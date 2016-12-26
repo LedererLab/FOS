@@ -1,5 +1,5 @@
 template< typename T, uint n, uint p >
-T FOS< T , n, p >::FOS( Eigen::Matrix< T, n, p >& X, Eigen::Matrix< T, n, 1 >& Y ){
+FOS< T , n, p >::FOS( Eigen::Matrix< T, n, p >& X, Eigen::Matrix< T, n, 1 >& Y ){
 
 }
 

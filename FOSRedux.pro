@@ -36,10 +36,13 @@ QMAKE_CXXFLAGS+= -Wno-unused-parameter
 #OpenCL
 #LIBS +=-L "/usr/local/cuda/lib64" -lOpenCL
 
-#???
+#for FISTA
 LIBS += -lstdc++ \
         -lblas \
         -llapack
+
+#Armadillo
+LIBS += -larmadillo
 
 HEADERS += fos.h \
     fosalgorithm.h

@@ -12,8 +12,52 @@
 // SPAMS Headers
 #include "linalg.h" // AbstractMatrix and Matrix
 #include "spams.h"
+// Armadillo Headers
+#include <armadillo>
 // Project Specific Headers
 //
+
+template < typename T >
+T CSV2Eigen( std::string file_path ) {
+
+    std::ifstream file_stream( file_path.c_str() );
+
+    if ( !file_stream.good() ) {
+        std::string err_str = __func__;
+        err_str += "\nCould not open CSV file at location :";
+        err_str += file_path;
+        throw std::ios_base::failure( err_str );
+    } else {
+        file_stream.close();
+    }
+
+    arma::mat X;
+    X.load( file_path, arma::csv_ascii );
+    std::cout << X.n_rows << "x" << X.n_cols << std::endl;
+
+    return Eigen::Map<const T>( X.memptr(), X.n_rows, X.n_cols );
+
+}
+
+void removeRow(Eigen::MatrixXd& matrix, unsigned int rowToRemove) {
+    unsigned int numRows = matrix.rows()-1;
+    unsigned int numCols = matrix.cols();
+
+    if( rowToRemove < numRows )
+        matrix.block(rowToRemove,0,numRows-rowToRemove,numCols) = matrix.block(rowToRemove+1,0,numRows-rowToRemove,numCols);
+
+    matrix.conservativeResize(numRows,numCols);
+}
+
+void removeColumn(Eigen::MatrixXd& matrix, unsigned int colToRemove) {
+    unsigned int numRows = matrix.rows();
+    unsigned int numCols = matrix.cols()-1;
+
+    if( colToRemove < numCols )
+        matrix.block(0,colToRemove,numRows,numCols-colToRemove) = matrix.block(0,colToRemove+1,numRows,numCols-colToRemove);
+
+    matrix.conservativeResize(numRows,numCols);
+}
 
 template < typename T, uint m, uint n >
 Eigen::Matrix< T, m, n > Spams2EigenMat ( const Matrix<T>* spams_mat ) {

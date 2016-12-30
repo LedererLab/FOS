@@ -21,6 +21,7 @@ class FOS {
   public:
     FOS( Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > x, Eigen::Matrix< T, Eigen::Dynamic, 1 > y );
     void Algorithm();
+    void Demo(  T lower_bound, T upper_bound, uint num_elements );
 
   private:
     T Mean(  Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& mat );
@@ -82,7 +83,7 @@ Eigen::Matrix< T, 1, Eigen::Dynamic > FOS< T >::LogScaleVector( T lower_bound, T
         T step = (T)i/(T)( num_elements - 1 );
         auto lin_step = delta*step + min_elem;
 
-        log_space_vector( 0, i ) = (T)pow( 10.0, lin_step );
+        log_space_vector( 0, i ) = static_cast<T>( pow( 10.0, lin_step ) );
     }
 
     return log_space_vector;
@@ -139,6 +140,11 @@ T abs_max( Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > matrix ) {
 }
 
 template< typename T >
+void FOS< T >::Demo( T lower_bound, T upper_bound, uint num_elements ) {
+    std::cout << LogScaleVector( lower_bound, upper_bound, num_elements ) << std::endl;
+}
+
+template< typename T >
 void FOS< T >::Algorithm() {
 
     Normalize( X );
@@ -148,7 +154,9 @@ void FOS< T >::Algorithm() {
     rMax = 2.0*cross_prod.template lpNorm< Eigen::Infinity >();
     rMin = 0.001*rMax;
 
-    auto rs = LogScaleVector( rMin, rMax, M );
+    DEBUG_PRINT( "rMax " << rMax << " rMin " << rMin );
+
+    auto rs = LogScaleVector( rMax, rMin, M );
 
     bool statsCont = true;
     uint statsIt = 1;
@@ -158,8 +166,8 @@ void FOS< T >::Algorithm() {
     while( statsCont && ( statsIt < M ) ) {
 
         statsIt ++;
-        old_Betas = Betas.col( statsIt - 1 );
-        auto rStatsIt = rs( 0, statsIt );
+        old_Betas = Betas.col( statsIt - 2 );
+        auto rStatsIt = rs( 0, statsIt - 1 );
 
         do {
 
@@ -169,7 +177,7 @@ void FOS< T >::Algorithm() {
             T rStatsIt_f = static_cast<T>( rStatsIt );
 
             //Duality Gap Prequel
-            auto beta_t = Betas.col( statsIt );
+            auto beta_t = Betas.col( statsIt - 1 );
 
             auto x_beta_t_prod = X * beta_t;
             auto error = x_beta_t_prod - Y;
@@ -194,7 +202,7 @@ void FOS< T >::Algorithm() {
             auto f_beta = error.squaredNorm() + rStatsIt_f * beta_t.template lpNorm < 1 >() ;
 
             auto ret_val_3 = nu_t + ( 2.0 / rStatsIt_f ) * Y;
-            auto d_nu = -0.25* pow( rStatsIt_f, 2.0 ) * ret_val_3.squaredNorm() - Y.squaredNorm();
+            auto d_nu = -0.25* square( rStatsIt_f ) * ret_val_3.squaredNorm() - Y.squaredNorm();
 
             auto duality_gap = static_cast<T>( f_beta ) - static_cast<T>( d_nu );
 
@@ -207,17 +215,18 @@ void FOS< T >::Algorithm() {
 
                 DEBUG_PRINT( "Duality gap is below specified threshold, exiting inner loop." );
 
-                Betas.col( statsIt ) = old_Betas;
+                Betas.col( statsIt - 1 ) = old_Betas;
                 break;
 
             } else {
 
-                DEBUG_PRINT( "Duality gap is " << duality_gap << " threshold is " << duality_gap_target );
+                DEBUG_PRINT( "Duality gap is " << duality_gap << " gap target is " << duality_gap_target );
 
-                auto fista_ret_val = FistaFlat<T>( Y, X, old_Betas, 0.5*rStatsIt_f );
+                old_Betas = Betas.col( statsIt - 1 ) = FistaFlat<T>( Y, X, old_Betas, 0.5*rStatsIt_f );
+//                DEBUG_PRINT( "Return value from fistaFlat" << std::endl << old_Betas << std::endl );
 
-                Betas.col( statsIt ) = fista_ret_val;
-                old_Betas = Betas.col(statsIt);
+                DEBUG_PRINT( "Beta Matrix:" << std::endl << Betas << std::endl );
+//                old_Betas = Betas.col( statsIt - 1 );
             }
 
         } while ( true );

@@ -223,7 +223,6 @@ char* str_to_c_ptr( std::string& str ) {
     writable[str.size()] = '\0'; // don't forget the terminating 0
 
     return writable;
-
 }
 
 namespace internal {
@@ -245,16 +244,7 @@ Matrix<T>* FistaFlat( Matrix<T>* Y, Matrix<T>* X, Matrix<T>* Omega_0, const T la
     //Initialize num_threads
     int num_threads = omp_get_max_threads();
 
-    auto inner_weights = new Vector<T>( 0 );
-
-//    std::string regul = "l1";
-//    char* regul_ptr = str_to_c_ptr( regul );
-
-//    std::string loss = "square";
-//    char* loss_ptr = str_to_c_ptr( loss );
-
-//    std::string log_name = "";
-//    char* log_name_ptr = str_to_c_ptr( log_name );
+    auto inner_weights = (Vector< double > *) 0;
 
     char regul[] = "l1";
     char loss[] = "square";

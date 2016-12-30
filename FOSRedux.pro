@@ -4,10 +4,11 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 #Force use of c++14
-QMAKE_CXXFLAGS += -std=c++11
+QMAKE_CXXFLAGS += -std=c++14
+QMAKE_CXXFLAGS -= -std=gnu++11
 QMAKE_CXXFLAGS -= -std=c++0x
 
-#CONFIG += c++11
+CONFIG += c++14
 
 CONFIG(debug, debug|release) {
     DEFINES += "DEBUG"
@@ -45,7 +46,8 @@ LIBS += -lstdc++ \
 LIBS += -larmadillo
 
 HEADERS += fos.h \
-    fosalgorithm.h
+    fosalgorithm.h \
+    fos_typetraits.h
 
-SOURCES += main.cpp \
+SOURCES += main.cpp
     #fos.tpp

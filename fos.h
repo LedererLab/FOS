@@ -13,6 +13,7 @@
 //#include <spams.h> // _fistaFlat
 // Project Specific Headers
 #include "fosalgorithm.h"
+#include "fos_typetraits.h"
 
 template < typename T >
 class FOS {
@@ -39,6 +40,8 @@ class FOS {
     T rMax;
     T rMin;
     float statsIt = 1;
+
+    uint loop_index = 0;
 
 };
 
@@ -115,8 +118,24 @@ void FOS< T >::Normalize( Eigen::Matrix< T, Eigen::Dynamic, 1 >& mat ) {
 //}
 
 template < typename T >
-T ComputeNorm( T& matrix, int norm_type ) {
+T compute_lp_norm( T& matrix, int norm_type ) {
     return matrix.template lpNorm< norm_type >();
+}
+
+template < typename T >
+T compute_sqr_norm( T& matrix ) {
+    return matrix.squaredNorm();
+}
+
+template < typename T>
+T square( T& val ) {
+    T sqr_part = static_cast<T>( val );
+    return sqr_part * sqr_part;
+}
+
+template < typename T >
+T abs_max( Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > matrix ) {
+    return static_cast<T>( matrix.cwiseAbs().maxCoeff() );
 }
 
 template< typename T >
@@ -126,47 +145,94 @@ void FOS< T >::Algorithm() {
     Normalize( Y );
 
     auto cross_prod = X.transpose() * Y;
-    auto rMax = 2*cross_prod.template lpNorm< Eigen::Infinity >();
+    rMax = 2.0*cross_prod.template lpNorm< Eigen::Infinity >();
+    rMin = 0.001*rMax;
 
     auto rs = LogScaleVector( rMin, rMax, M );
 
     bool statsCont = true;
     uint statsIt = 1;
-    Betas = Eigen::Matrix< T , Eigen::Dynamic, Eigen::Dynamic >::Zero( X.rows(), X.cols() );
-    auto r_tilda = rs.col( M - 1 );
+    Betas = Eigen::Matrix< T , Eigen::Dynamic, Eigen::Dynamic >::Zero( X.cols(), M );
 
     //Outer Loop
-    while( statsCont && statsIt < M ) {
+    while( statsCont && ( statsIt < M ) ) {
 
         statsIt ++;
         old_Betas = Betas.col( statsIt - 1 );
-        auto rStatsIt = rs.col( statsIt );
+        auto rStatsIt = rs( 0, statsIt );
 
         do {
+
+            loop_index ++;
+            DEBUG_PRINT( "Inner loop #: " << loop_index );
+
+            T rStatsIt_f = static_cast<T>( rStatsIt );
+
             //Duality Gap Prequel
             auto beta_t = Betas.col( statsIt );
-            std::cout << beta_t.rows() << "x" << beta_t.cols() << std::endl;
-            auto error = X*beta_t- Y;
 
-            auto ret_val = 2.0 * X.transpose() * error;
+            auto x_beta_t_prod = X * beta_t;
+            auto error = x_beta_t_prod - Y;
 
-            auto alternative = rStatsIt / ret_val.template lpNorm< Eigen::Infinity >();
+            auto x_cross_error = X.transpose() * error;
+            auto twice_x_cross_error = 2.0 * x_cross_error;
 
-            auto ret_val_2 = Y - X * beta_t;
-            auto alternative_2 = -1.0 / ret_val_2.template lpNorm< 2 >() * Y.transpose() * error;
+            auto alternative = rStatsIt_f/( twice_x_cross_error.template lpNorm< Eigen::Infinity >() );
+            T alt = static_cast<T>( alternative );
 
-            auto s = std::max( { alternative, alternative_2, -1*alternative} );
-            auto nu_t = -1.0 * ( 2 * s / rStatsIt ) * error;
+            T y_cross_error = static_cast<T>( Y.transpose() * error );
+            auto negative_error = Y - x_beta_t_prod;
+
+            auto alternative_2 = ( -1.0 / negative_error.squaredNorm() ) * y_cross_error;
+
+            T alt_2 = static_cast<T>( alternative_2 );
+
+            auto s = std::min( std::max( alt, alt_2 ), -1.0*alt );
+            auto nu_t = -1.0 * ( 2 * s / rStatsIt_f ) * error;
 
             //Compute Duality Gap
-            auto f_beta = pow( ret_val_2.squaredNorm() + rStatsIt*beta_t.template lpNorm < 1 >() );
-            auto ret_val_3 = 0.25* pow( rStatsIt, 2.0 ) * nu_t + ( 2.0 / rStatsIt ) * Y;
+            auto f_beta = error.squaredNorm() + rStatsIt_f * beta_t.template lpNorm < 1 >() ;
 
-            auto d_nu = ret_val_3 - Y.squaredNorm();
-            auto duality_gap = f_beta - d_nu;
+            auto ret_val_3 = nu_t + ( 2.0 / rStatsIt_f ) * Y;
+            auto d_nu = -0.25* pow( rStatsIt_f, 2.0 ) * ret_val_3.squaredNorm() - Y.squaredNorm();
 
-        } while ( 0 );
+            auto duality_gap = static_cast<T>( f_beta ) - static_cast<T>( d_nu );
 
+            DEBUG_PRINT( "Duality Gap = " << duality_gap );
+
+            auto duality_gap_target = square(C) * square( rStatsIt_f ) / static_cast<T>( X.rows() );
+
+            //Criteria meet, exit loop
+            if( duality_gap <= duality_gap_target ) {
+
+                DEBUG_PRINT( "Duality gap is below specified threshold, exiting inner loop." );
+
+                Betas.col( statsIt ) = old_Betas;
+                break;
+
+            } else {
+
+                DEBUG_PRINT( "Duality gap is " << duality_gap << " threshold is " << duality_gap_target );
+
+                auto fista_ret_val = FistaFlat<T>( Y, X, old_Betas, 0.5*rStatsIt_f );
+
+                Betas.col( statsIt ) = fista_ret_val;
+                old_Betas = Betas.col(statsIt);
+            }
+
+        } while ( true );
+
+        for ( uint i = 1; i < statsIt; i++ ) {
+
+            auto rk = rs( 0, i );
+
+            T abs_max_betas = abs_max<T>( Betas.col( statsIt ) - Betas.col( i ) );
+            T check_cond = static_cast<T>( X.rows() ) / ( static_cast<T>( rStatsIt ) + static_cast<T>( rk ) ) * abs_max_betas;
+
+            statsCont &= check_cond <= C;
+        }
+
+        auto avfosfit = Betas.col( statsIt );
     }
 
 }

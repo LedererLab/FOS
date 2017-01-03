@@ -1,0 +1,140 @@
+\hypertarget{fos__generics_8h}{}\section{/home/bephillips2/\+Qt-\/\+Projects/\+F\+O\+S\+Redux/fos\+\_\+generics.h File Reference}
+\label{fos__generics_8h}\index{/home/bephillips2/\+Qt-\/\+Projects/\+F\+O\+S\+Redux/fos\+\_\+generics.\+h@{/home/bephillips2/\+Qt-\/\+Projects/\+F\+O\+S\+Redux/fos\+\_\+generics.\+h}}
+
+
+Generic linear algebra functions.  
+
+
+{\ttfamily \#include $<$eigen3/\+Eigen/\+Dense$>$}\\*
+{\ttfamily \#include $<$armadillo$>$}\\*
+Include dependency graph for fos\+\_\+generics.\+h\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=258pt]{fos__generics_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=230pt]{fos__generics_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename T $>$ }\\T \hyperlink{fos__generics_8h_a3078b76bc228add250f305d3e877cf22}{C\+S\+V2\+Eigen} (std\+::string file\+\_\+path)
+\begin{DoxyCompactList}\small\item\em Read a .csv file into an Eigen Matrix. \end{DoxyCompactList}\item 
+void {\bfseries remove\+Row} (Eigen\+::\+Matrix\+Xd \&matrix, unsigned int row\+To\+Remove)\hypertarget{fos__generics_8h_a9a8df2e00594376f2c7ffb25988813d7}{}\label{fos__generics_8h_a9a8df2e00594376f2c7ffb25988813d7}
+
+\item 
+void {\bfseries remove\+Column} (Eigen\+::\+Matrix\+Xd \&matrix, unsigned int col\+To\+Remove)\hypertarget{fos__generics_8h_a05a555e2f83d10928a5a7202009f4f2f}{}\label{fos__generics_8h_a05a555e2f83d10928a5a7202009f4f2f}
+
+\item 
+{\footnotesize template$<$typename T $>$ }\\T \hyperlink{fos__generics_8h_ab660c06caa624c4213e9a8fc81f05bbb}{Std\+Dev} (const Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, Eigen\+::\+Dynamic $>$ \&mat)
+\begin{DoxyCompactList}\small\item\em Compute the standard deviation of a matrix. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\void \hyperlink{fos__generics_8h_a344f938a854d73b7f8601510b9b56572}{Normalize} (Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, Eigen\+::\+Dynamic $>$ \&mat)
+\begin{DoxyCompactList}\small\item\em Set the mean of a matrix to 0 and the standard deviation to 1. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\void \hyperlink{fos__generics_8h_a48e19f4572493cb8903c79b94a88e182}{Normalize} (Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&mat)
+\begin{DoxyCompactList}\small\item\em Set the mean of a vector to 0 and the standard deviation to 1. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Generic linear algebra functions. 
+
+
+
+\subsection{Function Documentation}
+\index{fos\+\_\+generics.\+h@{fos\+\_\+generics.\+h}!C\+S\+V2\+Eigen@{C\+S\+V2\+Eigen}}
+\index{C\+S\+V2\+Eigen@{C\+S\+V2\+Eigen}!fos\+\_\+generics.\+h@{fos\+\_\+generics.\+h}}
+\subsubsection[{\texorpdfstring{C\+S\+V2\+Eigen(std\+::string file\+\_\+path)}{CSV2Eigen(std::string file_path)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ T C\+S\+V2\+Eigen (
+\begin{DoxyParamCaption}
+\item[{std\+::string}]{file\+\_\+path}
+\end{DoxyParamCaption}
+)}\hypertarget{fos__generics_8h_a3078b76bc228add250f305d3e877cf22}{}\label{fos__generics_8h_a3078b76bc228add250f305d3e877cf22}
+
+
+Read a .csv file into an Eigen Matrix. 
+
+Files must -\/not-\/ have header information of any kind (e.\+g. row/col labels etc. ) Rows are determined by line breakers, columns are determined by comma-\/delimiter.
+
+
+\begin{DoxyParams}{Parameters}
+{\em file\+\_\+path} & The (hard) path to the data file.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+An Eigen matrix with rows/cols determined by data file. 
+\end{DoxyReturn}
+
+
+Definition at line 37 of file fos\+\_\+generics.\+h.
+
+\index{fos\+\_\+generics.\+h@{fos\+\_\+generics.\+h}!Normalize@{Normalize}}
+\index{Normalize@{Normalize}!fos\+\_\+generics.\+h@{fos\+\_\+generics.\+h}}
+\subsubsection[{\texorpdfstring{Normalize(\+Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, Eigen\+::\+Dynamic $>$ \&mat)}{Normalize(Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > &mat)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ void Normalize (
+\begin{DoxyParamCaption}
+\item[{Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, Eigen\+::\+Dynamic $>$ \&}]{mat}
+\end{DoxyParamCaption}
+)}\hypertarget{fos__generics_8h_a344f938a854d73b7f8601510b9b56572}{}\label{fos__generics_8h_a344f938a854d73b7f8601510b9b56572}
+
+
+Set the mean of a matrix to 0 and the standard deviation to 1. 
+
+Note this function is done in place, that is the input matrix is modified.
+
+
+\begin{DoxyParams}{Parameters}
+{\em mat} & An n x m matrix to be normalized. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 105 of file fos\+\_\+generics.\+h.
+
+\index{fos\+\_\+generics.\+h@{fos\+\_\+generics.\+h}!Normalize@{Normalize}}
+\index{Normalize@{Normalize}!fos\+\_\+generics.\+h@{fos\+\_\+generics.\+h}}
+\subsubsection[{\texorpdfstring{Normalize(\+Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&mat)}{Normalize(Eigen::Matrix< T, Eigen::Dynamic, 1 > &mat)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ void Normalize (
+\begin{DoxyParamCaption}
+\item[{Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&}]{mat}
+\end{DoxyParamCaption}
+)}\hypertarget{fos__generics_8h_a48e19f4572493cb8903c79b94a88e182}{}\label{fos__generics_8h_a48e19f4572493cb8903c79b94a88e182}
+
+
+Set the mean of a vector to 0 and the standard deviation to 1. 
+
+Note this function is done in place.
+
+
+\begin{DoxyParams}{Parameters}
+{\em mat} & An n x 1 vector to be normalized. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 123 of file fos\+\_\+generics.\+h.
+
+\index{fos\+\_\+generics.\+h@{fos\+\_\+generics.\+h}!Std\+Dev@{Std\+Dev}}
+\index{Std\+Dev@{Std\+Dev}!fos\+\_\+generics.\+h@{fos\+\_\+generics.\+h}}
+\subsubsection[{\texorpdfstring{Std\+Dev(const Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, Eigen\+::\+Dynamic $>$ \&mat)}{StdDev(const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > &mat)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ T Std\+Dev (
+\begin{DoxyParamCaption}
+\item[{const Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, Eigen\+::\+Dynamic $>$ \&}]{mat}
+\end{DoxyParamCaption}
+)}\hypertarget{fos__generics_8h_ab660c06caa624c4213e9a8fc81f05bbb}{}\label{fos__generics_8h_ab660c06caa624c4213e9a8fc81f05bbb}
+
+
+Compute the standard deviation of a matrix. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mat} & Matrix to be examined.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Standard deviation of the matrix 
+\end{DoxyReturn}
+
+
+Definition at line 88 of file fos\+\_\+generics.\+h.
+

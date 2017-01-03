@@ -47,7 +47,8 @@ LIBS += -larmadillo
 
 HEADERS += fos.h \
     fosalgorithm.h \
-    fos_typetraits.h
+    fos_typetraits.h \
+    fos_generics.h
 
 SOURCES += main.cpp
     #fos.tpp

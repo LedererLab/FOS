@@ -1,0 +1,259 @@
+\hypertarget{fosalgorithm_8h}{}\section{/home/bephillips2/\+Qt-\/\+Projects/\+F\+O\+S\+Redux/fosalgorithm.h File Reference}
+\label{fosalgorithm_8h}\index{/home/bephillips2/\+Qt-\/\+Projects/\+F\+O\+S\+Redux/fosalgorithm.\+h@{/home/bephillips2/\+Qt-\/\+Projects/\+F\+O\+S\+Redux/fosalgorithm.\+h}}
+
+
+Functions that provide an interface between Eigen and Spams linear algebra libraries.  
+
+
+{\ttfamily \#include $<$eigen3/\+Eigen/\+Dense$>$}\\*
+{\ttfamily \#include \char`\"{}linalg.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}spams.\+h\char`\"{}}\\*
+{\ttfamily \#include $<$armadillo$>$}\\*
+Include dependency graph for fosalgorithm.\+h\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{fosalgorithm_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=279pt]{fosalgorithm_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename T , uint m, uint n$>$ }\\Eigen\+::\+Matrix$<$ T, m, n $>$ \hyperlink{fosalgorithm_8h_a9b8b7c1219c57203eb55be82f363963d}{Spams2\+Eigen\+Mat} (const Matrix$<$ T $>$ $\ast$spams\+\_\+mat)
+\begin{DoxyCompactList}\small\item\em Convert a const-\/ Spams Matrix to an Eigen\+::\+Matrix. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T , uint m, uint n$>$ }\\Eigen\+::\+Matrix$<$ T, m, n $>$ \hyperlink{fosalgorithm_8h_af95efdd1e0c89e28ecade0ccc5f87c4c}{Spams2\+Eigen\+Mat} (Matrix$<$ T $>$ $\ast$spams\+\_\+mat)
+\begin{DoxyCompactList}\small\item\em Convert a Spams Matrix to an Eigen\+::\+Matrix whose rows and cols are known at compile time. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, Eigen\+::\+Dynamic $>$ \hyperlink{fosalgorithm_8h_af2cddac6a7add7116fba0a5dd4b1b4d4}{Spams2\+Eigen\+Mat} (Matrix$<$ T $>$ $\ast$spams\+\_\+mat)
+\begin{DoxyCompactList}\small\item\em Convert a Spams Matrix to an Eigen\+::\+Matrix whose rows and cols are assigned at run time. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T , uint m, uint n$>$ }\\Matrix$<$ T $>$ $\ast$ \hyperlink{fosalgorithm_8h_a0528c7867564847d122280b44b3f258e}{Eigen2\+Spams\+Mat} (const Eigen\+::\+Matrix$<$ T, n, m $>$ \&eigen\+\_\+mat)
+\begin{DoxyCompactList}\small\item\em Get a spams Matrix from an Eigen\+::\+Matrix whose dimensions are know at compile time. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\Matrix$<$ T $>$ $\ast$ \hyperlink{fosalgorithm_8h_a649fff8025ef5541fb3ca2c51c32fd9b}{Eigen2\+Spams\+Mat} (const Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, Eigen\+::\+Dynamic $>$ \&eigen\+\_\+mat)
+\begin{DoxyCompactList}\small\item\em Get a spams Matrix from an Eigen\+::\+Matrix whose dimensions are determined at run time. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T , uint m, uint n$>$ }\\Abstract\+MatrixB$<$ T $>$ {\bfseries Eigen2\+Spams\+Abstract\+MatB} (const Eigen\+::\+Matrix$<$ T, n, m $>$ \&eigen\+\_\+mat)\hypertarget{fosalgorithm_8h_ac00680a032bd45b1786197f2310d3286}{}\label{fosalgorithm_8h_ac00680a032bd45b1786197f2310d3286}
+
+\item 
+char $\ast$ \hyperlink{fosalgorithm_8h_ad7e3333e39a51029e238c41705f6884d}{str\+\_\+to\+\_\+c\+\_\+ptr} (std\+::string \&str)
+\begin{DoxyCompactList}\small\item\em Translate a std\+::string into a pointer to a char array. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\Matrix$<$ T $>$ $\ast$ \hyperlink{fosalgorithm_8h_aa227b689faec11b0585dcff2c4c4b9cc}{internal\+::\+Fista\+Flat} (Matrix$<$ T $>$ $\ast$Y, Matrix$<$ T $>$ $\ast$X, Matrix$<$ T $>$ $\ast$Omega\+\_\+0, const T lambda\+\_\+1)
+\begin{DoxyCompactList}\small\item\em Performed \+\_\+fista\+Flat on Spams objects, returning parameters useful for the \hyperlink{class_f_o_s}{F\+OS} algorithim. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, Eigen\+::\+Dynamic $>$ \hyperlink{fosalgorithm_8h_a21fff1ab4c69ac9ffcad454ec263d9e6}{Fista\+Flat} (Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, Eigen\+::\+Dynamic $>$ Y, Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, Eigen\+::\+Dynamic $>$ X, Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, Eigen\+::\+Dynamic $>$ Omega\+\_\+0, const T lambda\+\_\+1)
+\begin{DoxyCompactList}\small\item\em Performed fista\+Flat on Eigen objects, returning parameters useful for the \hyperlink{class_f_o_s}{F\+OS} algorithim. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Functions that provide an interface between Eigen and Spams linear algebra libraries. 
+
+
+
+\subsection{Function Documentation}
+\index{fosalgorithm.\+h@{fosalgorithm.\+h}!Eigen2\+Spams\+Mat@{Eigen2\+Spams\+Mat}}
+\index{Eigen2\+Spams\+Mat@{Eigen2\+Spams\+Mat}!fosalgorithm.\+h@{fosalgorithm.\+h}}
+\subsubsection[{\texorpdfstring{Eigen2\+Spams\+Mat(const Eigen\+::\+Matrix$<$ T, n, m $>$ \&eigen\+\_\+mat)}{Eigen2SpamsMat(const Eigen::Matrix< T, n, m > &eigen_mat)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T , uint m, uint n$>$ Matrix$<$T$>$$\ast$ Eigen2\+Spams\+Mat (
+\begin{DoxyParamCaption}
+\item[{const Eigen\+::\+Matrix$<$ T, n, m $>$ \&}]{eigen\+\_\+mat}
+\end{DoxyParamCaption}
+)}\hypertarget{fosalgorithm_8h_a0528c7867564847d122280b44b3f258e}{}\label{fosalgorithm_8h_a0528c7867564847d122280b44b3f258e}
+
+
+Get a spams Matrix from an Eigen\+::\+Matrix whose dimensions are know at compile time. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em eigen\+\_\+mat} & The Eigen\+::\+Matrix to be copied.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A new Spams Matrix ( in pointer form ). 
+\end{DoxyReturn}
+
+
+Definition at line 86 of file fosalgorithm.\+h.
+
+\index{fosalgorithm.\+h@{fosalgorithm.\+h}!Eigen2\+Spams\+Mat@{Eigen2\+Spams\+Mat}}
+\index{Eigen2\+Spams\+Mat@{Eigen2\+Spams\+Mat}!fosalgorithm.\+h@{fosalgorithm.\+h}}
+\subsubsection[{\texorpdfstring{Eigen2\+Spams\+Mat(const Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, Eigen\+::\+Dynamic $>$ \&eigen\+\_\+mat)}{Eigen2SpamsMat(const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > &eigen_mat)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ Matrix$<$T$>$$\ast$ Eigen2\+Spams\+Mat (
+\begin{DoxyParamCaption}
+\item[{const Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, Eigen\+::\+Dynamic $>$ \&}]{eigen\+\_\+mat}
+\end{DoxyParamCaption}
+)}\hypertarget{fosalgorithm_8h_a649fff8025ef5541fb3ca2c51c32fd9b}{}\label{fosalgorithm_8h_a649fff8025ef5541fb3ca2c51c32fd9b}
+
+
+Get a spams Matrix from an Eigen\+::\+Matrix whose dimensions are determined at run time. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em eigen\+\_\+mat} & The Eigen\+::\+Matrix to be copied.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A new Spams Matrix ( in pointer form ). 
+\end{DoxyReturn}
+
+
+Definition at line 113 of file fosalgorithm.\+h.
+
+\index{fosalgorithm.\+h@{fosalgorithm.\+h}!Fista\+Flat@{Fista\+Flat}}
+\index{Fista\+Flat@{Fista\+Flat}!fosalgorithm.\+h@{fosalgorithm.\+h}}
+\subsubsection[{\texorpdfstring{Fista\+Flat(\+Matrix$<$ T $>$ $\ast$\+Y, Matrix$<$ T $>$ $\ast$\+X, Matrix$<$ T $>$ $\ast$\+Omega\+\_\+0, const T lambda\+\_\+1)}{FistaFlat(Matrix< T > *Y, Matrix< T > *X, Matrix< T > *Omega_0, const T lambda_1)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ Matrix$<$T$>$$\ast$ internal\+::\+Fista\+Flat (
+\begin{DoxyParamCaption}
+\item[{Matrix$<$ T $>$ $\ast$}]{Y, }
+\item[{Matrix$<$ T $>$ $\ast$}]{X, }
+\item[{Matrix$<$ T $>$ $\ast$}]{Omega\+\_\+0, }
+\item[{const T}]{lambda\+\_\+1}
+\end{DoxyParamCaption}
+)}\hypertarget{fosalgorithm_8h_file_aa227b689faec11b0585dcff2c4c4b9cc}{}\label{fosalgorithm_8h_file_aa227b689faec11b0585dcff2c4c4b9cc}
+
+
+Performed \+\_\+fista\+Flat on Spams objects, returning parameters useful for the \hyperlink{class_f_o_s}{F\+OS} algorithim. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Y} & A n x 1 vector \\
+\hline
+{\em X} & An n x m desgin matrix\\
+\hline
+{\em Omega\+\_\+0} & An n x 1 vector of initial guesses ( probably )\\
+\hline
+{\em lambda\+\_\+1} & Regularization parameter\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Omega, a 1 x n matrix 
+\end{DoxyReturn}
+
+
+Definition at line 181 of file fosalgorithm.\+h.
+
+\index{fosalgorithm.\+h@{fosalgorithm.\+h}!Fista\+Flat@{Fista\+Flat}}
+\index{Fista\+Flat@{Fista\+Flat}!fosalgorithm.\+h@{fosalgorithm.\+h}}
+\subsubsection[{\texorpdfstring{Fista\+Flat(\+Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, Eigen\+::\+Dynamic $>$ Y, Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, Eigen\+::\+Dynamic $>$ X, Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, Eigen\+::\+Dynamic $>$ Omega\+\_\+0, const T lambda\+\_\+1)}{FistaFlat(Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > Y, Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X, Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > Omega_0, const T lambda_1)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, Eigen\+::\+Dynamic$>$ Fista\+Flat (
+\begin{DoxyParamCaption}
+\item[{Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, Eigen\+::\+Dynamic $>$}]{Y, }
+\item[{Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, Eigen\+::\+Dynamic $>$}]{X, }
+\item[{Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, Eigen\+::\+Dynamic $>$}]{Omega\+\_\+0, }
+\item[{const T}]{lambda\+\_\+1}
+\end{DoxyParamCaption}
+)}\hypertarget{fosalgorithm_8h_a21fff1ab4c69ac9ffcad454ec263d9e6}{}\label{fosalgorithm_8h_a21fff1ab4c69ac9ffcad454ec263d9e6}
+
+
+Performed fista\+Flat on Eigen objects, returning parameters useful for the \hyperlink{class_f_o_s}{F\+OS} algorithim. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Y} & A n x 1 vector \\
+\hline
+{\em X} & An n x m desgin matrix\\
+\hline
+{\em Omega\+\_\+0} & An n x 1 vector of initial guesses\\
+\hline
+{\em lambda\+\_\+1} & Regularization parameter\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Omega, a 1 x n matrix 
+\end{DoxyReturn}
+
+
+Definition at line 280 of file fosalgorithm.\+h.
+
+\index{fosalgorithm.\+h@{fosalgorithm.\+h}!Spams2\+Eigen\+Mat@{Spams2\+Eigen\+Mat}}
+\index{Spams2\+Eigen\+Mat@{Spams2\+Eigen\+Mat}!fosalgorithm.\+h@{fosalgorithm.\+h}}
+\subsubsection[{\texorpdfstring{Spams2\+Eigen\+Mat(const Matrix$<$ T $>$ $\ast$spams\+\_\+mat)}{Spams2EigenMat(const Matrix< T > *spams_mat)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T , uint m, uint n$>$ Eigen\+::\+Matrix$<$ T, m, n $>$ Spams2\+Eigen\+Mat (
+\begin{DoxyParamCaption}
+\item[{const Matrix$<$ T $>$ $\ast$}]{spams\+\_\+mat}
+\end{DoxyParamCaption}
+)}\hypertarget{fosalgorithm_8h_a9b8b7c1219c57203eb55be82f363963d}{}\label{fosalgorithm_8h_a9b8b7c1219c57203eb55be82f363963d}
+
+
+Convert a const-\/ Spams Matrix to an Eigen\+::\+Matrix. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em spams\+\_\+mat} & Spams Matrix pointer to be translated.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A new Eigen\+::\+Matrix with dimensions determined by the Spams Matrix. 
+\end{DoxyReturn}
+
+
+Definition at line 35 of file fosalgorithm.\+h.
+
+\index{fosalgorithm.\+h@{fosalgorithm.\+h}!Spams2\+Eigen\+Mat@{Spams2\+Eigen\+Mat}}
+\index{Spams2\+Eigen\+Mat@{Spams2\+Eigen\+Mat}!fosalgorithm.\+h@{fosalgorithm.\+h}}
+\subsubsection[{\texorpdfstring{Spams2\+Eigen\+Mat(\+Matrix$<$ T $>$ $\ast$spams\+\_\+mat)}{Spams2EigenMat(Matrix< T > *spams_mat)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T , uint m, uint n$>$ Eigen\+::\+Matrix$<$ T, m, n $>$ Spams2\+Eigen\+Mat (
+\begin{DoxyParamCaption}
+\item[{Matrix$<$ T $>$ $\ast$}]{spams\+\_\+mat}
+\end{DoxyParamCaption}
+)}\hypertarget{fosalgorithm_8h_af95efdd1e0c89e28ecade0ccc5f87c4c}{}\label{fosalgorithm_8h_af95efdd1e0c89e28ecade0ccc5f87c4c}
+
+
+Convert a Spams Matrix to an Eigen\+::\+Matrix whose rows and cols are known at compile time. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em spams\+\_\+mat} & Spams Matrix pointer to be translated.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A new Eigen\+::\+Matrix with dimensions determined by the Spams Matrix. 
+\end{DoxyReturn}
+
+
+Definition at line 50 of file fosalgorithm.\+h.
+
+\index{fosalgorithm.\+h@{fosalgorithm.\+h}!Spams2\+Eigen\+Mat@{Spams2\+Eigen\+Mat}}
+\index{Spams2\+Eigen\+Mat@{Spams2\+Eigen\+Mat}!fosalgorithm.\+h@{fosalgorithm.\+h}}
+\subsubsection[{\texorpdfstring{Spams2\+Eigen\+Mat(\+Matrix$<$ T $>$ $\ast$spams\+\_\+mat)}{Spams2EigenMat(Matrix< T > *spams_mat)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, Eigen\+::\+Dynamic $>$ Spams2\+Eigen\+Mat (
+\begin{DoxyParamCaption}
+\item[{Matrix$<$ T $>$ $\ast$}]{spams\+\_\+mat}
+\end{DoxyParamCaption}
+)}\hypertarget{fosalgorithm_8h_af2cddac6a7add7116fba0a5dd4b1b4d4}{}\label{fosalgorithm_8h_af2cddac6a7add7116fba0a5dd4b1b4d4}
+
+
+Convert a Spams Matrix to an Eigen\+::\+Matrix whose rows and cols are assigned at run time. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em spams\+\_\+mat} & Spams Matrix pointer to be translated.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A new Eigen\+::\+Matrix with dimensions determined by the Spams Matrix. 
+\end{DoxyReturn}
+
+
+Definition at line 67 of file fosalgorithm.\+h.
+
+\index{fosalgorithm.\+h@{fosalgorithm.\+h}!str\+\_\+to\+\_\+c\+\_\+ptr@{str\+\_\+to\+\_\+c\+\_\+ptr}}
+\index{str\+\_\+to\+\_\+c\+\_\+ptr@{str\+\_\+to\+\_\+c\+\_\+ptr}!fosalgorithm.\+h@{fosalgorithm.\+h}}
+\subsubsection[{\texorpdfstring{str\+\_\+to\+\_\+c\+\_\+ptr(std\+::string \&str)}{str_to_c_ptr(std::string &str)}}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ str\+\_\+to\+\_\+c\+\_\+ptr (
+\begin{DoxyParamCaption}
+\item[{std\+::string \&}]{str}
+\end{DoxyParamCaption}
+)}\hypertarget{fosalgorithm_8h_ad7e3333e39a51029e238c41705f6884d}{}\label{fosalgorithm_8h_ad7e3333e39a51029e238c41705f6884d}
+
+
+Translate a std\+::string into a pointer to a char array. 
+
+Used with Spams \textquotesingle{}print\textquotesingle{} functions.
+
+
+\begin{DoxyParams}{Parameters}
+{\em str} & String to be transformed\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+char$\ast$ populated with data in str and null terminator, Note that the char$\ast$ will need to be deleted later 
+\end{DoxyReturn}
+
+
+Definition at line 149 of file fosalgorithm.\+h.
+

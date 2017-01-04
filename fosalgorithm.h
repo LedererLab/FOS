@@ -17,17 +17,36 @@
 // Project Specific Headers
 //
 
-/*! \file Functions that provide an interface between Eigen and Spams linear algebra libraries.
+/*! \file
+ * \brief Functions that provide an interface between Eigen and Spams linear algebra libraries.
  *
  */
 
 template < typename T, uint m, uint n >
+/*!
+ * \brief Convert a const- Spams Matrix to an Eigen::Matrix
+ *
+ * \param spams_mat
+ *
+ * Spams Matrix pointer to be translated.
+ *
+ * \return A new Eigen::Matrix with dimensions determined by the Spams Matrix.
+ */
 Eigen::Matrix< T, m, n > Spams2EigenMat ( const Matrix<T>* spams_mat ) {
     auto M = Eigen::Map< Eigen::Matrix< T, n, m, Eigen::ColMajor> >( spams_mat->rawX() );
     return M;
 }
 
 template < typename T, uint m, uint n >
+/*!
+ * \brief Convert a Spams Matrix to an Eigen::Matrix whose rows and cols are known at compile time
+ *
+ * \param spams_mat
+ *
+ * Spams Matrix pointer to be translated.
+ *
+ * \return A new Eigen::Matrix with dimensions determined by the Spams Matrix.
+ */
 Eigen::Matrix< T, m, n > Spams2EigenMat ( Matrix<T>* spams_mat ) {
 
     auto M = Eigen::Map< Eigen::Matrix< T, n, m, Eigen::ColMajor> >( spams_mat->rawX() );
@@ -36,6 +55,15 @@ Eigen::Matrix< T, m, n > Spams2EigenMat ( Matrix<T>* spams_mat ) {
 
 
 template < typename T >
+/*!
+ * \brief Convert a Spams Matrix to an Eigen::Matrix whose rows and cols are assigned at run time
+ *
+ * \param spams_mat
+ *
+ * Spams Matrix pointer to be translated.
+ *
+ * \return A new Eigen::Matrix with dimensions determined by the Spams Matrix.
+ */
 Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > Spams2EigenMat ( Matrix<T>* spams_mat ) {
 
     uint num_cols = spams_mat->n();
@@ -46,14 +74,26 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > Spams2EigenMat ( Matrix<T>* s
 }
 
 template < typename T, uint m, uint n >
+/*!
+ * \brief Get a spams Matrix from an Eigen::Matrix whose dimensions are know at compile time.
+ *
+ * \param eigen_mat
+ *
+ * The Eigen::Matrix to be copied.
+ *
+ * \return A new Spams Matrix ( in pointer form ).
+ */
 Matrix<T>* Eigen2SpamsMat ( const Eigen::Matrix< T, n, m >& eigen_mat ) {
 
+    // Determine number of elements in eigen_mat
     auto eigen_mat_size = eigen_mat.cols() * eigen_mat.rows();
+    // Get a non-const copy of data in eigen_mat
+    // Spams matrices require non-const data in constructors
+    T* non_const_mat_data = new T[eigen_mat_size];
 
-    T* non_const_mat_data = new T[eigen_mat_size]; // create a new buffer
     auto mat_data = eigen_mat.data();
 
-    std::copy( mat_data, mat_data + eigen_mat_size, non_const_mat_data); // copy the data
+    std::copy( mat_data, mat_data + eigen_mat_size, non_const_mat_data);
 
     auto spams_mat = new Matrix<T> ( non_const_mat_data, m, n );
 
@@ -61,17 +101,28 @@ Matrix<T>* Eigen2SpamsMat ( const Eigen::Matrix< T, n, m >& eigen_mat ) {
 }
 
 template < typename T >
+/*!
+ * \brief Get a spams Matrix from an Eigen::Matrix whose dimensions are determined at run time.
+ *
+ * \param eigen_mat
+ *
+ * The Eigen::Matrix to be copied.
+ *
+ * \return A new Spams Matrix ( in pointer form ).
+ */
 Matrix<T>* Eigen2SpamsMat ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& eigen_mat ) {
 
-    auto m = eigen_mat.rows();
-    auto n = eigen_mat.cols();
+    uint m = eigen_mat.rows();
+    uint n = eigen_mat.cols();
+    // Determine number of elements in eigen_mat
+    auto eigen_mat_size = n*m;
+    // Get a non-const copy of data in eigen_mat
+    // Spams matrices require non-const data in constructors
+    T* non_const_mat_data = new T[eigen_mat_size];
 
-    auto eigen_mat_size = m * n ;
-
-    T* non_const_mat_data = new T[eigen_mat_size]; // create a new buffer
     auto mat_data = eigen_mat.data();
 
-    std::copy( mat_data, mat_data + eigen_mat_size, non_const_mat_data); // copy the data
+    std::copy( mat_data, mat_data + eigen_mat_size, non_const_mat_data );
 
     auto spams_mat = new Matrix<T> ( non_const_mat_data, m, n );
 
@@ -83,7 +134,18 @@ AbstractMatrixB<T> Eigen2SpamsAbstractMatB ( const Eigen::Matrix< T, n, m >& eig
     return AbstractMatrixB<T>( eigen_mat.data(), m, n );
 }
 
-//Will need to be deleted by user
+/*!
+ * \brief Translate a std::string into a pointer to a char array
+ *
+ * Used with Spams 'print' functions.
+ *
+ * \param str
+ *
+ * String to be transformed
+ *
+ * \return char* populated with data in str and null terminator,
+ * Note that the char* will need to be deleted later
+ */
 char* str_to_c_ptr( std::string& str ) {
 
     char * writable = new char[str.size() + 1];
@@ -96,6 +158,26 @@ char* str_to_c_ptr( std::string& str ) {
 namespace internal {
 
 template < typename T >
+/*!
+ * \brief Performed _fistaFlat on Spams objects, returning parameters useful for the FOS algorithim.
+ *
+ * \param Y
+ *
+ * A n x 1 vector
+ * \param X
+ *
+ * An n x m desgin matrix
+ *
+ * \param Omega_0
+ *
+ * An n x 1 vector of initial guesses ( probably )
+ *
+ * \param lambda_1
+ *
+ * Regularization parameter
+ *
+ * \return Omega, a 1 x n matrix
+ */
 Matrix<T>* FistaFlat( Matrix<T>* Y, Matrix<T>* X, Matrix<T>* Omega_0, const T lambda_1 ) {
 
     uint num_cols = Omega_0->n();
@@ -175,6 +257,26 @@ Matrix<T>* FistaFlat( Matrix<T>* Y, Matrix<T>* X, Matrix<T>* Omega_0, const T la
 }
 
 template < typename T >
+/*!
+ * \brief Performed fistaFlat on Eigen objects, returning parameters useful for the FOS algorithim.
+ *
+ * \param Y
+ *
+ * A n x 1 vector
+ * \param X
+ *
+ * An n x m desgin matrix
+ *
+ * \param Omega_0
+ *
+ * An n x 1 vector of initial guesses
+ *
+ * \param lambda_1
+ *
+ * Regularization parameter
+ *
+ * \return Omega, a 1 x n matrix
+ */
 Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic> FistaFlat( Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic> Y,\
         Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic> X, \
         Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic> Omega_0, \

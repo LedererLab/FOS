@@ -10,6 +10,8 @@ QMAKE_CXXFLAGS -= -std=c++0x
 
 CONFIG += c++14
 
+# Pass flags for bebugging
+# Override Qt's default -O2 flag in release mode
 CONFIG(debug, debug|release) {
     DEFINES += "DEBUG"
 } else {
@@ -18,10 +20,10 @@ CONFIG(debug, debug|release) {
     QMAKE_CXXFLAGS += -O3
 }
 
-#Eigen BLAS
+# Eigen
 INCLUDEPATH += /usr/include/eigen3
 
-#FISTA
+# SPAMS
 INCLUDEPATH +=  ../spams/src \
                 ../spams/src/spams/dictLearn \
                 ../spams/src/spams/decomp \
@@ -29,9 +31,9 @@ INCLUDEPATH +=  ../spams/src \
                 ../spams/src/spams/prox \
 
 QMAKE_CXXFLAGS+= -fopenmp
-#QMAKE_CXXFLAGS+= -O3
 QMAKE_LFLAGS +=  -fopenmp
 
+# SPAMS has unused parameters in source -- surpress warnings
 QMAKE_CXXFLAGS+= -Wno-unused-parameter
 
 #OpenCL
@@ -47,8 +49,7 @@ LIBS += -larmadillo
 
 HEADERS += fos.h \
     fosalgorithm.h \
-    fos_typetraits.h \
-    fos_generics.h
+    fos_generics.h \
+    fos_debug.h
 
 SOURCES += main.cpp
-    #fos.tpp

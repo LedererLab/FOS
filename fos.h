@@ -13,7 +13,7 @@
 //#include <spams.h> // _fistaFlat
 // Project Specific Headers
 #include "fosalgorithm.h"
-#include "fos_typetraits.h"
+#include "fos_debug.h"
 #include "fos_generics.h"
 
 template < typename T >
@@ -51,6 +51,15 @@ class FOS {
 };
 
 template< typename T >
+/*!
+ * \brief Initialize a new algorithm, and instantiate member attributes X and Y.
+ *
+ * \param x
+ * An n x p design matrix
+ *
+ * \param y
+ * An n x 1 vector
+ */
 FOS< T >::FOS(Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> x, Eigen::Matrix<T, Eigen::Dynamic, 1 > y ) : X( x ), Y( y ) {
 
 }
@@ -68,17 +77,58 @@ T compute_sqr_norm( T& matrix ) {
 }
 
 template < typename T>
+/*!
+ * \brief Compute the square of a value
+ * \param val
+ *
+ * value to square
+ *
+ * \return The squared quantity
+ */
 T square( T& val ) {
     T sqr_part = static_cast<T>( val );
     return sqr_part * sqr_part;
 }
 
 template < typename T >
+/*!
+ * \brief Compute the maximum of the absolute value of an Eigen::Matrix object
+ *
+ * \param matrix
+ *
+ * Matrix to work on- note that the matrix is not modified.
+ *
+ * \return Coeffecient-wise maximum of the absolute value of the argument
+ */
 T abs_max( Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > matrix ) {
     return static_cast<T>( matrix.cwiseAbs().maxCoeff() );
 }
 
 template < typename T >
+/*!
+ * \brief Generate a vector of logarithmically equally spaced points
+ *
+ * There will be num_element points, beginning at log10( lower_bound )
+ *  and ending at log10( upper_bound ).
+ *
+ * This function is semantically equivalent to the R function 'logspace'.
+ *
+ * \param lower_bound
+ *
+ * 10^x for x = smallest element in vector
+ *
+ * \param upper_bound
+ *
+ * 10^x for x = largest element in vector
+ *
+ * \param num_elements
+ *
+ * number of elements in the generated vector
+ *
+ * \return
+ *
+ * Vector of logarithmically equally spaced points
+ */
 Eigen::Matrix< T, 1, Eigen::Dynamic > LogScaleVector( T lower_bound, T upper_bound, uint num_elements ) {
 
     T min_elem = static_cast<T>( log10(lower_bound) );
@@ -102,6 +152,14 @@ Eigen::Matrix< T, 1, Eigen::Dynamic > LogScaleVector( T lower_bound, T upper_bou
 //Member functions
 
 template < typename T >
+/*!
+ * \brief Determine the 'stop' condition for the outer loop
+ *
+ * \param stats_it
+ * \param r_stats_it
+ * \param rs
+ * \return True if outer loop should continue, false otherwise
+ */
 bool FOS<T>::ComputeStatsCond( uint stats_it, uint r_stats_it, const Eigen::Matrix< T, 1, Eigen::Dynamic >& rs ) {
 
     bool stats_cond = true;
@@ -121,6 +179,10 @@ bool FOS<T>::ComputeStatsCond( uint stats_it, uint r_stats_it, const Eigen::Matr
 }
 
 template < typename T >
+/*!
+ * \brief Generate the 'rs' vector
+ * \return
+ */
 Eigen::Matrix< T, 1, Eigen::Dynamic > FOS<T>::GenerateRS() {
 
     auto cross_prod = X.transpose() * Y;
@@ -134,12 +196,27 @@ Eigen::Matrix< T, 1, Eigen::Dynamic > FOS<T>::GenerateRS() {
 }
 
 template < typename T >
+/*!
+ * \brief Compute the target for the duality gap used in the inner loop
+ *
+ * The duality gap should be less than or equal to this target in order to
+ * exit the inner loop.
+ *
+ * \param r_stats_it
+ *
+ * \return Target quantity
+ */
 T FOS<T>::DualityGapTarget(uint r_stats_it ) {
     T r_stats_it_f = static_cast<T>( r_stats_it );
     return square(C) * square( r_stats_it_f ) / static_cast<T>( X.rows() );
 }
 
 template < typename T >
+/*!
+ * \brief Compute the duality gap
+ * \param r_stats_it
+ * \return
+ */
 T FOS<T>::DualityGap( uint r_stats_it ) {
 
     T rStatsIt_f = static_cast<T>( r_stats_it );
@@ -181,6 +258,13 @@ T FOS<T>::DualityGap( uint r_stats_it ) {
 }
 
 template< typename T >
+/*!
+ * \brief Run the main FOS algorithm
+ *
+ * Calling this function will run the FOS algorithm using the values of
+ * X and Y that were instantiated with the class constructor.
+ *
+ */
 void FOS< T >::Algorithm() {
 
     Normalize( X );

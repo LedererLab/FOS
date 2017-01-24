@@ -89,7 +89,7 @@ Matrix<T>* Eigen2SpamsMat ( const Eigen::Matrix< T, n, m >& eigen_mat ) {
     auto eigen_mat_size = eigen_mat.cols() * eigen_mat.rows();
     // Get a non-const copy of data in eigen_mat
     // Spams matrices require non-const data in constructors
-    T* non_const_mat_data = new T[eigen_mat_size];
+    T* non_const_mat_data = new T[ eigen_mat_size ];
 
     auto mat_data = eigen_mat.data();
 

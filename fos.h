@@ -10,7 +10,7 @@
 // Boost Headers
 //
 // FISTA Headers
-//#include <spams.h> // _fistaFlat
+//
 // Project Specific Headers
 #include "fosalgorithm.h"
 #include "fos_debug.h"
@@ -40,6 +40,8 @@ class FOS {
 
     const T C = 0.75;
     const uint M = 100;
+    const T gamma = 1.0;
+
     T rMax;
     T rMin;
 
@@ -140,7 +142,7 @@ Eigen::Matrix< T, 1, Eigen::Dynamic > LogScaleVector( T lower_bound, T upper_bou
 
     for ( uint i = 0; i < num_elements ; i ++ ) {
 
-        T step = (T)i/(T)( num_elements - 1 );
+        T step = static_cast<T>( i )/static_cast<T>( num_elements - 1 );
         auto lin_step = delta*step + min_elem;
 
         log_space_vector( 0, i ) = static_cast<T>( pow( 10.0, lin_step ) );
@@ -186,6 +188,8 @@ template < typename T >
 Eigen::Matrix< T, 1, Eigen::Dynamic > FOS<T>::GenerateRS() {
 
     auto cross_prod = X.transpose() * Y;
+    DEBUG_PRINT( "Cross Product X and Y: \n" << cross_prod );
+
     T rMax = 2.0*cross_prod.template lpNorm< Eigen::Infinity >();
     T rMin = 0.001*rMax;
 
@@ -206,7 +210,7 @@ template < typename T >
  *
  * \return Target quantity
  */
-T FOS<T>::DualityGapTarget(uint r_stats_it ) {
+T FOS<T>::DualityGapTarget( uint r_stats_it ) {
     T r_stats_it_f = static_cast<T>( r_stats_it );
     return square(C) * square( r_stats_it_f ) / static_cast<T>( X.rows() );
 }
@@ -228,6 +232,7 @@ T FOS<T>::DualityGap( uint r_stats_it ) {
     auto error = x_beta_t_prod - Y;
 
     auto x_cross_error = X.transpose() * error;
+
     auto twice_x_cross_error = 2.0 * x_cross_error;
 
     auto alternative = rStatsIt_f/( twice_x_cross_error.template lpNorm< Eigen::Infinity >() );
@@ -245,9 +250,11 @@ T FOS<T>::DualityGap( uint r_stats_it ) {
 
     //Compute Duality Gap
     auto f_beta = error.squaredNorm() + rStatsIt_f * beta_t.template lpNorm < 1 >() ;
+    DEBUG_PRINT( "Primal Objective Function ( F Beta ): " << f_beta );
 
     auto ret_val = nu_t + ( 2.0 / rStatsIt_f ) * Y;
     auto d_nu = -0.25* square( rStatsIt_f ) * ret_val.squaredNorm() - Y.squaredNorm();
+    DEBUG_PRINT( "Dual Function (D Nu): " << d_nu );
 
     auto duality_gap = static_cast<T>( f_beta ) - static_cast<T>( d_nu );
     DEBUG_PRINT( "Duality Gap = " << duality_gap );
@@ -289,7 +296,6 @@ void FOS< T >::Algorithm() {
             loop_index ++;
             DEBUG_PRINT( "Inner loop #: " << loop_index );
 
-
             T duality_gap = DualityGap( rStatsIt );
             T duality_gap_target = DualityGapTarget( rStatsIt );
 
@@ -305,7 +311,9 @@ void FOS< T >::Algorithm() {
                 DEBUG_PRINT( "Duality gap is " << duality_gap << " gap target is " << duality_gap_target );
 
                 T rStatsIt_f = static_cast<T>( rStatsIt );
+                DEBUG_PRINT( "Current Lambda: " << rStatsIt_f );
                 old_Betas = Betas.col( statsIt - 1 ) = FistaFlat<T>( Y, X, old_Betas, 0.5*rStatsIt_f );
+                DEBUG_PRINT( "L2 Norm of Updated Betas: " << old_Betas.squaredNorm() );
 
             }
 

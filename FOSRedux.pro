@@ -50,6 +50,7 @@ LIBS += -larmadillo
 HEADERS += fos.h \
     fosalgorithm.h \
     fos_generics.h \
-    fos_debug.h
+    fos_debug.h \
+    tests.h
 
 SOURCES += main.cpp

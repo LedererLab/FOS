@@ -11,7 +11,7 @@ int main(int argc, char *argv[]) {
 
     Eigen::MatrixXd raw_data = CSV2Eigen< Eigen::MatrixXd >( data_set_path );
 
-    auto X = raw_data;
+    auto X = raw_data.block( 0, 1, raw_data.rows(), raw_data.cols() - 1 );
     auto Y = raw_data.col(0);
 
     FOS< double > algo_fos ( X, Y );

@@ -27,8 +27,8 @@ class FOS {
     void Algorithm();
 
   private:
-    Eigen::Matrix< T, 1, Eigen::Dynamic > GenerateRS();
-    bool ComputeStatsCond(uint stats_it, uint r_stats_it, const Eigen::Matrix<T, 1, Eigen::Dynamic> &rs );
+    Eigen::Matrix< T, 1, Eigen::Dynamic > GenerateLambdaGrid();
+    bool ComputeStatsCond(uint stats_it, uint r_stats_it, const Eigen::Matrix<T, 1, Eigen::Dynamic> &lambdas );
     T DualityGap( uint r_stats_it );
     T DualityGapTarget( uint r_stats_it );
 
@@ -159,16 +159,16 @@ template < typename T >
  *
  * \param stats_it
  * \param r_stats_it
- * \param rs
+ * \param lambdas
  * \return True if outer loop should continue, false otherwise
  */
-bool FOS<T>::ComputeStatsCond( uint stats_it, uint r_stats_it, const Eigen::Matrix< T, 1, Eigen::Dynamic >& rs ) {
+bool FOS<T>::ComputeStatsCond(uint stats_it, uint r_stats_it, const Eigen::Matrix< T, 1, Eigen::Dynamic >& lambdas ) {
 
     bool stats_cond = true;
 
     for ( uint i = 1; i < stats_it; i++ ) {
 
-        auto rk = rs( 0, i );
+        auto rk = lambdas( 0, i );
 
         T abs_max_betas = abs_max<T>( Betas.col( statsIt ) - Betas.col( i ) );
         T check_cond = static_cast<T>( X.rows() ) / ( static_cast<T>( r_stats_it ) + static_cast<T>( rk ) ) * abs_max_betas;
@@ -185,10 +185,9 @@ template < typename T >
  * \brief Generate the 'rs' vector
  * \return
  */
-Eigen::Matrix< T, 1, Eigen::Dynamic > FOS<T>::GenerateRS() {
+Eigen::Matrix< T, 1, Eigen::Dynamic > FOS<T>::GenerateLambdaGrid() {
 
     auto cross_prod = X.transpose() * Y;
-    DEBUG_PRINT( "Cross Product X and Y: \n" << cross_prod );
 
     T rMax = 2.0*cross_prod.template lpNorm< Eigen::Infinity >();
     T rMin = 0.001*rMax;
@@ -246,14 +245,18 @@ T FOS<T>::DualityGap( uint r_stats_it ) {
     T alt_2 = static_cast<T>( alternative_2 );
 
     auto s = std::min( std::max( alt, alt_2 ), -1.0*alt );
+
+    //Compute dual point
     auto nu_t = -1.0 * ( 2 * s / rStatsIt_f ) * error;
 
-    //Compute Duality Gap
+    //Compute primal objective function
     auto f_beta = error.squaredNorm() + rStatsIt_f * beta_t.template lpNorm < 1 >() ;
     DEBUG_PRINT( "Primal Objective Function ( F Beta ): " << f_beta );
 
     auto ret_val = nu_t + ( 2.0 / rStatsIt_f ) * Y;
-    auto d_nu = -0.25* square( rStatsIt_f ) * ret_val.squaredNorm() - Y.squaredNorm();
+
+    //Compute dual objective function
+    auto d_nu = -1.0*( 0.25* square( rStatsIt_f ) * ret_val.squaredNorm() - Y.squaredNorm() );
     DEBUG_PRINT( "Dual Function (D Nu): " << d_nu );
 
     auto duality_gap = static_cast<T>( f_beta ) - static_cast<T>( d_nu );
@@ -277,18 +280,21 @@ void FOS< T >::Algorithm() {
     Normalize( X );
     Normalize( Y );
 
-    auto rs = GenerateRS();
+    auto lamda_grid = GenerateLambdaGrid();
 
     bool statsCont = true;
     uint statsIt = 1;
+
     Betas = Eigen::Matrix< T , Eigen::Dynamic, Eigen::Dynamic >::Zero( X.cols(), M );
 
     //Outer Loop
     while( statsCont && ( statsIt < M ) ) {
 
         statsIt ++;
+
+        DEBUG_PRINT( "Outer loop #: " << statsIt );
         old_Betas = Betas.col( statsIt - 2 );
-        auto rStatsIt = rs( 0, statsIt - 1 );
+        auto rStatsIt = lamda_grid( 0, statsIt - 1 );
 
         //Inner Loop
         do {
@@ -304,6 +310,8 @@ void FOS< T >::Algorithm() {
 
                 DEBUG_PRINT( "Duality gap is below specified threshold, exiting inner loop." );
                 Betas.col( statsIt - 1 ) = old_Betas;
+                loop_index = 0;
+
                 break;
 
             } else {
@@ -312,6 +320,7 @@ void FOS< T >::Algorithm() {
 
                 T rStatsIt_f = static_cast<T>( rStatsIt );
                 DEBUG_PRINT( "Current Lambda: " << rStatsIt_f );
+
                 old_Betas = Betas.col( statsIt - 1 ) = FistaFlat<T>( Y, X, old_Betas, 0.5*rStatsIt_f );
                 DEBUG_PRINT( "L2 Norm of Updated Betas: " << old_Betas.squaredNorm() );
 
@@ -319,7 +328,7 @@ void FOS< T >::Algorithm() {
 
         } while ( true );
 
-        statsCont = ComputeStatsCond( statsIt, rStatsIt, rs );
+        statsCont = ComputeStatsCond( statsIt, rStatsIt, lamda_grid );
 
         //auto avfosfit = Betas.col( statsIt );
     }

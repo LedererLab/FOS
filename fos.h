@@ -321,7 +321,13 @@ void FOS< T >::Algorithm() {
                 T rStatsIt_f = static_cast<T>( rStatsIt );
                 DEBUG_PRINT( "Current Lambda: " << rStatsIt_f );
 
-                old_Betas = Betas.col( statsIt - 1 ) = FistaFlat<T>( Y, X, old_Betas, 0.5*rStatsIt_f );
+                auto fista_ret = FistaFlat<T>( Y, X, old_Betas, 0.5*rStatsIt_f );
+
+                Betas.col( statsIt - 1 ) = fista_ret;
+                old_Betas = Betas.col( statsIt - 1 );
+
+                DEBUG_PRINT( "L2 Norm of Fista RetVal: " << fista_ret.squaredNorm() );
+                DEBUG_PRINT( "L2 Norm of Betas: " << Betas.squaredNorm() );
                 DEBUG_PRINT( "L2 Norm of Updated Betas: " << old_Betas.squaredNorm() );
 
             }

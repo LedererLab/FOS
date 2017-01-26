@@ -33,6 +33,7 @@ template < typename T, uint m, uint n >
  * \return A new Eigen::Matrix with dimensions determined by the Spams Matrix.
  */
 Eigen::Matrix< T, m, n > Spams2EigenMat ( const Matrix<T>* spams_mat ) {
+
     auto M = Eigen::Map< Eigen::Matrix< T, n, m, Eigen::ColMajor> >( spams_mat->rawX() );
     return M;
 }
@@ -69,7 +70,18 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > Spams2EigenMat ( Matrix<T>* s
     uint num_cols = spams_mat->n();
     uint num_rows = spams_mat->m();
 
-    auto M = Eigen::Map< Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic, Eigen::ColMajor> >( spams_mat->rawX(), num_cols, num_rows );
+    // Determine number of elements in eigen_mat
+    auto spams_mat_size = num_cols*num_rows;
+    // Get a non-const copy of data in eigen_mat
+    // Spams matrices require non-const data in constructors
+    T* mat_data = new T[ spams_mat_size ];
+
+    std::copy( spams_mat->rawX(), spams_mat->rawX() + spams_mat_size, mat_data );
+
+    auto M = Eigen::Map< Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic, Eigen::ColMajor> >( mat_data, num_cols, num_rows );
+
+    delete[] mat_data;
+
     return M;
 }
 
@@ -118,13 +130,13 @@ Matrix<T>* Eigen2SpamsMat ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynam
     auto eigen_mat_size = n*m;
     // Get a non-const copy of data in eigen_mat
     // Spams matrices require non-const data in constructors
-    T* non_const_mat_data = new T[eigen_mat_size];
+    T* non_const_mat_data = new T[ eigen_mat_size ];
 
-    auto mat_data = eigen_mat.data();
-
-    std::copy( mat_data, mat_data + eigen_mat_size, non_const_mat_data );
+    std::copy( eigen_mat.data(), eigen_mat.data() + eigen_mat_size, non_const_mat_data );
 
     auto spams_mat = new Matrix<T> ( non_const_mat_data, m, n );
+
+    delete[] non_const_mat_data;
 
     return spams_mat;
 }
@@ -243,9 +255,9 @@ Matrix<T>* FistaFlat( Matrix<T>* Y, Matrix<T>* X, Matrix<T>* Omega_0, const T la
                false, //transpose
                0 //linesearch_mode
               );
-    delete Y;
-    delete X;
-    delete Omega_0;
+//    delete Y;
+//    delete X;
+//    delete Omega_0;
 
 //    delete W;
     delete groups;
@@ -289,7 +301,13 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic> FistaFlat( Eigen::Matrix< T, E
 
     auto spams_ret_val = internal::FistaFlat< T >( spams_Y, spams_X, spams_omega, lambda_1 );
 
+    delete spams_Y;
+    delete spams_X;
+    delete spams_omega;
+
     auto ret_val = Spams2EigenMat<T>( spams_ret_val );
+
+    delete spams_ret_val;
 
     return ret_val.transpose();
 }

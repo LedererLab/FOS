@@ -108,4 +108,19 @@ void Normalize( Eigen::Matrix< T, Eigen::Dynamic, 1 >& mat ) {
     mat = (mat.rowwise() - mean).array().rowwise() / std.array();
 }
 
+template< typename T >
+Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> build_matrix( uint num_rows, uint num_cols, T (*mat_func)(uint,uint) ) {
+
+    Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> mat( num_rows, num_cols );
+
+    for( uint i = 0; i < num_rows ; i ++ ) {
+
+        for( uint j = 0; j < num_cols ; j++ ) {
+            mat( i, j ) = (*mat_func)( i, j );
+        }
+    }
+
+    return mat;
+}
+
 #endif // FOS_GENERICS_H

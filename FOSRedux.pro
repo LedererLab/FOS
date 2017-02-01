@@ -51,6 +51,7 @@ HEADERS += fos.h \
     fosalgorithm.h \
     fos_generics.h \
     fos_debug.h \
-    tests.h
+    test_eigen3.h \
+    test_fista.h
 
 SOURCES += main.cpp

@@ -3,7 +3,8 @@
 
 #include "fos.h"
 #include "fosalgorithm.h"
-#include "tests.h"
+#include "test_eigen3.h"
+#include "test_fista.h"
 
 int main(int argc, char *argv[]) {
 
@@ -16,5 +17,7 @@ int main(int argc, char *argv[]) {
 
     FOS< double > algo_fos ( X, Y );
     algo_fos.Algorithm();
+
+//    RunFistaTests();
 
 }

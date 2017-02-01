@@ -80,7 +80,7 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > Spams2EigenMat ( Matrix<T>* s
 
     auto M = Eigen::Map< Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic, Eigen::ColMajor> >( mat_data, num_cols, num_rows );
 
-    delete[] mat_data;
+//    delete[] mat_data;
 
     return M;
 }
@@ -136,7 +136,7 @@ Matrix<T>* Eigen2SpamsMat ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynam
 
     auto spams_mat = new Matrix<T> ( non_const_mat_data, m, n );
 
-    delete[] non_const_mat_data;
+//    delete[] non_const_mat_data;
 
     return spams_mat;
 }

@@ -156,14 +156,14 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > ISTA ( Eigen::Matrix< T, Eige
     T L = L_0;
 
     Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta = Beta_0;
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta_k_less_1 = Beta_0;
 
     for( uint i = 0; i < num_iterations; i++ ) {
 
         Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta_k_less_1 = Beta;
-        Beta = update_beta( X, Y, Beta, L, 0.5*lambda );
+        Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta_try = update_beta( X, Y, Beta, L, 0.5*lambda );
 
-        while( f_beta( X, Y, Beta ) > f_beta_tilda( X, Y, Beta, Beta_k_less_1, L ) ) {
-            DEBUG_PRINT( "Beta: \n"  << Beta );
+        while( f_beta( X, Y, Beta_try ) > f_beta_tilda( X, Y, Beta_try, Beta_k_less_1, L ) ) {
 
             static uint counter = 0;
             counter++;
@@ -177,10 +177,35 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > ISTA ( Eigen::Matrix< T, Eige
 
         }
 
+        Beta = update_beta( X, Y, Beta, L, 0.5*lambda );
+
     }
 
     return Beta;
 
 }
+
+//template < typename T >
+//Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > ISTA ( Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X, \
+//        Eigen::Matrix< T, Eigen::Dynamic, 1 > Y, \
+//        Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta_0, \
+//        uint num_iterations, \
+//        T L_0, \
+//        T lambda ) {
+
+//    (void)L_0;
+
+//    T L = naive_L( X );
+
+//    Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta = Beta_0;
+
+//    for( uint i = 0; i < num_iterations; i++ ) {
+
+//        Beta = update_beta( X, Y, Beta, L, 0.5*lambda );
+
+//    }
+
+//    return Beta;
+//}
 
 #endif // ISTA_H

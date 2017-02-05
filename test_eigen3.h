@@ -18,7 +18,7 @@
 
 void crossprod_test() {
 
-    DEBUG_PRINT( __func__ )
+    DEBUG_PRINT( __func__ );
     Eigen::Matrix< float, Eigen::Dynamic, Eigen::Dynamic > X( 2 ,2 );
     Eigen::Matrix< float, Eigen::Dynamic, Eigen::Dynamic > Y( 2, 1 );
 
@@ -35,7 +35,7 @@ void crossprod_test() {
 
 void csv_read_test() {
 
-    DEBUG_PRINT( __func__ )
+    DEBUG_PRINT( __func__ );
     std::string data_set_path = "/home/bephillips2/Desktop/Hanger Bay 1/Academia/HDIM/test_data.csv";
     Eigen::MatrixXd raw_data = CSV2Eigen< Eigen::MatrixXd >( data_set_path );
 
@@ -47,7 +47,7 @@ void csv_read_test() {
 
 void lp_norm_test() {
 
-    DEBUG_PRINT( __func__ )
+    DEBUG_PRINT( __func__ );
     Eigen::Matrix< double, Eigen::Dynamic, Eigen::Dynamic > X( 2 ,2 );
 
     X << 1.0f, 2.0f, 3.0f, 4.0f;
@@ -67,7 +67,7 @@ void lp_norm_test() {
 
 void min_max_test() {
 
-    DEBUG_PRINT( __func__ )
+    DEBUG_PRINT( __func__ );
     Eigen::Matrix< double, Eigen::Dynamic, Eigen::Dynamic > X( 2 ,2 );
 
     X << 1.0f, -2.0f, 3.0f, -4.0f;
@@ -82,7 +82,7 @@ void min_max_test() {
 
 void row_col_test() {
 
-    DEBUG_PRINT( __func__ )
+    DEBUG_PRINT( __func__ );
     Eigen::Matrix< float, Eigen::Dynamic, Eigen::Dynamic > X( 2 ,2 );
     Eigen::Matrix< float, Eigen::Dynamic, Eigen::Dynamic > Y( 1, 2 );
 

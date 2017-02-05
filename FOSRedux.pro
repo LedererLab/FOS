@@ -16,8 +16,8 @@ CONFIG(debug, debug|release) {
     DEFINES += "DEBUG"
 } else {
     DEFINES += "NDEBUG"
-    QMAKE_CXXFLAGS -= -O2
-    QMAKE_CXXFLAGS += -O3
+#    QMAKE_CXXFLAGS -= -O2
+#    QMAKE_CXXFLAGS += -O3
 }
 
 # Eigen
@@ -52,6 +52,8 @@ HEADERS += fos.h \
     fos_generics.h \
     fos_debug.h \
     test_eigen3.h \
-    test_fista.h
+    test_fista.h \
+    ista.h \
+    test_ista.h
 
 SOURCES += main.cpp

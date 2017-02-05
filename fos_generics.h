@@ -108,6 +108,11 @@ void Normalize( Eigen::Matrix< T, Eigen::Dynamic, 1 >& mat ) {
     mat = (mat.rowwise() - mean).array().rowwise() / std.array();
 }
 
+double eucl_distance( uint n, uint m ) {
+    //Indices need to be incremented by one to agree with R's indexing
+    return std::sqrt( (m+1)*(m+1) + (n+1)*(n+1) );
+}
+
 template< typename T >
 Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> build_matrix( uint num_rows, uint num_cols, T (*mat_func)(uint,uint) ) {
 
@@ -121,6 +126,17 @@ Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> build_matrix( uint num_rows, ui
     }
 
     return mat;
+}
+
+template< typename T >
+void sweep_matrix( Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>& mat, T (*mat_func)(uint,uint) ) {
+
+    for( uint i = 0; i < mat.rows() ; i ++ ) {
+
+        for( uint j = 0; j < mat.cols() ; j++ ) {
+            mat( i, j ) = (*mat_func)( i, j );
+        }
+    }
 }
 
 #endif // FOS_GENERICS_H

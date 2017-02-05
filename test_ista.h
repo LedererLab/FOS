@@ -1,5 +1,6 @@
-#ifndef TEST_FISTA_H
-#define TEST_FISTA_H
+#ifndef TEST_ISTA_H
+#define TEST_ISTA_H
+
 
 // C System-Headers
 //
@@ -16,9 +17,9 @@
 // Project Specific Headers
 #include "fos_debug.h"
 #include "fos_generics.h"
-#include "fosalgorithm.h"
+#include "ista.h"
 
-void TestFistaFlat( uint num_rows, uint num_cols ) {
+void TestIsta( uint num_rows, uint num_cols ) {
 
     auto X = build_matrix<double>( num_rows, num_cols, &eucl_distance );
     auto Y = X.col(0);
@@ -27,16 +28,16 @@ void TestFistaFlat( uint num_rows, uint num_cols ) {
 
     double lambda = 1.0;
 
-    auto spams_retval =  FistaFlat< double >( Y, X, W_0, 0.5*lambda );
+    auto ista_retval =  ISTA< double >( X, Y, W_0, 1, 0.1, lambda );
 
-    std::cout << "fistaFlat result:\n" << spams_retval << std::endl;
+    std::cout << "ISTA result:\n" << ista_retval << std::endl;
 }
 
-void RunFistaTests() {
+void RunIstaTests() {
 
     for ( uint k = 2; k <= 10; k++ ) {
 
-        std::cout << "Testing fistaFlat for a " \
+        std::cout << "Testing ISTA for a " \
                   << k \
                   << "x" \
                   << k \
@@ -44,8 +45,8 @@ void RunFistaTests() {
                   << build_matrix<double>( k, k, &eucl_distance ) \
                   << std::endl;
 
-        TestFistaFlat( k, k );
+        TestIsta( k, k );
     }
 }
 
-#endif // TEST_FISTA_H
+#endif // TEST_ISTA_H

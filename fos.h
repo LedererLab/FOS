@@ -27,9 +27,14 @@ class FOS {
     FOS( Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > x, Eigen::Matrix< T, Eigen::Dynamic, 1 > y );
     void Algorithm();
 
+  protected:
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > avfos_fit;
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > lambdas;
+    uint optim_index;
+
   private:
     Eigen::Matrix< T, 1, Eigen::Dynamic > GenerateLambdaGrid();
-    bool ComputeStatsCond(uint stats_it, uint r_stats_it, const Eigen::Matrix<T, 1, Eigen::Dynamic> &lambdas );
+    bool ComputeStatsCond(uint stats_it, T r_stats_it, const Eigen::Matrix<T, 1, Eigen::Dynamic> &lambdas );
     T DualityGap( uint r_stats_it );
     T DualityGapTarget( uint r_stats_it );
 
@@ -103,8 +108,8 @@ template < typename T >
  *
  * \return Coeffecient-wise maximum of the absolute value of the argument
  */
-T abs_max( Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > matrix ) {
-    return static_cast<T>( matrix.cwiseAbs().maxCoeff() );
+T abs_max( const T& matrix ) {
+    return matrix.cwiseAbs().maxCoeff();
 }
 
 template < typename T >
@@ -163,18 +168,26 @@ template < typename T >
  * \param lambdas
  * \return True if outer loop should continue, false otherwise
  */
-bool FOS<T>::ComputeStatsCond(uint stats_it, uint r_stats_it, const Eigen::Matrix< T, 1, Eigen::Dynamic >& lambdas ) {
+bool FOS<T>::ComputeStatsCond( uint stats_it, T r_stats_it, const Eigen::Matrix< T, 1, Eigen::Dynamic >& lambdas ) {
 
     bool stats_cond = true;
 
-    for ( uint i = 1; i < stats_it; i++ ) {
+    for ( uint i = 1; i <= stats_it; i++ ) {
 
-        auto rk = lambdas( 0, i );
+        Eigen::Matrix< T, Eigen::Dynamic, 1 > beta_k = Betas.col( i - 1 );
+        T rk = lambdas( 0, i - 1 );
 
-        T abs_max_betas = abs_max<T>( Betas.col( statsIt ) - Betas.col( i ) );
-        T check_cond = static_cast<T>( X.rows() ) / ( static_cast<T>( r_stats_it ) + static_cast<T>( rk ) ) * abs_max_betas;
+        Eigen::Matrix< T, Eigen::Dynamic, 1 > beta_diff = Betas.col( stats_it - 1 );
+        beta_diff -= beta_k;
+        T abs_max_betas = beta_diff.cwiseAbs().maxCoeff();
 
-        stats_cond &= check_cond <= C;
+        T n = static_cast<T>( X.rows() );
+
+        T check_parameter = n*abs_max_betas / ( r_stats_it + rk );
+
+        DEBUG_PRINT( "Check Parameter: " << check_parameter );
+
+        stats_cond &= ( check_parameter <= C );
     }
 
     return stats_cond;
@@ -216,126 +229,52 @@ T FOS<T>::DualityGapTarget( uint r_stats_it ) {
 }
 
 template < typename T >
-/*!
- * \brief Compute the duality gap
- * \param r_stats_it
- * \return
- */
-T FOS<T>::DualityGap( uint r_stats_it ) {
-
-    T rStatsIt_f = static_cast<T>( r_stats_it );
-
-    //Duality Gap Set-Up
-    auto beta_t = Betas.col( statsIt - 1 );
-
-    auto x_beta_t_prod = X * beta_t;
-    auto error = x_beta_t_prod - Y;
-
-    auto x_cross_error = X.transpose() * error;
-
-    auto twice_x_cross_error = 2.0 * x_cross_error;
-
-    auto alternative = rStatsIt_f/( twice_x_cross_error.template lpNorm< Eigen::Infinity >() );
-    T alt = static_cast<T>( alternative );
-
-    T y_cross_error = static_cast<T>( Y.transpose() * error );
-    auto negative_error = Y - x_beta_t_prod;
-
-    auto alternative_2 = ( -1.0 / negative_error.squaredNorm() ) * y_cross_error;
-
-    T alt_2 = static_cast<T>( alternative_2 );
-
-    auto s = std::min( std::max( alt, alt_2 ), -1.0*alt );
-
-    //Compute dual point
-    auto nu_t = -1.0 * ( 2 * s / rStatsIt_f ) * error;
-
-    //Compute primal objective function
-    auto f_beta = error.squaredNorm() + rStatsIt_f * beta_t.template lpNorm < 1 >() ;
-    DEBUG_PRINT( "Primal Objective Function ( F Beta ): " << f_beta );
-
-    auto ret_val = nu_t + ( 2.0 / rStatsIt_f ) * Y;
-
-    //Compute dual objective function
-    auto d_nu = -1.0*( 0.25* square( rStatsIt_f ) * ret_val.squaredNorm() - Y.squaredNorm() );
-    DEBUG_PRINT( "Dual Function (D Nu): " << d_nu );
-
-    auto duality_gap = static_cast<T>( f_beta ) - static_cast<T>( d_nu );
-    DEBUG_PRINT( "Duality Gap = " << duality_gap );
-
-
-    return duality_gap;
-
-}
-
-template < typename T >
-T primal_objective( Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X, \
-                    Eigen::Matrix< T, Eigen::Dynamic, 1 > Y, \
-                    Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta, \
-                    uint r_stats_it ) {
-
-    T r_stats_it_f = static_cast<T>(r_stats_it);
+T primal_objective( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
+                    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y, \
+                    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta, \
+                    T r_stats_it ) {
 
     Eigen::Matrix< T, Eigen::Dynamic, 1 > error = X*Beta - Y;
-
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > alt_part_0 = 2*X.transpose()*error;
-    //Compute dual point
-    T alternative = r_stats_it_f/( alt_part_0.template lpNorm < Eigen::Infinity >() );
-
-    T alt_part_1 = -1.0*static_cast<T>( Y.transpose()*error );
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > alt_part_2 = Y - X*Beta;
-
-    T alternative_0 = alt_part_1/( alt_part_2.squaredNorm() );
-
-    T s = std::min( std::max( alternative, alternative_0), -1.0*alternative );
-
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > nu_t = -1.0*( 2.0*s / r_stats_it_f ) * error;
-
-    T f_beta = error.squaredNorm() + r_stats_it_f*Beta.template lpNorm < 1 >();
+    T f_beta = error.squaredNorm() + r_stats_it*Beta.template lpNorm < 1 >();
 
     return f_beta;
 
 }
 
 template < typename T >
-T dual_objective ( Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X, \
-                   Eigen::Matrix< T, Eigen::Dynamic, 1 > Y, \
-                   Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta, \
-                   uint r_stats_it ) {
+T dual_objective ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
+                   const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y, \
+                   const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta, \
+                   T r_stats_it ) {
 
-    T r_stats_it_f = static_cast<T>(r_stats_it);
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > error = X*Beta - Y;
 
-    auto error = X*Beta - Y;
-
-    auto alt_part_0 = 2*X.transpose()*error;
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > alt_part_0 = 2*X.transpose()*error;
     //Compute dual point
-    auto alternative = r_stats_it_f/( alt_part_0.template lpNorm < Eigen::Infinity >() );
+    T alternative = r_stats_it/( alt_part_0.template lpNorm < Eigen::Infinity >() );
 
-    auto alt_part_1 = -1.0*static_cast<T>( Y.transpose()*error );
-    auto alt_part_2 = Y - X*Beta;
+    T alt_part_1 = -1.0*static_cast<T>( Y.transpose()*error );
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > alt_part_2 = Y - X*Beta;
 
-    auto alternative_0 = alt_part_1/( alt_part_2.squaredNorm() );
+    T alternative_0 = alt_part_1/( alt_part_2.squaredNorm() );
 
-    T s = std::min( std::max( alternative, alternative_0), -1.0*alternative );
+    T s = std::min( std::max( alternative, alternative_0 ), -1.0*alternative );
 
-    auto nu_t = -1.0*( 2.0*s / r_stats_it_f ) * error;
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > nu_t = -1.0*( 2.0*s / r_stats_it ) * error;
 
-    T f_beta = error.squaredNorm() + r_stats_it_f*Beta.template lpNorm < 1 >();
+    Eigen::Matrix< T, Eigen::Dynamic, 1 >  nu_part = nu_t + 2.0/r_stats_it*Y;
 
-    auto nu_part = nu_t + 2.0/r_stats_it_f*Y;
-
-    T d_nu = 0.25* std::pow( r_stats_it_f, 2.0 )*nu_part.squaredNorm() - Y.squaredNorm();
+    T d_nu = 0.25* square( r_stats_it )*nu_part.squaredNorm() - Y.squaredNorm();
 
     return d_nu;
 }
 
 template < typename T >
-T duality_gap_target( T gamma, T C, uint r_stats_it, uint n ) {
+T duality_gap_target( T gamma, T C, T r_stats_it, uint n ) {
 
-    T r_stats_it_f = static_cast<T>( r_stats_it );
     T n_f = static_cast<T>( n );
+    return gamma*square( C )*square( r_stats_it )/n_f;
 
-    return gamma*std::pow( C, 2.0 )*std::pow( r_stats_it_f, 2.0 )/n_f;
 }
 
 
@@ -352,7 +291,8 @@ void FOS< T >::Algorithm() {
     Normalize( X );
     Normalize( Y );
 
-    auto lamda_grid = GenerateLambdaGrid();
+    Eigen::Matrix< T, 1, Eigen::Dynamic > lamda_grid = GenerateLambdaGrid();
+    DEBUG_PRINT( "Lambda grid: " << lamda_grid );
 
     bool statsCont = true;
     uint statsIt = 1;
@@ -365,11 +305,12 @@ void FOS< T >::Algorithm() {
         statsIt ++;
 
         DEBUG_PRINT( "Outer loop #: " << statsIt );
+
         old_Betas = Betas.col( statsIt - 2 );
-        auto rStatsIt = lamda_grid( 0, statsIt - 1 );
+        T rStatsIt = lamda_grid( 0, statsIt - 1 );
 
         //Inner Loop
-        do {
+        while( true ) {
 
             loop_index ++;
             DEBUG_PRINT( "Inner loop #: " << loop_index );
@@ -378,7 +319,10 @@ void FOS< T >::Algorithm() {
 
             T duality_gap = primal_objective( X, Y, beta_k, rStatsIt ) + dual_objective( X, Y, beta_k, rStatsIt );
 
-            T gap_target = duality_gap_target( gamma, C, rStatsIt, X.rows() );
+            uint n = static_cast< uint >( X.rows() );
+            T gap_target = duality_gap_target( gamma, C, rStatsIt, n );
+
+            DEBUG_PRINT( "Duality gap is " << duality_gap << " gap target is " << gap_target );
 
             //Criteria meet, exit loop
             if( duality_gap <= gap_target ) {
@@ -391,13 +335,9 @@ void FOS< T >::Algorithm() {
 
             } else {
 
-                DEBUG_PRINT( "Duality gap is " << duality_gap << " gap target is " << gap_target );
+                DEBUG_PRINT( "Current Lambda: " << rStatsIt );
 
-                T rStatsIt_f = static_cast<T>( rStatsIt );
-                DEBUG_PRINT( "Current Lambda: " << rStatsIt_f );
-
-                Betas.col( statsIt - 1 ) = FistaFlat<T>( Y, X, old_Betas, 0.5*rStatsIt_f );
-
+                Betas.col( statsIt - 1 ) = FistaFlat<T>( Y, X, old_Betas, 0.5*rStatsIt );
 //                Betas.col( statsIt - 1 ) = ISTA<T>( X, Y, old_Betas, 1, 0.1, 0.5*rStatsIt_f );
 
                 old_Betas = Betas.col( statsIt - 1 );
@@ -406,12 +346,17 @@ void FOS< T >::Algorithm() {
 
             }
 
-        } while ( true );
+        }
 
         statsCont = ComputeStatsCond( statsIt, rStatsIt, lamda_grid );
-
-        //auto avfosfit = Betas.col( statsIt );
     }
+
+    avfos_fit = Betas.col( statsIt - 1 );
+    lambdas = lamda_grid;
+    optim_index = statsIt;
+
+    std::cout << Betas.squaredNorm() << std::endl;
+    std::cout << optim_index << std::endl;
 
 }
 

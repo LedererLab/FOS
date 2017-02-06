@@ -6,6 +6,7 @@
 #include "test_eigen3.h"
 #include "test_ista.h"
 #include "test_fista.h"
+#include "test_fos.h"
 #include "debug.h"
 
 int main(int argc, char *argv[]) {
@@ -23,5 +24,7 @@ int main(int argc, char *argv[]) {
 
 //    RunIstaTests();
 //    RunFistaTests();
+
+//    RunFOSTests();
 
 }

@@ -55,6 +55,7 @@ HEADERS += fos.h \
     test_fista.h \
     ista.h \
     test_ista.h \
-    debug.h
+    debug.h \
+    test_fos.h
 
 SOURCES += main.cpp

@@ -82,7 +82,7 @@ template< typename T >
  *
  * An n x m matrix to be normalized.
  */
-void Normalize( Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> &mat ) {
+void Normalize( Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>& mat ) {
 
     auto mean = mat.colwise().mean();
     auto std = ((mat.rowwise() - mean).array().square().colwise().sum() / (mat.rows() - 1)).sqrt();

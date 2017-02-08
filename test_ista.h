@@ -28,7 +28,7 @@ void TestIsta( uint num_rows, uint num_cols ) {
 
     double lambda = 1.0;
 
-    auto ista_retval =  ISTA< double >( X, Y, W_0, 1, 0.1, lambda );
+    auto ista_retval =  ISTA< double >( X, Y, W_0, 1, 0.1, 0.5*lambda );
 
     std::cout << "ISTA result:\n" << ista_retval << std::endl;
 }

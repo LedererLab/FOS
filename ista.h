@@ -17,6 +17,7 @@
 //
 // Project Specific Headers
 #include "fos_debug.h"
+#include "fos_generics.h"
 
 template <typename T> int sgn(T val) {
     return (T(0) < val) - (val < T(0));
@@ -41,7 +42,7 @@ T prox( T x, T lambda ) {
 template < typename T >
 Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > soft_threshold_mat( Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > mat, T lambda ) {
 
-    Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> mat_x( mat.rows(), mat.cols() );
+    Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic > mat_x( mat.rows(), mat.cols() );
 
     for( uint i = 0; i < mat.rows() ; i ++ ) {
 
@@ -73,10 +74,10 @@ T f_beta_tilda ( Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X, \
     auto f_beta = X*Beta_prime - Y;
     T taylor_term_0 = f_beta.squaredNorm();
 
-    auto f_grad = 2*X.transpose()*( X*Beta_prime - Y );
+    auto f_grad = 2.0*X.transpose()*( X*Beta_prime - Y );
     auto beta_diff = ( Beta - Beta_prime );
 
-    auto taylor_term_1 = f_grad.transpose()*beta_diff;
+    T taylor_term_1 = f_grad.transpose()*beta_diff;
 
     auto taylor_term_2 = L/2.0*beta_diff.squaredNorm();
 
@@ -93,8 +94,6 @@ T backtrace( Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X, \
 
     uint counter = 0;
     T new_L = L;
-
-    DEBUG_PRINT( "Value of f: " << f_beta( X, Y, Beta_k ) << " Value of f tilde: " << f_beta_tilda( X, Y, Beta_k, Beta_k_less_1, L ) );
 
     while( f_beta( X, Y, Beta_k ) <= f_beta_tilda( X, Y, Beta_k, Beta_k_less_1, new_L ) ) {
         counter ++;
@@ -115,18 +114,21 @@ T backtrace( Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X, \
 //    return Beta
 
 template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > update_beta (
-    Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic  > X, \
+Eigen::Matrix< T, Eigen::Dynamic, 1 > update_beta (
+    Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X, \
     Eigen::Matrix< T, Eigen::Dynamic, 1  > Y, \
     Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta, \
     T L, \
     T thres ) {
 
-    auto X_t = X.transpose();
-    auto X_beta = X*Beta;
+    Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_t = X.transpose();
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > X_beta = X*Beta;
 
-    Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > beta_to_modify = Beta + 1.0/L*( X_t*( Y - X_beta ) );
-    return soft_threshold_mat( beta_to_modify, thres/L );
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > f_grad = 2.0*( X_t*( Y - X_beta ) );
+
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > beta_to_modify = Beta + (1.0/L)*f_grad;
+
+    return soft_threshold_mat<T>( beta_to_modify, thres/L );
 
 }
 
@@ -156,56 +158,32 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > ISTA ( Eigen::Matrix< T, Eige
     T L = L_0;
 
     Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta = Beta_0;
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta_k_less_1 = Beta_0;
 
     for( uint i = 0; i < num_iterations; i++ ) {
 
         Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta_k_less_1 = Beta;
-        Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta_try = update_beta( X, Y, Beta, L, 0.5*lambda );
 
-        while( f_beta( X, Y, Beta_try ) > f_beta_tilda( X, Y, Beta_try, Beta_k_less_1, L ) ) {
+        while( true ) {
 
             static uint counter = 0;
             counter++;
+
             DEBUG_PRINT( "Backtrace iteration: " << counter );
 
-            L = eta*L;
-            DEBUG_PRINT( "L: " << L );
+            Beta = update_beta( X, Y, Beta_k_less_1, L, lambda );
 
-            Beta_k_less_1 = Beta;
-            Beta = update_beta( X, Y, Beta, L, 0.5*lambda );
-
+            if( f_beta( X, Y, Beta ) > f_beta_tilda( X, Y, Beta, Beta_k_less_1, L ) ) {
+                L = L*eta;
+                DEBUG_PRINT( "L: " << L );
+            } else {
+                break;
+            }
         }
-
-        Beta = update_beta( X, Y, Beta, L, 0.5*lambda );
-
     }
 
     return Beta;
 
 }
 
-//template < typename T >
-//Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > ISTA ( Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X, \
-//        Eigen::Matrix< T, Eigen::Dynamic, 1 > Y, \
-//        Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta_0, \
-//        uint num_iterations, \
-//        T L_0, \
-//        T lambda ) {
-
-//    (void)L_0;
-
-//    T L = naive_L( X );
-
-//    Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta = Beta_0;
-
-//    for( uint i = 0; i < num_iterations; i++ ) {
-
-//        Beta = update_beta( X, Y, Beta, L, 0.5*lambda );
-
-//    }
-
-//    return Beta;
-//}
 
 #endif // ISTA_H

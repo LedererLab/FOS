@@ -287,11 +287,7 @@ Matrix<T>* FistaFlat( Matrix<T>* Y, Matrix<T>* X, Matrix<T>* Omega_0, const T la
                                  false, //transpose
                                  0 //linesearch_mode
                                 );
-//    delete Y;
-//    delete X;
-//    delete Omega_0;
 
-//    delete W;
     delete optim_info;
     delete groups;
     delete inner_weights;

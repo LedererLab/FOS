@@ -338,7 +338,7 @@ void FOS< T >::Algorithm() {
                 DEBUG_PRINT( "Current Lambda: " << rStatsIt );
 
                 Betas.col( statsIt - 1 ) = FistaFlat<T>( Y, X, old_Betas, 0.5*rStatsIt );
-//                Betas.col( statsIt - 1 ) = ISTA<T>( X, Y, old_Betas, 1, 0.1, 0.5*rStatsIt_f );
+//                Betas.col( statsIt - 1 ) = ISTA<T>( X, Y, old_Betas, 1, 0.1, rStatsIt );
 
                 old_Betas = Betas.col( statsIt - 1 );
 
@@ -355,8 +355,8 @@ void FOS< T >::Algorithm() {
     lambdas = lamda_grid;
     optim_index = statsIt;
 
-    std::cout << Betas.squaredNorm() << std::endl;
-    std::cout << optim_index << std::endl;
+    DEBUG_PRINT( avfos_fit );
+    DEBUG_PRINT( optim_index );
 
 }
 

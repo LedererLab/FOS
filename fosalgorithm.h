@@ -238,7 +238,7 @@ Matrix<T>* FistaFlat( Matrix<T>* Y, Matrix<T>* X, Matrix<T>* Omega_0, const T la
     //Initialize num_threads
     int num_threads = omp_get_max_threads();
 
-    auto inner_weights = (Vector< double > *) 0;
+    auto inner_weights = (Vector< T > *) 0;
 
     char regul[] = "l1";
     char loss[] = "square";

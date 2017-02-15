@@ -5,6 +5,34 @@
  *  \brief Preprocessor macros used for debugging and profiling
  */
 
+// C System-Headers
+#include <stdio.h>
+// C++ System headers
+#include <sstream>
+#include <string>
+#include <stdexcept>
+#include <iostream>
+#include <type_traits>
+#include <assert.h> //static_assert
+#include <fstream>
+#include <typeinfo>  // typeid, typeof
+#include <cxxabi.h>// abi::__cxa_demangle
+// Boost Headers
+//
+// Miscellaneous Headers
+//
+
+//Get the name of a type as it would appear in source code
+template <typename T> std::string get_type_name () {
+    int status;
+    char* type_name = abi::__cxa_demangle(typeid(T).name(), 0, 0, &status);
+    std::string type_str = std::string( type_name );
+
+    free (type_name);
+
+    return type_str;
+}
+
 /** Measure how long a function takes to execute.*/
 #define TIME_IT( func, ... ) \
     do { \

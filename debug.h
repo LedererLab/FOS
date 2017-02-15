@@ -14,6 +14,11 @@
 #include <string>
 #include <stdexcept>
 #include <iostream>
+#include <type_traits>
+#include <assert.h> //static_assert
+#include <fstream>
+#include <typeinfo>  // typeid, typeof
+#include <cxxabi.h>// abi::__cxa_demangle
 // Boost Headers
 //
 // Miscellaneous Headers

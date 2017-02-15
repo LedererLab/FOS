@@ -27,6 +27,11 @@ class FOS {
     FOS( Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > x, Eigen::Matrix< T, Eigen::Dynamic, 1 > y );
     void Algorithm();
 
+    Eigen::Matrix< T, 1, Eigen::Dynamic > ReturnLambdas();
+    Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > ReturnBetas();
+    uint ReturnOptimIndex();
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > ReturnCoefficients();
+
   protected:
     Eigen::Matrix< T, Eigen::Dynamic, 1 > avfos_fit;
     Eigen::Matrix< T, Eigen::Dynamic, 1 > lambdas;
@@ -46,7 +51,7 @@ class FOS {
 
     const T C = 0.75;
     const uint M = 100;
-    const T gamma = 1.0;
+    const T gamma = 1;
 
     T rMax;
     T rMin;
@@ -68,8 +73,26 @@ template< typename T >
  * \param y
  * An n x 1 vector
  */
-FOS< T >::FOS(Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> x, Eigen::Matrix<T, Eigen::Dynamic, 1 > y ) : X( x ), Y( y ) {
+FOS< T >::FOS(Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> x, Eigen::Matrix<T, Eigen::Dynamic, 1 > y ) : X( x ), Y( y ) {}
 
+template < typename T >
+Eigen::Matrix< T, 1, Eigen::Dynamic > FOS< T >::ReturnLambdas() {
+    return lambdas;
+}
+
+template < typename T >
+Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > FOS< T >::ReturnBetas() {
+    return Betas;
+}
+
+template < typename T >
+uint FOS< T >::ReturnOptimIndex() {
+    return optim_index;
+}
+
+template < typename T >
+Eigen::Matrix< T, Eigen::Dynamic, 1 > FOS< T >::ReturnCoefficients() {
+    return avfos_fit;
 }
 
 //Free functions
@@ -94,8 +117,7 @@ template < typename T>
  * \return The squared quantity
  */
 T square( T& val ) {
-    T sqr_part = static_cast<T>( val );
-    return sqr_part * sqr_part;
+    return val * val;
 }
 
 template < typename T >
@@ -253,16 +275,16 @@ T dual_objective ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, 
     //Compute dual point
     T alternative = r_stats_it/( alt_part_0.template lpNorm < Eigen::Infinity >() );
 
-    T alt_part_1 = -1.0*static_cast<T>( Y.transpose()*error );
+    T alt_part_1 = -1*static_cast<T>( Y.transpose()*error );
     Eigen::Matrix< T, Eigen::Dynamic, 1 > alt_part_2 = Y - X*Beta;
 
     T alternative_0 = alt_part_1/( alt_part_2.squaredNorm() );
 
-    T s = std::min( std::max( alternative, alternative_0 ), -1.0*alternative );
+    T s = std::min( std::max( alternative, alternative_0 ), -1*alternative );
 
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > nu_t = -1.0*( 2.0*s / r_stats_it ) * error;
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > nu_t = -1*( 2*s / r_stats_it ) * error;
 
-    Eigen::Matrix< T, Eigen::Dynamic, 1 >  nu_part = nu_t + 2.0/r_stats_it*Y;
+    Eigen::Matrix< T, Eigen::Dynamic, 1 >  nu_part = nu_t + 2/r_stats_it*Y;
 
     T d_nu = 0.25* square( r_stats_it )*nu_part.squaredNorm() - Y.squaredNorm();
 

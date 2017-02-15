@@ -2,7 +2,8 @@
 #define FOS_GENERICS_H
 
 // C System-Headers
-//
+#include <fenv.h>
+#include <tgmath.h>
 // C++ System headers
 //
 // Eigen Headers
@@ -108,9 +109,10 @@ void Normalize( Eigen::Matrix< T, Eigen::Dynamic, 1 >& mat ) {
     mat = (mat.rowwise() - mean).array().rowwise() / std.array();
 }
 
-double eucl_distance( uint n, uint m ) {
+template < typename T >
+T eucl_distance( uint n, uint m ) {
     //Indices need to be incremented by one to agree with R's indexing
-    return std::sqrt( (m+1)*(m+1) + (n+1)*(n+1) );
+    return sqrt( (m+1)*(m+1) + (n+1)*(n+1) );
 }
 
 template< typename T >

@@ -20,18 +20,16 @@
 #include "fos.h"
 #include "fosalgorithm.h"
 
-void TestFOS( uint num_rows, uint num_cols ) {
+template < typename T >
+void TestFOS() {
 
-    auto X = build_matrix<double>( num_rows, num_cols, &eucl_distance );
-    auto Y = X.col(0);
+    std::string data_set_path = "/home/bephillips2/Desktop/Hanger Bay 1/Academia/HDIM/test_data.csv";
 
-    FOS< double > algo_fos ( X, Y );
-    algo_fos.Algorithm();
-}
+    Eigen::MatrixXd raw_data = CSV2Eigen< Eigen::MatrixXd >( data_set_path );
 
-void RunFOSTests() {
+    std::cout << "Imported an m = " << raw_data.rows() << " by n = " << raw_data.cols() << " Matrix." << std::endl;
 
-    for ( uint k = 2; k <= 20; k++ ) {
+    for( uint k = 200; k <= 2000 ; k += 200 ) {
 
         std::cout << "Testing FOS for a " \
                   << k \
@@ -40,7 +38,35 @@ void RunFOSTests() {
                   << "Matrix: \n" \
                   << std::endl;
 
-        TestFOS( k, k );
+        auto X = raw_data.block( 0, 1, k, k );
+
+        auto Y = raw_data.block( 0, 0, k, 1 );
+
+        FOS< T > algo_fos ( X, Y );
+        TIME_IT( algo_fos.Algorithm(); );
+
+        std::cout << "Stopping index: " << algo_fos.ReturnOptimIndex() << std::endl;
+        std::cout << "Froebenius norm squared of Beta tilde, r tilde: " << algo_fos.ReturnCoefficients().squaredNorm() << std::endl;
+        std::cout << std::endl;
+
+    }
+}
+
+template < typename T >
+void RunFOSTests(  uint from, uint to ) {
+
+    std::cout << "Running FOS test for data type: " << get_type_name<T>() << std::endl;
+
+    for ( uint k = from; k <= to; k++ ) {
+
+        std::cout << "Testing FOS for a " \
+                  << k \
+                  << "x" \
+                  << k \
+                  << "Matrix: \n" \
+                  << std::endl;
+
+        TIME_IT( TestFOS< T >( k, k ); );
     }
 }
 

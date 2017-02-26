@@ -14,9 +14,9 @@
 // Armadillo Headers
 //
 // Project Specific Headers
-#include "fos_debug.h"
-#include "fos_generics.h"
-#include "fosalgorithm.h"
+#include "../Generic/debug.h"
+#include "../Generic/generics.h"
+#include "../Generic/algorithm.h"
 
 void TestFistaFlat( uint num_rows, uint num_cols ) {
 

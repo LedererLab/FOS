@@ -1,13 +1,21 @@
-#include <iostream>
-#include <eigen3/Eigen/Dense>
+// C System-Headers
+//
+// C++ System headers
+//
+// Eigen Headers
+//
+// Boost Headers
+//
+// SPAMS Headers
+//
+// Armadillo Headers
+//
+// Project Specific Headers
+#include "ISTA/perf_ista.h"
+#include "ISTA/test_ista.h"
+#include "SPAMS/perf_fista.h"
+#include "SPAMS/test_fista.h"
 
-#include "fos.h"
-#include "fosalgorithm.h"
-#include "test_eigen3.h"
-#include "test_ista.h"
-#include "test_fista.h"
-#include "test_fos.h"
-#include "debug.h"
 
 int main(int argc, char *argv[]) {
 
@@ -22,12 +30,10 @@ int main(int argc, char *argv[]) {
 
 //    TIME_IT( algo_fos.Algorithm(); );
 
-    TestFOS<double>();
+//    TestFOS<double>();
+//    TestFOS<float>();
 
-//    RunIstaTests();
-//    RunFistaTests();r
-
-//    RunFOSTests<float>( 2000, 2005 );
-//    RunFOSTests<double>( 2000, 2005 );
-
+    RunFistaPerfTests();
+    RunIstaPerfTests();
+//    RunFistaTests();
 }

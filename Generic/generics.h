@@ -35,7 +35,7 @@ template < typename T >
  * \return
  * An Eigen matrix with rows/cols determined by data file.
  */
-T CSV2Eigen( std::string file_path ) {
+Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > CSV2Eigen( std::string file_path ) {
 
     std::ifstream file_stream( file_path.c_str() );
 
@@ -48,11 +48,11 @@ T CSV2Eigen( std::string file_path ) {
         file_stream.close();
     }
 
-    arma::mat X;
+    arma::Mat<T> X;
     X.load( file_path, arma::csv_ascii );
     std::cout << X.n_rows << "x" << X.n_cols << std::endl;
 
-    return Eigen::Map<const T>( X.memptr(), X.n_rows, X.n_cols );
+    return Eigen::Map< const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > >( X.memptr(), X.n_rows, X.n_cols );
 
 }
 

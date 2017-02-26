@@ -20,6 +20,9 @@ CONFIG(debug, debug|release) {
     QMAKE_CXXFLAGS += -O3
 }
 
+# Rcpp
+INCLUDEPATH += /usr/local/lib/R/site-library/Rcpp/include/
+
 # Eigen
 INCLUDEPATH += /usr/include/eigen3
 
@@ -30,7 +33,7 @@ INCLUDEPATH +=  ../spams/src \
                 ../spams/src/spams/linalg \
                 ../spams/src/spams/prox \
 
-QMAKE_CXXFLAGS+= -fopenmp
+QMAKE_CXXFLAGS += -fopenmp
 QMAKE_LFLAGS +=  -fopenmp
 
 # SPAMS has unused parameters in source -- surpress warnings
@@ -47,15 +50,18 @@ LIBS += -lstdc++ \
 #Armadillo
 LIBS += -larmadillo
 
-HEADERS += fos.h \
-    fosalgorithm.h \
-    fos_generics.h \
-    fos_debug.h \
-    test_eigen3.h \
-    test_fista.h \
-    ista.h \
-    test_ista.h \
-    debug.h \
-    test_fos.h
+HEADERS += FOS/fos.h \
+    FOS/test_fos.h \
+    Generic/algorithm.h \
+    Generic/debug.h \
+    Generic/generics.h \
+    ISTA/ista.h \
+    ISTA/test_ista.h \
+    R_Wrapper/fos_r.h \
+    SPAMS/test_fista.h \
+    ISTA/perf_ista.h \
+    SPAMS/perf_fista.h
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    #FOS/fos.tpp \
+    R_Wrapper/fos_r.cpp

@@ -12,10 +12,10 @@
 // FISTA Headers
 //
 // Project Specific Headers
-#include "fosalgorithm.h"
-#include "fos_debug.h"
-#include "fos_generics.h"
-#include "ista.h"
+#include "../Generic/algorithm.h"
+#include "../Generic/debug.h"
+#include "../Generic/generics.h"
+#include "../ISTA/ista.h"
 
 template < typename T >
 /*!
@@ -271,20 +271,20 @@ T dual_objective ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, 
 
     Eigen::Matrix< T, Eigen::Dynamic, 1 > error = X*Beta - Y;
 
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > alt_part_0 = 2*X.transpose()*error;
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > alt_part_0 = 2.0f*X.transpose()*error;
     //Compute dual point
     T alternative = r_stats_it/( alt_part_0.template lpNorm < Eigen::Infinity >() );
 
-    T alt_part_1 = -1*static_cast<T>( Y.transpose()*error );
+    T alt_part_1 = -1.0f*static_cast<T>( Y.transpose()*error );
     Eigen::Matrix< T, Eigen::Dynamic, 1 > alt_part_2 = Y - X*Beta;
 
     T alternative_0 = alt_part_1/( alt_part_2.squaredNorm() );
 
-    T s = std::min( std::max( alternative, alternative_0 ), -1*alternative );
+    T s = std::min( std::max( alternative, alternative_0 ), -1.0f*alternative );
 
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > nu_t = -1*( 2*s / r_stats_it ) * error;
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > nu_t = -1.0f*( 2.0f*s / r_stats_it ) * error;
 
-    Eigen::Matrix< T, Eigen::Dynamic, 1 >  nu_part = nu_t + 2/r_stats_it*Y;
+    Eigen::Matrix< T, Eigen::Dynamic, 1 >  nu_part = nu_t + 2.0f/r_stats_it*Y;
 
     T d_nu = 0.25* square( r_stats_it )*nu_part.squaredNorm() - Y.squaredNorm();
 
@@ -373,7 +373,7 @@ void FOS< T >::Algorithm() {
         statsCont = ComputeStatsCond( statsIt, rStatsIt, lamda_grid );
     }
 
-    avfos_fit = Betas.col( statsIt - 1 );
+    avfos_fit = Betas.col( statsIt - 2 );
     lambdas = lamda_grid;
     optim_index = statsIt;
 

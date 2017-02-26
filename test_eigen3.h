@@ -37,7 +37,7 @@ void csv_read_test() {
 
     DEBUG_PRINT( __func__ );
     std::string data_set_path = "/home/bephillips2/Desktop/Hanger Bay 1/Academia/HDIM/test_data.csv";
-    Eigen::MatrixXd raw_data = CSV2Eigen< Eigen::MatrixXd >( data_set_path );
+    Eigen::MatrixXd raw_data = CSV2Eigen< double >( data_set_path );
 
     DEBUG_PRINT( "Matrix as read from file:\n" << raw_data );
     DEBUG_PRINT( "Answer should be: \n 1, 2 \n 3, 4" );

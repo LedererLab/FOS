@@ -16,8 +16,8 @@
 // Armadillo Headers
 //
 // Project Specific Headers
-#include "fos_debug.h"
-#include "fos_generics.h"
+#include "../Generic/debug.h"
+#include "../Generic/generics.h"
 
 template <typename T> int sgn(T val) {
     return (T(0) < val) - (val < T(0));
@@ -85,35 +85,6 @@ T f_beta_tilda ( Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X, \
 }
 
 template < typename T >
-T backtrace( Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X, \
-             Eigen::Matrix< T, Eigen::Dynamic, 1  > Y, \
-             Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta_k, \
-             Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta_k_less_1,
-             T L,
-             T eta ) {
-
-    uint counter = 0;
-    T new_L = L;
-
-    while( f_beta( X, Y, Beta_k ) <= f_beta_tilda( X, Y, Beta_k, Beta_k_less_1, new_L ) ) {
-        counter ++;
-        DEBUG_PRINT( "Backtrace iteration: " << counter );
-        new_L = eta*new_L;
-    }
-
-    return new_L;
-}
-
-//    def ista(A, b, l, maxit):
-//        Beta = np.zeros(X.shape[1])
-//        L = linalg.norm(X) ** 2  # Lipschitz constant
-
-//        for _ in Betarange(maBetait):
-//            Beta = soft_thresh(Beta + np.dot(X.T, Y - X.dot(Beta)) / L, l / L)
-
-//    return Beta
-
-template < typename T >
 Eigen::Matrix< T, Eigen::Dynamic, 1 > update_beta (
     Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X, \
     Eigen::Matrix< T, Eigen::Dynamic, 1  > Y, \
@@ -133,20 +104,6 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 > update_beta (
 }
 
 template < typename T >
-T naive_L( Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X ) {
-
-    auto arg = X.transpose() * X;
-
-    Eigen::SelfAdjointEigenSolver< Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > > eigensolver( arg );
-
-    auto eigen_values = eigensolver.eigenvalues();
-
-    T lambda_1 = 2.0*eigen_values.maxCoeff();
-
-    return std::abs( lambda_1 );
-}
-
-template < typename T >
 Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > ISTA ( Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X, \
         Eigen::Matrix< T, Eigen::Dynamic, 1 > Y, \
         Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta_0, \
@@ -163,21 +120,37 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > ISTA ( Eigen::Matrix< T, Eige
 
         Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta_k_less_1 = Beta;
 
-        while( true ) {
+        uint counter = 0;
 
-            static uint counter = 0;
+//        while( true ) {
+
+//            counter++;
+
+//            DEBUG_PRINT( "Backtrace iteration: " << counter );
+
+//            Beta = update_beta( X, Y, Beta_k_less_1, L, lambda );
+
+//            if( f_beta( X, Y, Beta ) > f_beta_tilda( X, Y, Beta, Beta_k_less_1, L ) ) {
+//                L = L*eta;
+//                DEBUG_PRINT( "L: " << L );
+//            } else {
+//                break;
+//            }
+//        }
+
+        Beta = update_beta( X, Y, Beta_k_less_1, L, lambda );
+
+        counter++;
+        DEBUG_PRINT( "Backtrace iteration: " << counter );
+
+        while( f_beta( X, Y, Beta ) > f_beta_tilda( X, Y, Beta, Beta_k_less_1, L ) ) {
+
             counter++;
-
             DEBUG_PRINT( "Backtrace iteration: " << counter );
 
+            L*= eta;
             Beta = update_beta( X, Y, Beta_k_less_1, L, lambda );
 
-            if( f_beta( X, Y, Beta ) > f_beta_tilda( X, Y, Beta, Beta_k_less_1, L ) ) {
-                L = L*eta;
-                DEBUG_PRINT( "L: " << L );
-            } else {
-                break;
-            }
         }
     }
 

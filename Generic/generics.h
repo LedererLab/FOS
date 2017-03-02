@@ -9,7 +9,8 @@
 // Eigen Headers
 #include <eigen3/Eigen/Dense>
 // Boost Headers
-//
+#include <boost/random.hpp>
+#include <boost/random/normal_distribution.hpp>
 // SPAMS Headers
 //
 // Armadillo Headers

@@ -22,6 +22,12 @@
 // Miscellaneous Headers
 //
 
+#ifdef DEBUG
+#define DEBUG_ON 1
+#else
+#define DEBUG_ON 0
+#endif
+
 //Get the name of a type as it would appear in source code
 template <typename T> std::string get_type_name () {
     int status;

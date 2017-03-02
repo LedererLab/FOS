@@ -3,8 +3,8 @@ CONFIG += console c++11
 CONFIG -= app_bundle
 CONFIG -= qt
 
-#Force use of c++14
-QMAKE_CXXFLAGS += -std=c++14
+#Force use of c++11
+QMAKE_CXXFLAGS += -std=c++11
 QMAKE_CXXFLAGS -= -std=gnu++11
 QMAKE_CXXFLAGS -= -std=c++0x
 
@@ -39,16 +39,30 @@ QMAKE_LFLAGS +=  -fopenmp
 # SPAMS has unused parameters in source -- surpress warnings
 QMAKE_CXXFLAGS+= -Wno-unused-parameter
 
-#OpenCL
-#LIBS +=-L "/usr/local/cuda/lib64" -lOpenCL
+# clBLAS
+LIBS += -L/usr/local/lib64/
+LIBS += -lclBLAS
 
-#for FISTA
+# OpenCL
+INCLUDEPATH += /usr/include/eigen3
+LIBS += -L/usr/local/cuda/lib64
+LIBS += -lOpenCL
+
+# for FISTA
 LIBS += -lstdc++ \
         -lblas \
         -llapack
 
-#Armadillo
+# Armadillo
 LIBS += -larmadillo
+
+# JASPL
+LIBS += -L/usr/local/lib \
+        -L/usr/lib \
+        -lboost_iostreams \
+        -lboost_system \
+        -lboost_filesystem \
+        -lboost_thread
 
 HEADERS += FOS/fos.h \
     FOS/test_fos.h \
@@ -60,8 +74,15 @@ HEADERS += FOS/fos.h \
     R_Wrapper/fos_r.h \
     SPAMS/test_fista.h \
     ISTA/perf_ista.h \
-    SPAMS/perf_fista.h
+    SPAMS/perf_fista.h \
+    test_eigen3.h \
+    OpenCL_Generics/cl_generics.h \
+    OpenCL_Generics/cl_algorithm.h \
+    OpenCL_Base/openclbase.h \
+    OpenCL_Generics/perf_cl_product.h
 
 SOURCES += main.cpp \
     #FOS/fos.tpp \
-    R_Wrapper/fos_r.cpp
+    R_Wrapper/fos_r.cpp \
+    OpenCL_Base/openclbase.cpp \
+    OpenCL_Generics/perf_cl_product.cpp

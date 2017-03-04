@@ -15,13 +15,15 @@
 #include "ISTA/perf_ista.h"
 #include "SPAMS/perf_fista.h"
 #include "FOS/test_fos.h"
+#include "FOS/test_fos_experimental.h"
 
 
 int main(int argc, char *argv[]) {
 
 //    RunIstaPerfTests();
 //    RunFistaPerfTests();
-    TestFOS< float >();
+
+    hdim::TestFOS< float >();
 
 //    std::vector< double > cpu_times;
 //    std::vector< double > gpu_times;

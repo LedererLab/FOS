@@ -39,7 +39,9 @@ T prox( T x, T lambda ) {
 }
 
 template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > soft_threshold_mat( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& mat, T lambda ) {
+Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > soft_threshold_mat(
+    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& mat,
+    const T lambda ) {
 
     Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic > mat_x( mat.rows(), mat.cols() );
 
@@ -55,9 +57,10 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > soft_threshold_mat( const Eig
 }
 
 template < typename T >
-T f_beta ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
-           const Eigen::Matrix< T, Eigen::Dynamic, 1  >& Y, \
-           const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta ) {
+T f_beta (
+    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1  >& Y,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta ) {
 
     Eigen::Matrix< T, Eigen::Dynamic, 1 > arg = Y - X*Beta;
     return arg.squaredNorm();
@@ -65,11 +68,12 @@ T f_beta ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
 }
 
 template < typename T >
-T f_beta_tilda ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
-                 const Eigen::Matrix< T, Eigen::Dynamic, 1  >& Y, \
-                 const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta, \
-                 const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_prime,
-                 T L ) {
+T f_beta_tilda (
+    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1  >& Y,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_prime,
+    T L ) {
 
     Eigen::Matrix< T, Eigen::Dynamic, 1  > f_beta = X*Beta_prime - Y;
     T taylor_term_0 = f_beta.squaredNorm();

@@ -92,6 +92,16 @@ void Normalize( Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>& mat ) {
     mat = (mat.rowwise() - mean).array().rowwise() / std.array();
 }
 
+template < typename T >
+Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> Normalize(
+    const Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>& mat ) {
+
+    auto mean = mat.colwise().mean();
+    auto std = ((mat.rowwise() - mean).array().square().colwise().sum() / (mat.rows() - 1)).sqrt();
+
+    return (mat.rowwise() - mean).array().rowwise() / std.array();
+}
+
 template< typename T >
 /*!
  * \brief Set the mean of a vector to 0 and the standard deviation to 1.
@@ -108,6 +118,16 @@ void Normalize( Eigen::Matrix< T, Eigen::Dynamic, 1 >& mat ) {
     auto std = ((mat.rowwise() - mean).array().square().colwise().sum() / (mat.rows() - 1)).sqrt();
 
     mat = (mat.rowwise() - mean).array().rowwise() / std.array();
+}
+
+template < typename T >
+Eigen::Matrix<T, Eigen::Dynamic, 1 > Normalize(
+    const Eigen::Matrix<T, Eigen::Dynamic, 1 >& mat ) {
+
+    auto mean = mat.colwise().mean();
+    auto std = ((mat.rowwise() - mean).array().square().colwise().sum() / (mat.rows() - 1)).sqrt();
+
+    return (mat.rowwise() - mean).array().rowwise() / std.array();
 }
 
 template < typename T >

@@ -318,9 +318,10 @@ template < typename T >
  *
  * \return Omega, a 1 x n matrix
  */
-Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic> FistaFlat( Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic> Y,\
-        Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic> X, \
-        Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic> Omega_0, \
+Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic> FistaFlat(
+        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic>& Y,
+        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic>& X,
+        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic>& Omega_0,
         const T lambda_1 ) {
 
 

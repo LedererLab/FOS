@@ -1,5 +1,5 @@
-#ifndef TEST_FOS_H
-#define TEST_FOS_H
+#ifndef TEST_FOS_EXPERIMENTAL_H
+#define TEST_FOS_EXPERIMENTAL_H
 
 // C System-Headers
 //
@@ -14,14 +14,16 @@
 // Armadillo Headers
 //
 // Project Specific Headers
-#include "fos.h"
+#include "fos_imperative.h"
 
 namespace hdim {
+
+namespace experimental {
 
 template < typename T >
 void TestFOS() {
 
-    std::cout << "Running FOS test for data type: " << get_type_name<T>() << std::endl;
+    std::cout << "Running experimental::FOS test for data type: " << get_type_name<T>() << std::endl;
 
     std::string data_set_path = "/home/bephillips2/Desktop/Hanger Bay 1/Academia/HDIM/test_data.csv";
 
@@ -38,9 +40,8 @@ void TestFOS() {
                   << "Matrix: \n" \
                   << std::endl;
 
-        auto X = raw_data.block( 0, 1, k, k );
-
-        auto Y = raw_data.block( 0, 0, k, 1 );
+        Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X = raw_data.block( 0, 1, k, k );
+        Eigen::Matrix< T, Eigen::Dynamic, 1 > Y = raw_data.block( 0, 0, k, 1 );
 
         std::cout << "Froebenius squared norm of X " \
                   << X.squaredNorm()\
@@ -48,11 +49,10 @@ void TestFOS() {
                   << Y.squaredNorm() \
                   << std::endl;
 
-        FOS< T > algo_fos ( X, Y );
-        TIME_IT( algo_fos.Algorithm(); );
+        Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > Beta;
+        TIME_IT( Beta = experimental::FOS< T >( X, Y ); );
 
-        std::cout << "Stopping index: " << algo_fos.ReturnOptimIndex() << std::endl;
-        std::cout << "Froebenius norm squared of Beta tilde, r tilde: " << algo_fos.ReturnCoefficients().squaredNorm() << std::endl;
+        std::cout << "Froebenius norm squared of Beta tilde, r tilde: " << Beta.squaredNorm() << std::endl;
         std::cout << std::endl;
 
     }
@@ -61,7 +61,7 @@ void TestFOS() {
 template < typename T >
 void RunFOSTests( uint from, uint to ) {
 
-    std::cout << "Running FOS test for data type: " << get_type_name<T>() << std::endl;
+    std::cout << "Running experimental::FOS test for data type: " << get_type_name<T>() << std::endl;
 
     for ( uint k = from; k <= to; k++ ) {
 
@@ -72,10 +72,12 @@ void RunFOSTests( uint from, uint to ) {
                   << "Matrix: \n" \
                   << std::endl;
 
-        TIME_IT( TestFOS< T >( k, k ); );
+        TIME_IT( TestFOS< T >(); );
     }
 }
 
 }
 
-#endif // TEST_FOS_H
+}
+
+#endif // TEST_FOS_EXPERIMENTAL_H

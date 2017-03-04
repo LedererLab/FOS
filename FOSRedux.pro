@@ -71,7 +71,9 @@ HEADERS += FOS/fos.h \
     OpenCL_Generics/cl_generics.h \
     OpenCL_Generics/cl_algorithm.h \
     OpenCL_Base/openclbase.h \
-    OpenCL_Generics/perf_cl_product.h
+    OpenCL_Generics/perf_cl_product.h \
+    FOS/fos_imperative.h \
+    FOS/test_fos_experimental.h
 
 SOURCES += main.cpp \
     #FOS/fos.tpp \

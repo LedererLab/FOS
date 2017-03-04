@@ -57,7 +57,7 @@ void TestFOS() {
 }
 
 template < typename T >
-void RunFOSTests(  uint from, uint to ) {
+void RunFOSTests( uint from, uint to ) {
 
     std::cout << "Running FOS test for data type: " << get_type_name<T>() << std::endl;
 

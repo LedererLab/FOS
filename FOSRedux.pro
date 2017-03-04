@@ -56,14 +56,6 @@ LIBS += -lstdc++ \
 # Armadillo
 LIBS += -larmadillo
 
-# JASPL
-LIBS += -L/usr/local/lib \
-        -L/usr/lib \
-        -lboost_iostreams \
-        -lboost_system \
-        -lboost_filesystem \
-        -lboost_thread
-
 HEADERS += FOS/fos.h \
     FOS/test_fos.h \
     Generic/algorithm.h \

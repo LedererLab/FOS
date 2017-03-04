@@ -173,7 +173,7 @@ Eigen::Matrix< T, 1, Eigen::Dynamic > LogScaleVector( T lower_bound, T upper_bou
         T step = static_cast<T>( i )/static_cast<T>( num_elements - 1 );
         auto lin_step = delta*step + min_elem;
 
-        log_space_vector( 0, i ) = static_cast<T>( pow( 10.0, lin_step ) );
+        log_space_vector( 0, i ) = static_cast<T>( std::pow( 10.0, lin_step ) );
     }
 
     return log_space_vector;
@@ -360,7 +360,7 @@ void FOS< T >::Algorithm() {
                 DEBUG_PRINT( "Current Lambda: " << rStatsIt );
 
                 Betas.col( statsIt - 1 ) = FistaFlat<T>( Y, X, old_Betas, 0.5*rStatsIt );
-//                Betas.col( statsIt - 1 ) = ISTA<T>( X, Y, old_Betas, 1, 0.1, rStatsIt );
+//                Betas.col( statsIt - 1 ) = ISTA<T>( X, Y, old_Betas, 1, 0.1, 0.5*rStatsIt );
 
                 old_Betas = Betas.col( statsIt - 1 );
 

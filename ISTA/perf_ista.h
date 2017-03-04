@@ -20,9 +20,9 @@
 
 void PerfIsta( uint num_rows, uint num_cols ) {
 
-    auto X = build_matrix<double>( num_rows, num_cols, &eucl_distance );
-    auto Y = X.col(0);
-    auto W_0 = Eigen::Matrix< double, Eigen::Dynamic, 1 > ( num_rows, 1 );
+    Eigen::Matrix< double, Eigen::Dynamic, Eigen::Dynamic > X = build_matrix<double>( num_rows, num_cols, &eucl_distance );
+    Eigen::Matrix< double, Eigen::Dynamic, 1 > Y = X.col(0);
+    Eigen::Matrix< double, Eigen::Dynamic, 1 > W_0 = Eigen::Matrix< double, Eigen::Dynamic, 1 > ( num_rows, 1 );
     W_0.setZero();
 
     double lambda = 1.0;

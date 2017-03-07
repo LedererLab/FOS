@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
 //    RunIstaPerfTests();
 //    RunFistaPerfTests();
 
-    hdim::TestFOS< float >();
+    hdim::experimental::TestFOS< float >();
 
 //    std::vector< double > cpu_times;
 //    std::vector< double > gpu_times;

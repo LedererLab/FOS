@@ -20,14 +20,14 @@
 
 void PerfIsta( uint num_rows, uint num_cols ) {
 
-    Eigen::Matrix< double, Eigen::Dynamic, Eigen::Dynamic > X = build_matrix<double>( num_rows, num_cols, &eucl_distance );
-    Eigen::Matrix< double, Eigen::Dynamic, 1 > Y = X.col(0);
-    Eigen::Matrix< double, Eigen::Dynamic, 1 > W_0 = Eigen::Matrix< double, Eigen::Dynamic, 1 > ( num_rows, 1 );
+    Eigen::Matrix< float, Eigen::Dynamic, Eigen::Dynamic > X = build_matrix<float>( num_rows, num_cols, &eucl_distance );
+    Eigen::Matrix< float, Eigen::Dynamic, 1 > Y = X.col(0);
+    Eigen::Matrix< float, Eigen::Dynamic, 1 > W_0 = Eigen::Matrix< float, Eigen::Dynamic, 1 > ( num_rows, 1 );
     W_0.setZero();
 
-    double lambda = 1.0;
+    float lambda = 1.0;
 
-    TIME_IT( ISTA< double >( X, Y, W_0, 1, 0.1, 0.5*lambda ); );
+    TIME_IT( ISTA< float >( X, Y, W_0, 1, 0.1f, 0.5*lambda ); );
 
 }
 

@@ -24,6 +24,7 @@ template < typename T >
 void TestFOS() {
 
     std::cout << "Running experimental::FOS test for data type: " << get_type_name<T>() << std::endl;
+    std::cout << "Using experimental version of FOS with ISTA." << std::endl;
 
     std::string data_set_path = "/home/bephillips2/Desktop/Hanger Bay 1/Academia/HDIM/test_data.csv";
 

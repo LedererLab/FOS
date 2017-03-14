@@ -8,7 +8,7 @@ QMAKE_CXXFLAGS += -std=c++11
 QMAKE_CXXFLAGS -= -std=gnu++11
 QMAKE_CXXFLAGS -= -std=c++0x
 
-CONFIG += c++14
+CONFIG += c++11
 
 # Pass flags for bebugging
 # Override Qt's default -O2 flag in release mode
@@ -18,6 +18,7 @@ CONFIG(debug, debug|release) {
     DEFINES += "NDEBUG"
     QMAKE_CXXFLAGS -= -O2
     QMAKE_CXXFLAGS += -O3
+    DEFINES += "OMP_NUM_THREADS=8"
 }
 
 # Rcpp
@@ -77,6 +78,6 @@ HEADERS += FOS/fos.h \
 
 SOURCES += main.cpp \
     #FOS/fos.tpp \
-    R_Wrapper/fos_r.cpp \
+    #R_Wrapper/fos_r.cpp \
     OpenCL_Base/openclbase.cpp \
     OpenCL_Generics/perf_cl_product.cpp

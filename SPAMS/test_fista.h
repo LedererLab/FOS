@@ -29,19 +29,19 @@ void TestFistaFlat( uint num_rows, uint num_cols ) {
 
     auto spams_retval =  FistaFlat< float >( Y, X, W_0, 0.5*lambda );
 
-    std::cout << "fistaFlat result:\n" << spams_retval << std::endl;
+    std::cout << "fistaFlat result:\n" << spams_retval.squaredNorm() << std::endl;
 }
 
 void RunFistaTests() {
 
-    for ( uint k = 2; k <= 10; k++ ) {
+    for ( uint k = 200; k <= 2000; k+= 200 ) {
 
         std::cout << "Testing fistaFlat for a " \
                   << k \
                   << "x" \
                   << k \
                   << "Matrix: \n" \
-                  << build_matrix<float>( k, k, &eucl_distance ) \
+//                  << build_matrix<float>( k, k, &eucl_distance )
                   << std::endl;
 
         TestFistaFlat( k, k );

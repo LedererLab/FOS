@@ -14,16 +14,19 @@
 #include "OpenCL_Generics/perf_cl_product.h"
 #include "ISTA/perf_ista.h"
 #include "SPAMS/perf_fista.h"
+#include "ISTA/test_ista.h"
+#include "SPAMS/test_fista.h"
 #include "FOS/test_fos.h"
 #include "FOS/test_fos_experimental.h"
 
 
 int main(int argc, char *argv[]) {
 
-//    RunIstaPerfTests();
-//    RunFistaPerfTests();
+//    RunIstaTests();
+//    RunFistaTests();
 
     hdim::experimental::TestFOS< float >();
+//    hdim::TestFOS< float >();
 
 //    std::vector< double > cpu_times;
 //    std::vector< double > gpu_times;

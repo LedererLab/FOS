@@ -8,6 +8,7 @@
 #include <cmath>
 // Eigen Headers
 #include <eigen3/Eigen/Dense>
+#include <Eigen/IterativeLinearSolvers>
 // Boost Headers
 //
 // SPAMS Headers
@@ -28,21 +29,27 @@ void TestIsta( uint num_rows, uint num_cols ) {
 
     float lambda = 1.0;
 
-    auto ista_retval = ISTA< float >( X, Y, W_0, 1, 0.1, 0.5*lambda );
+    Eigen::Matrix< float, Eigen::Dynamic, 1 > ista_retval = ISTA< float >( X, Y, W_0, 10, 0.1, lambda );
 
-    std::cout << "ISTA result:\n" << ista_retval << std::endl;
+//    Eigen::ConjugateGradient<Eigen::MatrixXf, Eigen::Lower|Eigen::Upper> cg;
+//    cg.compute( X );
+//    Eigen::Matrix< float, Eigen::Dynamic, 1 > beta = cg.solve( Y );
+
+//    std::cout << "Eigen CG result:\n" << beta.squaredNorm() << std::endl;
+
+    std::cout << "ISTA result:\n" << ista_retval.squaredNorm() << std::endl;
 }
 
 void RunIstaTests() {
 
-    for ( uint k = 2; k <= 10; k++ ) {
+    for ( uint k = 200; k <= 2000; k+= 200 ) {
 
         std::cout << "Testing ISTA for a " \
                   << k \
                   << "x" \
                   << k \
                   << "Matrix: \n" \
-                  << build_matrix<float>( k, k, &eucl_distance ) \
+//                  << build_matrix<float>( k, k, &eucl_distance )
                   << std::endl;
 
         TestIsta( k, k );

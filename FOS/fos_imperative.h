@@ -12,7 +12,6 @@
 // FISTA Headers
 //
 // Project Specific Headers
-#include "../Generic/algorithm.h"
 #include "../Generic/debug.h"
 #include "../Generic/generics.h"
 #include "../ISTA/ista.h"
@@ -31,33 +30,23 @@ typename T::value_type L1_norm( const T& matrix ) {
     return matrix.template lpNorm< 1 >();
 }
 
-//template < typename T >
-//T compute_lp_norm( const Eigen::Matrix< T, Eigen::Dynamic, 1 >& matrix, int norm_type ) {
-//    return matrix.template lpNorm< norm_type >();
-//}
-
-//template < typename T >
-//T compute_sqr_norm( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& matrix ) {
-//    return matrix.squaredNorm();
-//}
-
 template < typename T >
 typename T::value_type compute_sqr_norm( const T& matrix ) {
     return matrix.squaredNorm();
 }
 
-template < typename T>
-/*!
- * \brief Compute the square of a value
- * \param val
- *
- * value to square
- *
- * \return The squared quantity
- */
-T square( T& val ) {
-    return val * val;
-}
+//template < typename T>
+///*!
+// * \brief Compute the square of a value
+// * \param val
+// *
+// * value to square
+// *
+// * \return The squared quantity
+// */
+//T square( const T& val ) {
+//    return val * val;
+//}
 
 template < typename T >
 /*!
@@ -269,6 +258,9 @@ Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> FOS(
     Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>& X,
     Eigen::Matrix<T, Eigen::Dynamic, 1 >& Y ) {
 
+    omp_set_num_threads( 8 );
+    Eigen::setNbThreads( 8 );
+
     Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > Betas;
     Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > old_Betas;
 
@@ -278,8 +270,6 @@ Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> FOS(
 
     bool statsCont = true;
     uint statsIt = 1;
-
-    uint loop_index = 0;
 
     Normalize( X );
     Normalize( Y );
@@ -302,55 +292,37 @@ Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> FOS(
         old_Betas = Betas.col( statsIt - 2 );
         T rStatsIt = lamda_grid( 0, statsIt - 1 );
 
-        //Inner Loop
-        while( true ) {
+        Eigen::Matrix< T , Eigen::Dynamic, 1  > beta_k = Betas.col( statsIt - 1 );
 
-            loop_index ++;
-            DEBUG_PRINT( "Inner loop #: " << loop_index );
+        T gap = duality_gap( X, Y, beta_k, rStatsIt );
 
-            Eigen::Matrix< T , Eigen::Dynamic, 1  > beta_k = Betas.col( statsIt - 1 );
+        uint n = static_cast< uint >( X.rows() );
+        T gap_target = duality_gap_target( gamma, C, rStatsIt, n );
 
-            T gap = duality_gap( X, Y, beta_k, rStatsIt );
+        if( gap <= gap_target ) {
 
-            uint n = static_cast< uint >( X.rows() );
-            T gap_target = duality_gap_target( gamma, C, rStatsIt, n );
+            Betas.col( statsIt - 1 ) = old_Betas;
 
-            DEBUG_PRINT( "Duality gap is " << gap << " gap target is " << gap_target );
+        } else {
 
-            //Criteria meet, exit loop
-            if( gap <= gap_target ) {
+            DEBUG_PRINT( "Current Lambda: " << rStatsIt );
 
-                DEBUG_PRINT( "Duality gap is below specified threshold, exiting inner loop." );
-                Betas.col( statsIt - 1 ) = old_Betas;
-                loop_index = 0;
+            Betas.col( statsIt - 1 ) = X_ISTA<T>( X, Y, old_Betas, 0.1, rStatsIt, gap_target );
+            old_Betas = Betas.col( statsIt - 1 );
 
-                break;
-
-            } else {
-
-                DEBUG_PRINT( "Current Lambda: " << rStatsIt );
-
-                Betas.col( statsIt - 1 ) = FistaFlat<T>( Y, X, old_Betas, 0.5*rStatsIt );
-                //Betas.col( statsIt - 1 ) = ISTA<T>( X, Y, old_Betas, 1, 0.1, 0.5*rStatsIt );
-
-                old_Betas = Betas.col( statsIt - 1 );
-
-                DEBUG_PRINT( "L2 Norm of Betas: " << Betas.squaredNorm() );
-
-            }
+            DEBUG_PRINT( "L2 Norm of Betas: " << Betas.squaredNorm() );
 
         }
 
         statsCont = ComputeStatsCond( C, statsIt, rStatsIt, lamda_grid, X, Betas );
     }
 
-    auto avfos_fit = Betas.col( statsIt - 2 );
     auto optim_index = statsIt;
-
-    DEBUG_PRINT( avfos_fit );
     DEBUG_PRINT( optim_index );
 
-    return Betas;
+    std::cout << "Stopping Index " << optim_index << std::endl;
+
+    return Betas.col( statsIt - 2 );
 
 }
 

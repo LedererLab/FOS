@@ -25,8 +25,8 @@ int main(int argc, char *argv[]) {
 //    RunIstaTests();
 //    RunFistaTests();
 
-    hdim::experimental::TestFOS< float >();
-//    hdim::TestFOS< float >();
+//    hdim::experimental::TestFOS< float >();
+    hdim::TestFOS< float >();
 
 //    std::vector< double > cpu_times;
 //    std::vector< double > gpu_times;

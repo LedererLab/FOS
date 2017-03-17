@@ -361,8 +361,8 @@ void FOS< T >::Algorithm() {
 
                 DEBUG_PRINT( "Current Lambda: " << rStatsIt );
 
-                Betas.col( statsIt - 1 ) = FistaFlat<T>( Y, X, old_Betas, 0.5*rStatsIt );
-//                Betas.col( statsIt - 1 ) = ISTA<T>( X, Y, old_Betas, 10, 0.1, rStatsIt );
+//                Betas.col( statsIt - 1 ) = FistaFlat<T>( Y, X, old_Betas, 0.5*rStatsIt );
+                Betas.col( statsIt - 1 ) = ISTA<T>( X, Y, old_Betas, 10, 0.1, rStatsIt );
 
                 old_Betas = Betas.col( statsIt - 1 );
 

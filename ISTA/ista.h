@@ -243,12 +243,11 @@ T duality_gap ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
 
 template<class T>
 typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type
-    almost_equal(T x, T y, int ulp)
-{
+almost_equal(T x, T y, int ulp) {
     // the machine epsilon has to be scaled to the magnitude of the values used
     // and multiplied by the desired precision in ULPs (units in the last place)
     return std::abs(x-y) < std::numeric_limits<T>::epsilon() * std::abs(x+y) * ulp
-    // unless the result is subnormal
+           // unless the result is subnormal
            || std::abs(x-y) < std::numeric_limits<T>::min();
 }
 
@@ -276,9 +275,9 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_ISTA (
 
         outer_counter ++;
         DEBUG_PRINT( "Outer loop iteration: " << outer_counter );
-//        std::cout << "Outer loop iteration: " << outer_counter << std::endl;
 
-//        std::cout << "Duality gap is " << delta_k << " gap target is " << duality_gap_target << std::endl;
+        std::cout << "Outer loop iteration: " << outer_counter << std::endl;
+        std::cout << "Duality gap is " << delta_k << " gap target is " << duality_gap_target << std::endl;
 
         Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta_k_less_1 = Beta;
 
@@ -304,7 +303,7 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_ISTA (
 
 //        std::cout << "Squared norm of Beta tilde " << Beta.squaredNorm() << std::endl;
 
-    } while ( ( duality_gap( X, Y, Beta, lambda ) > duality_gap_target ) && !almost_equal(delta_k, delta_k_less_1, 2) );
+    } while ( ( duality_gap( X, Y, Beta, lambda ) > duality_gap_target ) );
 
     return Beta;
 

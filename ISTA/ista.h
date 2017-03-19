@@ -24,7 +24,7 @@
 //}
 template <typename T>
 T sgn(T val) {
-    return (T(0) < val) - (val < T(0));
+    return static_cast<T>( T(0) < val ) - ( val < T(0) );
 }
 
 template < typename T >
@@ -37,32 +37,6 @@ T soft_threshold( T x, T y ) {
     T sgn_T = static_cast<T>( sgn(x) );
     return sgn_T*pos_part( std::abs(x) - y );
 }
-
-struct SoftThres_f {
-
-    SoftThres_f( float lambda_in ) : lambda( lambda_in ) {}
-
-    typedef float result_type;
-    float operator()( float x ) const {
-        return soft_threshold<float>( x, lambda );
-    }
-
-  private:
-    float lambda;
-};
-
-struct SoftThres_d {
-
-    SoftThres_d( double lambda_in ) : lambda( lambda_in ) {}
-
-    typedef double result_type;
-    double operator()( double x ) const {
-        return soft_threshold<double>( x, lambda );
-    }
-
-  private:
-    double lambda;
-};
 
 template < typename T >
 struct SoftThres {
@@ -267,17 +241,17 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_ISTA (
 
     uint outer_counter = 0;
 
-    T delta_k, delta_k_less_1 = 0;
+//    T delta_k, delta_k_less_1 = 0;
 
     do {
 
-        delta_k = duality_gap( X, Y, Beta, lambda );
+//        delta_k = duality_gap( X, Y, Beta, lambda );
 
         outer_counter ++;
         DEBUG_PRINT( "Outer loop iteration: " << outer_counter );
 
-        std::cout << "Outer loop iteration: " << outer_counter << std::endl;
-        std::cout << "Duality gap is " << delta_k << " gap target is " << duality_gap_target << std::endl;
+//        std::cout << "Outer loop iteration: " << outer_counter << std::endl;
+//        std::cout << "Duality gap is " << delta_k << " gap target is " << duality_gap_target << std::endl;
 
         Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta_k_less_1 = Beta;
 
@@ -299,7 +273,7 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_ISTA (
 
         }
 
-        delta_k_less_1 = duality_gap( X, Y, Beta, lambda );
+//        delta_k_less_1 = duality_gap( X, Y, Beta, lambda );
 
 //        std::cout << "Squared norm of Beta tilde " << Beta.squaredNorm() << std::endl;
 

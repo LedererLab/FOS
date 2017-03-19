@@ -1,5 +1,5 @@
-#ifndef TEST_FOS_H
-#define TEST_FOS_H
+#ifndef PERF_FOS_H
+#define PERF_FOS_H
 
 // C System-Headers
 //
@@ -19,9 +19,9 @@
 namespace hdim {
 
 template < typename T >
-std::vector< T > TestFOS() {
+std::vector< T > PerfFOS() {
 
-    std::cout << "Running FOS test for data type: " << get_type_name<T>() << std::endl;
+    std::cout << "Timing FOS for data type: " << get_type_name<T>() << std::endl;
 
     std::string data_set_path = "/home/bephillips2/Desktop/Hanger Bay 1/Academia/HDIM/test_data.csv";
 
@@ -29,7 +29,7 @@ std::vector< T > TestFOS() {
 
     std::cout << "Imported an m = " << raw_data.rows() << " by n = " << raw_data.cols() << " Matrix." << std::endl;
 
-    std::vector < T > sqr_norm_results;
+    std::vector < T > timing_results;
 
     for( uint k = 200; k <= 2000 ; k += 200 ) {
 
@@ -41,29 +41,26 @@ std::vector< T > TestFOS() {
                   << std::endl;
 
         auto X = raw_data.block( 0, 1, k, k );
-
         auto Y = raw_data.block( 0, 0, k, 1 );
 
-        std::cout << "Froebenius squared norm of X " \
-                  << X.squaredNorm()\
-                  << " Froebenius squared norm of Y "\
-                  << Y.squaredNorm() \
-                  << std::endl;
-
         FOS< T > algo_fos ( X, Y );
-        TIME_IT( algo_fos.Algorithm(); );
 
-        std::cout << "Stopping index: " << algo_fos.ReturnOptimIndex() << std::endl;
-        T sqr_norm = algo_fos.ReturnCoefficients().squaredNorm();
-        std::cout << "Froebenius norm squared of Beta tilde, r tilde: " << sqr_norm << std::endl;
-        std::cout << std::endl;
+        auto start = std::chrono::high_resolution_clock::now();
 
-        sqr_norm_results.push_back( sqr_norm );
+        algo_fos.Algorithm();
+
+        auto end = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double, std::milli> ms = end - start;
+        auto time_taken = ms.count();
+
+        std::cout << "FOS took " << time_taken << " ms." << std::endl;
+
+        timing_results.push_back( time_taken );
     }
 
-    return sqr_norm_results;
+    return timing_results;
 }
 
 }
 
-#endif // TEST_FOS_H
+#endif // PERF_FOS_H

@@ -290,7 +290,7 @@ Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> FOS(
         DEBUG_PRINT( "Outer loop #: " << statsIt );
 
         old_Betas = Betas.col( statsIt - 2 );
-        T rStatsIt = lamda_grid( 0, statsIt - 1 );
+        T rStatsIt = lamda_grid( statsIt - 1 );
 
         Eigen::Matrix< T , Eigen::Dynamic, 1  > beta_k = Betas.col( statsIt - 1 );
 

@@ -1,5 +1,6 @@
-#ifndef TEST_FOS_EXPERIMENTAL_H
-#define TEST_FOS_EXPERIMENTAL_H
+#ifndef PERF_FOS_EXPERIMENTAL_H
+#define PERF_FOS_EXPERIMENTAL_H
+
 
 // C System-Headers
 //
@@ -21,10 +22,9 @@ namespace hdim {
 namespace experimental {
 
 template < typename T >
-std::vector< T > TestFOS() {
+std::vector< T > PerfFOS() {
 
-    std::cout << "Running experimental::FOS test for data type: " << get_type_name<T>() << std::endl;
-    std::cout << "Using experimental version of FOS with ISTA." << std::endl;
+    std::cout << "Timing experimental::FOS test for data type: " << get_type_name<T>() << std::endl;
 
     std::string data_set_path = "/home/bephillips2/Desktop/Hanger Bay 1/Academia/HDIM/test_data.csv";
 
@@ -32,7 +32,7 @@ std::vector< T > TestFOS() {
 
     std::cout << "Imported an m = " << raw_data.rows() << " by n = " << raw_data.cols() << " Matrix." << std::endl;
 
-    std::vector < T > sqr_norm_results;
+    std::vector < T > timing_results;
 
     for( uint k = 200; k <= 2000 ; k += 200 ) {
 
@@ -46,27 +46,24 @@ std::vector< T > TestFOS() {
         Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X = raw_data.block( 0, 1, k, k );
         Eigen::Matrix< T, Eigen::Dynamic, 1 > Y = raw_data.block( 0, 0, k, 1 );
 
-        std::cout << "Froebenius squared norm of X " \
-                  << X.squaredNorm()\
-                  << " Froebenius squared norm of Y "\
-                  << Y.squaredNorm() \
-                  << std::endl;
+        auto start = std::chrono::high_resolution_clock::now();
 
-        Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > Beta;
-        TIME_IT( Beta = experimental::FOS< T >( X, Y ); );
+        experimental::FOS< T >( X, Y );
 
-        T sqr_norm = Beta.squaredNorm();
-        std::cout << "Froebenius norm squared of Beta tilde, r tilde: " << sqr_norm << std::endl;
-        std::cout << std::endl;
+        auto end = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double, std::milli> ms = end - start;
+        auto time_taken = ms.count();
 
-        sqr_norm_results.push_back( sqr_norm );
+        std::cout << "FOS::experimental took " << time_taken << " ms." << std::endl;
+
+        timing_results.push_back( time_taken );
     }
 
-    return sqr_norm_results;
+    return timing_results;
 }
 
 }
 
 }
 
-#endif // TEST_FOS_EXPERIMENTAL_H
+#endif // PERF_FOS_EXPERIMENTAL_H

@@ -8,8 +8,8 @@
 //
 // SPAMS Headers
 //
-// Armadillo Headers
-//
+// JASPL
+#include "../JASPL/jPlot/jplot.h"
 // Project Specific Headers
 #include "OpenCL_Generics/perf_cl_product.h"
 #include "ISTA/perf_ista.h"
@@ -18,40 +18,32 @@
 #include "SPAMS/test_fista.h"
 #include "FOS/test_fos.h"
 #include "FOS/test_fos_experimental.h"
+#include "FOS/perf_fos.h"
+#include "FOS/perf_fos_experimental.h"
 
 
 int main(int argc, char *argv[]) {
 
-//    RunIstaTests();
-//    RunFistaTests();
+    auto fos_results_w_ista = hdim::experimental::PerfFOS< double >();
+    auto fos_results_w_fista = hdim::PerfFOS< double >();
 
-//    hdim::experimental::TestFOS< float >();
-    hdim::TestFOS< float >();
+//    auto fos_results_w_ista = hdim::experimental::TestFOS< double >();
+//    auto fos_results_w_fista = hdim::TestFOS< double >();
 
-//    std::vector< double > cpu_times;
-//    std::vector< double > gpu_times;
+    std::vector< double > ratio_results;
 
-//    auto mat_mul_test = MatProdTest( 0, 0 );
+    for( uint i = 0 ; i < fos_results_w_ista.size() ; i++ ) {
 
-//    for( uint k = 2; k <= std::pow( 2, 12 ); k *= 2 ) {
+        auto ratio = fos_results_w_fista.at(i) / fos_results_w_ista.at(i);
+        ratio_results.push_back( ratio );
+    }
 
-//        std::pair< double, double > data_point = mat_mul_test.Run( k, k );
-//        std::pair< double, double > data_point_biased = mat_mul_test.RunBiased( k, k );
+    jaspl::plot< std::vector< double > >( ratio_results, "Ratio of FOS timing w/ ISTA v. FISTA" );
 
-//        double gpu_cpu_ratio = data_point.first / data_point.second;
-//        double gpu_cpu_ratio_biased = data_point_biased.first / data_point_biased.second;
-
-//        cpu_times.push_back( gpu_cpu_ratio );
-//        gpu_times.push_back( gpu_cpu_ratio_biased );
-
-//        cpu_times.push_back( data_point.first );
-//        gpu_times.push_back( data_point.second );
-
-//        std::cout << "Ratio of CPU/GPU time: "
-//                  << data_point.first / data_point.second
-//                  << std::endl;
-
-//    }
-
+//    jaspl::plot< std::vector< double > >( fos_results_w_ista,
+//                 fos_results_w_fista,
+//                 "FOS w/ ISTA",
+//                 "FOS w/ FISTA",
+//                 "Comparison of FOS implementations");
 
 }

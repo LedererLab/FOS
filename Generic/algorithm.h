@@ -22,21 +22,6 @@
  *
  */
 
-template < typename T >
-typename T::value_type L_infinity_norm( const T& matrix ) {
-    return matrix.template lpNorm< Eigen::Infinity >();
-}
-
-template < typename T >
-typename T::value_type L1_norm( const T& matrix ) {
-    return matrix.template lpNorm< 1 >();
-}
-
-template < typename T >
-typename T::value_type compute_sqr_norm( const T& matrix ) {
-    return matrix.squaredNorm();
-}
-
 template < typename T, uint m, uint n >
 /*!
  * \brief Convert a const- Spams Matrix to an Eigen::Matrix

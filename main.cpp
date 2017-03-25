@@ -11,11 +11,6 @@
 // JASPL
 #include "../JASPL/jPlot/jplot.h"
 // Project Specific Headers
-#include "OpenCL_Generics/perf_cl_product.h"
-#include "ISTA/perf_ista.h"
-#include "SPAMS/perf_fista.h"
-#include "ISTA/test_ista.h"
-#include "SPAMS/test_fista.h"
 #include "FOS/test_fos.h"
 #include "FOS/test_fos_experimental.h"
 #include "FOS/perf_fos.h"
@@ -24,26 +19,38 @@
 
 int main(int argc, char *argv[]) {
 
-    auto fos_results_w_ista = hdim::experimental::PerfFOS< double >();
-    auto fos_results_w_fista = hdim::PerfFOS< double >();
+//    auto x_fos = hdim::experimental::PerfX_FOS< double >();
+//    auto old_fos = hdim::PerfFOS< double >();
+//    auto old_fos = hdim::experimental::PerfFOS< double >();
+
+    auto x_fos = hdim::experimental::TestX_FOS< double >();
+//    auto old_fos = hdim::experimental::TestFOS< double >();
 
 //    auto fos_results_w_ista = hdim::experimental::TestFOS< double >();
-//    auto fos_results_w_fista = hdim::TestFOS< double >();
+//    auto x_fos = hdim::experimental::TestX_FOS< double >();
+//    auto old_fos = hdim::TestFOS< double >();
 
-    std::vector< double > ratio_results;
+//    std::vector< double > ratio_results;
 
-    for( uint i = 0 ; i < fos_results_w_ista.size() ; i++ ) {
+//    for( uint i = 0 ; i < x_fos.size() ; i++ ) {
 
-        auto ratio = fos_results_w_fista.at(i) / fos_results_w_ista.at(i);
-        ratio_results.push_back( ratio );
-    }
+//        auto ratio = x_fos.at(i) / old_fos.at(i);
+//        ratio_results.push_back( ratio );
+//    }
 
-    jaspl::plot< std::vector< double > >( ratio_results, "Ratio of FOS timing w/ ISTA v. FISTA" );
 
-//    jaspl::plot< std::vector< double > >( fos_results_w_ista,
-//                 fos_results_w_fista,
-//                 "FOS w/ ISTA",
-//                 "FOS w/ FISTA",
-//                 "Comparison of FOS implementations");
+//    jaspl::plot_to_disk< std::vector< double > >( ratio_results,
+//                                                  "Timing Results Ratio",
+//                                                  "Row Size / 200",
+//                                                  "Execution time ( X_FISTA / FISTA ).",
+//                                                  "Ratio of FOS timing with X_FISTA v FISTA",
+//                                                  "/home/bephillips2/");
+
+//    jaspl::plot_to_disk< std::vector< double > >( ratio_results,
+//                                                  "L2 Norm of Beta Ratio",
+//                                                  "Row Size / 200",
+//                                                  "L2 Norm of Beta ( X_FISTA / FISTA ).",
+//                                                  "Ratio of FOS results X_FISTA v. X_ISTA",
+//                                                  "/home/bephillips2/");
 
 }

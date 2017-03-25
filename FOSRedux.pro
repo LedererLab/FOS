@@ -16,9 +16,11 @@ CONFIG(debug, debug|release) {
     DEFINES += "DEBUG"
 } else {
     DEFINES += "NDEBUG"
-    QMAKE_CXXFLAGS -= -O2
+    #QMAKE_CXXFLAGS -= -O2
     QMAKE_CXXFLAGS += -O3
-    DEFINES += "OMP_NUM_THREADS=8"
+    QMAKE_CXXFLAGS += -ftree-vectorize
+    QMAKE_CXXFLAGS += -msse2
+    QMAKE_CXXFLAGS += -ffast-math
 }
 
 # Boost
@@ -81,7 +83,8 @@ HEADERS += FOS/fos.h \
     FOS/fos_imperative.h \
     FOS/test_fos_experimental.h \
     FOS/perf_fos.h \
-    FOS/perf_fos_experimental.h
+    FOS/perf_fos_experimental.h \
+    FOS/x_fos.h
 
 SOURCES += main.cpp \
     #FOS/fos.tpp \

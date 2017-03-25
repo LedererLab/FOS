@@ -19,59 +19,6 @@
 #include "../Generic/debug.h"
 #include "../Generic/generics.h"
 
-//template <typename T> int sgn(T val) {
-//    return (T(0) < val) - (val < T(0));
-//}
-template <typename T>
-T sgn(T val) {
-    return static_cast<T>( T(0) < val ) - ( val < T(0) );
-}
-
-template < typename T >
-T pos_part( T x ) {
-    return std::max( x, static_cast<T>(0.0) );
-}
-
-template < typename T >
-T soft_threshold( T x, T y ) {
-    T sgn_T = static_cast<T>( sgn(x) );
-    return sgn_T*pos_part( std::abs(x) - y );
-}
-
-template < typename T >
-struct SoftThres {
-
-    SoftThres( T lambda_in ) : lambda( lambda_in ) {}
-
-    typedef T result_type;
-    T operator()( T x ) const {
-        return soft_threshold<T>( x, lambda );
-    }
-
-  private:
-    T lambda;
-};
-
-template < typename T >
-inline T prox( T x, T lambda ) {
-    return ( std::abs(x) >= lambda )?( x - sgn( x )*lambda ):( 0 );
-}
-
-template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, 1 > soft_threshold_mat(
-    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& mat,
-    const T lambda ) {
-
-    Eigen::Matrix<T, Eigen::Dynamic, 1 > mat_x( mat.rows() );
-
-//    #pragma omp parallel for collapse(2)
-    for( uint i = 0; i < mat.rows() ; i ++ ) {
-        mat_x( i ) =  prox( mat( i ), lambda );
-    }
-
-    return mat_x;
-}
-
 template < typename T >
 T f_beta (
     const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
@@ -106,22 +53,47 @@ T f_beta_tilda (
 }
 
 template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, 1 > update_beta (
+Eigen::Matrix< T, Eigen::Dynamic, 1 > update_beta_ista (
     const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
-    const Eigen::Matrix< T, Eigen::Dynamic, 1  >& Y,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
     T L,
     T thres ) {
 
     Eigen::Matrix< T, Eigen::Dynamic, 1 > f_grad = 2.0f*( X.transpose()*( X*Beta - Y ) );
-
-//    return soft_threshold_mat<T>( Beta - (1.0/L)*f_grad, thres/L );
-
     Eigen::Matrix< T, Eigen::Dynamic, 1 > beta_to_modify = Beta - (1.0f/L)*f_grad;
 
-    return beta_to_modify.unaryExpr( SoftThres<T>( thres/L ) );
-//    return soft_threshold_mat<T>( beta_to_modify, thres/L );
+//    Eigen::Matrix< T, Eigen::Dynamic, 1 > beta_to_modify =  Beta + (2.0f/L)*( X.transpose()*( -1.0f*X*Beta + Y ) );
 
+//    Eigen::Matrix< T, Eigen::Dynamic, 1 > beta_to_modify = Beta + ( -2.0 / L )*X.transpose()*X*Beta + ( 2.0 / L ) * X.transpose()*Y;
+
+    return beta_to_modify.unaryExpr( SoftThres<T>( thres/L ) );
+
+}
+
+template < typename T >
+Eigen::Matrix< T, Eigen::Dynamic, 1 > update_beta_fista (
+    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
+    T L,
+    T thres ) {
+
+    T t_k = thres / L;
+
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > f_grad = 2.0f*( X.transpose()*( X*Beta - Y ) );
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > beta_to_modify = Beta - (1.0f/L)*f_grad;
+
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > x_k = beta_to_modify.unaryExpr( SoftThres<T>( thres/L ) );
+
+    T t_k_plus_1 = ( 1.0 + std::sqrt( 1.0 + 4.0 * square( t_k ) ) ) / 2.0;
+
+    static Eigen::Matrix< T, Eigen::Dynamic, 1 > x_k_less_1;
+    x_k_less_1.resize( x_k.rows(), x_k.cols() );
+
+    x_k_less_1 = x_k + ( t_k - 1.0 ) / ( t_k_plus_1 ) * ( x_k - x_k_less_1 );
+
+    return x_k_less_1;
 }
 
 template < typename T >
@@ -145,7 +117,7 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > ISTA (
 
         uint counter = 0;
 
-        Beta = update_beta( X, Y, Beta_k_less_1, L, lambda );
+        Beta = update_beta_ista( X, Y, Beta_k_less_1, L, lambda );
 
         counter++;
         DEBUG_PRINT( "Backtrace iteration: " << counter );
@@ -156,26 +128,13 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > ISTA (
             DEBUG_PRINT( "Backtrace iteration: " << counter );
 
             L*= eta;
-            Beta = update_beta( X, Y, Beta_k_less_1, L, lambda );
+            Beta = update_beta_ista( X, Y, Beta_k_less_1, L, lambda );
 
         }
     }
 
     return Beta;
 
-}
-
-template < typename T>
-/*!
- * \brief Compute the square of a value
- * \param val
- *
- * value to square
- *
- * \return The squared quantity
- */
-T square( const T& val ) {
-    return val * val;
 }
 
 template < typename T >
@@ -204,9 +163,9 @@ T duality_gap ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
 
     T alternative = r_stats_it /( L_infinity_norm( 2.0f*X.transpose()*error ) );
 
-    T alt_part_1 = -1.0*static_cast<T>( Y.transpose()*error );
+    T alt_part_1 = static_cast<T>( Y.transpose()*error );
 
-    T alternative_0 = alt_part_1/( compute_sqr_norm( -1.0f*error ) );
+    T alternative_0 = alt_part_1/( compute_sqr_norm( error ) );
 
     T s = std::min( std::max( alternative, alternative_0 ), -1.0f*alternative );
 
@@ -241,23 +200,16 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_ISTA (
 
     uint outer_counter = 0;
 
-//    T delta_k, delta_k_less_1 = 0;
-
     do {
-
-//        delta_k = duality_gap( X, Y, Beta, lambda );
 
         outer_counter ++;
         DEBUG_PRINT( "Outer loop iteration: " << outer_counter );
-
-//        std::cout << "Outer loop iteration: " << outer_counter << std::endl;
-//        std::cout << "Duality gap is " << delta_k << " gap target is " << duality_gap_target << std::endl;
 
         Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta_k_less_1 = Beta;
 
         uint counter = 0;
 
-        Beta = update_beta( X, Y, Beta_k_less_1, L, lambda );
+        Beta = update_beta_ista( X, Y, Beta_k_less_1, L, lambda );
 
         counter++;
         DEBUG_PRINT( "Backtrace iteration: " << counter );
@@ -266,16 +218,12 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_ISTA (
 
             counter++;
             DEBUG_PRINT( "Backtrace iteration: " << counter );
-//            std::cout << "Backtrace iteration: " << counter << std::endl;
 
             L*= eta;
-            Beta = update_beta( X, Y, Beta_k_less_1, L, lambda );
+            Beta = update_beta_ista( X, Y, Beta_k_less_1, L, lambda );
 
         }
 
-//        delta_k_less_1 = duality_gap( X, Y, Beta, lambda );
-
-//        std::cout << "Squared norm of Beta tilde " << Beta.squaredNorm() << std::endl;
 
     } while ( ( duality_gap( X, Y, Beta, lambda ) > duality_gap_target ) );
 

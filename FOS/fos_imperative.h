@@ -20,93 +20,6 @@ namespace hdim {
 
 namespace experimental {
 
-template < typename T >
-typename T::value_type L_infinity_norm( const T& matrix ) {
-    return matrix.template lpNorm< Eigen::Infinity >();
-}
-
-template < typename T >
-typename T::value_type L1_norm( const T& matrix ) {
-    return matrix.template lpNorm< 1 >();
-}
-
-template < typename T >
-typename T::value_type compute_sqr_norm( const T& matrix ) {
-    return matrix.squaredNorm();
-}
-
-//template < typename T>
-///*!
-// * \brief Compute the square of a value
-// * \param val
-// *
-// * value to square
-// *
-// * \return The squared quantity
-// */
-//T square( const T& val ) {
-//    return val * val;
-//}
-
-template < typename T >
-/*!
- * \brief Compute the maximum of the absolute value of an Eigen::Matrix object
- *
- * \param matrix
- *
- * Matrix to work on- note that the matrix is not modified.
- *
- * \return Coeffecient-wise maximum of the absolute value of the argument
- */
-T abs_max( const T& matrix ) {
-    return matrix.cwiseAbs().maxCoeff();
-}
-
-template < typename T >
-/*!
- * \brief Generate a vector of logarithmically equally spaced points
- *
- * There will be num_element points, beginning at log10( lower_bound )
- *  and ending at log10( upper_bound ).
- *
- * This function is semantically equivalent to the R function 'logspace'.
- *
- * \param lower_bound
- *
- * 10^x for x = smallest element in vector
- *
- * \param upper_bound
- *
- * 10^x for x = largest element in vector
- *
- * \param num_elements
- *
- * number of elements in the generated vector
- *
- * \return
- *
- * Vector of logarithmically equally spaced points
- */
-Eigen::Matrix< T, 1, Eigen::Dynamic > LogScaleVector( T lower_bound, T upper_bound, uint num_elements ) {
-
-    T min_elem = static_cast<T>( log10(lower_bound) );
-    T max_elem = static_cast<T>( log10(upper_bound) );
-    T delta = max_elem - min_elem;
-
-    Eigen::Matrix< T, 1, Eigen::Dynamic > log_space_vector;
-    log_space_vector.resize( num_elements );
-
-    for ( uint i = 0; i < num_elements ; i ++ ) {
-
-        T step = static_cast<T>( i )/static_cast<T>( num_elements - 1 );
-        auto lin_step = delta*step + min_elem;
-
-        log_space_vector( 0, i ) = static_cast<T>( std::pow( 10.0, lin_step ) );
-    }
-
-    return log_space_vector;
-}
-
 //Member functions
 
 template < typename T >
@@ -233,13 +146,15 @@ T duality_gap ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
 
     T alternative = r_stats_it /( L_infinity_norm( 2.0f*X.transpose()*error ) );
 
-    T alt_part_1 = -1.0*static_cast<T>( Y.transpose()*error );
+    T alt_part_1 = static_cast<T>( Y.transpose()*error );
 
-    T alternative_0 = alt_part_1/( compute_sqr_norm( -1.0f*error ) );
+    T alternative_0 = alt_part_1/( static_cast<T>( error.squaredNorm() ) );
 
     T s = std::min( std::max( alternative, alternative_0 ), -1.0f*alternative );
 
-    T d_nu = 0.25*square( r_stats_it )*compute_sqr_norm( -1.0f*( 2.0f*s / r_stats_it ) * error + 2.0f/r_stats_it*Y ) - Y.squaredNorm();
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > nu_part = -1.0f*( 2.0f*s / r_stats_it ) * error + 2.0f/r_stats_it*Y;
+
+    T d_nu = 0.25*square( r_stats_it )*nu_part.squaredNorm() - Y.squaredNorm();
 
     return f_beta + d_nu;
 }
@@ -257,9 +172,6 @@ template< typename T >
 Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> FOS(
     Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>& X,
     Eigen::Matrix<T, Eigen::Dynamic, 1 >& Y ) {
-
-    omp_set_num_threads( 8 );
-    Eigen::setNbThreads( 8 );
 
     Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > Betas;
     Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > old_Betas;

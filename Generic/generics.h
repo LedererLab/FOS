@@ -84,7 +84,7 @@ template< typename T >
  *
  * An n x m matrix to be normalized.
  */
-void Normalize( Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>& mat ) {
+void Normalize_IP ( Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>& mat ) {
 
     auto mean = mat.colwise().mean();
     auto std = ((mat.rowwise() - mean).array().square().colwise().sum() / (mat.rows() - 1)).sqrt();
@@ -112,7 +112,7 @@ template< typename T >
  *
  * An n x 1 vector to be normalized.
  */
-void Normalize( Eigen::Matrix< T, Eigen::Dynamic, 1 >& mat ) {
+void Normalize_IP( Eigen::Matrix< T, Eigen::Dynamic, 1 >& mat ) {
 
     auto mean = mat.colwise().mean();
     auto std = ((mat.rowwise() - mean).array().square().colwise().sum() / (mat.rows() - 1)).sqrt();
@@ -160,6 +160,144 @@ void sweep_matrix( Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>& mat, T (*ma
             mat( i, j ) = (*mat_func)( i, j );
         }
     }
+}
+
+template < typename T >
+typename T::value_type L_infinity_norm( const T& matrix ) {
+    return matrix.template lpNorm< Eigen::Infinity >();
+}
+
+template < typename T >
+typename T::value_type L1_norm( const T& matrix ) {
+    return matrix.template lpNorm< 1 >();
+}
+
+template < typename T >
+typename T::value_type compute_sqr_norm( const T& matrix ) {
+    return matrix.squaredNorm();
+}
+
+
+template < typename T>
+/*!
+ * \brief Compute the square of a value
+ * \param val
+ *
+ * value to square
+ *
+ * \return The squared quantity
+ */
+T square( T& val ) {
+    return val * val;
+}
+
+template < typename T >
+/*!
+ * \brief Compute the maximum of the absolute value of an Eigen::Matrix object
+ *
+ * \param matrix
+ *
+ * Matrix to work on- note that the matrix is not modified.
+ *
+ * \return Coeffecient-wise maximum of the absolute value of the argument
+ */
+T abs_max( const T& matrix ) {
+    return matrix.cwiseAbs().maxCoeff();
+}
+
+template < typename T >
+/*!
+ * \brief Generate a vector of logarithmically equally spaced points
+ *
+ * There will be num_element points, beginning at log10( lower_bound )
+ *  and ending at log10( upper_bound ).
+ *
+ * This function is semantically equivalent to the R function 'logspace'.
+ *
+ * \param lower_bound
+ *
+ * 10^x for x = smallest element in vector
+ *
+ * \param upper_bound
+ *
+ * 10^x for x = largest element in vector
+ *
+ * \param num_elements
+ *
+ * number of elements in the generated vector
+ *
+ * \return
+ *
+ * Vector of logarithmically equally spaced points
+ */
+Eigen::Matrix< T, 1, Eigen::Dynamic > LogScaleVector( T lower_bound, T upper_bound, uint num_elements ) {
+
+    T min_elem = static_cast<T>( log10(lower_bound) );
+    T max_elem = static_cast<T>( log10(upper_bound) );
+    T delta = max_elem - min_elem;
+
+    Eigen::Matrix< T, 1, Eigen::Dynamic > log_space_vector;
+    log_space_vector.resize( num_elements );
+
+    for ( uint i = 0; i < num_elements ; i ++ ) {
+
+        T step = static_cast<T>( i )/static_cast<T>( num_elements - 1 );
+        auto lin_step = delta*step + min_elem;
+
+        log_space_vector( 0, i ) = static_cast<T>( std::pow( 10.0, lin_step ) );
+    }
+
+    return log_space_vector;
+}
+
+template <typename T>
+T sgn(T val) {
+    return static_cast<T>( T(0) < val ) - ( val < T(0) );
+}
+
+template < typename T >
+T pos_part( T x ) {
+    return std::max( x, static_cast<T>(0.0) );
+}
+
+template < typename T >
+T soft_threshold( T x, T y ) {
+    T sgn_T = static_cast<T>( sgn(x) );
+    return sgn_T*pos_part( std::abs(x) - y );
+}
+
+template < typename T >
+struct SoftThres {
+
+    SoftThres( T lambda_in ) : lambda( lambda_in ) {}
+
+    typedef T result_type;
+    T operator()( T x ) const {
+        return soft_threshold<T>( x, lambda );
+    }
+
+  private:
+    T lambda;
+};
+
+template < typename T >
+inline T prox( T x, T lambda ) {
+    return ( std::abs(x) >= lambda )?( x - sgn( x )*lambda ):( 0 );
+}
+
+template < typename T >
+Eigen::Matrix< T, Eigen::Dynamic, 1 > soft_threshold_mat(
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& mat,
+    const T lambda ) {
+
+    Eigen::Matrix<T, Eigen::Dynamic, 1 > mat_x( mat.rows() );
+
+//    #pragma omp parallel for collapse(2)
+    for( uint i = 0; i < mat.rows() ; i ++ ) {
+        mat_x( i ) =  prox( mat( i ), lambda );
+    }
+
+    return mat_x;
 }
 
 #endif // FOS_GENERICS_H

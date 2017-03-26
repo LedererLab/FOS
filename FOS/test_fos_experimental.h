@@ -90,7 +90,6 @@ std::vector< T > TestX_FOS() {
                   << std::endl;
 
         auto X = raw_data.block( 0, 1, k, k );
-
         auto Y = raw_data.block( 0, 0, k, 1 );
 
         std::cout << "Froebenius squared norm of X " \

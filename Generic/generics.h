@@ -174,7 +174,7 @@ typename T::value_type L1_norm( const T& matrix ) {
 
 template < typename T >
 typename T::value_type compute_sqr_norm( const T& matrix ) {
-    return matrix.squaredNorm();
+    return static_cast< typename T:: value_type >( matrix.squaredNorm() );
 }
 
 

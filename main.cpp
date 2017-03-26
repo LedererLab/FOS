@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
 //    auto old_fos = hdim::experimental::PerfFOS< double >();
 
     auto x_fos = hdim::experimental::TestX_FOS< double >();
-//    auto old_fos = hdim::experimental::TestFOS< double >();
+    auto old_fos = hdim::experimental::TestFOS< double >();
 
 //    auto fos_results_w_ista = hdim::experimental::TestFOS< double >();
 //    auto x_fos = hdim::experimental::TestX_FOS< double >();
@@ -42,8 +42,8 @@ int main(int argc, char *argv[]) {
 //    jaspl::plot_to_disk< std::vector< double > >( ratio_results,
 //                                                  "Timing Results Ratio",
 //                                                  "Row Size / 200",
-//                                                  "Execution time ( X_FISTA / FISTA ).",
-//                                                  "Ratio of FOS timing with X_FISTA v FISTA",
+//                                                  "Execution time ( X FISTA / FISTA ).",
+//                                                  "Ratio of FOS timing with X FISTA v FISTA",
 //                                                  "/home/bephillips2/");
 
 //    jaspl::plot_to_disk< std::vector< double > >( ratio_results,

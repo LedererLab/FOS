@@ -18,8 +18,8 @@ CONFIG(debug, debug|release) {
     DEFINES += "NDEBUG"
     #QMAKE_CXXFLAGS -= -O2
     QMAKE_CXXFLAGS += -O3
-    QMAKE_CXXFLAGS += -ftree-vectorize
-    QMAKE_CXXFLAGS += -msse2
+#    QMAKE_CXXFLAGS += -ftree-vectorize
+#    QMAKE_CXXFLAGS += -msse2
     QMAKE_CXXFLAGS += -ffast-math
 }
 
@@ -29,7 +29,6 @@ LIBS += -L/usr/local/lib \
         -lboost_iostreams \
         -lboost_system \
         -lboost_filesystem \
-        -lboost_thread
 
 # Eigen
 INCLUDEPATH += /usr/include/eigen3

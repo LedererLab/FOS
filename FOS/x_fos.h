@@ -64,10 +64,14 @@ class X_FOS {
         const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
         const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& Betas );
 
-    T DualityGap( uint r_stats_it );
     T DualityGapTarget( uint r_stats_it );
 
     T duality_gap_target( T gamma, T C, T r_stats_it, uint n );
+
+    T duality_gap ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
+                    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y, \
+                    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta, \
+                    T r_stats_it );
 
     Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_ISTA (
         const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
@@ -77,7 +81,23 @@ class X_FOS {
         T lambda,
         T duality_gap_target );
 
+    Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_ISTA_OPT (
+        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
+        T L_0, \
+        T lambda,
+        T duality_gap_target );
+
     Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FISTA (
+        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
+        T L_0, \
+        T lambda,
+        T duality_gap_target );
+
+    Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FISTA_OPT (
         const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
         const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
         const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
@@ -223,7 +243,12 @@ bool X_FOS<T>::ComputeStatsCond( T C,
 
         DEBUG_PRINT( "Check Parameter: " << check_parameter );
 
-        stats_cond &= ( check_parameter <= C );
+        if( !( check_parameter <= C ) ) {
+            stats_cond = false;
+            break;
+        }
+
+//        stats_cond &= ( check_parameter <= C );
     }
 
     return stats_cond;
@@ -307,6 +332,37 @@ T dual_objective ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, 
     return d_nu;
 }
 */
+
+template < typename T >
+inline T X_FOS<T>::duality_gap ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
+                                 const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y, \
+                                 const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta, \
+                                 T r_stats_it ) {
+
+    //Computation of Primal Objective
+
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > error = X*Beta - Y;
+
+    T f_beta = error.squaredNorm() + r_stats_it*Beta.template lpNorm < 1 >();
+
+    //Computation of Dual Objective
+
+    //Compute dual point
+
+    T alternative = r_stats_it /( L_infinity_norm( 2.0f*X.transpose()*error ) );
+
+    T alt_part_1 = static_cast<T>( Y.transpose()*error );
+
+    T alternative_0 = alt_part_1/( static_cast<T>( error.squaredNorm() ) );
+
+    T s = std::min( std::max( alternative, alternative_0 ), -1.0f*alternative );
+
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > nu_part = ( - 2.0f*s / r_stats_it ) * error + 2.0f/r_stats_it*Y;
+
+    T d_nu = 0.25*square( r_stats_it )*nu_part.squaredNorm() - Y.squaredNorm();
+
+    return f_beta + d_nu;
+}
 
 template < typename T >
 T X_FOS<T>::duality_gap_target( T gamma, T C, T r_stats_it, uint n ) {
@@ -395,6 +451,92 @@ almost_equal(T x, T y, int ulp) {
            || std::abs(x-y) < std::numeric_limits<T>::min();
 }
 
+
+template < typename T >
+Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS<T>::X_FISTA_OPT (
+    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
+    T L_0, \
+    T lambda,
+    T duality_gap_target ) {
+
+    T eta = 1.5;
+    T L = L_0;
+
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta = Beta_0;
+    y_k = Beta;
+
+    uint outer_counter = 0;
+
+    do {
+
+        outer_counter ++;
+        DEBUG_PRINT( "Outer loop iteration: " << outer_counter );
+
+        y_k_old = y_k;
+
+        Eigen::Matrix< T, Eigen::Dynamic, 1 > f_grad = 2.0*( X.transpose()*( X*y_k_old - Y ) );
+
+        Eigen::Matrix< T, Eigen::Dynamic, 1 > to_modify = y_k_old - (1.0/L)*f_grad;
+        Eigen::Matrix< T, Eigen::Dynamic, 1 > y_k_temp = to_modify.unaryExpr( SoftThres<T>( lambda/L ) );
+
+        uint counter = 0;
+
+        T f_beta = ( X*y_k_temp - Y ).squaredNorm();
+
+        Eigen::Matrix< T, Eigen::Dynamic, 1  > f_part = X*y_k_old - Y;
+        T taylor_term_0 = f_part.squaredNorm();
+
+        Eigen::Matrix< T, Eigen::Dynamic, 1  > beta_diff = ( y_k_temp - y_k_old );
+
+        T taylor_term_1 = f_grad.transpose()*beta_diff;
+
+        T taylor_term_2 = L/2.0*beta_diff.squaredNorm();
+
+        T f_beta_tilde = taylor_term_0 + taylor_term_1 + taylor_term_2;
+
+        while( f_beta > f_beta_tilde ) {
+
+            counter++;
+            DEBUG_PRINT( "Backtrace iteration: " << counter );
+
+            L*= eta;
+
+            DEBUG_PRINT( "L: " << L );
+            to_modify = y_k_old - (1.0/L)*f_grad;
+            y_k_temp = to_modify.unaryExpr( SoftThres<T>( lambda/L ) );
+
+            f_beta = ( X*y_k_temp - Y ).squaredNorm();;
+
+            beta_diff = ( y_k_temp - y_k_old );
+            taylor_term_1 = f_grad.transpose()*beta_diff;
+            taylor_term_2 = L/2.0*beta_diff.squaredNorm();
+
+            f_beta_tilde = taylor_term_0 + taylor_term_1 + taylor_term_2;
+
+        }
+
+        Eigen::Matrix< T, Eigen::Dynamic, 1 > x_k = Beta;
+
+        x_k_less_1 = x_k;
+
+        to_modify = y_k_old - (1.0/L)*f_grad;
+        x_k = to_modify.unaryExpr( SoftThres<T>( lambda/L ) );
+
+        T t_k_plus_1 = ( 1.0 + std::sqrt( 1.0 + 4.0 * square( t_k ) ) ) / 2.0;
+        t_k = t_k_plus_1;
+
+        y_k = x_k + ( t_k - 1.0 ) / ( t_k_plus_1 ) * ( x_k - x_k_less_1 );
+
+        Beta = x_k;
+
+    } while ( ( duality_gap( X, Y, Beta, lambda ) > duality_gap_target ));
+
+    return Beta;
+
+}
+
 template < typename T >
 Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS<T>::X_FISTA (
     const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
@@ -443,6 +585,78 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS<T>::X_FISTA (
 
     return Beta;
 
+}
+
+template < typename T >
+Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS<T>::X_ISTA_OPT (
+    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
+    T L_0, \
+    T lambda,
+    T duality_gap_target ) {
+
+    T eta = 1.5;
+    T L = L_0;
+
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta = Beta_0;
+
+    uint outer_counter = 0;
+
+    do {
+
+        outer_counter ++;
+        DEBUG_PRINT( "Outer loop iteration: " << outer_counter );
+
+        uint counter = 0;
+
+        Eigen::Matrix< T, Eigen::Dynamic, 1 > f_grad = 2.0*( X.transpose()*( X*Beta - Y ) );
+
+        Eigen::Matrix< T, Eigen::Dynamic, 1 > to_modify = Beta - (1.0/L)*f_grad;
+        Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta_temp = to_modify.unaryExpr( SoftThres<T>( lambda/L ) );
+
+        counter++;
+        DEBUG_PRINT( "Backtrace iteration: " << counter );
+
+        T f_beta = ( X*Beta_temp - Y ).squaredNorm();
+
+        Eigen::Matrix< T, Eigen::Dynamic, 1  > f_part = X*Beta - Y;
+        T taylor_term_0 = f_part.squaredNorm();
+
+        Eigen::Matrix< T, Eigen::Dynamic, 1  > beta_diff = ( Beta_temp - Beta );
+
+        T taylor_term_1 = f_grad.transpose()*beta_diff;
+
+        T taylor_term_2 = L/2.0*beta_diff.squaredNorm();
+
+        T f_beta_tilde = taylor_term_0 + taylor_term_1 + taylor_term_2;
+
+        while( f_beta > f_beta_tilde ) {
+
+            counter++;
+            DEBUG_PRINT( "Backtrace iteration: " << counter );
+
+            L*= eta;
+
+            DEBUG_PRINT( "L: " << L );
+            to_modify = Beta - (1.0/L)*f_grad;
+            Beta_temp = to_modify.unaryExpr( SoftThres<T>( lambda/L ) );
+
+            f_beta = ( X*Beta_temp - Y ).squaredNorm();;
+
+            beta_diff = ( Beta_temp - Beta );
+            taylor_term_1 = f_grad.transpose()*beta_diff;
+            taylor_term_2 = L/2.0*beta_diff.squaredNorm();
+
+            f_beta_tilde = taylor_term_0 + taylor_term_1 + taylor_term_2;
+
+        }
+
+        Beta = ( Beta - (1.0/L)*f_grad ).unaryExpr( SoftThres<T>( lambda/L ) );
+
+    } while ( ( duality_gap( X, Y, Beta, lambda ) > duality_gap_target ) );
+
+    return Beta;
 }
 
 template < typename T >
@@ -496,7 +710,6 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS<T>::X_ISTA (
     } while ( ( duality_gap( X, Y, Beta, lambda ) > duality_gap_target ) );
 
     return Beta;
-
 }
 
 template< typename T >
@@ -548,7 +761,7 @@ void X_FOS< T >::Run() {
 
             DEBUG_PRINT( "Current Lambda: " << rStatsIt );
 
-            Betas.col( statsIt - 1 ) = X_FISTA( X, Y, old_Betas, 0.1, rStatsIt, gap_target );
+            Betas.col( statsIt - 1 ) = X_ISTA_OPT( X, Y, old_Betas, 0.1, rStatsIt, gap_target );
             old_Betas = Betas.col( statsIt - 1 );
 
             DEBUG_PRINT( "L2 Norm of Betas: " << Betas.squaredNorm() );

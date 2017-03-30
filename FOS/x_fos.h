@@ -156,6 +156,7 @@ class X_FOS {
     Eigen::Matrix< T, 1, Eigen::Dynamic > lambda_grid;
 
     T t_k = 1;
+    T hot_start_L = 0.1;
 
 };
 
@@ -243,12 +244,12 @@ bool X_FOS<T>::ComputeStatsCond( T C,
 
         DEBUG_PRINT( "Check Parameter: " << check_parameter );
 
-        if( !( check_parameter <= C ) ) {
-            stats_cond = false;
-            break;
-        }
+//        if( !( check_parameter <= C ) ) {
+//            stats_cond = false;
+//            break;
+//        }
 
-//        stats_cond &= ( check_parameter <= C );
+        stats_cond &= ( check_parameter <= C );
     }
 
     return stats_cond;
@@ -342,8 +343,9 @@ inline T X_FOS<T>::duality_gap ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::
     //Computation of Primal Objective
 
     Eigen::Matrix< T, Eigen::Dynamic, 1 > error = X*Beta - Y;
+    T error_sqr_norm = error.squaredNorm();
 
-    T f_beta = error.squaredNorm() + r_stats_it*Beta.template lpNorm < 1 >();
+    T f_beta = error_sqr_norm + r_stats_it*Beta.template lpNorm < 1 >();
 
     //Computation of Dual Objective
 
@@ -353,7 +355,7 @@ inline T X_FOS<T>::duality_gap ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::
 
     T alt_part_1 = static_cast<T>( Y.transpose()*error );
 
-    T alternative_0 = alt_part_1/( static_cast<T>( error.squaredNorm() ) );
+    T alternative_0 = alt_part_1/( error_sqr_norm );
 
     T s = std::min( std::max( alternative, alternative_0 ), -1.0f*alternative );
 
@@ -560,8 +562,6 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS<T>::X_FISTA (
         DEBUG_PRINT( "Outer loop iteration: " << outer_counter );
 
         y_k_old = y_k;
-//        y_k = update_beta_ista( X, Y, y_k, L, lambda );
-
 
         Eigen::Matrix< T, Eigen::Dynamic, 1 > y_k_temp = update_beta_ista( X, Y, y_k, L, lambda );
 
@@ -639,6 +639,7 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS<T>::X_ISTA_OPT (
             L*= eta;
 
             DEBUG_PRINT( "L: " << L );
+
             to_modify = Beta - (1.0/L)*f_grad;
             Beta_temp = to_modify.unaryExpr( SoftThres<T>( lambda/L ) );
 
@@ -655,6 +656,8 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS<T>::X_ISTA_OPT (
         Beta = ( Beta - (1.0/L)*f_grad ).unaryExpr( SoftThres<T>( lambda/L ) );
 
     } while ( ( duality_gap( X, Y, Beta, lambda ) > duality_gap_target ) );
+
+    hot_start_L = L;
 
     return Beta;
 }
@@ -680,34 +683,27 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS<T>::X_ISTA (
         outer_counter ++;
         DEBUG_PRINT( "Outer loop iteration: " << outer_counter );
 
-//        Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta_k_less_1 = Beta;
-//        Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta_temp = update_beta_ista( X, Y, Beta_k_less_1, L, lambda );
-
         uint counter = 0;
 
         Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta_temp = update_beta_ista( X, Y, Beta, L, lambda );
 
-//        Beta = update_beta_ista( X, Y, Beta_k_less_1, L, lambda );
-
         counter++;
         DEBUG_PRINT( "Backtrace iteration: " << counter );
 
-//        while( ( f_beta( X, Y, Beta_temp ) > f_beta_tilda( X, Y, Beta_temp, Beta_k_less_1, L ) ) ) {
         while( ( f_beta( X, Y, Beta_temp ) > f_beta_tilda( X, Y, Beta_temp, Beta, L ) ) ) {
             counter++;
             DEBUG_PRINT( "Backtrace iteration: " << counter );
 
             L*= eta;
             Beta_temp = update_beta_ista( X, Y, Beta, L, lambda );
-//            Beta_temp = update_beta_ista( X, Y, Beta_k_less_1, L, lambda );
 
         }
-
-//        Beta = update_beta_ista( X, Y, Beta_k_less_1, L, lambda );
 
         Beta = update_beta_ista( X, Y, Beta, L, lambda );
 
     } while ( ( duality_gap( X, Y, Beta, lambda ) > duality_gap_target ) );
+
+    hot_start_L = L;
 
     return Beta;
 }
@@ -761,7 +757,8 @@ void X_FOS< T >::Run() {
 
             DEBUG_PRINT( "Current Lambda: " << rStatsIt );
 
-            Betas.col( statsIt - 1 ) = X_ISTA_OPT( X, Y, old_Betas, 0.1, rStatsIt, gap_target );
+            Betas.col( statsIt - 1 ) = X_ISTA_OPT( X, Y, old_Betas, hot_start_L, rStatsIt, gap_target );
+//            Betas.col( statsIt - 1 ) = X_ISTA( X, Y, old_Betas, hot_start_L, rStatsIt, gap_target );
             old_Betas = Betas.col( statsIt - 1 );
 
             DEBUG_PRINT( "L2 Norm of Betas: " << Betas.squaredNorm() );

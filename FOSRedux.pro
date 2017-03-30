@@ -20,7 +20,7 @@ CONFIG(debug, debug|release) {
     QMAKE_CXXFLAGS += -O3
 #    QMAKE_CXXFLAGS += -ftree-vectorize
 #    QMAKE_CXXFLAGS += -msse2
-    QMAKE_CXXFLAGS += -ffast-math
+#    QMAKE_CXXFLAGS += -ffast-math
 }
 
 # Boost
@@ -61,7 +61,7 @@ LIBS += -lstdc++ \
         -llapack
 
 # Armadillo
-LIBS += -larmadillo
+#LIBS += -larmadillo
 
 HEADERS += FOS/fos.h \
     FOS/test_fos.h \

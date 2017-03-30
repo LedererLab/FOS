@@ -57,6 +57,25 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > CSV2Eigen( std::string file_p
 
 }
 
+template < typename T >
+Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > load_from_file (const std::string & path) {
+    std::ifstream indata;
+    indata.open(path);
+    std::string line;
+    std::vector<T> values;
+    uint rows = 0;
+    while (std::getline(indata, line)) {
+        std::stringstream lineStream(line);
+        std::string cell;
+        while (std::getline(lineStream, cell, ',')) {
+            values.push_back(std::stod(cell));
+        }
+        ++rows;
+    }
+
+    return Eigen::Map< const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > >(values.data(), rows, values.size()/rows);
+}
+
 template< typename T >
 /*!
  * \brief Compute the standard deviation of a matrix

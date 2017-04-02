@@ -22,6 +22,8 @@
  *  \brief Generic linear algebra functions.
  */
 
+namespace hdim {
+
 template < typename T >
 /*!
  * \brief Read a .csv file into an Eigen Matrix
@@ -55,25 +57,6 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > CSV2Eigen( std::string file_p
 
     return Eigen::Map< const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > >( X.memptr(), X.n_rows, X.n_cols );
 
-}
-
-template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > load_from_file (const std::string & path) {
-    std::ifstream indata;
-    indata.open(path);
-    std::string line;
-    std::vector<T> values;
-    uint rows = 0;
-    while (std::getline(indata, line)) {
-        std::stringstream lineStream(line);
-        std::string cell;
-        while (std::getline(lineStream, cell, ',')) {
-            values.push_back(std::stod(cell));
-        }
-        ++rows;
-    }
-
-    return Eigen::Map< const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > >(values.data(), rows, values.size()/rows);
 }
 
 template< typename T >
@@ -112,6 +95,15 @@ void Normalize_IP ( Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>& mat ) {
 }
 
 template < typename T >
+/*!
+ * \brief Set the mean of a matrix to 0 and the standard deviation to 1.
+ *
+ * Note this function is done in place, that is the input matrix is modified.
+ *
+ * \param mat
+ *
+ * An n x m matrix to be normalized.
+ */
 Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> Normalize(
     const Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>& mat ) {
 
@@ -123,13 +115,8 @@ Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> Normalize(
 
 template< typename T >
 /*!
- * \brief Set the mean of a vector to 0 and the standard deviation to 1.
- *
- * Note this function is done in place.
- *
- * \param mat
- *
- * An n x 1 vector to be normalized.
+ * \brief Overloaded version of hdim::Normalize_IP to
+ * accomadate vectors
  */
 void Normalize_IP( Eigen::Matrix< T, Eigen::Dynamic, 1 >& mat ) {
 
@@ -140,6 +127,10 @@ void Normalize_IP( Eigen::Matrix< T, Eigen::Dynamic, 1 >& mat ) {
 }
 
 template < typename T >
+/*!
+ * \brief Overloaded version of hdim::Normalize to
+ * accomadate vectors
+ */
 Eigen::Matrix<T, Eigen::Dynamic, 1 > Normalize(
     const Eigen::Matrix<T, Eigen::Dynamic, 1 >& mat ) {
 
@@ -149,13 +140,23 @@ Eigen::Matrix<T, Eigen::Dynamic, 1 > Normalize(
     return (mat.rowwise() - mean).array().rowwise() / std.array();
 }
 
-template < typename T >
-T eucl_distance( uint n, uint m ) {
-    //Indices need to be incremented by one to agree with R's indexing
-    return sqrt( (m+1)*(m+1) + (n+1)*(n+1) );
-}
-
 template< typename T >
+/*!
+ * \brief Generate a matrix using a function that depends on
+ * row and column indices.
+ *
+ * That is \f$ \forall i, j A_{i,j} = f( i, j ) \f$
+ * for some function f and an input matrix A.
+ *
+ * \param num_rows
+ * Number of rows the output matrix should have
+ *
+ * \param num_cols
+ * Number of columns the output matrix should have
+ *
+ * \return
+ * A matrix populated with values assigned by mat_func( i, j )
+ */
 Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> build_matrix( uint num_rows, uint num_cols, T (*mat_func)(uint,uint) ) {
 
     Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> mat( num_rows, num_cols );
@@ -171,6 +172,10 @@ Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> build_matrix( uint num_rows, ui
 }
 
 template< typename T >
+/*!
+ * \brief sweep_matrix
+ * \param mat
+ */
 void sweep_matrix( Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>& mat, T (*mat_func)(uint,uint) ) {
 
     for( uint i = 0; i < mat.rows() ; i ++ ) {
@@ -270,24 +275,72 @@ Eigen::Matrix< T, 1, Eigen::Dynamic > LogScaleVector( T lower_bound, T upper_bou
 }
 
 template <typename T>
+/*!
+ * \brief The sign function
+ * defined as
+ *
+ * \f[  sgn(x) \equiv
+ *  \begin{cases}
+ *      1 & \text{if } x > 0 \\
+ *      0 & \text{if } x = 0 \\
+ *     -1& \text{if } x < 0
+ *  \end{cases}
+ * \f]
+ */
 T sgn(T val) {
     return static_cast<T>( T(0) < val ) - ( val < T(0) );
 }
 
 template < typename T >
+/*!
+ * \brief The positive part function
+ * defined as
+ *
+ * \f[  x^{+} \equiv
+ *  \begin{cases}
+ *      x & \text{if } x \geq 0\\
+ *      0 & \text{if } x < 0\\
+ *  \end{cases}
+ * \f]
+ */
 T pos_part( T x ) {
     return std::max( x, static_cast<T>(0.0) );
 }
 
 template < typename T >
+/*!
+ * \brief The proximal ( soft thresholding ) operator defined as
+ *
+ * \f[  \tau( x, y ) \equiv sgn(x) \left( \lvert x \rvert  - y \right)^{+}
+ * \f]
+ *
+ * \param val
+ * \return
+ */
 T soft_threshold( T x, T y ) {
     T sgn_T = static_cast<T>( sgn(x) );
     return sgn_T*pos_part( std::abs(x) - y );
 }
 
 template < typename T >
+/*!
+ * \brief Soft Threshold functor used to apply
+ * hdim::soft_threshold to each element in a matrix or vector.
+ *
+ * Designed to be applied with Eigen::Matrix::unaryExpr or the like.
+ */
 struct SoftThres {
 
+    /*!
+     * \brief Initialize proximal operator, note that the
+     * term lambda_in takes the place of 'y' in the definition
+     * of the proximal operator.
+     *
+     * \param lambda_in
+     *
+     * The equivalent of 'y' in the definition of the proximal operator
+     * the value for 'x' will be provided by the matrix element.
+     */
     SoftThres( T lambda_in ) : lambda( lambda_in ) {}
 
     typedef T result_type;
@@ -300,6 +353,9 @@ struct SoftThres {
 };
 
 template < typename T >
+/*!
+ * \brief A functional equivalent of hdim::soft_threshold, but possibly faster.
+ */
 inline T prox( T x, T lambda ) {
     return ( std::abs(x) >= lambda )?( x - sgn( x )*lambda ):( 0 );
 }
@@ -317,6 +373,8 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 > soft_threshold_mat(
     }
 
     return mat_x;
+}
+
 }
 
 #endif // FOS_GENERICS_H

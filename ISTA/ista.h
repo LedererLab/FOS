@@ -19,6 +19,8 @@
 #include "../Generic/debug.h"
 #include "../Generic/generics.h"
 
+namespace hdim {
+
 template < typename T >
 T f_beta (
     const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
@@ -228,6 +230,8 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_ISTA (
     } while ( ( duality_gap( X, Y, Beta, lambda ) > duality_gap_target ) );
 
     return Beta;
+
+}
 
 }
 

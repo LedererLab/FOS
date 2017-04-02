@@ -1,7 +1,7 @@
 # HDIM
 
-HDIM is a collection of packages provided by the Lederer and Hauser HDIM Group.
-( https://lederer.stat.washington.edu/ )
+HDIM is a collection of packages provided by the
+[Lederer and Hauser HDIM Group]( https://lederer.stat.washington.edu/ )
 
 HDIM provides fast methods to perform high-dimensional linear regression --
 most notably the FOS ( Fast and Optimal Selection ) method for minimizing the
@@ -11,8 +11,8 @@ most notably the FOS ( Fast and Optimal Selection ) method for minimizing the
 
 You will need to have the following packages installed in order to use HDIM:
 
-* Eigen3 Linear Algebra Library (http://eigen.tuxfamily.org/index.php?title=Main_Page)
-* clBLAS (https://github.com/clMathLibraries/clBLAS)
+* [Eigen3](http://eigen.tuxfamily.org/index.php?title=Main_Page)
+* [clBLAS](https://github.com/clMathLibraries/clBLAS)
 
 ## Authors
 

@@ -86,7 +86,5 @@ HEADERS += FOS/fos.h \
     FOS/x_fos.h
 
 SOURCES += main.cpp \
-    #FOS/fos.tpp \
-    #R_Wrapper/fos_r.cpp \
     OpenCL_Base/openclbase.cpp \
     OpenCL_Generics/perf_cl_product.cpp

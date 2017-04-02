@@ -28,16 +28,22 @@ namespace experimental {
 
 template < typename T >
 /*!
- * \brief The main X_FOS algorithim
+ * \brief The FOS algorithim
  */
-class X_FOS {
+class FOS {
 
   public:
-    X_FOS( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& x, const Eigen::Matrix< T, Eigen::Dynamic, 1 >& y );
+    FOS( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& x, const Eigen::Matrix< T, Eigen::Dynamic, 1 >& y );
 
-    X_FOS( const X_FOS& rhs );
-//    X_FOS & operator=(const X_FOS &rhs );
+    FOS( const FOS& rhs );
 
+    /*!
+     * \brief Run the main X_FOS algorithm
+     *
+     * Calling this function will run the X_FOS algorithm using the values of
+     * X and Y that were instantiated with the class constructor.
+     *
+     */
     void Run();
 
     Eigen::Matrix< T, 1, Eigen::Dynamic > ReturnLambdas();
@@ -73,7 +79,7 @@ class X_FOS {
                     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta, \
                     T r_stats_it );
 
-    Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_ISTA (
+    Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > ISTA (
         const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
         const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
         const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
@@ -81,7 +87,7 @@ class X_FOS {
         T lambda,
         T duality_gap_target );
 
-    Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_ISTA_OPT (
+    Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > ISTA_OPT (
         const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
         const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
         const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
@@ -89,7 +95,7 @@ class X_FOS {
         T lambda,
         T duality_gap_target );
 
-    Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FISTA (
+    Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > FISTA (
         const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
         const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
         const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
@@ -97,7 +103,7 @@ class X_FOS {
         T lambda,
         T duality_gap_target );
 
-    Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FISTA_OPT (
+    Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > FISTA_OPT (
         const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
         const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
         const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
@@ -170,15 +176,15 @@ template< typename T >
  * \param y
  * An n x 1 vector
  */
-X_FOS< T >::X_FOS( const Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>& x,
-                   const Eigen::Matrix<T, Eigen::Dynamic, 1 >& y ) : X( x ), Y( y ) {
+FOS< T >::FOS( const Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>& x,
+               const Eigen::Matrix<T, Eigen::Dynamic, 1 >& y ) : X( x ), Y( y ) {
 
     x_k_less_1 = Eigen::Matrix<T, Eigen::Dynamic, 1 >::Zero( X.rows(), 1 );
 
 }
 
 template< typename T >
-X_FOS<T>::X_FOS(const X_FOS &rhs ) {
+FOS<T>::FOS(const FOS &rhs ) {
     Betas( rhs.Betas );
     lambda_grid( rhs.lambda_grid );
     statsIt( rhs.statsIt );
@@ -190,22 +196,22 @@ X_FOS<T>::X_FOS(const X_FOS &rhs ) {
 //}
 
 template < typename T >
-Eigen::Matrix< T, 1, Eigen::Dynamic > X_FOS< T >::ReturnLambdas() {
+Eigen::Matrix< T, 1, Eigen::Dynamic > FOS< T >::ReturnLambdas() {
     return lambdas;
 }
 
 template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS< T >::ReturnBetas() {
+Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > FOS< T >::ReturnBetas() {
     return Betas;
 }
 
 template < typename T >
-uint X_FOS< T >::ReturnOptimIndex() {
+uint FOS< T >::ReturnOptimIndex() {
     return optim_index;
 }
 
 template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, 1 > X_FOS< T >::ReturnCoefficients() {
+Eigen::Matrix< T, Eigen::Dynamic, 1 > FOS< T >::ReturnCoefficients() {
     return fos_fit;
 }
 
@@ -220,12 +226,12 @@ template < typename T >
  * \param lambdas
  * \return True if outer loop should continue, false otherwise
  */
-bool X_FOS<T>::ComputeStatsCond( T C,
-                                 uint stats_it,
-                                 T r_stats_it,
-                                 const Eigen::Matrix< T, 1, Eigen::Dynamic >& lambdas,
-                                 const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
-                                 const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& Betas ) {
+bool FOS<T>::ComputeStatsCond( T C,
+                               uint stats_it,
+                               T r_stats_it,
+                               const Eigen::Matrix< T, 1, Eigen::Dynamic >& lambdas,
+                               const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+                               const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& Betas ) {
 
     bool stats_cond = true;
 
@@ -261,7 +267,7 @@ template < typename T >
  * \brief Generate the 'rs' vector
  * \return
  */
-Eigen::Matrix< T, 1, Eigen::Dynamic > X_FOS<T>::GenerateLambdaGrid (
+Eigen::Matrix< T, 1, Eigen::Dynamic > FOS<T>::GenerateLambdaGrid (
     const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
     uint M ) {
@@ -286,16 +292,16 @@ template < typename T >
  *
  * \return Target quantity
  */
-T X_FOS<T>::DualityGapTarget( uint r_stats_it ) {
+T FOS<T>::DualityGapTarget( uint r_stats_it ) {
     T r_stats_it_f = static_cast<T>( r_stats_it );
     return square(C) * square( r_stats_it_f ) / static_cast<T>( X.rows() );
 }
 
 template < typename T >
-inline T X_FOS<T>::duality_gap ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
-                                 const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y, \
-                                 const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta, \
-                                 T r_stats_it ) {
+inline T FOS<T>::duality_gap ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
+                               const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y, \
+                               const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta, \
+                               T r_stats_it ) {
 
     //Computation of Primal Objective
 
@@ -324,7 +330,7 @@ inline T X_FOS<T>::duality_gap ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::
 }
 
 template < typename T >
-T X_FOS<T>::duality_gap_target( T gamma, T C, T r_stats_it, uint n ) {
+T FOS<T>::duality_gap_target( T gamma, T C, T r_stats_it, uint n ) {
 
     T n_f = static_cast<T>( n );
     return gamma*square( C )*square( r_stats_it )/n_f;
@@ -332,7 +338,7 @@ T X_FOS<T>::duality_gap_target( T gamma, T C, T r_stats_it, uint n ) {
 }
 
 template < typename T >
-T X_FOS<T>::f_beta (
+T FOS<T>::f_beta (
     const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
     const Eigen::Matrix< T, Eigen::Dynamic, 1  >& Y,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta ) {
@@ -344,7 +350,7 @@ T X_FOS<T>::f_beta (
 }
 
 template < typename T >
-T X_FOS<T>::f_beta_tilda (
+T FOS<T>::f_beta_tilda (
     const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
@@ -365,7 +371,7 @@ T X_FOS<T>::f_beta_tilda (
 }
 
 template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, 1 >  X_FOS<T>::update_beta_ista (
+Eigen::Matrix< T, Eigen::Dynamic, 1 >  FOS<T>::update_beta_ista (
     const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
@@ -380,7 +386,7 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 >  X_FOS<T>::update_beta_ista (
 }
 
 template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, 1 > X_FOS<T>::update_beta_fista (
+Eigen::Matrix< T, Eigen::Dynamic, 1 > FOS<T>::update_beta_fista (
     const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
@@ -412,7 +418,7 @@ almost_equal(T x, T y, int ulp) {
 
 
 template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS<T>::X_FISTA_OPT (
+Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > FOS<T>::FISTA_OPT (
     const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
@@ -497,7 +503,7 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS<T>::X_FISTA_OPT (
 }
 
 template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS<T>::X_FISTA (
+Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > FOS<T>::FISTA (
     const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
@@ -545,7 +551,7 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS<T>::X_FISTA (
 }
 
 template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS<T>::X_ISTA_OPT (
+Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > FOS<T>::ISTA_OPT (
     const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
@@ -620,7 +626,7 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS<T>::X_ISTA_OPT (
 }
 
 template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS<T>::X_ISTA (
+Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > FOS<T>::ISTA (
     const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
@@ -666,14 +672,7 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS<T>::X_ISTA (
 }
 
 template< typename T >
-/*!
- * \brief Run the main X_FOS algorithm
- *
- * Calling this function will run the X_FOS algorithm using the values of
- * X and Y that were instantiated with the class constructor.
- *
- */
-void X_FOS< T >::Run() {
+void FOS< T >::Run() {
 
     Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > Betas;
     Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > old_Betas;
@@ -714,7 +713,7 @@ void X_FOS< T >::Run() {
 
             DEBUG_PRINT( "Current Lambda: " << rStatsIt );
 
-            Betas.col( statsIt - 1 ) = X_ISTA_OPT( X, Y, old_Betas, hot_start_L, rStatsIt, gap_target );
+            Betas.col( statsIt - 1 ) = ISTA_OPT( X, Y, old_Betas, hot_start_L, rStatsIt, gap_target );
 //            Betas.col( statsIt - 1 ) = X_ISTA( X, Y, old_Betas, hot_start_L, rStatsIt, gap_target );
             old_Betas = Betas.col( statsIt - 1 );
 

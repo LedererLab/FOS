@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['eigen2spamsmat',['Eigen2SpamsMat',['../algorithm_8h.html#a0528c7867564847d122280b44b3f258e',1,'Eigen2SpamsMat(const Eigen::Matrix&lt; T, n, m &gt; &amp;eigen_mat):&#160;algorithm.h'],['../algorithm_8h.html#a649fff8025ef5541fb3ca2c51c32fd9b',1,'Eigen2SpamsMat(const Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;eigen_mat):&#160;algorithm.h']]]
+  ['debug_2eh',['debug.h',['../debug_8h.html',1,'']]],
+  ['debug_5fprint',['DEBUG_PRINT',['../debug_8h.html#af6551f0b4c3964c3128f808e7bf987c7',1,'debug.h']]]
 ];

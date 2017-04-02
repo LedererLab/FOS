@@ -22,14 +22,25 @@
 // Miscellaneous Headers
 //
 
+/*! \file
+ *  \brief Functions designed to aid in debugging.
+ */
+
 #ifdef DEBUG
 #define DEBUG_ON 1
 #else
 #define DEBUG_ON 0
 #endif
 
-//Get the name of a type as it would appear in source code
-template <typename T> std::string get_type_name () {
+template <typename T>
+/*!
+ * \brief Get the de-mangled name of a type ( as it would
+ * appear in the source code ).
+ *
+ * \return
+ * name of the template parameter type
+ */
+std::string get_type_name () {
     int status;
     char* type_name = abi::__cxa_demangle(typeid(T).name(), 0, 0, &status);
     std::string type_str = std::string( type_name );

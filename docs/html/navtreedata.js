@@ -1,6 +1,11 @@
 var NAVTREE =
 [
   [ "FOS++", "index.html", [
+    [ "C++ Packages", "index.html", [
+      [ "Introduction", "index.html#intro_sec", null ],
+      [ "Dependencies", "index.html#Base", null ]
+    ] ],
+    [ "HDIM", "md__home_bephillips2_Qt-Projects_FOSRedux_README.html", null ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],

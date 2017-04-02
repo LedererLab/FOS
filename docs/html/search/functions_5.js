@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['normalize_5fip',['Normalize_IP',['../generics_8h.html#ada2dd4ead56aa2669aad039ee802d598',1,'Normalize_IP(Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;mat):&#160;generics.h'],['../generics_8h.html#aec7d3c7ebfb6ae04b4e6a2d6c79de59d',1,'Normalize_IP(Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;mat):&#160;generics.h']]]
+  ['get_5ftype_5fname',['get_type_name',['../debug_8h.html#aa8a72a35421f5ce138a724551e155560',1,'debug.h']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['csv2eigen',['CSV2Eigen',['../generics_8h.html#a6ac2cca27887374732e9886b9ef7815c',1,'generics.h']]]
+  ['build_5fmatrix',['build_matrix',['../generics_8h.html#ac0e0b7abe91f28f11caa8b921a8e3675',1,'hdim']]]
 ];

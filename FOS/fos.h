@@ -44,6 +44,15 @@ class FOS {
     bool ComputeStatsCond(uint stats_it, T r_stats_it, const Eigen::Matrix<T, 1, Eigen::Dynamic> &lambdas );
     T DualityGap( uint r_stats_it );
     T DualityGapTarget( uint r_stats_it );
+    T duality_gap_target( T gamma, T C, T r_stats_it, uint n );
+    T dual_objective ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
+                       const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y, \
+                       const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta, \
+                       T r_stats_it );
+    T primal_objective( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
+                        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y, \
+                        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta, \
+                        T r_stats_it );
 
     Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > Betas;
     Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > old_Betas;
@@ -107,78 +116,6 @@ T compute_lp_norm( T& matrix, int norm_type ) {
 template < typename T >
 T compute_sqr_norm( T& matrix ) {
     return matrix.squaredNorm();
-}
-
-template < typename T>
-/*!
- * \brief Compute the square of a value
- * \param val
- *
- * value to square
- *
- * \return The squared quantity
- */
-T square( T& val ) {
-    return val * val;
-}
-
-template < typename T >
-/*!
- * \brief Compute the maximum of the absolute value of an Eigen::Matrix object
- *
- * \param matrix
- *
- * Matrix to work on- note that the matrix is not modified.
- *
- * \return Coeffecient-wise maximum of the absolute value of the argument
- */
-T abs_max( const T& matrix ) {
-    return matrix.cwiseAbs().maxCoeff();
-}
-
-template < typename T >
-/*!
- * \brief Generate a vector of logarithmically equally spaced points
- *
- * There will be num_element points, beginning at log10( lower_bound )
- *  and ending at log10( upper_bound ).
- *
- * This function is semantically equivalent to the R function 'logspace'.
- *
- * \param lower_bound
- *
- * 10^x for x = smallest element in vector
- *
- * \param upper_bound
- *
- * 10^x for x = largest element in vector
- *
- * \param num_elements
- *
- * number of elements in the generated vector
- *
- * \return
- *
- * Vector of logarithmically equally spaced points
- */
-Eigen::Matrix< T, 1, Eigen::Dynamic > LogScaleVector( T lower_bound, T upper_bound, uint num_elements ) {
-
-    T min_elem = static_cast<T>( log10(lower_bound) );
-    T max_elem = static_cast<T>( log10(upper_bound) );
-    T delta = max_elem - min_elem;
-
-    Eigen::Matrix< T, 1, Eigen::Dynamic > log_space_vector;
-    log_space_vector.resize( num_elements );
-
-    for ( uint i = 0; i < num_elements ; i ++ ) {
-
-        T step = static_cast<T>( i )/static_cast<T>( num_elements - 1 );
-        auto lin_step = delta*step + min_elem;
-
-        log_space_vector( 0, i ) = static_cast<T>( std::pow( 10.0, lin_step ) );
-    }
-
-    return log_space_vector;
 }
 
 //Member functions
@@ -253,10 +190,10 @@ T FOS<T>::DualityGapTarget( uint r_stats_it ) {
 }
 
 template < typename T >
-T primal_objective( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
-                    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y, \
-                    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta, \
-                    T r_stats_it ) {
+T FOS< T >::primal_objective( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
+                              const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y, \
+                              const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta, \
+                              T r_stats_it ) {
 
     Eigen::Matrix< T, Eigen::Dynamic, 1 > error = X*Beta - Y;
     T f_beta = error.squaredNorm() + r_stats_it*Beta.template lpNorm < 1 >();
@@ -266,10 +203,10 @@ T primal_objective( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
 }
 
 template < typename T >
-T dual_objective ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
-                   const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y, \
-                   const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta, \
-                   T r_stats_it ) {
+T FOS< T >::dual_objective ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
+                             const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y, \
+                             const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta, \
+                             T r_stats_it ) {
 
     Eigen::Matrix< T, Eigen::Dynamic, 1 > error = X*Beta - Y;
 
@@ -294,7 +231,7 @@ T dual_objective ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, 
 }
 
 template < typename T >
-T duality_gap_target( T gamma, T C, T r_stats_it, uint n ) {
+T FOS< T >::duality_gap_target( T gamma, T C, T r_stats_it, uint n ) {
 
     T n_f = static_cast<T>( n );
     return gamma*square( C )*square( r_stats_it )/n_f;

@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['fistaflat',['FistaFlat',['../algorithm_8h.html#aa227b689faec11b0585dcff2c4c4b9cc',1,'internal::FistaFlat()'],['../algorithm_8h.html#a4c2ec1c7c509f5541736cbaa4f26516c',1,'FistaFlat():&#160;algorithm.h']]],
-  ['fos',['FOS',['../classhdim_1_1_f_o_s.html',1,'hdim']]],
-  ['fos',['FOS',['../classhdim_1_1_f_o_s.html#a417a66dfbbd353669a08a6501a9ce39e',1,'hdim::FOS']]]
+  ['eigen2spamsmat',['Eigen2SpamsMat',['../algorithm_8h.html#a0528c7867564847d122280b44b3f258e',1,'Eigen2SpamsMat(const Eigen::Matrix&lt; T, n, m &gt; &amp;eigen_mat):&#160;algorithm.h'],['../algorithm_8h.html#a649fff8025ef5541fb3ca2c51c32fd9b',1,'Eigen2SpamsMat(const Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;eigen_mat):&#160;algorithm.h']]]
 ];

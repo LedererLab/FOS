@@ -291,49 +291,6 @@ T X_FOS<T>::DualityGapTarget( uint r_stats_it ) {
     return square(C) * square( r_stats_it_f ) / static_cast<T>( X.rows() );
 }
 
-/*
-template < typename T >
-T primal_objective( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
-                    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y, \
-                    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta, \
-                    T r_stats_it ) {
-
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > error = X*Beta - Y;
-    T f_beta = error.squaredNorm() + r_stats_it*Beta.template lpNorm < 1 >();
-
-    return f_beta;
-
-}
-
-template < typename T >
-T dual_objective ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
-                   const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y, \
-                   const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta, \
-                   T r_stats_it ) {
-
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > error = X*Beta - Y;
-
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > alt_part_0 = 2.0f*X.transpose()*error;
-    //Compute dual point
-    T alternative = r_stats_it/( alt_part_0.template lpNorm < Eigen::Infinity >() );
-
-    T alt_part_1 = -1.0*static_cast<T>( Y.transpose()*error );
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > alt_part_2 = Y - X*Beta;
-
-    T alternative_0 = alt_part_1/( alt_part_2.squaredNorm() );
-
-    T s = std::min( std::max( alternative, alternative_0 ), -1.0f*alternative );
-
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > nu_t = -1.0f*( 2.0f*s / r_stats_it ) * error;
-
-    Eigen::Matrix< T, Eigen::Dynamic, 1 >  nu_part = nu_t + 2.0f/r_stats_it*Y;
-
-    T d_nu = 0.25* square( r_stats_it )*nu_part.squaredNorm() - Y.squaredNorm();
-
-    return d_nu;
-}
-*/
-
 template < typename T >
 inline T X_FOS<T>::duality_gap ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
                                  const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y, \

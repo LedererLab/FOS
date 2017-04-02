@@ -16,6 +16,18 @@
 #include "FOS/perf_fos.h"
 #include "FOS/perf_fos_experimental.h"
 
+/*! \mainpage C++ Packages
+ *
+ * \section intro_sec Introduction
+ *
+ * Wrapper around Alazartech C API to make life a little less miserable
+ *
+ * \section Base Dependencies
+ *      \li Alazartech SDK
+ *      \li Qt-Charts
+ *
+ *
+ */
 
 int main(int argc, char *argv[]) {
 

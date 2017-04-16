@@ -15,7 +15,7 @@
 // Armadillo Headers
 //
 // Project Specific Headers
-#include "fos_imperative.h"
+//#include "fos_imperative.h"
 
 namespace hdim {
 
@@ -48,7 +48,7 @@ std::vector< T > PerfFOS() {
 
         auto start = std::chrono::high_resolution_clock::now();
 
-        experimental::FOS< T >( X, Y );
+//        experimental::Imp_FOS< T >( X, Y );
 
         auto end = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double, std::milli> ms = end - start;

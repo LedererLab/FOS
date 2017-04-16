@@ -169,7 +169,7 @@ T duality_gap_target( T gamma, T C, T r_stats_it, uint n ) {
 
 
 template< typename T >
-Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> FOS(
+Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> Imp_FOS(
     Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>& X,
     Eigen::Matrix<T, Eigen::Dynamic, 1 >& Y ) {
 

@@ -16,26 +16,36 @@
 #include "FOS/perf_fos.h"
 #include "FOS/perf_fos_experimental.h"
 
-/*! \mainpage C++ Packages
+/*! \mainpage C++ Implementation of packages developed by the
+ * Lederer and Hauser HDIM Group
  *
  * \section intro_sec Introduction
  *
- * Wrapper around Alazartech C API to make life a little less miserable
+ * HDIM provides fast methods to perform high-dimensional linear regression -- most notably the FOS ( Fast and Optimal Selection ) method for minimizing the LASSO objective function.
  *
  * \section Base Dependencies
- *      \li Alazartech SDK
- *      \li Qt-Charts
+ *   \li Eigen3
+ *
+ * \section Dependencies for OpenCL Acceleration
+ *  \li OpenCL SDK ( AMD-APP, CUDA, Intel Beignet )
+ *  \li clBLAS
+ *
+ * \section Dependencies for Python Wrappers
+ *  \li Python 2.7 Installation
+ *  \li Simplified Wrapper and Inteface Generator ( SWIG )
  *
  *
  */
 
 int main(int argc, char *argv[]) {
+    (void)argc;
+    (void)argv;
 
-    auto x_fos = hdim::experimental::PerfX_FOS< double >();
-    auto old_fos = hdim::PerfFOS< double >();
+//    auto x_fos = hdim::experimental::PerfX_FOS< double >();
+//    auto old_fos = hdim::PerfFOS< double >();
 
-//    auto x_fos = hdim::experimental::TestX_FOS< double >();
-//    auto old_fos = hdim::TestFOS< double >();
+    auto x_fos = hdim::experimental::TestX_FOS< double >();
+    auto old_fos = hdim::TestFOS< double >();
 
     std::vector< double > ratio_results;
 
@@ -46,18 +56,18 @@ int main(int argc, char *argv[]) {
     }
 
 
-    jaspl::plot_to_disk< std::vector< double > >( ratio_results,
-                                                  "Timing Results Ratio",
-                                                  "Row Size / 200",
-                                                  "Execution time ( X FOS v. FOS ).",
-                                                  "Ratio of FOS timing with X FOS w FISTA v. FOS",
-                                                  "/home/bephillips2/");
-
 //    jaspl::plot_to_disk< std::vector< double > >( ratio_results,
-//                                                  "L2 Norm of Beta Ratio",
+//                                                  "Timing Results Ratio",
 //                                                  "Row Size / 200",
-//                                                  "L2 Norm of Beta ( X FOS v. FOS ).",
-//                                                  "Ratio of results X FOS v. FOS",
+//                                                  "Execution time ( X FOS v. FOS ).",
+//                                                  "Ratio of FOS timing with X FOS v. FOS",
 //                                                  "/home/bephillips2/");
+
+    jaspl::plot_to_disk< std::vector< double > >( ratio_results,
+                                                  "L2 Norm of Beta Ratio",
+                                                  "Row Size / 20",
+                                                  "L2 Norm of Beta ( X FOS v. FOS w FISTA ).",
+                                                  "Ratio of results X FOS v. FOS w FISTA",
+                                                  "/home/bephillips2/");
 
 }

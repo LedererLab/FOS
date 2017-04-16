@@ -15,7 +15,6 @@
 // OpenMP Headers
 #include <omp.h> //OpenMP pragmas
 // Project Specific Headers
-#include "../Generic/algorithm.h"
 #include "../Generic/debug.h"
 #include "../Generic/generics.h"
 
@@ -119,20 +118,22 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > ISTA (
 
         uint counter = 0;
 
-        Beta = update_beta_ista( X, Y, Beta_k_less_1, L, lambda );
+        Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta_temp = update_beta_ista( X, Y, Beta, L, lambda );
 
         counter++;
         DEBUG_PRINT( "Backtrace iteration: " << counter );
 
-        while( ( f_beta( X, Y, Beta ) > f_beta_tilda( X, Y, Beta, Beta_k_less_1, L ) ) ) {
+        while( ( f_beta( X, Y, Beta_temp ) > f_beta_tilda( X, Y, Beta_temp, Beta_k_less_1, L ) ) ) {
 
             counter++;
             DEBUG_PRINT( "Backtrace iteration: " << counter );
 
             L*= eta;
-            Beta = update_beta_ista( X, Y, Beta_k_less_1, L, lambda );
+            Beta_temp = update_beta_ista( X, Y, Beta, L, lambda );
 
         }
+
+        Beta = update_beta_ista( X, Y, Beta, L, lambda );
     }
 
     return Beta;

@@ -56,7 +56,7 @@ std::vector< T > TestFOS() {
 
         Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > Beta;
 
-        TIME_IT( Beta = experimental::FOS< T >( X, Y ); );
+        TIME_IT( Beta = experimental::Imp_FOS< T >( X, Y ); );
 
         T sqr_norm = Beta.squaredNorm();
         std::cout << "Froebenius norm squared of Beta tilde, r tilde: " << sqr_norm << std::endl;
@@ -71,7 +71,7 @@ std::vector< T > TestFOS() {
 template < typename T >
 std::vector< T > TestX_FOS() {
 
-    std::cout << "Running FOS test for data type: " << get_type_name<T>() << std::endl;
+    std::cout << "Running X_FOS test for data type: " << get_type_name<T>() << std::endl;
 
     std::string data_set_path = "/home/bephillips2/Desktop/Hanger Bay 1/Academia/HDIM/test_data.csv";
 

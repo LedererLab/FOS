@@ -10,7 +10,8 @@
 // Boost Headers
 //
 // SPAMS Headers
-#include "linalg.h" // AbstractMatrix and Matrix
+#include "linalg.h"
+//#include "linalg.h" // AbstractMatrix and Matrix
 #include "spams.h"
 // Armadillo Headers
 #include <armadillo>
@@ -32,7 +33,7 @@ template < typename T, uint m, uint n >
  *
  * \return A new Eigen::Matrix with dimensions determined by the Spams Matrix.
  */
-Eigen::Matrix< T, m, n > Spams2EigenMat ( const Matrix<T>* spams_mat ) {
+inline Eigen::Matrix< T, m, n > Spams2EigenMat ( const Matrix<T>* spams_mat ) {
 
     auto M = Eigen::Map< Eigen::Matrix< T, n, m, Eigen::ColMajor> >( spams_mat->rawX() );
     return M;
@@ -48,7 +49,7 @@ template < typename T, uint m, uint n >
  *
  * \return A new Eigen::Matrix with dimensions determined by the Spams Matrix.
  */
-Eigen::Matrix< T, m, n > Spams2EigenMat ( Matrix<T>* spams_mat ) {
+inline Eigen::Matrix< T, m, n > Spams2EigenMat ( Matrix<T>* spams_mat ) {
 
     auto M = Eigen::Map< Eigen::Matrix< T, n, m, Eigen::ColMajor> >( spams_mat->rawX() );
     return M;
@@ -64,13 +65,13 @@ template < typename T >
  *
  * \return A new Eigen::Matrix with dimensions determined by the Spams Matrix.
  */
-Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > Spams2EigenMat ( Matrix<T>* spams_mat ) {
+inline Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > Spams2EigenMat ( Matrix<T>* spams_mat ) {
 
     uint num_cols = spams_mat->n();
     uint num_rows = spams_mat->m();
 
-    auto M = Eigen::Map< Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic, Eigen::ColMajor> >( spams_mat->rawX(), num_cols, num_rows );
-    return M;
+    return Eigen::Map< Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic, Eigen::ColMajor> >( spams_mat->rawX(), num_cols, num_rows );
+
 }
 
 //template < typename T >
@@ -113,7 +114,7 @@ template < typename T, uint m, uint n >
  *
  * \return A new Spams Matrix ( in pointer form ).
  */
-Matrix<T>* Eigen2SpamsMat ( const Eigen::Matrix< T, n, m >& eigen_mat ) {
+inline Matrix<T>* Eigen2SpamsMat ( const Eigen::Matrix< T, n, m >& eigen_mat ) {
 
     // Determine number of elements in eigen_mat
     auto eigen_mat_size = eigen_mat.cols() * eigen_mat.rows();
@@ -160,7 +161,7 @@ Matrix<T>* Eigen2SpamsMat ( const Eigen::Matrix< T, n, m >& eigen_mat ) {
 //}
 
 template < typename T >
-Matrix<T>* Eigen2SpamsMat ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& eigen_mat ) {
+inline Matrix<T>* Eigen2SpamsMat ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& eigen_mat ) {
 
     uint m = eigen_mat.rows();
     uint n = eigen_mat.cols();
@@ -174,7 +175,7 @@ Matrix<T>* Eigen2SpamsMat ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynam
 }
 
 template < typename T, uint m, uint n >
-AbstractMatrixB<T> Eigen2SpamsAbstractMatB ( const Eigen::Matrix< T, n, m >& eigen_mat ) {
+inline AbstractMatrixB<T> Eigen2SpamsAbstractMatB ( const Eigen::Matrix< T, n, m >& eigen_mat ) {
     return AbstractMatrixB<T>( eigen_mat.data(), m, n );
 }
 
@@ -190,7 +191,7 @@ AbstractMatrixB<T> Eigen2SpamsAbstractMatB ( const Eigen::Matrix< T, n, m >& eig
  * \return char* populated with data in str and null terminator,
  * Note that the char* will need to be deleted later
  */
-char* str_to_c_ptr( std::string& str ) {
+inline char* str_to_c_ptr( std::string& str ) {
 
     char * writable = new char[str.size() + 1];
     std::copy(str.begin(), str.end(), writable);
@@ -222,7 +223,7 @@ template < typename T >
  *
  * \return Omega, a 1 x n matrix
  */
-Matrix<T>* FistaFlat( Matrix<T>* Y, Matrix<T>* X, Matrix<T>* Omega_0, const T lambda_1 ) {
+inline Matrix<T>* FistaFlat( Matrix<T>* Y, Matrix<T>* X, Matrix<T>* Omega_0, const T lambda_1 ) {
 
     uint num_cols = Omega_0->n();
     uint num_rows = Omega_0->m();
@@ -318,7 +319,7 @@ template < typename T >
  *
  * \return Omega, a 1 x n matrix
  */
-Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic> FistaFlat(
+inline Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic> FistaFlat(
         const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic>& Y,
         const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic>& X,
         const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic>& Omega_0,

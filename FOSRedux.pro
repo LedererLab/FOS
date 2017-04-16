@@ -51,7 +51,6 @@ LIBS += -L/usr/local/lib64/
 LIBS += -lclBLAS
 
 # OpenCL
-INCLUDEPATH += /usr/include/eigen3
 LIBS += -L/usr/local/cuda/lib64
 LIBS += -lOpenCL
 
@@ -61,7 +60,7 @@ LIBS += -lstdc++ \
         -llapack
 
 # Armadillo
-#LIBS += -larmadillo
+LIBS += -larmadillo
 
 HEADERS += FOS/fos.h \
     FOS/test_fos.h \
@@ -79,12 +78,19 @@ HEADERS += FOS/fos.h \
     OpenCL_Generics/cl_algorithm.h \
     OpenCL_Base/openclbase.h \
     OpenCL_Generics/perf_cl_product.h \
-    FOS/fos_imperative.h \
     FOS/test_fos_experimental.h \
     FOS/perf_fos.h \
     FOS/perf_fos_experimental.h \
-    FOS/x_fos.h
+    FOS/x_fos.h \
+    FOS/fos_imperative.h \
 
 SOURCES += main.cpp \
     OpenCL_Base/openclbase.cpp \
-    OpenCL_Generics/perf_cl_product.cpp
+    OpenCL_Generics/perf_cl_product.cpp \
+    FOS/x_fos.cpp \
+
+DISTFILES += \
+    Python_Wrapper/build.sh \
+    Python_Wrapper/eigen.i \
+    Python_Wrapper/hdim.i \
+    Python_Wrapper/numpy.i

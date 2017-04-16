@@ -5,7 +5,7 @@
 // C System-Headers
 //
 // C++ System headers
-#include <cmath>
+//#include <cmath>
 #include <limits>
 #include <iomanip>
 #include <iostream>
@@ -18,7 +18,6 @@
 // FISTA Headers
 //
 // Project Specific Headers
-#include "../Generic/algorithm.h"
 #include "../Generic/debug.h"
 #include "../Generic/generics.h"
 
@@ -30,12 +29,10 @@ template < typename T >
 /*!
  * \brief The FOS algorithim
  */
-class FOS {
+class X_FOS {
 
   public:
-    FOS( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& x, const Eigen::Matrix< T, Eigen::Dynamic, 1 >& y );
-
-    FOS( const FOS& rhs );
+    X_FOS( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& x, const Eigen::Matrix< T, Eigen::Dynamic, 1 >& y );
 
     /*!
      * \brief Run the main X_FOS algorithm
@@ -46,14 +43,15 @@ class FOS {
      */
     void Run();
 
-    Eigen::Matrix< T, 1, Eigen::Dynamic > ReturnLambdas();
+    T ReturnLambda();
     Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > ReturnBetas();
     uint ReturnOptimIndex();
     Eigen::Matrix< T, Eigen::Dynamic, 1 > ReturnCoefficients();
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > ReturnSupport();
 
   protected:
     Eigen::Matrix< T, Eigen::Dynamic, 1 > fos_fit;
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > lambdas;
+    T lambda;
     uint optim_index;
 
   private:
@@ -163,6 +161,7 @@ class FOS {
 
     T t_k = 1;
     T hot_start_L = 0.1;
+    const T L_0 = 0.1;
 
 };
 
@@ -176,18 +175,11 @@ template< typename T >
  * \param y
  * An n x 1 vector
  */
-FOS< T >::FOS( const Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>& x,
-               const Eigen::Matrix<T, Eigen::Dynamic, 1 >& y ) : X( x ), Y( y ) {
+X_FOS< T >::X_FOS( const Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>& x,
+                   const Eigen::Matrix<T, Eigen::Dynamic, 1 >& y ) : X( x ), Y( y ) {
 
     x_k_less_1 = Eigen::Matrix<T, Eigen::Dynamic, 1 >::Zero( X.rows(), 1 );
 
-}
-
-template< typename T >
-FOS<T>::FOS(const FOS &rhs ) {
-    Betas( rhs.Betas );
-    lambda_grid( rhs.lambda_grid );
-    statsIt( rhs.statsIt );
 }
 
 //template< typename T >
@@ -196,23 +188,33 @@ FOS<T>::FOS(const FOS &rhs ) {
 //}
 
 template < typename T >
-Eigen::Matrix< T, 1, Eigen::Dynamic > FOS< T >::ReturnLambdas() {
-    return lambdas;
+T X_FOS< T >::ReturnLambda() {
+    return lambda;
 }
 
 template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > FOS< T >::ReturnBetas() {
+Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS< T >::ReturnBetas() {
     return Betas;
 }
 
 template < typename T >
-uint FOS< T >::ReturnOptimIndex() {
+uint X_FOS< T >::ReturnOptimIndex() {
     return optim_index;
 }
 
 template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, 1 > FOS< T >::ReturnCoefficients() {
+Eigen::Matrix< T, Eigen::Dynamic, 1 > X_FOS< T >::ReturnCoefficients() {
     return fos_fit;
+}
+
+template < typename T >
+Eigen::Matrix<T, Eigen::Dynamic, 1> X_FOS<T>::ReturnSupport() {
+
+    T C_t = static_cast<T>( C );
+    T n_t = static_cast<T>( X.rows() );
+
+    return fos_fit.unaryExpr( SupportSift<T>( C_t, lambda, n_t ) );
+
 }
 
 //Member functions
@@ -226,12 +228,12 @@ template < typename T >
  * \param lambdas
  * \return True if outer loop should continue, false otherwise
  */
-bool FOS<T>::ComputeStatsCond( T C,
-                               uint stats_it,
-                               T r_stats_it,
-                               const Eigen::Matrix< T, 1, Eigen::Dynamic >& lambdas,
-                               const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
-                               const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& Betas ) {
+bool X_FOS<T>::ComputeStatsCond( T C,
+                                 uint stats_it,
+                                 T r_stats_it,
+                                 const Eigen::Matrix< T, 1, Eigen::Dynamic >& lambdas,
+                                 const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+                                 const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& Betas ) {
 
     bool stats_cond = true;
 
@@ -267,7 +269,7 @@ template < typename T >
  * \brief Generate the 'rs' vector
  * \return
  */
-Eigen::Matrix< T, 1, Eigen::Dynamic > FOS<T>::GenerateLambdaGrid (
+Eigen::Matrix< T, 1, Eigen::Dynamic > X_FOS<T>::GenerateLambdaGrid (
     const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
     uint M ) {
@@ -292,16 +294,16 @@ template < typename T >
  *
  * \return Target quantity
  */
-T FOS<T>::DualityGapTarget( uint r_stats_it ) {
+T X_FOS<T>::DualityGapTarget( uint r_stats_it ) {
     T r_stats_it_f = static_cast<T>( r_stats_it );
     return square(C) * square( r_stats_it_f ) / static_cast<T>( X.rows() );
 }
 
 template < typename T >
-inline T FOS<T>::duality_gap ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
-                               const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y, \
-                               const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta, \
-                               T r_stats_it ) {
+inline T X_FOS<T>::duality_gap ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
+                                 const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y, \
+                                 const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta, \
+                                 T r_stats_it ) {
 
     //Computation of Primal Objective
 
@@ -330,7 +332,7 @@ inline T FOS<T>::duality_gap ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dy
 }
 
 template < typename T >
-T FOS<T>::duality_gap_target( T gamma, T C, T r_stats_it, uint n ) {
+T X_FOS<T>::duality_gap_target( T gamma, T C, T r_stats_it, uint n ) {
 
     T n_f = static_cast<T>( n );
     return gamma*square( C )*square( r_stats_it )/n_f;
@@ -338,7 +340,7 @@ T FOS<T>::duality_gap_target( T gamma, T C, T r_stats_it, uint n ) {
 }
 
 template < typename T >
-T FOS<T>::f_beta (
+T X_FOS<T>::f_beta (
     const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
     const Eigen::Matrix< T, Eigen::Dynamic, 1  >& Y,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta ) {
@@ -350,7 +352,7 @@ T FOS<T>::f_beta (
 }
 
 template < typename T >
-T FOS<T>::f_beta_tilda (
+T X_FOS<T>::f_beta_tilda (
     const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
@@ -371,7 +373,7 @@ T FOS<T>::f_beta_tilda (
 }
 
 template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, 1 >  FOS<T>::update_beta_ista (
+Eigen::Matrix< T, Eigen::Dynamic, 1 >  X_FOS<T>::update_beta_ista (
     const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
@@ -386,7 +388,7 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 >  FOS<T>::update_beta_ista (
 }
 
 template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, 1 > FOS<T>::update_beta_fista (
+Eigen::Matrix< T, Eigen::Dynamic, 1 > X_FOS<T>::update_beta_fista (
     const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
@@ -418,7 +420,7 @@ almost_equal(T x, T y, int ulp) {
 
 
 template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > FOS<T>::FISTA_OPT (
+Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS<T>::FISTA_OPT (
     const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
@@ -503,7 +505,7 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > FOS<T>::FISTA_OPT (
 }
 
 template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > FOS<T>::FISTA (
+Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS<T>::FISTA (
     const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
@@ -551,7 +553,7 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > FOS<T>::FISTA (
 }
 
 template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > FOS<T>::ISTA_OPT (
+Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS<T>::ISTA_OPT (
     const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
@@ -626,7 +628,7 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > FOS<T>::ISTA_OPT (
 }
 
 template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > FOS<T>::ISTA (
+Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS<T>::ISTA (
     const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
@@ -672,7 +674,7 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > FOS<T>::ISTA (
 }
 
 template< typename T >
-void FOS< T >::Run() {
+void X_FOS< T >::Run() {
 
     Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > Betas;
     Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > old_Betas;
@@ -713,7 +715,7 @@ void FOS< T >::Run() {
 
             DEBUG_PRINT( "Current Lambda: " << rStatsIt );
 
-            Betas.col( statsIt - 1 ) = ISTA_OPT( X, Y, old_Betas, hot_start_L, rStatsIt, gap_target );
+            Betas.col( statsIt - 1 ) = ISTA( X, Y, old_Betas, hot_start_L, rStatsIt, gap_target );
 //            Betas.col( statsIt - 1 ) = X_ISTA( X, Y, old_Betas, hot_start_L, rStatsIt, gap_target );
             old_Betas = Betas.col( statsIt - 1 );
 
@@ -725,7 +727,7 @@ void FOS< T >::Run() {
     }
 
     fos_fit = Betas.col( statsIt - 2 );
-    lambdas = lambda_grid;
+    lambda = lambda_grid( statsIt - 1 );
     optim_index = statsIt;
 
     DEBUG_PRINT( fos_fit );

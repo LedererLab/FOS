@@ -274,6 +274,21 @@ Eigen::Matrix< T, 1, Eigen::Dynamic > LogScaleVector( T lower_bound, T upper_bou
     return log_space_vector;
 }
 
+template < typename T >
+/*!
+ * \brief Functor to convert vector of values into support vector
+ *
+ * Designed to be applied with Eigen::Matrix::unaryExpr or the like.
+ */
+struct Binarize {
+
+    typedef T result_type;
+    T operator()( T x ) const {
+        return static_cast<T>( x == static_cast<T>( 0 ) );
+    }
+
+};
+
 template <typename T>
 /*!
  * \brief The sign function
@@ -374,6 +389,20 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 > soft_threshold_mat(
 
     return mat_x;
 }
+
+template < typename T >
+struct SupportSift {
+
+    SupportSift( T C, T r_tilde, T n ) : cut_off( std::abs( static_cast<T>( 6 )*C*r_tilde/n ) ) {}
+
+    typedef T result_type;
+    T operator()( T x ) const {
+        return ( x >= cut_off )?( static_cast<T>( 1 ) ):( static_cast<T>( 0 ) );
+    }
+
+  private:
+    T cut_off;
+};
 
 }
 

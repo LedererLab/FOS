@@ -12,7 +12,7 @@
 // FISTA Headers
 //
 // Project Specific Headers
-#include "../Generic/algorithm.h"
+//#include "../Generic/algorithm.h"
 #include "../Generic/debug.h"
 #include "../Generic/generics.h"
 #include "../ISTA/ista.h"
@@ -29,14 +29,15 @@ class FOS {
     FOS( Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > x, Eigen::Matrix< T, Eigen::Dynamic, 1 > y );
     void Algorithm();
 
-    Eigen::Matrix< T, 1, Eigen::Dynamic > ReturnLambdas();
+    T ReturnLambda();
     Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > ReturnBetas();
     uint ReturnOptimIndex();
     Eigen::Matrix< T, Eigen::Dynamic, 1 > ReturnCoefficients();
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > ReturnSupport();
 
   protected:
     Eigen::Matrix< T, Eigen::Dynamic, 1 > avfos_fit;
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > lambdas;
+    T lambda;
     uint optim_index;
 
   private:
@@ -87,8 +88,8 @@ template< typename T >
 FOS< T >::FOS(Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> x, Eigen::Matrix<T, Eigen::Dynamic, 1 > y ) : X( x ), Y( y ) {}
 
 template < typename T >
-Eigen::Matrix< T, 1, Eigen::Dynamic > FOS< T >::ReturnLambdas() {
-    return lambdas;
+T FOS< T >::ReturnLambda() {
+    return lambda;
 }
 
 template < typename T >
@@ -104,6 +105,16 @@ uint FOS< T >::ReturnOptimIndex() {
 template < typename T >
 Eigen::Matrix< T, Eigen::Dynamic, 1 > FOS< T >::ReturnCoefficients() {
     return avfos_fit;
+}
+
+template < typename T >
+Eigen::Matrix<T, Eigen::Dynamic, 1> FOS<T>::ReturnSupport() {
+
+    T C_t = static_cast<T>( C );
+    T n_t = static_cast<T>( X.rows() );
+
+    return avfos_fit.unaryExpr( SupportSift<T>( C_t, lambda, n_t ) );
+
 }
 
 //Free functions
@@ -252,8 +263,8 @@ void FOS< T >::Algorithm() {
     Normalize( X );
     Normalize( Y );
 
-    Eigen::Matrix< T, 1, Eigen::Dynamic > lamda_grid = GenerateLambdaGrid();
-    DEBUG_PRINT( "Lambda grid: " << lamda_grid );
+    Eigen::Matrix< T, 1, Eigen::Dynamic > lambda_grid = GenerateLambdaGrid();
+    DEBUG_PRINT( "Lambda grid: " << lambda_grid );
 
     bool statsCont = true;
     uint statsIt = 1;
@@ -268,7 +279,7 @@ void FOS< T >::Algorithm() {
         DEBUG_PRINT( "Outer loop #: " << statsIt );
 
         old_Betas = Betas.col( statsIt - 2 );
-        T rStatsIt = lamda_grid( 0, statsIt - 1 );
+        T rStatsIt = lambda_grid( 0, statsIt - 1 );
 
         //Inner Loop
         while( true ) {
@@ -298,8 +309,8 @@ void FOS< T >::Algorithm() {
 
                 DEBUG_PRINT( "Current Lambda: " << rStatsIt );
 
-                Betas.col( statsIt - 1 ) = FistaFlat<T>( Y, X, old_Betas, 0.5*rStatsIt );
-//                Betas.col( statsIt - 1 ) = ISTA<T>( X, Y, old_Betas, 10, 0.1, rStatsIt );
+//                Betas.col( statsIt - 1 ) = FistaFlat<T>( Y, X, old_Betas, 0.5*rStatsIt );
+                Betas.col( statsIt - 1 ) = ISTA<T>( X, Y, old_Betas, 1, 0.1, rStatsIt );
 
                 old_Betas = Betas.col( statsIt - 1 );
 
@@ -309,11 +320,11 @@ void FOS< T >::Algorithm() {
 
         }
 
-        statsCont = ComputeStatsCond( statsIt, rStatsIt, lamda_grid );
+        statsCont = ComputeStatsCond( statsIt, rStatsIt, lambda_grid );
     }
 
     avfos_fit = Betas.col( statsIt - 2 );
-    lambdas = lamda_grid;
+    lambda = lambda_grid( statsIt - 1 );
     optim_index = statsIt;
 
     DEBUG_PRINT( avfos_fit );
@@ -322,5 +333,8 @@ void FOS< T >::Algorithm() {
 }
 
 }
+
+//Eigen::Matrix< double, Eigen::Dynamic, 1 > estimate_support_FOS( Eigen::Matrix< double, Eigen::Dynamic, Eigen::Dynamic > X,
+//                                                                 Eigen::Matrix< double, Eigen::Dynamic, 1 > Y );
 
 #endif // FOS_H

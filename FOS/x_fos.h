@@ -316,15 +316,15 @@ inline T X_FOS<T>::duality_gap ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::
 
     //Compute dual point
 
-    T alternative = r_stats_it /( L_infinity_norm( 2.0f*X.transpose()*error ) );
+    T alternative = r_stats_it /( L_infinity_norm( 2.0*X.transpose()*error ) );
 
     T alt_part_1 = static_cast<T>( Y.transpose()*error );
 
     T alternative_0 = alt_part_1/( error_sqr_norm );
 
-    T s = std::min( std::max( alternative, alternative_0 ), -1.0f*alternative );
+    T s = std::min( std::max( alternative, alternative_0 ), -1.0*alternative );
 
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > nu_part = ( - 2.0f*s / r_stats_it ) * error + 2.0f/r_stats_it*Y;
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > nu_part = ( - 2.0*s / r_stats_it ) * error + 2.0/r_stats_it*Y;
 
     T d_nu = 0.25*square( r_stats_it )*nu_part.squaredNorm() - Y.squaredNorm();
 

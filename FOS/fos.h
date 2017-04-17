@@ -68,6 +68,8 @@ class FOS {
     T rMax;
     T rMin;
 
+    T hot_start_L = 0;
+
     bool statsCont = true;
     uint statsIt = 1;
 

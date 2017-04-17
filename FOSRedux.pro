@@ -88,6 +88,7 @@ SOURCES += main.cpp \
     OpenCL_Base/openclbase.cpp \
     OpenCL_Generics/perf_cl_product.cpp \
     FOS/x_fos.cpp \
+    FOS/fos.cpp
 
 DISTFILES += \
     Python_Wrapper/build.sh \

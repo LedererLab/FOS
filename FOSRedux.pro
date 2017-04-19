@@ -16,7 +16,6 @@ CONFIG(debug, debug|release) {
     DEFINES += "DEBUG"
 } else {
     DEFINES += "NDEBUG"
-    #QMAKE_CXXFLAGS -= -O2
     QMAKE_CXXFLAGS += -O3
 #    QMAKE_CXXFLAGS += -ftree-vectorize
 #    QMAKE_CXXFLAGS += -msse2
@@ -82,7 +81,7 @@ HEADERS += FOS/fos.h \
     FOS/perf_fos.h \
     FOS/perf_fos_experimental.h \
     FOS/x_fos.h \
-    FOS/fos_imperative.h \
+#    FOS/fos_imperative.h \
 
 SOURCES += main.cpp \
     OpenCL_Base/openclbase.cpp \

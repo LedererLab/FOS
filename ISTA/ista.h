@@ -26,9 +26,7 @@ T f_beta (
     const Eigen::Matrix< T, Eigen::Dynamic, 1  >& Y,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta ) {
 
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > f_beta = X*Beta - Y;
-    return f_beta.squaredNorm();
-//    return( compute_sqr_norm( X*Beta - Y ) );
+    return (X*Beta - Y).squaredNorm();
 
 }
 
@@ -69,31 +67,6 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 > update_beta_ista (
 }
 
 template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, 1 > update_beta_fista (
-    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
-    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
-    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
-    T L,
-    T thres ) {
-
-    T t_k = thres / L;
-
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > f_grad = 2.0*( X.transpose()*( X*Beta - Y ) );
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > beta_to_modify = Beta - (1.0/L)*f_grad;
-
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > x_k = beta_to_modify.unaryExpr( SoftThres<T>( thres/L ) );
-
-    T t_k_plus_1 = ( 1.0 + std::sqrt( 1.0 + 4.0 * square( t_k ) ) ) / 2.0;
-
-    static Eigen::Matrix< T, Eigen::Dynamic, 1 > x_k_less_1;
-    x_k_less_1.resize( x_k.rows(), x_k.cols() );
-
-    x_k_less_1 = x_k + ( t_k - 1.0 ) / ( t_k_plus_1 ) * ( x_k - x_k_less_1 );
-
-    return x_k_less_1;
-}
-
-template < typename T >
 Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > ISTA (
     const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y, \
@@ -115,12 +88,12 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > ISTA (
         Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta_temp = update_beta_ista( X, Y, Beta, L, lambda );
 
         counter++;
-        DEBUG_PRINT( "Backtrace iteration: " << counter );
+        //DEBUG_PRINT( "Backtrace iteration: " << counter );
 
         while( ( f_beta( X, Y, Beta_temp ) > f_beta_tilda( X, Y, Beta_temp, Beta, L ) ) ) {
 
             counter++;
-            DEBUG_PRINT( "Backtrace iteration: " << counter );
+            //DEBUG_PRINT( "Backtrace iteration: " << counter );
 
             L*= eta;
             Beta_temp = update_beta_ista( X, Y, Beta, L, lambda );
@@ -130,100 +103,6 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > ISTA (
         Beta = update_beta_ista( X, Y, Beta, L, lambda );
 
     }
-
-    return Beta;
-
-}
-
-template < typename T >
-T duality_gap_target( T gamma, T C, T r_stats_it, uint n ) {
-
-    T n_f = static_cast<T>( n );
-    return gamma*square( C )*square( r_stats_it )/n_f;
-
-}
-
-template < typename T >
-T duality_gap ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
-                const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y, \
-                const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta, \
-                T r_stats_it ) {
-
-    //Computation of Primal Objective
-
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > error = X*Beta - Y;
-
-    T f_beta = error.squaredNorm() + r_stats_it*Beta.template lpNorm < 1 >();
-
-    //Computation of Dual Objective
-
-    //Compute dual point
-
-    T alternative = r_stats_it /( L_infinity_norm( 2.0*X.transpose()*error ) );
-
-    T alt_part_1 = static_cast<T>( Y.transpose()*error );
-
-    T alternative_0 = alt_part_1/( compute_sqr_norm( error ) );
-
-    T s = std::min( std::max( alternative, alternative_0 ), -1.0*alternative );
-
-    T d_nu = 0.25*square( r_stats_it )*compute_sqr_norm( -1.0*( 2.0*s / r_stats_it ) * error + 2.0/r_stats_it*Y ) - Y.squaredNorm();
-
-    return f_beta + d_nu;
-}
-
-template<class T>
-typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type
-almost_equal(T x, T y, int ulp) {
-    // the machine epsilon has to be scaled to the magnitude of the values used
-    // and multiplied by the desired precision in ULPs (units in the last place)
-    return std::abs(x-y) < std::numeric_limits<T>::epsilon() * std::abs(x+y) * ulp
-           // unless the result is subnormal
-           || std::abs(x-y) < std::numeric_limits<T>::min();
-}
-
-template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_ISTA (
-    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
-    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
-    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
-    T L_0, \
-    T lambda,
-    T duality_gap_target ) {
-
-    T eta = 1.5;
-    T L = L_0;
-
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta = Beta_0;
-
-    uint outer_counter = 0;
-
-    do {
-
-        outer_counter ++;
-        DEBUG_PRINT( "Outer loop iteration: " << outer_counter );
-
-        Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta_k_less_1 = Beta;
-
-        uint counter = 0;
-
-        Beta = update_beta_ista( X, Y, Beta_k_less_1, L, lambda );
-
-        counter++;
-        DEBUG_PRINT( "Backtrace iteration: " << counter );
-
-        while( ( f_beta( X, Y, Beta ) > f_beta_tilda( X, Y, Beta, Beta_k_less_1, L ) ) ) {
-
-            counter++;
-            DEBUG_PRINT( "Backtrace iteration: " << counter );
-
-            L*= eta;
-            Beta = update_beta_ista( X, Y, Beta_k_less_1, L, lambda );
-
-        }
-
-
-    } while ( ( duality_gap( X, Y, Beta, lambda ) > duality_gap_target ) );
 
     return Beta;
 

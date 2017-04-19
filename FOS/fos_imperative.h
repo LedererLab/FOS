@@ -219,7 +219,7 @@ Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> Imp_FOS(
 
             DEBUG_PRINT( "Current Lambda: " << rStatsIt );
 
-            Betas.col( statsIt - 1 ) = X_ISTA<T>( X, Y, old_Betas, 0.1, rStatsIt, gap_target );
+            Betas.col( statsIt - 1 ) = ISTA<T>( X, Y, old_Betas, 0.1, rStatsIt, gap_target );
             old_Betas = Betas.col( statsIt - 1 );
 
             DEBUG_PRINT( "L2 Norm of Betas: " << Betas.squaredNorm() );

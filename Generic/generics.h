@@ -254,21 +254,21 @@ template < typename T >
  *
  * Vector of logarithmically equally spaced points
  */
-Eigen::Matrix< T, 1, Eigen::Dynamic > LogScaleVector( T lower_bound, T upper_bound, uint num_elements ) {
+std::vector < T > LogScaleVector( T lower_bound, T upper_bound, uint num_elements ) {
 
     T min_elem = static_cast<T>( log10(lower_bound) );
     T max_elem = static_cast<T>( log10(upper_bound) );
     T delta = max_elem - min_elem;
 
-    Eigen::Matrix< T, 1, Eigen::Dynamic > log_space_vector;
-    log_space_vector.resize( num_elements );
+    std::vector < T > log_space_vector;
+    log_space_vector.reserve( num_elements );
 
     for ( uint i = 0; i < num_elements ; i ++ ) {
 
         T step = static_cast<T>( i )/static_cast<T>( num_elements - 1 );
         auto lin_step = delta*step + min_elem;
 
-        log_space_vector( 0, i ) = static_cast<T>( std::pow( 10.0, lin_step ) );
+        log_space_vector.push_back( static_cast<T>( std::pow( 10.0, lin_step ) ) );
     }
 
     return log_space_vector;
@@ -403,6 +403,62 @@ struct SupportSift {
   private:
     T cut_off;
 };
+
+//Burrowed from https://forum.kde.org/viewtopic.php?f=74&t=108033
+
+template<typename Mat, typename Vec>
+typename Mat::Scalar power(const Mat& m, Vec& y) {
+    typedef typename Mat::Scalar Scalar;
+    int iters = 0;
+    Scalar theta;
+    Vec v;
+    do {
+        v = y.normalized();
+        y.noalias() = m * v;
+        theta = v.dot(y);
+        iters++;
+    } while (iters<100 && (y-theta*v).norm() > 1e-5*std::abs(theta));
+    return theta;
+}
+
+/**
+ * @brief powerIteration Compute the dominant eigenvalue and its relative eigenvector of a square matrix
+ * @param A The input matrix
+ * @param eigenVector The eigenvector
+ * @param tolerance Maximum tolerance
+ * @param nIterations Number of iterations
+ * @return The dominant eigenvalue
+ */
+template < typename Derived,  typename OtherDerived>
+typename Derived::Scalar powerIteration(const Eigen::MatrixBase<Derived>& A,
+                                        Eigen::MatrixBase<OtherDerived>& eigenVector,
+                                        typename Derived::Scalar tolerance,
+                                        int nIterations) {
+
+    typedef typename Derived::Scalar Scalar;
+
+    OtherDerived approx(A.cols());
+    approx.setRandom(A.cols());
+    int counter = 0;
+    Scalar error=100;
+    while (counter < nIterations && error > tolerance  ) {
+        OtherDerived temp = approx;
+        approx = (A*temp).normalized();
+        error = (temp-approx).stableNorm();
+        counter++;
+    }
+    eigenVector = approx;
+
+    Scalar dominantEigenvalue = approx.transpose()*A*approx;
+#ifdef INFO_LOG
+    cerr << "Power Iteration:" << endl;
+    cerr << "\tTotal iterations= " << counter << endl;
+    cerr << "\tError= " << error << endl;
+    cerr << "\tDominant Eigenvalue= " << dominantEigenvalue << endl;
+    cerr << "\tDominant Eigenvector= [" << eigenVector.transpose()<< "]" << endl;
+#endif
+    return dominantEigenvalue;
+}
 
 }
 

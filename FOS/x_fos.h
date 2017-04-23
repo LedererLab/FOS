@@ -143,6 +143,8 @@ class X_FOS {
         const Eigen::Matrix< T, Eigen::Dynamic, 1  >& Y,
         const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta );
 
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > (X_FOS::*Subgradient_Descent)() = NULL;
+
     Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > Betas;
     Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > old_Betas;
 
@@ -157,9 +159,6 @@ class X_FOS {
     const T C = 0.75;
     const uint M = 100;
     const T gamma = 1;
-
-    T rMax;
-    T rMin;
 
     bool statsCont = true;
 
@@ -504,6 +503,7 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS<T>::FISTA_OPT (
 
     Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta = Beta_0;
     y_k = Beta;
+    t_k = 1;
 
     uint outer_counter = 0;
 
@@ -589,6 +589,7 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS<T>::FISTA (
 
     Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta = Beta_0;
     y_k = Beta;
+    t_k = 1;
 
     uint outer_counter = 0;
 
@@ -611,7 +612,7 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS<T>::FISTA (
             L*= eta;
 
             DEBUG_PRINT( "L: " << L );
-            y_k_temp = update_beta_ista( X, Y, y_k_old, L, lambda );
+            y_k_temp = update_beta_ista( X, Y, Beta, L, lambda );
 
         }
 
@@ -739,7 +740,7 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS<T>::ISTA (
 
         Beta = update_beta_ista( X, Y, Beta, L, lambda );
 
-//        DEBUG_PRINT( "Duality Gap:" << duality_gap( X, Y, Beta, lambda ) )
+        DEBUG_PRINT( "Duality Gap:" << duality_gap( X, Y, Beta, lambda ) );
 
     } while ( duality_gap( X, Y, Beta, lambda ) > duality_gap_target );
 //    } while ( ( primal_objective( X, Y, Beta, lambda ) + dual_objective( X, Y, Beta, lambda ) ) > duality_gap_target );
@@ -770,15 +771,15 @@ void X_FOS< T >::Run() {
 
         statsIt ++;
 
-        //DEBUG_PRINT( "Outer loop #: " << statsIt );
+        DEBUG_PRINT( "Outer loop #: " << statsIt );
 
         old_Betas = Betas.col( statsIt - 2 );
         T rStatsIt = lambda_grid.at( statsIt - 1 );
 
         Eigen::Matrix< T, Eigen::Dynamic, 1 > beta_k = Betas.col( statsIt - 1 );
 
-//        T gap = duality_gap( X, Y, beta_k, rStatsIt );
-        T gap = primal_objective( X, Y, beta_k, rStatsIt ) + dual_objective( X, Y, beta_k, rStatsIt );
+        T gap = duality_gap( X, Y, beta_k, rStatsIt );
+//        T gap = primal_objective( X, Y, beta_k, rStatsIt ) + dual_objective( X, Y, beta_k, rStatsIt );
 
         uint n = static_cast< uint >( X.rows() );
         T gap_target = duality_gap_target( gamma, C, rStatsIt, n );
@@ -789,7 +790,7 @@ void X_FOS< T >::Run() {
 
         } else {
 
-            //DEBUG_PRINT( "Current Lambda: " << rStatsIt );
+            DEBUG_PRINT( "Current Lambda: " << rStatsIt );
 
             Betas.col( statsIt - 1 ) = ISTA_OPT( X, Y, old_Betas, 0.1, rStatsIt, gap_target );
 

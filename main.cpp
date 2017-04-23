@@ -61,14 +61,14 @@ int main(int argc, char *argv[]) {
                                                   "Timing Results Ratio",
                                                   "Row Size / 200",
                                                   "Execution time ( X FOS v. FOS ).",
-                                                  "Ratio of FOS timing with X FOS w FISTA v. FOS",
+                                                  "Ratio of FOS timing, X FOS w ISTA_{OPT} v. FOS",
                                                   "/home/bephillips2/");
 
 //    jaspl::plot_to_disk< std::vector< double > >( ratio_results,
 //                                                  "L2 Norm of Beta Ratio",
 //                                                  "Row Size / 20",
-//                                                  "L2 Norm of Beta ( X FOS v. FOS w FISTA ).",
-//                                                  "Ratio of results X FOS v. FOS w FISTA",
+//                                                  "L2 Norm of Beta ( X FOS  w FISTA v. FOS ).",
+//                                                  "Ratio of results X FOS  w FISTA v. FOS",
 //                                                  "/home/bephillips2/");
 
 }

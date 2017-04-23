@@ -461,7 +461,7 @@ void FOS< T >::Algorithm() {
 
 //                Betas.col( statsIt - 1 ) = FistaFlat<T>( Y, X, old_Betas, 0.5*rStatsIt );
                 Betas.col( statsIt - 1 ) = ISTA( X, Y, old_Betas, 1, L_k_less_1, rStatsIt );
-//                Betas.col( statsIt - 1 ) = DERP_ISTA( X, Y, old_Betas, 1, L_naive, 0.5*rStatsIt );
+
                 old_Betas = Betas.col( statsIt - 1 );
 
             }

@@ -116,6 +116,8 @@ class FOS {
     T L_k_less_1 = 0.1;
     uint statsIt = 1;
 
+    uint n = 0, p = 0;
+
     std::vector< T > lambda_grid;
 
     uint loop_index = 0;
@@ -356,7 +358,6 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > FOS<T>::ISTA (
 
             counter++;
             //DEBUG_PRINT( "Backtrace iteration: " << counter );
-
             L*= eta;
             Beta_temp = update_beta_ista( X, Y, Beta, L, lambda );
 
@@ -415,13 +416,7 @@ void FOS< T >::Algorithm() {
 
     Betas = Eigen::Matrix< T , Eigen::Dynamic, Eigen::Dynamic >::Zero( X.cols(), M );
 
-//    Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_t_X = X.transpose()*X;
-//    Eigen::Matrix< T, Eigen::Dynamic, 1 > starting_vector = Eigen::Matrix< T, Eigen::Dynamic, 1 >::Constant( X.rows(), 1, 1.0 );
 
-//    T L_naive = 2.0*powerIteration( X_t_X,
-//                                    starting_vector,
-//                                    (T)1e-6,
-//                                    100 );
     //Outer Loop
     while( statsCont && ( statsIt < M ) ) {
 

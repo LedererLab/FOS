@@ -35,8 +35,9 @@ class X_FOS {
 
 public:
 
-	FOS( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& x, const Eigen::Matrix< T, Eigen::Dynamic, 1 >& y );
-	void Run();
+	X_FOS();
+	void Process( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >&x,
+		     const Eigen::Matrix< T, Eigen::Dynamic, 1 >&y );
 
 	T ReturnLambda();
 	Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > ReturnBetas();
@@ -45,7 +46,6 @@ public:
 	Eigen::Matrix< T, Eigen::Dynamic, 1 > ReturnSupport();
 
 };
-
 
 %template(FOS_d) hdim::FOS<double>;
 %template(X_FOS_d) hdim::experimental::X_FOS<double>;

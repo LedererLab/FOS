@@ -114,6 +114,17 @@ Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> Normalize(
 }
 
 template< typename T >
+Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> Normalize(
+    Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>& mat ) {
+
+    auto mean = mat.colwise().mean();
+    auto std = ((mat.rowwise() - mean).array().square().colwise().sum() / (mat.rows() - 1)).sqrt();
+
+    return (mat.rowwise() - mean).array().rowwise() / std.array();
+}
+
+template< typename T >
+
 /*!
  * \brief Overloaded version of hdim::Normalize_IP to
  * accomadate vectors
@@ -133,6 +144,20 @@ template < typename T >
  */
 Eigen::Matrix<T, Eigen::Dynamic, 1 > Normalize(
     const Eigen::Matrix<T, Eigen::Dynamic, 1 >& mat ) {
+
+    auto mean = mat.colwise().mean();
+    auto std = ((mat.rowwise() - mean).array().square().colwise().sum() / (mat.rows() - 1)).sqrt();
+
+    return (mat.rowwise() - mean).array().rowwise() / std.array();
+}
+
+template < typename T >
+/*!
+ * \brief Overloaded version of hdim::Normalize to
+ * accomadate vectors
+ */
+Eigen::Matrix<T, Eigen::Dynamic, 1 > Normalize(
+    Eigen::Matrix<T, Eigen::Dynamic, 1 >& mat ) {
 
     auto mean = mat.colwise().mean();
     auto std = ((mat.rowwise() - mean).array().square().colwise().sum() / (mat.rows() - 1)).sqrt();

@@ -89,11 +89,11 @@ std::vector< T > PerfX_FOS() {
         auto X = raw_data.block( 0, 1, k, k );
         auto Y = raw_data.block( 0, 0, k, 1 );
 
-        X_FOS< T > algo_fos ( X, Y );
+        X_FOS< T > algo_fos;
 
         auto start = std::chrono::high_resolution_clock::now();
 
-        algo_fos.Run();
+        algo_fos( X, Y );
 
         auto end = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double, std::milli> ms = end - start;

@@ -99,8 +99,8 @@ std::vector< T > TestX_FOS() {
                   << Y.squaredNorm() \
                   << std::endl;
 
-        X_FOS< T > algo_fos ( X, Y );
-        TIME_IT( algo_fos.Run(); );
+        X_FOS< T > algo_fos;
+        TIME_IT( algo_fos( X, Y ); );
 
         std::cout << "Stopping index: " << algo_fos.ReturnOptimIndex() << std::endl;
         T sqr_norm = algo_fos.ReturnCoefficients().squaredNorm();

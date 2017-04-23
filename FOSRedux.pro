@@ -40,7 +40,7 @@ INCLUDEPATH +=  ../spams/src \
                 ../spams/src/spams/prox \
 
 QMAKE_CXXFLAGS += -fopenmp
-QMAKE_LFLAGS +=  -fopenmp
+QMAKE_LFLAGS += -fopenmp
 
 # SPAMS has unused parameters in source -- surpress warnings
 QMAKE_CXXFLAGS+= -Wno-unused-parameter

@@ -48,7 +48,7 @@ class X_FOS {
     Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > ReturnBetas();
     uint ReturnOptimIndex();
     Eigen::Matrix< T, Eigen::Dynamic, 1 > ReturnCoefficients();
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > ReturnSupport();
+    Eigen::Matrix< T, Eigen::Dynamic, 1> ReturnSupport();
 
   protected:
     Eigen::Matrix< T, Eigen::Dynamic, 1 > fos_fit;
@@ -208,10 +208,13 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 > X_FOS< T >::ReturnCoefficients() {
 }
 
 template < typename T >
-Eigen::Matrix<T, Eigen::Dynamic, 1> X_FOS<T>::ReturnSupport() {
+Eigen::Matrix< T, Eigen::Dynamic, 1> X_FOS<T>::ReturnSupport() {
 
     T C_t = static_cast<T>( C );
     T n_t = static_cast<T>( n );
+
+//    T cut_off = std::abs( static_cast<T>( 6 )*C_t*lambda/n_t );
+//    return GenerateSupport( fos_fit, cut_off );
 
     return fos_fit.unaryExpr( SupportSift<T>( C_t, lambda, n_t ) );
 
@@ -753,7 +756,7 @@ void X_FOS< T >::operator()( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dyna
 
             DEBUG_PRINT( "Current Lambda: " << rStatsIt );
 
-            Betas.col( statsIt - 1 ) = ISTA( X, Y, old_Betas, 0.1, rStatsIt, gap_target );
+            Betas.col( statsIt - 1 ) = ISTA_OPT( X, Y, old_Betas, 0.1, rStatsIt, gap_target );
 
         }
 

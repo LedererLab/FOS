@@ -66,9 +66,9 @@ int main(int argc, char *argv[]) {
 
     jaspl::plot_to_disk< std::vector< double > >( ratio_results,
                                                   "L2 Norm of Beta Ratio",
-                                                  "Row Size / 20",
-                                                  "L2 Norm of Beta ( X FOS  w ISTA v. FOS ).",
-                                                  "Ratio of results X FOS  w ISTA v. FOS",
+                                                  "Row Size / 200",
+                                                  "L2 Norm of Beta ( X FOS w FISTA v. FOS w FISTA ).",
+                                                  "Ratio of results X FOS w FISTA v. FOS w FISTA",
                                                   "/home/bephillips2/");
 
 }

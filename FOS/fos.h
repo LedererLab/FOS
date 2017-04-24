@@ -93,13 +93,6 @@ class FOS {
         T L_0, \
         T lambda );
 
-    Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > STATIC_L_ISTA (const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
-            const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y, \
-            const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0, \
-            uint num_iterations, \
-            T L_0,
-            T lambda );
-
     Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > Betas;
     Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > old_Betas;
 
@@ -372,29 +365,6 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > FOS<T>::ISTA (
     return Beta;
 
 }
-
-template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > FOS<T>::STATIC_L_ISTA (
-    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
-    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y, \
-    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0, \
-    uint num_iterations, \
-    T L_0,
-    T lambda) {
-
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta = Beta_0;
-
-//    #pragma omp parallel for
-    for( uint i = 0; i < num_iterations; i++ ) {
-
-        Beta = update_beta_ista( X, Y, Beta, L_0, lambda );
-
-    }
-
-    return Beta;
-
-}
-
 
 template< typename T >
 /*!

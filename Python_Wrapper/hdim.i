@@ -43,7 +43,7 @@ public:
 	Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > ReturnBetas();
 	uint ReturnOptimIndex();
 	Eigen::Matrix< T, Eigen::Dynamic, 1 > ReturnCoefficients();
-	Eigen::Matrix< T, Eigen::Dynamic, 1 > ReturnSupport();
+	Eigen::Matrix< int, Eigen::Dynamic, 1 > ReturnSupport();
 
 };
 

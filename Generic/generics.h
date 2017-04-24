@@ -429,6 +429,21 @@ struct SupportSift {
     T cut_off;
 };
 
+template< typename T >
+Eigen::Matrix< int, Eigen::Dynamic, 1 > GenerateSupport(
+    const Eigen::Matrix<T, Eigen::Dynamic, 1 >& coefficients,
+    T cut_off ) {
+
+    Eigen::Matrix< int, Eigen::Dynamic, 1 > support( coefficients.rows(), 1 );
+
+    for( uint i = 0; i < coefficients.rows() ; i ++ ) {
+        T x = coefficients( i );
+        support( i ) = ( x >= cut_off )?( 1 ):( 0 );
+    }
+
+    return support;
+}
+
 //Burrowed from https://forum.kde.org/viewtopic.php?f=74&t=108033
 
 template<typename Mat, typename Vec>

@@ -76,7 +76,6 @@ docs/
 
 # Generated Python Wrapper files
 Python_Wrapper/Test
-Python_Wrapper/*.py
 Python_Wrapper/*.cxx
 Python_Wrapper/__pycache__
 

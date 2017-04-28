@@ -22,7 +22,7 @@ CONFIG(debug, debug|release) {
     QMAKE_CXXFLAGS_RELEASE -= -O2
     QMAKE_CXXFLAGS_RELEASE *= -O3
     QMAKE_CXXFLAGS_RELEASE *= -mtune=native
-#    QMAKE_CXXFLAGS += -msse2
+    QMAKE_CXXFLAGS += -msse2
 #    QMAKE_CXXFLAGS += -Ofast
 }
 

@@ -11,6 +11,10 @@
 %eigen_typemaps(Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>)
 %eigen_typemaps(Eigen::Matrix<double, 1, Eigen::Dynamic>)
 %eigen_typemaps(Eigen::Matrix<double, Eigen::Dynamic, 1>)
+%eigen_typemaps(Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic>)
+%eigen_typemaps(Eigen::Matrix<float, 1, Eigen::Dynamic >)
+%eigen_typemaps(Eigen::Matrix<float, Eigen::Dynamic, 1>)
+%eigen_typemaps(Eigen::Matrix<int, Eigen::Dynamic, 1>)
 
 %include "../FOS/fos.h"
 %include "../FOS/x_fos.h"
@@ -36,8 +40,8 @@ class X_FOS {
 public:
 
 	X_FOS();
-	void Process( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >&x,
-		     const Eigen::Matrix< T, Eigen::Dynamic, 1 >&y );
+	void operator()( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >&x,
+                     const Eigen::Matrix< T, Eigen::Dynamic, 1 >&y );
 
 	T ReturnLambda();
 	Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > ReturnBetas();
@@ -48,4 +52,6 @@ public:
 };
 
 %template(FOS_d) hdim::FOS<double>;
+%template(FOS_f) hdim::FOS<float>;
 %template(X_FOS_d) hdim::experimental::X_FOS<double>;
+%template(X_FOS_f) hdim::experimental::X_FOS<float>;

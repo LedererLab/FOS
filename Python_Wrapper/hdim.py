@@ -126,6 +126,42 @@ class FOS_d(_object):
 FOS_d_swigregister = _hdim.FOS_d_swigregister
 FOS_d_swigregister(FOS_d)
 
+class FOS_f(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, FOS_f, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, FOS_f, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, x, y):
+        this = _hdim.new_FOS_f(x, y)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+
+    def Algorithm(self):
+        return _hdim.FOS_f_Algorithm(self)
+
+    def ReturnLambda(self):
+        return _hdim.FOS_f_ReturnLambda(self)
+
+    def ReturnBetas(self):
+        return _hdim.FOS_f_ReturnBetas(self)
+
+    def ReturnOptimIndex(self):
+        return _hdim.FOS_f_ReturnOptimIndex(self)
+
+    def ReturnCoefficients(self):
+        return _hdim.FOS_f_ReturnCoefficients(self)
+
+    def ReturnSupport(self):
+        return _hdim.FOS_f_ReturnSupport(self)
+    __swig_destroy__ = _hdim.delete_FOS_f
+    __del__ = lambda self: None
+FOS_f_swigregister = _hdim.FOS_f_swigregister
+FOS_f_swigregister(FOS_f)
+
 class X_FOS_d(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, X_FOS_d, name, value)
@@ -161,6 +197,42 @@ class X_FOS_d(_object):
     __del__ = lambda self: None
 X_FOS_d_swigregister = _hdim.X_FOS_d_swigregister
 X_FOS_d_swigregister(X_FOS_d)
+
+class X_FOS_f(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, X_FOS_f, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, X_FOS_f, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        this = _hdim.new_X_FOS_f()
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+
+    def __call__(self, x, y):
+        return _hdim.X_FOS_f___call__(self, x, y)
+
+    def ReturnLambda(self):
+        return _hdim.X_FOS_f_ReturnLambda(self)
+
+    def ReturnBetas(self):
+        return _hdim.X_FOS_f_ReturnBetas(self)
+
+    def ReturnOptimIndex(self):
+        return _hdim.X_FOS_f_ReturnOptimIndex(self)
+
+    def ReturnCoefficients(self):
+        return _hdim.X_FOS_f_ReturnCoefficients(self)
+
+    def ReturnSupport(self):
+        return _hdim.X_FOS_f_ReturnSupport(self)
+    __swig_destroy__ = _hdim.delete_X_FOS_f
+    __del__ = lambda self: None
+X_FOS_f_swigregister = _hdim.X_FOS_f_swigregister
+X_FOS_f_swigregister(X_FOS_f)
 
 # This file is compatible with both classic and new-style classes.
 

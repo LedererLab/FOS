@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import numpy as np
 import scipy.io as sio
 from scipy import spatial
@@ -12,7 +10,6 @@ def X_FOS_support( X, Y ):
 
 	fos( X, Y )
 	return fos.ReturnSupport()
-
 def FOS_support( X, Y ):
 	fos = hdim.FOS_d( X, Y)
 
@@ -33,7 +30,7 @@ def main():
 
 
 	idx_col = np.arange(p)
-	C = np.zeros((p, p))
+	C = np.zeros((p, p), dtype="int")
 
 	for var_curr in idx_col:
 
@@ -46,7 +43,11 @@ def main():
 		t_start = time.time()
 		# Run FOS for X=X_minus_var_curr and y=y_var_curr
 		# get the corresponding support (boolean vector of length p-1)
-		support_var_curr = FOS_support( X_minus_var_curr, y_var_curr )
+
+		#X_minus_var_curr = X_minus_var_curr.astype(np.float32, copy=False)
+		#y_var_curr = y_var_curr.astype(np.float32, copy=False)
+
+		support_var_curr = X_FOS_support( X_minus_var_curr, y_var_curr )
 
 		t_end = time.time()
 
@@ -67,6 +68,11 @@ def main():
 	hd = spatial.distance.hamming(ground_truth[np.tril_indices(p, -1)], E_or[np.tril_indices(p, -1)])
 
 	print( hd )
+
+	C_dict = {}
+	C_dict['C_Matrix'] = C
+
+	sio.savemat( 'C.mat', C_dict )
 
 
 if __name__ == "__main__":

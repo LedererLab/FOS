@@ -270,7 +270,7 @@ std::vector< T > X_FOS<T>::GenerateLambdaGrid (
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
     uint M ) {
 
-    T rMax = 2.0*L_infinity_norm( X.transpose() * Y );
+    T rMax = 2.0*( X.transpose() * Y ).template lpNorm< Eigen::Infinity >();
     T rMin = 0.001*rMax;
 
     return LogScaleVector( rMax, rMin, M );
@@ -310,7 +310,7 @@ inline T X_FOS<T>::duality_gap ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::
 
     //Compute dual point
 
-    T alternative = r_stats_it /( L_infinity_norm( 2.0*X.transpose()*error ) );
+    T alternative = r_stats_it /( ( 2.0*X.transpose()*error ).template lpNorm< Eigen::Infinity >() );
 
     T alt_part_1 = static_cast<T>( Y.transpose()*error );
 

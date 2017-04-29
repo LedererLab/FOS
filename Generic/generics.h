@@ -211,22 +211,6 @@ void sweep_matrix( Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>& mat, T (*ma
     }
 }
 
-template < typename T >
-typename T::value_type L_infinity_norm( const T& matrix ) {
-    return matrix.template lpNorm< Eigen::Infinity >();
-}
-
-template < typename T >
-typename T::value_type L1_norm( const T& matrix ) {
-    return matrix.template lpNorm< 1 >();
-}
-
-template < typename T >
-typename T::value_type compute_sqr_norm( const T& matrix ) {
-    return static_cast< typename T:: value_type >( matrix.squaredNorm() );
-}
-
-
 template < typename T>
 /*!
  * \brief Compute the square of a value

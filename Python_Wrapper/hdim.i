@@ -45,7 +45,7 @@ public:
 
 	T ReturnLambda();
 	Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > ReturnBetas();
-	uint ReturnOptimIndex();
+	unsigned int ReturnOptimIndex();
 	Eigen::Matrix< T, Eigen::Dynamic, 1 > ReturnCoefficients();
 	Eigen::Matrix< int, Eigen::Dynamic, 1 > ReturnSupport();
 

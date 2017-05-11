@@ -21,9 +21,9 @@ CONFIG(debug, debug|release) {
     QMAKE_CXXFLAGS_RELEASE -= -O1
     QMAKE_CXXFLAGS_RELEASE -= -O2
     QMAKE_CXXFLAGS_RELEASE *= -O3
+#    QMAKE_CXXFLAGS *= -Ofast
     QMAKE_CXXFLAGS_RELEASE *= -mtune=native
-    QMAKE_CXXFLAGS += -msse2
-#    QMAKE_CXXFLAGS += -Ofast
+    QMAKE_CXXFLAGS_RELEASE *= -march=native
 }
 
 # Boost
@@ -86,12 +86,15 @@ HEADERS += FOS/fos.h \
     FOS/perf_fos_experimental.h \
     FOS/x_fos.h \
 #    FOS/fos_imperative.h \
+    test_armadillo.h \
+    OpenCL_Generics/matvectprodtest.h
 
 SOURCES += main.cpp \
     OpenCL_Base/openclbase.cpp \
     OpenCL_Generics/perf_cl_product.cpp \
     FOS/x_fos.cpp \
-    FOS/fos.cpp
+    FOS/fos.cpp \
+    OpenCL_Generics/matvectprodtest.cpp
 
 DISTFILES += \
     Python_Wrapper/build.sh \

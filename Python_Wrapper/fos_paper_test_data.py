@@ -10,14 +10,14 @@ def X_FOS_support( X, Y ):
 
 	fos( X, Y )
 	return fos.ReturnSupport()
+
 def FOS_support( X, Y ):
 	fos = hdim.FOS_d( X, Y)
 
 	fos.Algorithm()
 	return fos.ReturnSupport()
 
-def main():
-
+def test():
 	total_run_time = 0.0
 	# lung cancer data: gene expressions for 500 patients (n=500, p=1000)
 	cancer_data = sio.loadmat('data_obs.mat')
@@ -44,8 +44,10 @@ def main():
 		# Run FOS for X=X_minus_var_curr and y=y_var_curr
 		# get the corresponding support (boolean vector of length p-1)
 
-		#X_minus_var_curr = X_minus_var_curr.astype(np.float32, copy=False)
-		#y_var_curr = y_var_curr.astype(np.float32, copy=False)
+		# X_minus_var_curr = X_minus_var_curr.astype(np.float32)
+		# y_var_curr = y_var_curr.astype(np.float32)
+
+		# print( X_minus_var_curr.dtype )
 
 		support_var_curr = X_FOS_support( X_minus_var_curr, y_var_curr )
 
@@ -73,6 +75,47 @@ def main():
 	C_dict['C_Matrix'] = C
 
 	sio.savemat( 'C.mat', C_dict )
+
+def test_col_9():
+
+	# lung cancer data: gene expressions for 500 patients (n=500, p=1000)
+	cancer_data = sio.loadmat('data_obs.mat')
+	X = cancer_data['data_obs']
+	n,p = X.shape
+
+	# ground truth for the interaction network for the lung cancer data
+	cancer_network = sio.loadmat('GS.mat')
+	ground_truth = cancer_network['DAG']
+
+	idx_col = np.arange(p)
+
+	var_curr = 9
+
+	y_var_curr = X[:,var_curr]
+	X_minus_var_curr = X[:, idx_col[idx_col != var_curr]]
+
+	fos = hdim.X_FOS_d()
+	fos( X_minus_var_curr, y_var_curr )
+	#coefficients = fos.ReturnCoefficients()
+
+	#fos = hdim.FOS_d( X_minus_var_curr, y_var_curr )
+	#fos.Algorithm()
+
+	coefficients = fos.ReturnCoefficients()
+	lambda_max = fos.ReturnLambda()
+
+	nz_indices = coefficients.nonzero()[0]
+
+	nz_values = coefficients[ nz_indices ]
+
+	print( lambda_max, nz_indices.size )
+
+	#for idx in nz_indices:
+	#	print( idx, nz_values[ idx ] )
+	
+
+def main():
+	test()
 
 
 if __name__ == "__main__":

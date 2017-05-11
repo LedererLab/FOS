@@ -1,5 +1,5 @@
-#ifndef TESTS_H
-#define TESTS_H
+#ifndef TEST_EIGEN3_H
+#define TEST_EIGEN3_H
 
 // C System-Headers
 //
@@ -104,4 +104,4 @@ void RunTests() {
     row_col_test();
 }
 
-#endif // TESTS_H
+#endif // TEST_EIGEN3_H

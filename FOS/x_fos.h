@@ -182,11 +182,6 @@ template< typename T >
  */
 X_FOS< T >::X_FOS() {}
 
-//template< typename T >
-//X_FOS<T>::X_FOS & operator=( const X_FOS &rhs ) {
-
-//}
-
 template < typename T >
 T X_FOS< T >::ReturnLambda() {
     return lambda;
@@ -210,10 +205,9 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 > X_FOS< T >::ReturnCoefficients() {
 template < typename T >
 Eigen::Matrix<int, Eigen::Dynamic, 1> X_FOS<T>::ReturnSupport() {
 
-    T C_t = static_cast<T>( C );
     T n_t = static_cast<T>( n );
 
-    T cut_off = std::abs( static_cast<T>( 6 )*C_t*lambda/n_t );
+    T cut_off = std::abs( static_cast<T>( 6 )*C*lambda/n_t );
     return GenerateSupport( fos_fit, cut_off );
 
 //    return fos_fit.unaryExpr( SupportSift<T>( C_t, lambda, n_t ) );
@@ -245,9 +239,9 @@ bool X_FOS<T>::ComputeStatsCond( T C,
         Eigen::Matrix< T, Eigen::Dynamic, 1 > beta_k = Betas.col( i - 1 );
         T rk = lambdas.at( i - 1 );
 
-        Eigen::Matrix< T, Eigen::Dynamic, 1 > beta_diff = Betas.col( stats_it - 1 );
-        beta_diff -= beta_k;
-        T abs_max_betas = beta_diff.cwiseAbs().maxCoeff();
+        Eigen::Matrix< T, Eigen::Dynamic, 1 > beta_diff = Betas.col( stats_it - 1 ) - beta_k;
+
+        T abs_max_betas = beta_diff.template lpNorm< Eigen::Infinity >();
 
         T n_t = static_cast<T>( n );
 
@@ -409,6 +403,7 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 >  X_FOS<T>::update_beta_ista (
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
     T L,
     T thres ) {
+
 
     Eigen::Matrix< T, Eigen::Dynamic, 1 > f_grad = 2.0*( X.transpose()*( X*Beta - Y ) );
     Eigen::Matrix< T, Eigen::Dynamic, 1 > beta_to_modify = Beta - (1.0/L)*f_grad;
@@ -600,22 +595,10 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS<T>::ISTA_OPT (
 
     Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta = Beta_0;
 
-    uint outer_counter = 0;
-
     do {
 
-        outer_counter ++;
-        DEBUG_PRINT( "Outer loop iteration: " << outer_counter );
-
-        uint counter = 0;
-
         Eigen::Matrix< T, Eigen::Dynamic, 1 > f_grad = 2.0*( X.transpose()*( X*Beta - Y ) );
-
-        Eigen::Matrix< T, Eigen::Dynamic, 1 > to_modify = Beta - (1.0/L)*f_grad;
-        Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta_temp = to_modify.unaryExpr( SoftThres<T>( lambda/L ) );
-
-        counter++;
-        DEBUG_PRINT( "Backtrace iteration: " << counter );
+        Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta_temp = ( Beta - (1.0/L)*f_grad ).unaryExpr( SoftThres<T>( lambda/L ) );
 
         T f_beta = ( X*Beta_temp - Y ).squaredNorm();
 
@@ -632,15 +615,9 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS<T>::ISTA_OPT (
 
         while( f_beta > f_beta_tilde ) {
 
-            counter++;
-            DEBUG_PRINT( "Backtrace iteration: " << counter );
-
             L*= eta;
 
-            DEBUG_PRINT( "L: " << L );
-
-            to_modify = Beta - (1.0/L)*f_grad;
-            Beta_temp = to_modify.unaryExpr( SoftThres<T>( lambda/L ) );
+            Beta_temp = ( Beta - (1.0/L)*f_grad ).unaryExpr( SoftThres<T>( lambda/L ) );
 
             f_beta = ( X*Beta_temp - Y ).squaredNorm();;
 
@@ -740,9 +717,9 @@ void X_FOS< T >::operator()( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dyna
         old_Betas = Betas.col( statsIt - 2 );
         T rStatsIt = lambda_grid.at( statsIt - 1 );
 
-        Eigen::Matrix< T, Eigen::Dynamic, 1 > beta_k = Betas.col( statsIt - 1 );
+//        Eigen::Matrix< T, Eigen::Dynamic, 1 > beta_k = Betas.col( statsIt - 1 );
 
-        T gap = duality_gap( X, Y, beta_k, rStatsIt );
+        T gap = duality_gap( X, Y, old_Betas, rStatsIt );
 //        T gap = primal_objective( X, Y, beta_k, rStatsIt ) + dual_objective( X, Y, beta_k, rStatsIt );
 
         uint n = static_cast< uint >( n );
@@ -756,7 +733,7 @@ void X_FOS< T >::operator()( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dyna
 
             DEBUG_PRINT( "Current Lambda: " << rStatsIt );
 
-            Betas.col( statsIt - 1 ) = ISTA( X, Y, old_Betas, 0.1, rStatsIt, gap_target );
+            Betas.col( statsIt - 1 ) = ISTA_OPT( X, Y, old_Betas, 0.1, rStatsIt, gap_target );
 
         }
 

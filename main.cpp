@@ -15,6 +15,7 @@
 #include "FOS/test_fos_experimental.h"
 #include "FOS/perf_fos.h"
 #include "FOS/perf_fos_experimental.h"
+#include "OpenCL_Generics/matvectprodtest.h"
 
 /*! \mainpage C++ Implementation of packages developed by the
  * Lederer and Hauser HDIM Group
@@ -42,19 +43,22 @@ int main(int argc, char *argv[]) {
     (void)argc;
     (void)argv;
 
-//    auto x_fos = hdim::experimental::PerfX_FOS< float >();
-//    auto old_fos = hdim::PerfFOS< float >();
+//    MatVectProdTest cl_tester;
+//    cl_tester.Run( 20000, 20000 );
+
+//    auto x_fos = hdim::experimental::PerfX_FOS< double >();
+//    auto old_fos = hdim::PerfFOS< double >();
 
     auto x_fos = hdim::experimental::TestX_FOS< double >();
     auto old_fos = hdim::TestFOS< double >();
 
-    std::vector< double > ratio_results;
+//    std::vector< double > ratio_results;
 
-    for( uint i = 0 ; i < x_fos.size() ; i++ ) {
+//    for( uint i = 0 ; i < x_fos.size() ; i++ ) {
 
-        auto ratio = x_fos.at(i) / old_fos.at(i);
-        ratio_results.push_back( ratio );
-    }
+//        auto ratio = x_fos.at(i) / old_fos.at(i);
+//        ratio_results.push_back( ratio );
+//    }
 
 
 //    jaspl::plot_to_disk< std::vector< double > >( ratio_results,
@@ -64,11 +68,11 @@ int main(int argc, char *argv[]) {
 //                                                  "Ratio of FOS timing, X FOS w FISTA} v. FOS",
 //                                                  "/home/bephillips2/");
 
-    jaspl::plot_to_disk< std::vector< double > >( ratio_results,
-                                                  "L2 Norm of Beta Ratio",
-                                                  "Row Size / 200",
-                                                  "L2 Norm of Beta ( X FOS w FISTA v. FOS w FISTA ).",
-                                                  "Ratio of results X FOS w FISTA v. FOS w FISTA",
-                                                  "/home/bephillips2/");
+//    jaspl::plot_to_disk< std::vector< double > >( ratio_results,
+//                                                  "L2 Norm of Beta Ratio",
+//                                                  "Row Size / 200",
+//                                                  "L2 Norm of Beta ( X FOS w FISTA v. FOS w FISTA ).",
+//                                                  "Ratio of results X FOS w FISTA v. FOS w FISTA",
+//                                                  "/home/bephillips2/");
 
 }

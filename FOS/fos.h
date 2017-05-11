@@ -217,8 +217,8 @@ template < typename T >
  * \return
  */
 std::vector< T > FOS<T>::GenerateLambdaGrid( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
-                                             const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
-                                             uint M ) {
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+        uint M ) {
 
     T rMax = 2.0*( X.transpose() * Y ).template lpNorm< Eigen::Infinity >();
     T rMin = 0.001*rMax;
@@ -403,9 +403,11 @@ void FOS< T >::Algorithm() {
             loop_index ++;
             //DEBUG_PRINT( "Inner loop #: " << loop_index );
 
-            Eigen::Matrix< T , Eigen::Dynamic, 1  > beta_k = Betas.col( statsIt - 1 );
+//            Eigen::Matrix< T , Eigen::Dynamic, 1  > beta_k = Betas.col( statsIt - 1 );
+//            T duality_gap = primal_objective( X, Y, beta_k, rStatsIt ) + dual_objective( X, Y, beta_k, rStatsIt );
 
-            T duality_gap = primal_objective( X, Y, beta_k, rStatsIt ) + dual_objective( X, Y, beta_k, rStatsIt );
+            T duality_gap = primal_objective( X, Y, old_Betas, rStatsIt ) + dual_objective( X, Y, old_Betas, rStatsIt );
+
 
             uint n = static_cast< uint >( X.rows() );
             T gap_target = duality_gap_target( gamma, C, rStatsIt, n );
@@ -437,8 +439,10 @@ void FOS< T >::Algorithm() {
     }
 
     avfos_fit = Betas.col( statsIt - 2 );
-    lambda = lambda_grid.at( statsIt - 1 );
+    lambda = lambda_grid.at( statsIt - 2 );
     optim_index = statsIt;
+
+    std::cout << "Stopping Index: " << optim_index << std::endl;
 
 }
 

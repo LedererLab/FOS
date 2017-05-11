@@ -11,8 +11,8 @@
 // Boost Headers
 #include <boost/random.hpp>
 #include <boost/random/normal_distribution.hpp>
-// SPAMS Headers
-//
+// OpenMP
+#include <omp.h>
 // Armadillo Headers
 #include <armadillo>
 // Project Specific Headers
@@ -482,6 +482,22 @@ typename Derived::Scalar powerIteration(const Eigen::MatrixBase<Derived>& A,
     cerr << "\tDominant Eigenvector= [" << eigenVector.transpose()<< "]" << endl;
 #endif
     return dominantEigenvalue;
+}
+
+template < typename T >
+Eigen::Matrix< T, Eigen::Dynamic, 1 > ParallelMatVect(
+    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& mat,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& vect ) {
+
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > out( vect.rows(), 1 );
+
+    #pragma omp parallel for
+    for( uint i = 0; i < mat.rows() ; i ++ ) {
+        out( i ) = static_cast<T>( mat.row( i )*vect );
+    }
+
+    return out;
+
 }
 
 }

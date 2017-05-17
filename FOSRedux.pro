@@ -32,18 +32,8 @@ LIBS += -L/usr/local/lib \
 # Eigen
 INCLUDEPATH += /usr/include/eigen3
 
-# SPAMS
-INCLUDEPATH +=  ../spams/src \
-                ../spams/src/spams/dictLearn \
-                ../spams/src/spams/decomp \
-                ../spams/src/spams/linalg \
-                ../spams/src/spams/prox \
-
 QMAKE_CXXFLAGS += -fopenmp
 QMAKE_LFLAGS += -fopenmp
-
-# SPAMS has unused parameters in source -- surpress warnings
-# QMAKE_CXXFLAGS+= -Wno-unused-parameter
 
 # clBLAS
 LIBS += -L/usr/local/lib64/
@@ -63,9 +53,7 @@ HEADERS += FOS/fos.h \
     ISTA/ista.h \
     ISTA/test_ista.h \
     R_Wrapper/fos_r.h \
-    SPAMS/test_fista.h \
     ISTA/perf_ista.h \
-    SPAMS/perf_fista.h \
     test_eigen3.h \
     OpenCL_Generics/cl_generics.h \
     OpenCL_Generics/cl_algorithm.h \
@@ -76,14 +64,15 @@ HEADERS += FOS/fos.h \
     FOS/perf_fos_experimental.h \
     FOS/x_fos.h \
     test_armadillo.h \
-    OpenCL_Generics/matvectprodtest.h
+    OpenCL_Generics/matvectprodtest.h \
+    FISTA/fista.h \
 
 SOURCES += main.cpp \
     OpenCL_Base/openclbase.cpp \
     OpenCL_Generics/perf_cl_product.cpp \
     FOS/x_fos.cpp \
     FOS/fos.cpp \
-    OpenCL_Generics/matvectprodtest.cpp
+    OpenCL_Generics/matvectprodtest.cpp \
 
 DISTFILES += \
     Python_Wrapper/build.sh \

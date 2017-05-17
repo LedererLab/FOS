@@ -75,12 +75,13 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > ISTA (
     T L_0, \
     T lambda ) {
 
+    static_assert(std::is_floating_point< T >::value, "ISTA can only be used with floating point types.");
+
     T eta = 1.5;
     T L = L_0;
 
     Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta = Beta_0;
 
-//    #pragma omp parallel for
     for( uint i = 0; i < num_iterations; i++ ) {
 
         uint counter = 0;
@@ -88,12 +89,12 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > ISTA (
         Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta_temp = update_beta_ista( X, Y, Beta, L, lambda );
 
         counter++;
-        //DEBUG_PRINT( "Backtrace iteration: " << counter );
+        DEBUG_PRINT( "Backtrace iteration: " << counter );
 
         while( ( f_beta( X, Y, Beta_temp ) > f_beta_tilda( X, Y, Beta_temp, Beta, L ) ) ) {
 
             counter++;
-            //DEBUG_PRINT( "Backtrace iteration: " << counter );
+            DEBUG_PRINT( "Backtrace iteration: " << counter );
 
             L*= eta;
             Beta_temp = update_beta_ista( X, Y, Beta, L, lambda );
@@ -105,6 +106,67 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > ISTA (
     }
 
     return Beta;
+
+}
+
+namespace optimize {
+
+template < typename T >
+Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > ISTA (
+    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y, \
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0, \
+    uint num_iterations, \
+    T L_0, \
+    T lambda ) {
+
+    static_assert(std::is_floating_point< T >::value, "ISTA can only be used with floating point types.");
+
+    T eta = 1.5;
+    T L = L_0;
+
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta = Beta_0;
+
+    for( uint i = 0; i < num_iterations; i++ ) {
+
+        Eigen::Matrix< T, Eigen::Dynamic, 1 > f_grad = 2.0*( X.transpose()*( X*Beta - Y ) );
+        Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta_temp = ( Beta - (1.0/L)*f_grad ).unaryExpr( SoftThres<T>( lambda/L ) );
+
+        T f_beta = ( X*Beta_temp - Y ).squaredNorm();
+
+        Eigen::Matrix< T, Eigen::Dynamic, 1  > f_part = X*Beta - Y;
+        T taylor_term_0 = f_part.squaredNorm();
+
+        Eigen::Matrix< T, Eigen::Dynamic, 1  > beta_diff = ( Beta_temp - Beta );
+
+        T taylor_term_1 = f_grad.transpose()*beta_diff;
+
+        T taylor_term_2 = L/2.0*beta_diff.squaredNorm();
+
+        T f_beta_tilde = taylor_term_0 + taylor_term_1 + taylor_term_2;
+
+        while( f_beta > f_beta_tilde ) {
+
+            L*= eta;
+
+            Beta_temp = ( Beta - (1.0/L)*f_grad ).unaryExpr( SoftThres<T>( lambda/L ) );
+
+            f_beta = ( X*Beta_temp - Y ).squaredNorm();;
+
+            beta_diff = ( Beta_temp - Beta );
+            taylor_term_1 = f_grad.transpose()*beta_diff;
+            taylor_term_2 = L/2.0*beta_diff.squaredNorm();
+
+            f_beta_tilde = taylor_term_0 + taylor_term_1 + taylor_term_2;
+
+        }
+
+        Beta = ( Beta - (1.0/L)*f_grad ).unaryExpr( SoftThres<T>( lambda/L ) );
+
+    }
+
+    return Beta;
+}
 
 }
 

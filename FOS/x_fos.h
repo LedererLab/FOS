@@ -179,7 +179,9 @@ template< typename T >
  * \param y
  * An n x 1 vector
  */
-X_FOS< T >::X_FOS() {}
+X_FOS< T >::X_FOS() {
+    static_assert(std::is_floating_point< T >::value, "X_FOS can only be used with floating point types.");
+}
 
 template < typename T >
 T X_FOS< T >::ReturnLambda() {
@@ -258,6 +260,7 @@ template < typename T >
  * \return
  */
 std::vector< T > X_FOS<T>::GenerateLambdaGrid (
+
     const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
     uint M ) {
@@ -711,8 +714,7 @@ void X_FOS< T >::operator()( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dyna
         T gap = duality_gap( X, Y, old_Betas, rStatsIt );
 //        T gap = primal_objective( X, Y, beta_k, rStatsIt ) + dual_objective( X, Y, beta_k, rStatsIt );
 
-        uint n = static_cast< uint >( n );
-        T gap_target = duality_gap_target( gamma, C, rStatsIt, X.rows() );
+        T gap_target = duality_gap_target( gamma, C, rStatsIt, n );
 
         if( gap <= gap_target ) {
 

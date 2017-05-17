@@ -125,7 +125,9 @@ template< typename T >
  * \param y
  * An n x 1 vector
  */
-FOS< T >::FOS(Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> x, Eigen::Matrix<T, Eigen::Dynamic, 1 > y ) : X( x ), Y( y ) {}
+FOS< T >::FOS(Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> x, Eigen::Matrix<T, Eigen::Dynamic, 1 > y ) : X( x ), Y( y ) {
+    static_assert(std::is_floating_point< T >::value, "FOS can only be used with floating point types.");
+}
 
 template < typename T >
 T FOS< T >::ReturnLambda() {

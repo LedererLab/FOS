@@ -9,9 +9,11 @@ most notably the FOS ( Fast and Optimal Selection ) method for minimizing the
 
 ### Dependencies
 
-You will need to have the following packages installed in order to use HDIM:
+You will need to have the following packages installed in order to use the base HDIM package:
 
 * [Eigen3](http://eigen.tuxfamily.org/index.php?title=Main_Page)
+
+To use GPU accelerated functions you will need a working OpenCL implementation and clBLAS:
 * [clBLAS](https://github.com/clMathLibraries/clBLAS)
 
 ## Authors

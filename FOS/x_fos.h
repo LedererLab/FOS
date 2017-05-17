@@ -207,7 +207,9 @@ Eigen::Matrix<int, Eigen::Dynamic, 1> X_FOS<T>::ReturnSupport() {
 
     T n_t = static_cast<T>( n );
 
-    T cut_off = std::abs( static_cast<T>( 6 )*C*lambda/n_t );
+    T cut_off = static_cast<T>( 6 )*C*lambda/n_t;
+    std::cout << "Cut-off for Support Computation: " << cut_off << std::endl;
+
     return GenerateSupport( fos_fit, cut_off );
 
 //    return fos_fit.unaryExpr( SupportSift<T>( C_t, lambda, n_t ) );

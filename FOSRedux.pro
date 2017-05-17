@@ -16,11 +16,7 @@ CONFIG(debug, debug|release) {
     DEFINES += "DEBUG"
 } else {
     DEFINES += "NDEBUG"
-#Over-ride Qt's default -O2 optimization
-    QMAKE_CXXFLAGS_RELEASE -= -O
-    QMAKE_CXXFLAGS_RELEASE -= -O1
-    QMAKE_CXXFLAGS_RELEASE -= -O2
-    QMAKE_CXXFLAGS_RELEASE *= -O3
+    CONFIG += optimize_full
 #    QMAKE_CXXFLAGS *= -Ofast
     QMAKE_CXXFLAGS_RELEASE *= -mtune=native
     QMAKE_CXXFLAGS_RELEASE *= -march=native

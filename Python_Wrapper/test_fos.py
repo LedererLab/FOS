@@ -5,6 +5,7 @@ import test_data_gen
 import numpy as np
 import matplotlib.pyplot as plt
 import math
+import scipy.io as sio
 
 def test_FOS( X, Y ):
 	fos_test = hdim.FOS_d( X, Y )
@@ -19,15 +20,35 @@ def test_X_FOS( X, Y ):
 	return fos_test.ReturnSupport()
 
 def main():
-	N = 50
-	P = 100
+	N = 200
+	P = 500
 
 	#ind = np.arange(P)  # the x locations for the groups
 
-	X, y, beta = test_data_gen.generate_data( N, P, int( math.ceil(N/10) ), 0.3, 5 )
+	# X, y, beta = test_data_gen.generate_data( N, P, int( math.ceil(P/10) ), 0.3, 5 )
 
-	fos_results= test_FOS( X, y )
+	old_data = sio.loadmat('Bundled_data.mat')
+	X = old_data['X']
+	y = np.transpose( old_data['y'] )
+	beta = old_data['beta']
+
+	# Mat_dict = {}
+	# Mat_dict['X'] = X
+	# Mat_dict['y'] = y
+	# Mat_dict['beta'] = beta
+
+	# sio.savemat( 'Bundled_data.mat', Mat_dict )
+
+	fos_results = test_FOS( X, y )
 	x_fos_results = test_X_FOS( X, y )
+
+	L2_sqr_norm = np.linalg.norm( x_fos_results, ord='fro' )**2
+
+	nz_indices = x_fos_results.nonzero()[0]
+	print( nz_indices )
+
+	test_indices = [ 99, 177, 224, 250, 345, 427 ]
+	print( x_fos_results[ test_indices ] )
 
 	ind = np.arange( len( fos_results ) )
 

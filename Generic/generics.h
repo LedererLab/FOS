@@ -406,7 +406,7 @@ struct SupportSift {
 
     typedef T result_type;
     T operator()( T x ) const {
-        return ( x >= cut_off )?( static_cast<T>( 1 ) ):( static_cast<T>( 0 ) );
+        return ( std::abs(x) >= cut_off )?( static_cast<T>( 1 ) ):( static_cast<T>( 0 ) );
     }
 
   private:
@@ -422,7 +422,7 @@ Eigen::Matrix< int, Eigen::Dynamic, 1 > GenerateSupport(
 
     for( uint i = 0; i < coefficients.rows() ; i ++ ) {
         T x = coefficients( i );
-        support( i ) = ( x >= cut_off )?( 1 ):( 0 );
+        support( i ) = ( std::abs( x ) >= cut_off )?( 1 ):( 0 );
     }
 
     return support;

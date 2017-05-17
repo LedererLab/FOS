@@ -226,20 +226,6 @@ T square( T& val ) {
 
 template < typename T >
 /*!
- * \brief Compute the maximum of the absolute value of an Eigen::Matrix object
- *
- * \param matrix
- *
- * Matrix to work on- note that the matrix is not modified.
- *
- * \return Coeffecient-wise maximum of the absolute value of the argument
- */
-T abs_max( const T& matrix ) {
-    return matrix.cwiseAbs().maxCoeff();
-}
-
-template < typename T >
-/*!
  * \brief Generate a vector of logarithmically equally spaced points
  *
  * There will be num_element points, beginning at log10( lower_bound )
@@ -426,62 +412,6 @@ Eigen::Matrix< int, Eigen::Dynamic, 1 > GenerateSupport(
     }
 
     return support;
-}
-
-//Burrowed from https://forum.kde.org/viewtopic.php?f=74&t=108033
-
-template<typename Mat, typename Vec>
-typename Mat::Scalar power(const Mat& m, Vec& y) {
-    typedef typename Mat::Scalar Scalar;
-    int iters = 0;
-    Scalar theta;
-    Vec v;
-    do {
-        v = y.normalized();
-        y.noalias() = m * v;
-        theta = v.dot(y);
-        iters++;
-    } while (iters<100 && (y-theta*v).norm() > 1e-5*std::abs(theta));
-    return theta;
-}
-
-/**
- * @brief powerIteration Compute the dominant eigenvalue and its relative eigenvector of a square matrix
- * @param A The input matrix
- * @param eigenVector The eigenvector
- * @param tolerance Maximum tolerance
- * @param nIterations Number of iterations
- * @return The dominant eigenvalue
- */
-template < typename Derived,  typename OtherDerived>
-typename Derived::Scalar powerIteration(const Eigen::MatrixBase<Derived>& A,
-                                        Eigen::MatrixBase<OtherDerived>& eigenVector,
-                                        typename Derived::Scalar tolerance,
-                                        int nIterations) {
-
-    typedef typename Derived::Scalar Scalar;
-
-    OtherDerived approx(A.cols());
-    approx.setRandom(A.cols());
-    int counter = 0;
-    Scalar error=100;
-    while (counter < nIterations && error > tolerance  ) {
-        OtherDerived temp = approx;
-        approx = (A*temp).normalized();
-        error = (temp-approx).stableNorm();
-        counter++;
-    }
-    eigenVector = approx;
-
-    Scalar dominantEigenvalue = approx.transpose()*A*approx;
-#ifdef INFO_LOG
-    cerr << "Power Iteration:" << endl;
-    cerr << "\tTotal iterations= " << counter << endl;
-    cerr << "\tError= " << error << endl;
-    cerr << "\tDominant Eigenvalue= " << dominantEigenvalue << endl;
-    cerr << "\tDominant Eigenvector= [" << eigenVector.transpose()<< "]" << endl;
-#endif
-    return dominantEigenvalue;
 }
 
 template < typename T >

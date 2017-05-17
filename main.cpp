@@ -15,7 +15,6 @@
 #include "FOS/test_fos_experimental.h"
 #include "FOS/perf_fos.h"
 #include "FOS/perf_fos_experimental.h"
-#include "OpenCL_Generics/matvectprodtest.h"
 
 /*! \mainpage C++ Implementation of packages developed by the
  * Lederer and Hauser HDIM Group
@@ -32,7 +31,7 @@
  *  \li clBLAS
  *
  * \section Dependencies for Python Wrappers
- *  \li Python 2.7 Installation
+ *  \li Python 2 or 3 Installation
  *  \li Simplified Wrapper and Inteface Generator ( SWIG )
  *
  *

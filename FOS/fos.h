@@ -12,7 +12,6 @@
 // FISTA Headers
 //
 // Project Specific Headers
-//#include "../Generic/algorithm.h"
 #include "../Generic/debug.h"
 #include "../Generic/generics.h"
 
@@ -336,7 +335,6 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > FOS<T>::ISTA (
 
     Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta = Beta_0;
 
-//    #pragma omp parallel for
     for( uint i = 0; i < num_iterations; i++ ) {
 
         uint counter = 0;
@@ -344,12 +342,12 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > FOS<T>::ISTA (
         Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta_temp = update_beta_ista( X, Y, Beta, L, lambda );
 
         counter++;
-        //DEBUG_PRINT( "Backtrace iteration: " << counter );
+        DEBUG_PRINT( "Backtrace iteration: " << counter );
 
         while( ( f_beta( X, Y, Beta_temp ) > f_beta_tilda( X, Y, Beta_temp, Beta, L ) ) ) {
 
             counter++;
-            //DEBUG_PRINT( "Backtrace iteration: " << counter );
+            DEBUG_PRINT( "Backtrace iteration: " << counter );
             L*= eta;
             Beta_temp = update_beta_ista( X, Y, Beta, L, lambda );
 
@@ -400,10 +398,7 @@ void FOS< T >::Algorithm() {
         while( true ) {
 
             loop_index ++;
-            //DEBUG_PRINT( "Inner loop #: " << loop_index );
-
-//            Eigen::Matrix< T , Eigen::Dynamic, 1  > beta_k = Betas.col( statsIt - 1 );
-//            T duality_gap = primal_objective( X, Y, beta_k, rStatsIt ) + dual_objective( X, Y, beta_k, rStatsIt );
+            DEBUG_PRINT( "Inner loop #: " << loop_index );
 
             T duality_gap = primal_objective( X, Y, old_Betas, rStatsIt ) + dual_objective( X, Y, old_Betas, rStatsIt );
 
@@ -416,7 +411,7 @@ void FOS< T >::Algorithm() {
             //Criteria meet, exit loop
             if( duality_gap <= gap_target ) {
 
-                //DEBUG_PRINT( "Duality gap is below specified threshold, exiting inner loop." );
+                DEBUG_PRINT( "Duality gap is below specified threshold, exiting inner loop." );
                 Betas.col( statsIt - 1 ) = old_Betas;
                 loop_index = 0;
 
@@ -425,7 +420,6 @@ void FOS< T >::Algorithm() {
 
             } else {
 
-//                Betas.col( statsIt - 1 ) = FistaFlat<T>( Y, X, old_Betas, 0.5*rStatsIt );
                 Betas.col( statsIt - 1 ) = ISTA( X, Y, old_Betas, 1, L_k_less_1, rStatsIt );
                 old_Betas = Betas.col( statsIt - 1 );
 
@@ -445,8 +439,5 @@ void FOS< T >::Algorithm() {
 }
 
 }
-
-//Eigen::Matrix< double, Eigen::Dynamic, 1 > estimate_support_FOS( Eigen::Matrix< double, Eigen::Dynamic, Eigen::Dynamic > X,
-//                                                                 Eigen::Matrix< double, Eigen::Dynamic, 1 > Y );
 
 #endif // FOS_H

@@ -43,7 +43,7 @@ QMAKE_CXXFLAGS += -fopenmp
 QMAKE_LFLAGS += -fopenmp
 
 # SPAMS has unused parameters in source -- surpress warnings
-QMAKE_CXXFLAGS+= -Wno-unused-parameter
+# QMAKE_CXXFLAGS+= -Wno-unused-parameter
 
 # clBLAS
 LIBS += -L/usr/local/lib64/
@@ -53,17 +53,11 @@ LIBS += -lclBLAS
 LIBS += -L/usr/local/cuda/lib64
 LIBS += -lOpenCL
 
-# for FISTA
-LIBS += -lstdc++ \
-        -lblas \
-        -llapack
-
 # Armadillo
 LIBS += -larmadillo
 
 HEADERS += FOS/fos.h \
     FOS/test_fos.h \
-    Generic/algorithm.h \
     Generic/debug.h \
     Generic/generics.h \
     ISTA/ista.h \
@@ -81,7 +75,6 @@ HEADERS += FOS/fos.h \
     FOS/perf_fos.h \
     FOS/perf_fos_experimental.h \
     FOS/x_fos.h \
-#    FOS/fos_imperative.h \
     test_armadillo.h \
     OpenCL_Generics/matvectprodtest.h
 

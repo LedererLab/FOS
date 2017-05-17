@@ -31,12 +31,6 @@ void TestIsta( uint num_rows, uint num_cols ) {
 
     Eigen::Matrix< float, Eigen::Dynamic, 1 > ista_retval = ISTA< float >( X, Y, W_0, 10, 0.1, lambda );
 
-//    Eigen::ConjugateGradient<Eigen::MatrixXf, Eigen::Lower|Eigen::Upper> cg;
-//    cg.compute( X );
-//    Eigen::Matrix< float, Eigen::Dynamic, 1 > beta = cg.solve( Y );
-
-//    std::cout << "Eigen CG result:\n" << beta.squaredNorm() << std::endl;
-
     std::cout << "ISTA result:\n" << ista_retval.squaredNorm() << std::endl;
 }
 

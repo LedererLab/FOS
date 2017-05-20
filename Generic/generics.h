@@ -430,6 +430,23 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 > ParallelMatVect(
 
 }
 
+template < typename T >
+Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > negative_index(
+    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& mat_in,
+    int index ) {
+
+    uint n = mat_in.rows();
+    uint p = mat_in.cols();
+
+    Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > left_half = mat_in.block( 0, 0, n, index - 1 );
+    Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > right_half = mat_in.block( 0, index + 1, n, p );
+
+    Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > out ( n, p - 1 );
+    out << left_half, right_half;
+
+    return out;
+}
+
 }
 
 #endif // FOS_GENERICS_H

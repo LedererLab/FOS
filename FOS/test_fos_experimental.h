@@ -90,8 +90,8 @@ std::vector< T > TestX_FOS() {
                   << "Matrix: \n" \
                   << std::endl;
 
-        auto X = raw_data.block( 0, 1, k, k );
-        auto Y = raw_data.block( 0, 0, k, 1 );
+        Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X = raw_data.block( 0, 1, k, k );
+        Eigen::Matrix< T, Eigen::Dynamic, 1 > Y = raw_data.block( 0, 0, k, 1 );
 
         std::cout << "Froebenius squared norm of X " \
                   << X.squaredNorm()\

@@ -413,7 +413,6 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 >  X_FOS<T>::update_beta_ista (
     T L,
     T thres ) {
 
-
     Eigen::Matrix< T, Eigen::Dynamic, 1 > f_grad = 2.0*( X.transpose()*( X*Beta - Y ) );
     Eigen::Matrix< T, Eigen::Dynamic, 1 > beta_to_modify = Beta - (1.0/L)*f_grad;
 
@@ -695,60 +694,6 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS<T>::ISTA (
     return Beta;
 }
 
-//template < typename T >
-//Eigen::Matrix< T, Eigen::Dynamic, 1 > X_FOS< T >::update_beta_cd (
-//    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
-//    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
-//    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta ) {
-
-
-//    Eigen::Matrix< T, Eigen::Dynamic, 1 > theta = Beta;
-
-//    for( int i = 0; i < p ; i++ ) {
-
-//        Eigen::Matrix< T, Eigen::Dynamic, 1 > A_i = X.col( i );
-
-//        T threshold = lambda / A_i.squaredNorm();
-//        T norm_factor = static_cast<T>( 1 )/( A_i.transpose()*A_i );
-
-//        Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > A_negative_i ( n, p - 1 );
-
-//        if( i > 0 ) {
-
-//            std::cout << X.block( 0, 0, n, i ).rows() << "x" << X.block( 0, 0, n, i ).cols() << std::endl;
-//            std::cout << X.block( 0, i + 1, n, p - i - 1 ).rows() << "x" << X.block( 0, i + 1, n, p - i - 1 ).cols() << std::endl;
-
-//            A_negative_i << X.block( 0, 0, n, i ), X.block( 0, i + 1, n, p - i - 1 );
-//        } else {
-////                std::cout << A_negative_i.rows() << "x" << A_negative_i.cols() << std::endl;
-////                std::cout << X.block( 0, 1, n, p - 1 ).rows() << "x" << X.block( 0, 1, n, p - 1 ).cols() << std::endl;
-//            A_negative_i << X.block( 0, 1, n, p - 1 );
-//        }
-
-//        Eigen::Matrix< T, Eigen::Dynamic, 1 > x_negative_i( p - 1 );
-
-//        if( i > 0 ) {
-//            std::cout << theta.rows() << " x " <<  theta.cols() << std::endl;
-//            std::cout << x_negative_i.rows() << " x " <<  x_negative_i.cols() << std::endl;
-
-//            theta.block( 0, 0, i, 1 );
-//            theta.block( i + 1, 0, p - i - 1, 1 );
-
-////                x_negative_i << Beta.block( 0, 0, i, 1 ), Beta.block( i + 1, 0, p - i - 1, 1 );
-
-//            x_negative_i << Beta.head( i ), Beta.segment( i + 1,  p - i - 1 );
-//        } else {
-//            x_negative_i << Beta.tail( p - 1 );
-//        }
-
-//        theta = ( norm_factor*A_i.transpose()*( Y - A_negative_i*x_negative_i ) ).unaryExpr( SoftThres<T>( threshold ) );
-
-//    }
-
-//    return theta;
-
-//}
-
 template < typename T >
 Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS< T >::CoordinateDescent (
     const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
@@ -761,55 +706,45 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS< T >::CoordinateDescent
 
     do {
 
-        for( int i = 0; i < p ; i++ ) {
+//        Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta_Old = Beta;
+
+        for( int i = 0; i < Beta.size() ; i++ ) {
 
             Eigen::Matrix< T, Eigen::Dynamic, 1 > A_i = X.col( i );
 
             T threshold = lambda / A_i.squaredNorm();
-            T norm_factor = static_cast<T>( 1 )/( A_i.transpose()*A_i );
+            T inverse_norm = static_cast<T>( 1 )/( A_i.squaredNorm() );
 
-            Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > A_negative_i ( n, p - 1 );
+            Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > A_negative_i = X;
+            A_negative_i.col( i ) = Eigen::Matrix< T, Eigen::Dynamic, 1 >::Zero( X.rows() );
 
-            if( i > 0 ) {
+            Eigen::Matrix< T, Eigen::Dynamic, 1 > x_negative_i = Beta;
+            x_negative_i( i ) = static_cast<T>( 0 );
 
-//                std::cout << X.block( 0, 0, n, i ).rows() << "x" << X.block( 0, 0, n, i ).cols() << std::endl;
-//                std::cout << X.block( 0, i + 1, n, p - i - 1 ).rows() << "x" << X.block( 0, i + 1, n, p - i - 1 ).cols() << std::endl;
+//            Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > A_negative_i ( n, p - 1 );
 
-                A_negative_i << X.block( 0, 0, n, i ), X.block( 0, i + 1, n, p - i - 1 );
-            } else {
-//                std::cout << A_negative_i.rows() << "x" << A_negative_i.cols() << std::endl;
-//                std::cout << X.block( 0, 1, n, p - 1 ).rows() << "x" << X.block( 0, 1, n, p - 1 ).cols() << std::endl;
-                A_negative_i << X.block( 0, 1, n, p - 1 );
-            }
+//            if( i > 0 ) {
+//                A_negative_i << X.block( 0, 0, n, i ), X.block( 0, i + 1, n, p - i - 1 );
+//            } else {
+//                A_negative_i << X.block( 0, 1, n, p - 1 );
+//            }
 
-            Eigen::Matrix< T, Eigen::Dynamic, 1 > x_negative_i( p - 1 );
+//            Eigen::Matrix< T, Eigen::Dynamic, 1 > x_negative_i( p - 1 );
 
-            if( i > 0 ) {
+//            if( i > 0 ) {
+//                x_negative_i << Beta.head( i ), Beta.segment( i + 1,  p - i - 1 );
+//            } else {
+//                x_negative_i << Beta.tail( p - 1 );
+//            }
 
-//                Beta.block( 0, 0, i, 1 );
-//                Beta.block( i + 1, 0, p - i - 1, 1 );
-
-//                x_negative_i << Beta.block( 0, 0, i, 1 ), Beta.block( i + 1, 0, p - i - 1, 1 );
-
-                x_negative_i << Beta.head( i ), Beta.segment( i + 1,  p - i - 1 );
-            } else {
-                x_negative_i << Beta.tail( p - 1 );
-            }
-
-//            Eigen::Matrix< T, Eigen::Dynamic, 1 > f_grad = 2.0*( X.transpose()*( X*Beta - Y ) );
-//            Eigen::Matrix< T, Eigen::Dynamic, 1 > beta_to_modify = Beta - (1.0/L)*f_grad;
-
-//            return beta_to_modify.unaryExpr( SoftThres<T>( thres/L ) );
-
-//            std::cout << "Beta_i before update: " << Beta( i ) << std::endl;
-            Beta( i ) = soft_threshold<T>( norm_factor*A_i.transpose()*( Y - A_negative_i*x_negative_i ), threshold );
-//            std::cout << "Parameter w/o thresholding: " << norm_factor*A_i.transpose()*( Y - A_negative_i*x_negative_i ) << " Lambda " << threshold << std::endl;
-//            std::cout << "Beta_i after update: " << Beta( i ) << std::endl;
+            T residual =  inverse_norm*A_i.transpose()*( Y - A_negative_i*x_negative_i );
+            Beta( i ) = soft_threshold<T>( residual, threshold );
 
         }
 
-        std::cout << "Current Duality Gap: " << duality_gap( X, Y, Beta, lambda ) << std::endl;
-        std::cout << "Norm Squared of updated Beta: " << Beta.squaredNorm() << std::endl;
+        DEBUG_PRINT( "Current Duality Gap: " << duality_gap( X, Y, Beta, lambda ) << " Current Target: " << duality_gap_target );
+        DEBUG_PRINT( "Norm Squared of updated Beta: " << Beta.squaredNorm() );
+
     } while ( duality_gap( X, Y, Beta, lambda ) > duality_gap_target );
 
     return Beta;

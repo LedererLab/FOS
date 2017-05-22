@@ -447,6 +447,36 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > negative_index(
     return out;
 }
 
+template < typename T >
+T duality_gap ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
+                const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y, \
+                const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta, \
+                T r_stats_it ) {
+
+    //Computation of Primal Objective
+
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > error = X*Beta - Y;
+    T error_sqr_norm = error.squaredNorm();
+
+    T f_beta = error_sqr_norm + r_stats_it*Beta.template lpNorm < 1 >();
+
+    //Computation of Dual Objective
+
+    //Compute dual point
+
+    T alternative = r_stats_it /( ( 2.0*X.transpose()*error ).template lpNorm< Eigen::Infinity >() );
+    T alt_part_1 = static_cast<T>( Y.transpose()*error );
+    T alternative_0 = alt_part_1/( error_sqr_norm );
+
+    T s = std::min( std::max( alternative, alternative_0 ), -alternative );
+
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > nu_part = ( - 2.0*s / r_stats_it ) * error + 2.0/r_stats_it*Y;
+
+    T d_nu = 0.25*square( r_stats_it )*nu_part.squaredNorm() - Y.squaredNorm();
+
+    return f_beta + d_nu;
+}
+
 }
 
 #endif // FOS_GENERICS_H

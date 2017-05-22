@@ -23,18 +23,21 @@ template < typename T >
  */
 class FOS {
 
+    using MatrixT = Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >;
+    using VectorT = Eigen::Matrix< T, Eigen::Dynamic, 1 >;
+
   public:
-    FOS( Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > x, Eigen::Matrix< T, Eigen::Dynamic, 1 > y );
+    FOS( MatrixT x, VectorT y );
     void Algorithm();
 
     T ReturnLambda();
-    Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > ReturnBetas();
+    MatrixT ReturnBetas();
     uint ReturnOptimIndex();
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > ReturnCoefficients();
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > ReturnSupport();
+    VectorT ReturnCoefficients();
+    VectorT ReturnSupport();
 
   protected:
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > avfos_fit;
+    VectorT avfos_fit;
     T lambda;
     uint optim_index;
 
@@ -49,53 +52,53 @@ class FOS {
         uint stats_it,
         T r_stats_it,
         const std::vector<T>& lambdas,
-        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
-        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& Betas );
+        const MatrixT& X,
+        const MatrixT& Betas );
 
     T DualityGap( uint r_stats_it );
 
     T duality_gap_target( T gamma, T C, T r_stats_it, uint n );
-    T dual_objective ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
-                       const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y, \
-                       const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta, \
+    T dual_objective ( const MatrixT& X, \
+                       const VectorT& Y, \
+                       const VectorT& Beta, \
                        T r_stats_it );
-    T primal_objective( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
-                        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y, \
-                        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta, \
+    T primal_objective( const MatrixT& X, \
+                        const VectorT& Y, \
+                        const VectorT& Beta, \
                         T r_stats_it );
 
     T f_beta (
-        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+        const MatrixT& X,
         const Eigen::Matrix< T, Eigen::Dynamic, 1  >& Y,
-        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta );
+        const VectorT& Beta );
 
     T f_beta_tilda (
-        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
-        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
-        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
-        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_prime,
+        const MatrixT& X,
+        const VectorT& Y,
+        const VectorT& Beta,
+        const VectorT& Beta_prime,
         T L );
 
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > update_beta_ista (
-        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
-        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
-        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
+    VectorT update_beta_ista (
+        const MatrixT& X,
+        const VectorT& Y,
+        const VectorT& Beta,
         T L,
         T thres );
 
-    Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > ISTA (
-        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
-        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y, \
-        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0, \
+    MatrixT ISTA (
+        const MatrixT& X, \
+        const VectorT& Y, \
+        const VectorT& Beta_0, \
         uint num_iterations, \
         T L_0, \
         T lambda );
 
-    Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > Betas;
-    Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > old_Betas;
+    MatrixT Betas;
+    MatrixT old_Betas;
 
-    Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X;
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > Y;
+    MatrixT X;
+    VectorT Y;
 
     const T C = 0.75;
     const uint M = 100;
@@ -145,7 +148,7 @@ uint FOS< T >::ReturnOptimIndex() {
 }
 
 template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, 1 > FOS< T >::ReturnCoefficients() {
+Eigen::Matrix< T, Eigen::Dynamic, 1 >  FOS< T >::ReturnCoefficients() {
     return avfos_fit;
 }
 
@@ -186,17 +189,17 @@ bool FOS<T>::ComputeStatsCond(T C,
                               uint stats_it,
                               T r_stats_it,
                               const std::vector<T> &lambdas,
-                              const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
-                              const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& Betas ) {
+                              const MatrixT& X,
+                              const MatrixT& Betas ) {
 
     bool stats_cond = true;
 
     for ( uint i = 1; i <= stats_it; i++ ) {
 
-        Eigen::Matrix< T, Eigen::Dynamic, 1 > beta_k = Betas.col( i - 1 );
+        VectorT beta_k = Betas.col( i - 1 );
         T rk = lambdas.at( i - 1 );
 
-        Eigen::Matrix< T, Eigen::Dynamic, 1 > beta_diff = Betas.col( stats_it - 1 );
+        VectorT beta_diff = Betas.col( stats_it - 1 );
         beta_diff -= beta_k;
         T abs_max_betas = beta_diff.cwiseAbs().maxCoeff();
 
@@ -216,8 +219,8 @@ template < typename T >
  * \brief Generate the 'rs' vector
  * \return
  */
-std::vector< T > FOS<T>::GenerateLambdaGrid( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
-        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+std::vector< T > FOS<T>::GenerateLambdaGrid( const MatrixT& X,
+        const VectorT& Y,
         uint M ) {
 
     T rMax = 2.0*( X.transpose() * Y ).template lpNorm< Eigen::Infinity >();
@@ -246,12 +249,12 @@ T FOS< T >::duality_gap_target( T gamma, T C, T r_stats_it, uint n ) {
 }
 
 template < typename T >
-T FOS< T >::primal_objective( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
-                              const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y, \
-                              const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta, \
+T FOS< T >::primal_objective( const MatrixT& X, \
+                              const VectorT& Y, \
+                              const VectorT& Beta, \
                               T r_stats_it ) {
 
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > error = Y - X*Beta;
+    VectorT error = Y - X*Beta;
     T f_beta = error.squaredNorm() + r_stats_it*Beta.template lpNorm < 1 >();
 
     return f_beta;
@@ -259,9 +262,9 @@ T FOS< T >::primal_objective( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dyn
 }
 
 template < typename T >
-T FOS< T >::dual_objective ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
-                             const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y, \
-                             const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta, \
+T FOS< T >::dual_objective ( const MatrixT& X, \
+                             const VectorT& Y, \
+                             const VectorT& Beta, \
                              T r_stats_it ) {
 
     //Computation of s
@@ -270,7 +273,7 @@ T FOS< T >::dual_objective ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dyna
     T s = std::min( std::max( - s_chunk, s_chunk_prime ), s_chunk );
 
     //Computation of nu tilde
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > nu_tilde = 2.0*s/r_stats_it*( X*Beta - Y );
+    VectorT nu_tilde = 2.0*s/r_stats_it*( X*Beta - Y );
 
     T d_nu = square( r_stats_it )/4.0*( nu_tilde + 2.0/r_stats_it*Y ).squaredNorm() - Y.squaredNorm();
 
@@ -279,9 +282,9 @@ T FOS< T >::dual_objective ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dyna
 
 template < typename T >
 T FOS<T>::f_beta (
-    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+    const MatrixT& X,
     const Eigen::Matrix< T, Eigen::Dynamic, 1  >& Y,
-    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta ) {
+    const VectorT& Beta ) {
 
     return (X*Beta - Y).squaredNorm();
 
@@ -289,10 +292,10 @@ T FOS<T>::f_beta (
 
 template < typename T >
 T FOS<T>::f_beta_tilda (
-    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
-    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
-    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
-    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_prime,
+    const MatrixT& X,
+    const VectorT& Y,
+    const VectorT& Beta,
+    const VectorT& Beta_prime,
     T L ) {
 
     Eigen::Matrix< T, Eigen::Dynamic, 1  > f_beta = X*Beta_prime - Y;
@@ -309,25 +312,25 @@ T FOS<T>::f_beta_tilda (
 }
 
 template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, 1 > FOS<T>::update_beta_ista (
-    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
-    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
-    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
+Eigen::Matrix< T, Eigen::Dynamic, 1 >  FOS<T>::update_beta_ista (
+    const MatrixT& X,
+    const VectorT& Y,
+    const VectorT& Beta,
     T L,
     T thres ) {
 
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > f_grad = 2.0*( X.transpose()*( X*Beta - Y ) );
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > beta_to_modify = Beta - (1.0/L)*f_grad;
+    VectorT f_grad = 2.0*( X.transpose()*( X*Beta - Y ) );
+    VectorT beta_to_modify = Beta - (1.0/L)*f_grad;
 
     return beta_to_modify.unaryExpr( SoftThres<T>( thres/L ) );
 
 }
 
 template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > FOS<T>::ISTA (
-    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
-    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y, \
-    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0, \
+Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >  FOS<T>::ISTA (
+    const MatrixT& X, \
+    const VectorT& Y, \
+    const VectorT& Beta_0, \
     uint num_iterations, \
     T L_0, \
     T lambda ) {
@@ -335,13 +338,13 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > FOS<T>::ISTA (
     T eta = 1.5;
     T L = L_0;
 
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta = Beta_0;
+    VectorT Beta = Beta_0;
 
     for( uint i = 0; i < num_iterations; i++ ) {
 
         uint counter = 0;
 
-        Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta_temp = update_beta_ista( X, Y, Beta, L, lambda );
+        VectorT Beta_temp = update_beta_ista( X, Y, Beta, L, lambda );
 
         counter++;
         DEBUG_PRINT( "Backtrace iteration: " << counter );
@@ -383,7 +386,7 @@ void FOS< T >::Algorithm() {
     bool statsCont = true;
     uint statsIt = 1;
 
-    Betas = Eigen::Matrix< T , Eigen::Dynamic, Eigen::Dynamic >::Zero( X.cols(), M );
+    Betas = MatrixT::Zero( X.cols(), M );
 
 
     //Outer Loop

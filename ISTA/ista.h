@@ -20,11 +20,17 @@
 
 namespace hdim {
 
+template< typename T >
+using MatrixT = Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >;
+
+template< typename T >
+using VectorT = Eigen::Matrix< T, Eigen::Dynamic, 1 >;
+
 template < typename T >
 T f_beta (
-    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+    const MatrixT<T>& X,
     const Eigen::Matrix< T, Eigen::Dynamic, 1  >& Y,
-    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta ) {
+    const VectorT<T>& Beta ) {
 
     return (X*Beta - Y).squaredNorm();
 
@@ -32,10 +38,10 @@ T f_beta (
 
 template < typename T >
 T f_beta_tilda (
-    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
-    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
-    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
-    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_prime,
+    const MatrixT<T>& X,
+    const VectorT<T>& Y,
+    const VectorT<T>& Beta,
+    const VectorT<T>& Beta_prime,
     T L ) {
 
     Eigen::Matrix< T, Eigen::Dynamic, 1  > f_beta = X*Beta_prime - Y;
@@ -52,25 +58,25 @@ T f_beta_tilda (
 }
 
 template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, 1 > update_beta_ista (
-    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
-    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
-    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
+VectorT<T> update_beta_ista (
+    const MatrixT<T>& X,
+    const VectorT<T>& Y,
+    const VectorT<T>& Beta,
     T L,
     T thres ) {
 
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > f_grad = 2.0*( X.transpose()*( X*Beta - Y ) );
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > beta_to_modify = Beta - (1.0/L)*f_grad;
+    VectorT<T> f_grad = 2.0*( X.transpose()*( X*Beta - Y ) );
+    VectorT<T> beta_to_modify = Beta - (1.0/L)*f_grad;
 
     return beta_to_modify.unaryExpr( SoftThres<T>( thres/L ) );
 
 }
 
 template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > ISTA (
-    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
-    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y, \
-    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0, \
+MatrixT<T> ISTA (
+    const MatrixT<T>& X, \
+    const VectorT<T>& Y, \
+    const VectorT<T>& Beta_0, \
     uint num_iterations, \
     T L_0, \
     T lambda ) {
@@ -80,13 +86,13 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > ISTA (
     T eta = 1.5;
     T L = L_0;
 
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta = Beta_0;
+    VectorT<T> Beta = Beta_0;
 
     for( uint i = 0; i < num_iterations; i++ ) {
 
         uint counter = 0;
 
-        Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta_temp = update_beta_ista( X, Y, Beta, L, lambda );
+        VectorT<T> Beta_temp = update_beta_ista( X, Y, Beta, L, lambda );
 
         counter++;
         DEBUG_PRINT( "Backtrace iteration: " << counter );
@@ -112,10 +118,10 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > ISTA (
 namespace optimize {
 
 template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > ISTA (
-    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
-    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y, \
-    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0, \
+MatrixT<T> ISTA (
+    const MatrixT<T>& X, \
+    const VectorT<T>& Y, \
+    const VectorT<T>& Beta_0, \
     uint num_iterations, \
     T L_0, \
     T lambda ) {
@@ -125,12 +131,12 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > ISTA (
     T eta = 1.5;
     T L = L_0;
 
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta = Beta_0;
+    VectorT<T> Beta = Beta_0;
 
     for( uint i = 0; i < num_iterations; i++ ) {
 
-        Eigen::Matrix< T, Eigen::Dynamic, 1 > f_grad = 2.0*( X.transpose()*( X*Beta - Y ) );
-        Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta_temp = ( Beta - (1.0/L)*f_grad ).unaryExpr( SoftThres<T>( lambda/L ) );
+        VectorT<T> f_grad = 2.0*( X.transpose()*( X*Beta - Y ) );
+        VectorT<T> Beta_temp = ( Beta - (1.0/L)*f_grad ).unaryExpr( SoftThres<T>( lambda/L ) );
 
         T f_beta = ( X*Beta_temp - Y ).squaredNorm();
 

@@ -22,6 +22,7 @@ You will need to have the following packages installed in order to use the base 
 ### Python Wrapper
 
 * [SWIG](http://www.swig.org/download.html) The Simplified Wrapper and Interface Generator
+* [Python Development Headers]
 
 ### R Wrapper
 

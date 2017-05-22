@@ -19,11 +19,17 @@
 
 namespace hdim {
 
+template< typename T >
+using MatrixT = Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >;
+
+template< typename T >
+using VectorT = Eigen::Matrix< T, Eigen::Dynamic, 1 >;
+
 template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, 1 > FISTA (
-    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
-    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
-    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
+VectorT<T> FISTA (
+    const MatrixT<T>& X,
+    const VectorT<T>& Y,
+    const VectorT<T>& Beta_0,
     uint num_iterations,
     T L_0,
     T lambda ) {
@@ -39,26 +45,26 @@ class FISTA {
 
   public:
     FISTA();
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > operator()(
-        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
-        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
-        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
+    VectorT<T> operator()(
+        const MatrixT<T>& X,
+        const VectorT<T>& Y,
+        const VectorT<T>& Beta_0,
         uint num_iterations,
         T L_0,
         T lambda );
 
   private:
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > update_beta_fista (
-        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
-        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
-        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
+    VectorT<T> update_beta_fista (
+        const MatrixT<T>& X,
+        const VectorT<T>& Y,
+        const VectorT<T>& Beta,
         T L,
         T thres );
 
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > y_k;
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > y_k_old;
+    VectorT<T> y_k;
+    VectorT<T> y_k_old;
 
-    Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > x_k_less_1;
+    MatrixT<T> x_k_less_1;
 
     T t_k = 1;
 };
@@ -69,14 +75,14 @@ FISTA::FISTA() {
 }
 
 template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, 1 > FISTA<T>::update_beta_fista (
-    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
-    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
-    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
+VectorT<T> FISTA<T>::update_beta_fista (
+    const MatrixT<T>& X,
+    const VectorT<T>& Y,
+    const VectorT<T>& Beta,
     T L,
     T thres ) {
 
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > x_k = Beta;
+    VectorT<T> x_k = Beta;
 
     x_k_less_1 = x_k;
     x_k = update_beta_ista( X, Y, y_k, L, thres );
@@ -91,10 +97,10 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 > FISTA<T>::update_beta_fista (
 
 
 template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > FISTA<T>::operator() (
-    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
-    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
-    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
+MatrixT<T> FISTA<T>::operator() (
+    const MatrixT<T>& X,
+    const VectorT<T>& Y,
+    const VectorT<T>& Beta_0,
     uint num_iterations,
     T L_0,
     T lambda ) {
@@ -102,7 +108,7 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > FISTA<T>::operator() (
     T eta = 1.5;
     T L = L_0;
 
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta = Beta_0;
+    VectorT<T> Beta = Beta_0;
     y_k = Beta;
     t_k = 1;
 
@@ -115,7 +121,7 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > FISTA<T>::operator() (
 
         y_k_old = y_k;
 
-        Eigen::Matrix< T, Eigen::Dynamic, 1 > y_k_temp = update_beta_ista( X, Y, y_k, L, lambda );
+        VectorT<T> y_k_temp = update_beta_ista( X, Y, y_k, L, lambda );
 
         uint counter = 0;
 

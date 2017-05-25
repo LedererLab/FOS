@@ -1,7 +1,6 @@
 #ifndef X_FOS_H
 #define X_FOS_H
 
-
 // C System-Headers
 //
 // C++ System headers
@@ -69,22 +68,21 @@ class X_FOS {
                           const std::vector<T> &lambdas,
                           const MatrixT& Betas );
 
-    T DualityGapTarget( uint r_stats_it );
     T duality_gap_target( T gamma, T C, T r_stats_it, uint n );
 
-    T primal_objective( const MatrixT& X, \
-                        const VectorT& Y, \
-                        const VectorT& Beta, \
+    T primal_objective( const MatrixT& X,
+                        const VectorT& Y,
+                        const VectorT& Beta,
                         T r_stats_it );
 
-    T dual_objective( const MatrixT& X, \
-                      const VectorT& Y, \
-                      const VectorT& Beta, \
+    T dual_objective( const MatrixT& X,
+                      const VectorT& Y,
+                      const VectorT& Beta,
                       T r_stats_it );
 
-    T duality_gap ( const MatrixT& X, \
-                    const VectorT& Y, \
-                    const VectorT& Beta, \
+    T duality_gap ( const MatrixT& X,
+                    const VectorT& Y,
+                    const VectorT& Beta,
                     T r_stats_it );
 
     MatrixT ISTA (
@@ -154,7 +152,7 @@ class X_FOS {
 
     T f_beta (
         const MatrixT& X,
-        const Eigen::Matrix< T, Eigen::Dynamic, 1  >& Y,
+        const VectorT& Y,
         const VectorT& Beta );
 
     VectorT y_k;
@@ -245,7 +243,7 @@ template < typename T >
 bool X_FOS<T>::ComputeStatsCond( T C,
                                  uint stats_it,
                                  T r_stats_it,
-                                 const std::vector < T >& lambdas,
+                                 const std::vector <T>& lambdas,
                                  const MatrixT& Betas ) {
 
     bool stats_cond = true;
@@ -286,21 +284,21 @@ std::vector< T > X_FOS<T>::GenerateLambdaGrid (
 
 }
 
-template < typename T >
-/*!
- * \brief Compute the target for the duality gap used in the inner loop
- *
- * The duality gap should be less than or equal to this target in order to
- * exit the inner loop.
- *
- * \param r_stats_it
- *
- * \return Target quantity
- */
-T X_FOS<T>::DualityGapTarget( uint r_stats_it ) {
-    T r_stats_it_f = static_cast<T>( r_stats_it );
-    return square(C) * square( r_stats_it_f ) / static_cast<T>( n );
-}
+//template < typename T >
+///*!
+// * \brief Compute the target for the duality gap used in the inner loop
+// *
+// * The duality gap should be less than or equal to this target in order to
+// * exit the inner loop.
+// *
+// * \param r_stats_it
+// *
+// * \return Target quantity
+// */
+//T X_FOS<T>::DualityGapTarget( uint r_stats_it ) {
+//    T r_stats_it_f = static_cast<T>( r_stats_it );
+//    return square(C) * square( r_stats_it_f ) / static_cast<T>( n );
+//}
 
 template < typename T >
 T X_FOS<T>::duality_gap ( const MatrixT& X, \
@@ -373,10 +371,9 @@ T X_FOS<T>::duality_gap_target( T gamma, T C, T r_stats_it, uint n ) {
 }
 
 template < typename T >
-T X_FOS<T>::f_beta (
-    const MatrixT& X,
-    const Eigen::Matrix< T, Eigen::Dynamic, 1  >& Y,
-    const VectorT& Beta ) {
+T X_FOS<T>::f_beta (const MatrixT& X,
+                    const VectorT &Y,
+                    const VectorT& Beta ) {
 
     return (X*Beta - Y).squaredNorm();
 
@@ -390,17 +387,17 @@ T X_FOS<T>::f_beta_tilda (
     const VectorT& Beta_prime,
     T L ) {
 
-    Eigen::Matrix< T, Eigen::Dynamic, 1  > f_beta = X*Beta_prime - Y;
+    VectorT f_beta = X*Beta_prime - Y;
     T taylor_term_0 = f_beta.squaredNorm();
 
-    Eigen::Matrix< T, Eigen::Dynamic, 1  > f_grad = 2.0*X.transpose()*( f_beta );
-    Eigen::Matrix< T, Eigen::Dynamic, 1  > beta_diff = ( Beta - Beta_prime );
+    VectorT f_grad = 2.0*X.transpose()*( f_beta );
+    VectorT beta_diff = ( Beta - Beta_prime );
 
     T taylor_term_1 = f_grad.transpose()*beta_diff;
 
     T taylor_term_2 = L/2.0*beta_diff.squaredNorm();
 
-//    Eigen::Matrix< T, Eigen::Dynamic, 1  > f_grad = 2.0*X.transpose()*( f_beta );
+//    VectorT f_grad = 2.0*X.transpose()*( f_beta );
 //    T taylor_term_1 = static_cast<T>( f_grad.transpose()*Beta ) - static_cast<T>( f_grad.transpose()*Beta_prime );
 //    T taylor_term_2 = L/2.0*( std::abs( Beta.squaredNorm() - Beta_prime.squaredNorm() ) );
 
@@ -490,10 +487,10 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS<T>::FISTA_OPT (
 
         T f_beta = ( X*y_k_temp - Y ).squaredNorm();
 
-        Eigen::Matrix< T, Eigen::Dynamic, 1  > f_part = X*y_k_old - Y;
+        VectorT f_part = X*y_k_old - Y;
         T taylor_term_0 = f_part.squaredNorm();
 
-        Eigen::Matrix< T, Eigen::Dynamic, 1  > beta_diff = ( y_k_temp - y_k_old );
+        VectorT beta_diff = ( y_k_temp - y_k_old );
 
         T taylor_term_1 = f_grad.transpose()*beta_diff;
 
@@ -612,10 +609,10 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS<T>::ISTA_OPT (
 
         T f_beta = ( X*Beta_temp - Y ).squaredNorm();
 
-        Eigen::Matrix< T, Eigen::Dynamic, 1  > f_part = X*Beta - Y;
+        VectorT f_part = X*Beta - Y;
         T taylor_term_0 = f_part.squaredNorm();
 
-        Eigen::Matrix< T, Eigen::Dynamic, 1  > beta_diff = ( Beta_temp - Beta );
+        VectorT beta_diff = ( Beta_temp - Beta );
 
         T taylor_term_1 = f_grad.transpose()*beta_diff;
 
@@ -708,39 +705,21 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS< T >::CoordinateDescent
 
     do {
 
-//        VectorT Beta_Old = Beta;
-
         for( int i = 0; i < Beta.size() ; i++ ) {
 
-            VectorT A_i = X.col( i );
+            VectorT X_i = X.col( i );
+            T inverse_norm = static_cast<T>( 1 )/( 2.0 * X_i.squaredNorm() );
 
-            T threshold = lambda / A_i.squaredNorm();
-            T inverse_norm = static_cast<T>( 1 )/( A_i.squaredNorm() );
+//            MatrixT X_negative_i = X;
+//            X_negative_i.col( i ) = VectorT::Zero( X.rows() );
 
-            MatrixT A_negative_i = X;
-            A_negative_i.col( i ) = VectorT::Zero( X.rows() );
+            VectorT Beta_negative_i = Beta;
+            Beta_negative_i( i ) = static_cast<T>( 0 );
 
-            VectorT x_negative_i = Beta;
-            x_negative_i( i ) = static_cast<T>( 0 );
-
-//            MatrixT A_negative_i ( n, p - 1 );
-
-//            if( i > 0 ) {
-//                A_negative_i << X.block( 0, 0, n, i ), X.block( 0, i + 1, n, p - i - 1 );
-//            } else {
-//                A_negative_i << X.block( 0, 1, n, p - 1 );
-//            }
-
-//            VectorT x_negative_i( p - 1 );
-
-//            if( i > 0 ) {
-//                x_negative_i << Beta.head( i ), Beta.segment( i + 1,  p - i - 1 );
-//            } else {
-//                x_negative_i << Beta.tail( p - 1 );
-//            }
-
-            T residual =  inverse_norm*A_i.transpose()*( Y - A_negative_i*x_negative_i );
-            Beta( i ) = soft_threshold<T>( residual, threshold );
+//            VectorT r_i = 2.0*( Y - X_negative_i*Beta_negative_i );
+//            T elem = r_i.transpose()*X_i;
+            T elem = (2.0*( Y - X*Beta_negative_i ) ).transpose()*X_i;
+            Beta( i ) = inverse_norm*soft_threshold<T>( elem, lambda );
 
         }
 

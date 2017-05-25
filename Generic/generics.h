@@ -5,7 +5,7 @@
 #include <fenv.h>
 #include <tgmath.h>
 // C++ System headers
-//
+#include <chrono>
 // Eigen Headers
 #include <eigen3/Eigen/Dense>
 // Boost Headers
@@ -71,7 +71,7 @@ template< typename T >
  */
 T StdDev( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& mat ) {
 
-    Eigen::RowVectorXf mean = mat.colwise().mean();
+    Eigen::Matrix< T, 1, Eigen::Dynamic >  mean = mat.colwise().mean();
     return ((mat.rowwise() - mean).array().square().colwise().sum() / (mat.rows() - 1)).sqrt();
 }
 
@@ -437,6 +437,22 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > negative_index(
 
     uint n = mat_in.rows();
     uint p = mat_in.cols();
+
+    //            MatrixT A_negative_i ( n, p - 1 );
+
+    //            if( i > 0 ) {
+    //                A_negative_i << X.block( 0, 0, n, i ), X.block( 0, i + 1, n, p - i - 1 );
+    //            } else {
+    //                A_negative_i << X.block( 0, 1, n, p - 1 );
+    //            }
+
+    //            VectorT x_negative_i( p - 1 );
+
+    //            if( i > 0 ) {
+    //                x_negative_i << Beta.head( i ), Beta.segment( i + 1,  p - i - 1 );
+    //            } else {
+    //                x_negative_i << Beta.tail( p - 1 );
+    //            }
 
     Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > left_half = mat_in.block( 0, 0, n, index - 1 );
     Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > right_half = mat_in.block( 0, index + 1, n, p );

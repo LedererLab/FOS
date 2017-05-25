@@ -30,7 +30,7 @@ LIBS += -L/usr/local/lib \
         -lboost_filesystem \
 
 # Eigen
-INCLUDEPATH += /usr/include/eigen3
+INCLUDEPATH += /usr/include/eigen30
 
 QMAKE_CXXFLAGS += -fopenmp
 QMAKE_LFLAGS += -fopenmp
@@ -50,8 +50,8 @@ HEADERS += FOS/fos.h \
     FOS/test_fos.h \
     Generic/debug.h \
     Generic/generics.h \
-    ISTA/ista.h \
-    ISTA/test_ista.h \
+    Solvers/SubGradientDescent/ISTA/ista.h \
+    Solvers/SubGradientDescent/ISTA/test_ista.h \
     R_Wrapper/fos_r.h \
     ISTA/perf_ista.h \
     test_eigen3.h \
@@ -65,7 +65,8 @@ HEADERS += FOS/fos.h \
     FOS/x_fos.h \
     test_armadillo.h \
     OpenCL_Generics/matvectprodtest.h \
-    FISTA/fista.h \
+    Solvers/SubGradientDescent/FISTA/fista.h \
+    Solvers/CoordinateDescent/coordinate_descent.h \
 
 SOURCES += main.cpp \
     OpenCL_Base/openclbase.cpp \

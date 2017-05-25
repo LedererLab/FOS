@@ -55,8 +55,6 @@ class FOS {
         const MatrixT& X,
         const MatrixT& Betas );
 
-    T DualityGap( uint r_stats_it );
-
     T duality_gap_target( T gamma, T C, T r_stats_it, uint n );
     T dual_objective ( const MatrixT& X, \
                        const VectorT& Y, \
@@ -69,7 +67,7 @@ class FOS {
 
     T f_beta (
         const MatrixT& X,
-        const Eigen::Matrix< T, Eigen::Dynamic, 1  >& Y,
+        const VectorT& Y,
         const VectorT& Beta );
 
     T f_beta_tilda (
@@ -283,7 +281,7 @@ T FOS< T >::dual_objective ( const MatrixT& X, \
 template < typename T >
 T FOS<T>::f_beta (
     const MatrixT& X,
-    const Eigen::Matrix< T, Eigen::Dynamic, 1  >& Y,
+    const VectorT& Y,
     const VectorT& Beta ) {
 
     return (X*Beta - Y).squaredNorm();
@@ -298,11 +296,11 @@ T FOS<T>::f_beta_tilda (
     const VectorT& Beta_prime,
     T L ) {
 
-    Eigen::Matrix< T, Eigen::Dynamic, 1  > f_beta = X*Beta_prime - Y;
+    VectorT f_beta = X*Beta_prime - Y;
     T taylor_term_0 = f_beta.squaredNorm();
 
-    Eigen::Matrix< T, Eigen::Dynamic, 1  > f_grad = 2.0*X.transpose()*( f_beta );
-    Eigen::Matrix< T, Eigen::Dynamic, 1  > beta_diff = ( Beta - Beta_prime );
+    VectorT f_grad = 2.0*X.transpose()*( f_beta );
+    VectorT beta_diff = ( Beta - Beta_prime );
 
     T taylor_term_1 = f_grad.transpose()*beta_diff;
 

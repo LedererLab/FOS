@@ -8,7 +8,7 @@
 //
 // Eigen Headers
 #include <eigen3/Eigen/Dense>
-#include <Eigen/Core>
+#include <eigen3/Eigen/Core>
 // Boost Headers
 //
 // SPAMS Headers

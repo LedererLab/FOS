@@ -1,0 +1,20 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$class_f_i_s_t_a_1_1_regularizer.html" title="FISTA::Regularizer\&lt; T \&gt;" alt="" coords="5,401,172,428"/>
+<area shape="rect" id="node2" href="$class_f_i_s_t_a_1_1_fused_lasso.html" title="FISTA::FusedLasso\&lt; T \&gt;" alt="" coords="232,427,403,453"/>
+<area shape="rect" id="node3" href="$class_f_i_s_t_a_1_1_graph_lasso.html" title="FISTA::GraphLasso\&lt; T \&gt;" alt="" coords="232,5,403,32"/>
+<area shape="rect" id="node4" href="$class_f_i_s_t_a_1_1_graph_path_conv.html" title="FISTA::GraphPathConv\&lt; T \&gt;" alt="" coords="221,477,414,504"/>
+<area shape="rect" id="node5" href="$class_f_i_s_t_a_1_1_graph_path_l0.html" title="FISTA::GraphPathL0\&lt; T \&gt;" alt="" coords="229,528,405,555"/>
+<area shape="rect" id="node6" href="$class_f_i_s_t_a_1_1_group_prox.html" title="FISTA::GroupProx\&lt; T,\l Reg \&gt;" alt="" coords="240,579,395,621"/>
+<area shape="rect" id="node7" href="$class_f_i_s_t_a_1_1_lasso.html" title="FISTA::Lasso\&lt; T \&gt;" alt="" coords="250,645,385,672"/>
+<area shape="rect" id="node8" href="$class_f_i_s_t_a_1_1_lasso_constraint.html" title="FISTA::LassoConstraint\&lt; T \&gt;" alt="" coords="220,696,415,723"/>
+<area shape="rect" id="node9" href="$class_f_i_s_t_a_1_1_log_d_c.html" title="FISTA::LogDC\&lt; T \&gt;" alt="" coords="247,747,388,773"/>
+<area shape="rect" id="node10" href="$class_f_i_s_t_a_1_1_lzero.html" title="FISTA::Lzero\&lt; T \&gt;" alt="" coords="251,797,383,824"/>
+<area shape="rect" id="node11" href="$class_f_i_s_t_a_1_1_none.html" title="FISTA::None\&lt; T \&gt;" alt="" coords="252,56,383,83"/>
+<area shape="rect" id="node12" href="$class_f_i_s_t_a_1_1norm_l2.html" title="FISTA::normL2\&lt; T \&gt;" alt="" coords="246,107,389,133"/>
+<area shape="rect" id="node13" href="$class_f_i_s_t_a_1_1norm_l_i_n_f.html" title="FISTA::normLINF\&lt; T \&gt;" alt="" coords="238,157,397,184"/>
+<area shape="rect" id="node14" href="$class_f_i_s_t_a_1_1_prox_mat_to_vec.html" title="FISTA::ProxMatToVec\l\&lt; T, ProxMat \&gt;" alt="" coords="240,209,395,250"/>
+<area shape="rect" id="node15" href="$class_f_i_s_t_a_1_1_ridge.html" title="FISTA::Ridge\&lt; T \&gt;" alt="" coords="250,275,385,301"/>
+<area shape="rect" id="node16" href="$class_f_i_s_t_a_1_1_tree_lasso.html" title="FISTA::TreeLasso\&lt; T \&gt;" alt="" coords="237,325,398,352"/>
+<area shape="rect" id="node17" href="$class_f_i_s_t_a_1_1_tree_lzero.html" title="FISTA::TreeLzero\&lt; T \&gt;" alt="" coords="238,376,397,403"/>
+<area shape="rect" id="node18" href="$class_f_i_s_t_a_1_1_splitting_function.html" title="FISTA::SplittingFunction\l\&lt; T, SpMatrix\&lt; T \&gt; \&gt;" alt="" coords="6,23,171,65"/>
+</map>

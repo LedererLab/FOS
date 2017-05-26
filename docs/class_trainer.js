@@ -1,0 +1,25 @@
+var class_trainer =
+[
+    [ "Trainer", "class_trainer.html#a749070f5f6c983f6df395b83a236642e", null ],
+    [ "Trainer", "class_trainer.html#a87814d0d9b4110ef000387dae5ee63bb", null ],
+    [ "Trainer", "class_trainer.html#a4792363627636e193b33b7b3e00a2031", null ],
+    [ "Trainer", "class_trainer.html#a38ab3c6f7763aa92521357c24be0d542", null ],
+    [ "Trainer", "class_trainer.html#a749070f5f6c983f6df395b83a236642e", null ],
+    [ "Trainer", "class_trainer.html#a87814d0d9b4110ef000387dae5ee63bb", null ],
+    [ "Trainer", "class_trainer.html#a4792363627636e193b33b7b3e00a2031", null ],
+    [ "Trainer", "class_trainer.html#a38ab3c6f7763aa92521357c24be0d542", null ],
+    [ "getA", "class_trainer.html#a15c7db9dff675cba8b41177fa940b8ab", null ],
+    [ "getA", "class_trainer.html#a15c7db9dff675cba8b41177fa940b8ab", null ],
+    [ "getB", "class_trainer.html#aec75484dcc09b920ac338515c4002bc0", null ],
+    [ "getB", "class_trainer.html#aec75484dcc09b920ac338515c4002bc0", null ],
+    [ "getD", "class_trainer.html#ae4cf62e91e0cf0fb38df7f71c605dbe9", null ],
+    [ "getD", "class_trainer.html#ae4cf62e91e0cf0fb38df7f71c605dbe9", null ],
+    [ "getIter", "class_trainer.html#a4d5631c119bcc306630a37709f6fb4c2", null ],
+    [ "getIter", "class_trainer.html#a4d5631c119bcc306630a37709f6fb4c2", null ],
+    [ "train", "class_trainer.html#ae92c36df0e7a9ee1469018a4b01e1e8a", null ],
+    [ "train", "class_trainer.html#ae92c36df0e7a9ee1469018a4b01e1e8a", null ],
+    [ "train_fista", "class_trainer.html#a4f1381097d972d05dc956da8c83de6d2", null ],
+    [ "train_fista", "class_trainer.html#a4f1381097d972d05dc956da8c83de6d2", null ],
+    [ "trainOffline", "class_trainer.html#ab61d8b78198e435ab91c7ab87776c866", null ],
+    [ "trainOffline", "class_trainer.html#ab61d8b78198e435ab91c7ab87776c866", null ]
+];

@@ -1,0 +1,27 @@
+var class_online_surrogate =
+[
+    [ "OnlineSurrogate", "class_online_surrogate.html#a37aee576eb2dffa64cf17ed04d8a88b0", null ],
+    [ "~OnlineSurrogate", "class_online_surrogate.html#a5c5a8f04bff01ecbd0c0ee1268c928e6", null ],
+    [ "OnlineSurrogate", "class_online_surrogate.html#a37aee576eb2dffa64cf17ed04d8a88b0", null ],
+    [ "~OnlineSurrogate", "class_online_surrogate.html#a5c5a8f04bff01ecbd0c0ee1268c928e6", null ],
+    [ "eval_function", "class_online_surrogate.html#a80dc794481f7d4983acf0e3405cb6096", null ],
+    [ "eval_function", "class_online_surrogate.html#a80dc794481f7d4983acf0e3405cb6096", null ],
+    [ "initialize", "class_online_surrogate.html#aa022ab0bffaef9d4c1e6caec6ac7d24f", null ],
+    [ "initialize", "class_online_surrogate.html#aa022ab0bffaef9d4c1e6caec6ac7d24f", null ],
+    [ "minimize_surrogate", "class_online_surrogate.html#ac0e159293463243c74d4d48ee8b61b6e", null ],
+    [ "minimize_surrogate", "class_online_surrogate.html#ac0e159293463243c74d4d48ee8b61b6e", null ],
+    [ "n", "class_online_surrogate.html#aeedeb5819e90c7be92b6649ee84c22e3", null ],
+    [ "n", "class_online_surrogate.html#aeedeb5819e90c7be92b6649ee84c22e3", null ],
+    [ "num_batches", "class_online_surrogate.html#adb6cca97ebc3fe61b9a4d6973f5a5e55", null ],
+    [ "num_batches", "class_online_surrogate.html#adb6cca97ebc3fe61b9a4d6973f5a5e55", null ],
+    [ "print_aux", "class_online_surrogate.html#a3bc8f5218204890b1c9a38292bc43df5", null ],
+    [ "print_aux", "class_online_surrogate.html#a3bc8f5218204890b1c9a38292bc43df5", null ],
+    [ "setRandom", "class_online_surrogate.html#aead68d3d4e3c5a7fb8dacee4da805928", null ],
+    [ "setRandom", "class_online_surrogate.html#aead68d3d4e3c5a7fb8dacee4da805928", null ],
+    [ "subsample", "class_online_surrogate.html#a13630f2d99b19aee6eea181ff7c86986", null ],
+    [ "subsample", "class_online_surrogate.html#a13630f2d99b19aee6eea181ff7c86986", null ],
+    [ "un_subsample", "class_online_surrogate.html#afc5a291e6482f1f6ec7864e19061d9bd", null ],
+    [ "un_subsample", "class_online_surrogate.html#afc5a291e6482f1f6ec7864e19061d9bd", null ],
+    [ "update_surrogate", "class_online_surrogate.html#a8390437258f26d1acf37ad40d6b6aadf", null ],
+    [ "update_surrogate", "class_online_surrogate.html#a8390437258f26d1acf37ad40d6b6aadf", null ]
+];

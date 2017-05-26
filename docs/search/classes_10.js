@@ -1,0 +1,28 @@
+var searchData=
+[
+  ['shiftmatrix',['ShiftMatrix',['../class_shift_matrix.html',1,'']]],
+  ['smoothfunction',['SmoothFunction',['../class_smooth_function.html',1,'']]],
+  ['smoothfunction_3c_20t_2c_20spmatrix_3c_20t_20_3e_20_3e',['SmoothFunction&lt; T, SpMatrix&lt; T &gt; &gt;',['../class_smooth_function.html',1,'']]],
+  ['softthres',['SoftThres',['../structhdim_1_1_soft_thres.html',1,'hdim']]],
+  ['softthres',['SoftThres',['../struct_soft_thres.html',1,'']]],
+  ['specgraphmat',['SpecGraphMat',['../class_f_i_s_t_a_1_1_spec_graph_mat.html',1,'FISTA']]],
+  ['splittingfunction',['SplittingFunction',['../class_f_i_s_t_a_1_1_splitting_function.html',1,'FISTA']]],
+  ['splittingfunction_3c_20t_20_3e',['SplittingFunction&lt; T &gt;',['../class_f_i_s_t_a_1_1_splitting_function.html',1,'FISTA']]],
+  ['splittingfunction_3c_20t_2c_20spmatrix_3c_20t_20_3e_20_3e',['SplittingFunction&lt; T, SpMatrix&lt; T &gt; &gt;',['../class_f_i_s_t_a_1_1_splitting_function.html',1,'FISTA']]],
+  ['spmatrix',['SpMatrix',['../class_sp_matrix.html',1,'']]],
+  ['spvector',['SpVector',['../class_sp_vector.html',1,'']]],
+  ['sqloss',['SqLoss',['../class_f_i_s_t_a_1_1_sq_loss.html',1,'FISTA']]],
+  ['sqlossmat',['SqLossMat',['../class_f_i_s_t_a_1_1_sq_loss_mat.html',1,'FISTA']]],
+  ['sqlossmissing',['SqLossMissing',['../class_f_i_s_t_a_1_1_sq_loss_missing.html',1,'FISTA']]],
+  ['squarefunction',['SquareFunction',['../class_square_function.html',1,'']]],
+  ['stochasticsmoothl1solver',['StochasticSmoothL1Solver',['../class_stochastic_smooth_l1_solver.html',1,'']]],
+  ['stochasticsmoothridgesolver',['StochasticSmoothRidgeSolver',['../class_stochastic_smooth_ridge_solver.html',1,'']]],
+  ['stochasticsolver',['StochasticSolver',['../class_stochastic_solver.html',1,'']]],
+  ['stochasticsolver_3c_20t_2c_20spmatrix_3c_20t_20_3e_20_3e',['StochasticSolver&lt; T, SpMatrix&lt; T &gt; &gt;',['../class_stochastic_solver.html',1,'']]],
+  ['structnodeelem',['StructNodeElem',['../class_struct_node_elem.html',1,'']]],
+  ['submatrix',['SubMatrix',['../class_sub_matrix.html',1,'']]],
+  ['supportsift',['SupportSift',['../structhdim_1_1_support_sift.html',1,'hdim']]],
+  ['swig_5fcast_5finfo',['swig_cast_info',['../structswig__cast__info.html',1,'']]],
+  ['swig_5fmodule_5finfo',['swig_module_info',['../structswig__module__info.html',1,'']]],
+  ['swig_5ftype_5finfo',['swig_type_info',['../structswig__type__info.html',1,'']]]
+];

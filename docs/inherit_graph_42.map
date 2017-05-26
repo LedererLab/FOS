@@ -1,0 +1,6 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$class_online_surrogate.html" title="OnlineSurrogate\&lt; T, U \&gt;" alt="" coords="5,13,171,39"/>
+<area shape="rect" id="node2" href="$class_incremental_surrogate.html" title="IncrementalSurrogate\l\&lt; T, U \&gt;" alt="" coords="219,5,365,47"/>
+<area shape="rect" id="node3" href="$class_quadratic_surrogate.html" title="QuadraticSurrogate\l\&lt; T, U \&gt;" alt="" coords="413,5,548,47"/>
+<area shape="rect" id="node4" href="$class_proximal_surrogate.html" title="ProximalSurrogate\&lt;\l T, U \&gt;" alt="" coords="596,5,733,47"/>
+</map>

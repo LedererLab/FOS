@@ -1,0 +1,4 @@
+<map id="hdim::sgn" name="hdim::sgn">
+<area shape="rect" id="node2" href="$generics_8h.html#a56fdb512c670ac5bb5d060bfe3511ff1" title="The proximal ( soft thresholding ) operator defined as. " alt="" coords="132,29,272,56"/>
+<area shape="rect" id="node3" href="$generics_8h.html#a8c8be46b7676a3d3327625568b16bcc3" title="A functional equivalent of hdim::soft_threshold, but possibly faster. " alt="" coords="161,104,243,131"/>
+</map>

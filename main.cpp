@@ -21,11 +21,11 @@ int main(int argc, char *argv[]) {
     (void)argc;
     (void)argv;
 
-//    auto x_fos = hdim::experimental::PerfX_FOS< double >();
-//    auto old_fos = hdim::PerfFOS< double >();
+    auto x_fos = hdim::experimental::PerfX_FOS< double >();
+    auto old_fos = hdim::PerfFOS< double >();
 
-    auto x_fos = hdim::experimental::TestX_FOS< double >();
-    auto old_fos = hdim::TestFOS< double >();
+//    auto x_fos = hdim::experimental::TestX_FOS< double >();
+//    auto old_fos = hdim::TestFOS< double >();
 
     std::vector< double > ratio_results;
 

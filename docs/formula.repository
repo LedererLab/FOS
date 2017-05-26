@@ -1,0 +1,5 @@
+\form#0:\[ sgn(x) = \begin{cases} 1 & \text{if } x>0\\ 0 & \text{if } x=0\\ -1& \text{if } x<0 \end{cases} \]
+\form#1:\[ sgn(x) \equiv \begin{cases} 1 & \text{if } x > 0 \\ 0 & \text{if } x = 0 \\ -1& \text{if } x < 0 \end{cases} \]
+\form#2:\[ x^{+} \equiv \begin{cases} x & \text{if } x \geq 0\\ 0 & \text{if } x < 0\\ \end{cases} \]
+\form#3:\[ \tau( x, y ) \equiv sgn(x) \left( \lvert x \rvert - y \right)^{+} \]
+\form#4:$ \forall i, j A_{i,j} = f( i, j ) $

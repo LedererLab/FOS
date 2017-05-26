@@ -1,0 +1,5 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classocl_1_1_open_c_l_base.html" title="Base class for every class that needs access to OpenCL Platforms, Contexts or Devices. " alt="" coords="5,31,131,57"/>
+<area shape="rect" id="node2" href="$class_mat_prod_test.html" title="MatProdTest" alt="" coords="192,5,289,32"/>
+<area shape="rect" id="node3" href="$class_mat_vect_prod_test.html" title="MatVectProdTest" alt="" coords="179,56,303,83"/>
+</map>

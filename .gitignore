@@ -71,8 +71,8 @@ Thumbs.db
 *.dll
 *.exe
 
-# Documentation
-docs/
+# Doxygen files
+doxygen/
 
 # Generated Python Wrapper files
 Python_Wrapper/Test

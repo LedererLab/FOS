@@ -286,8 +286,8 @@ void X_FOS< T >::operator()( const MatrixT& x, const VectorT& y ) {
         } else {
 
             DEBUG_PRINT( "Current Lambda: " << rStatsIt );
-            Betas.col( statsIt - 1 ) = fista_solver( X, Y, old_Betas, 0.1, rStatsIt, gap_target );
-//            Betas.col( statsIt - 1 ) = CoordinateDescent( X, Y, old_Betas, rStatsIt, gap_target );
+//            Betas.col( statsIt - 1 ) = fista_solver( X, Y, old_Betas, 0.1, rStatsIt, gap_target );
+            Betas.col( statsIt - 1 ) = CoordinateDescentStandardized( X, Y, old_Betas, rStatsIt, gap_target );
 
         }
 

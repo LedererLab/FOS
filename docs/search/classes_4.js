@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['softthres',['SoftThres',['../structhdim_1_1_soft_thres.html',1,'hdim']]],
-  ['supportsift',['SupportSift',['../structhdim_1_1_support_sift.html',1,'hdim']]]
+  ['openclbase',['OpenCLBase',['../classocl_1_1_open_c_l_base.html',1,'ocl']]]
 ];

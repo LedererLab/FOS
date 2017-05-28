@@ -21,11 +21,40 @@
 namespace hdim {
 
 template < typename T >
+/*!
+ * \brief Run the Iterative Shrinking and Thresholding Algorthim.
+ */
 class ISTA : public internal::SubGradientSolver<T> {
 
   public:
     ISTA();
 
+    /*!
+    \f{algorithm}{
+      \caption{ISTA with backtracking line search and iterative convergence criteria}
+      \begin{algorithmic}[1]
+      \Statex
+      \Input\tikzmark{k}
+      \Statex $X \in \mathbb{R}^{n \times p} $ \Comment{ The design matrix }
+      \Statex $Y \in \mathbb{R}^n$  \Comment{ The vector of predictors }
+      \Statex $\beta \in \mathbb{R}^n$  \Comment{ Starting vector }
+      \Statex $L_0 \in \mathbb{R}$  \Comment{ Initial Lipschitz constant, used by backtracking line search }
+      \Statex $\lambda \in \mathbb{R}$  \Comment{ Grid element }
+      \Statex $\eta \in \mathbb{R}$  \Comment{ Step size when updating Lipschitz constant }
+      \Statex $\mathcal{N} \in \mathbb{N}$  \Comment{ Number of times to run the algorithm }\tikzmark{l}
+        \State $\widetilde{\beta} \gets \beta$ \Comment{ Make a copy of $\beta$ that will be updated during back tracking.}
+          \For{$i \in \{ 1, 2, \dots, \mathcal{N} \}$}
+            \State $ \widetilde{\beta} \gets \tau( \beta - \frac{1}{L} \nabla f( X, Y, \widetilde{\beta}, L ) )$
+            \While{ $f_{\beta} ( X, Y, \widetilde{\beta} ) > f_{\widetilde{\beta}}( X, Y, \widetilde{\beta}, \beta_, L) $ }
+              \State $L \gets \eta L$
+              \State $ \widetilde{\beta} \gets \tau( \beta - \frac{1}{L} \nabla f( X, Y, \beta ) )$
+            \EndWhile
+            \State $\beta \gets \tau( \beta - \frac{1}{L} \nabla f( X, Y, \beta, L ) )$ \Comment{ Update $\beta$ once $L$ is sufficiently large.}
+          \EndFor
+      \end{algorithmic}
+      \Return $\beta$
+     \f}
+     */
     VectorT<T> operator()(
         const MatrixT<T>& X,
         const VectorT<T>& Y,
@@ -34,6 +63,32 @@ class ISTA : public internal::SubGradientSolver<T> {
         T lambda,
         uint num_iterations );
 
+    /*!
+    \f{algorithm}{
+      \caption{ISTA with backtracking line search and duality gap convergence criteria}
+      \begin{algorithmic}[1]
+      \Statex
+      \Input\tikzmark{k}
+      \Statex $X \in \mathbb{R}^{n \times p} $ \Comment{ The design matrix }
+      \Statex $Y \in \mathbb{R}^n$  \Comment{ The vector of predictors }
+      \Statex $\beta \in \mathbb{R}^n$  \Comment{ Starting vector }
+      \Statex $L_0 \in \mathbb{R}$  \Comment{ Initial Lipschitz constant, used by backtracking line search }
+      \Statex $\lambda \in \mathbb{R}$  \Comment{ Grid element }
+      \Statex $\eta \in \mathbb{R}$  \Comment{ Step size when updating Lipschitz constant }
+      \Statex $\mathcal{D} \in \mathbb{R}$  \Comment{ Duality gap target }\tikzmark{l}
+        \State $\widetilde{\beta} \gets \beta$ \Comment{ Make a copy of $\beta$ that will be updated during back tracking.}
+          \Do
+            \State $ \widetilde{\beta} \gets \tau( \beta - \frac{1}{L} \nabla f( X, Y, \widetilde{\beta}, L ) )$
+            \While{ $f_{\beta} ( X, Y, \widetilde{\beta} ) > f_{\widetilde{\beta}}( X, Y, \widetilde{\beta}, \beta_, L) $ }
+              \State $L \gets \eta L$
+              \State $ \widetilde{\beta} \gets \tau( \beta - \frac{1}{L} \nabla f( X, Y, \beta ) )$
+            \EndWhile
+            \State $\beta \gets \tau( \beta - \frac{1}{L} \nabla f( X, Y, \beta, L ) )$ \Comment{ Update $\beta$ once $L$ is sufficiently large.}
+          \doWhile{ DG $( X, Y, \beta, \lambda ) > \mathcal{D}$ }\\
+      \end{algorithmic}
+      \Return $\beta$
+     \f}
+     */
     VectorT<T> operator()(
         const MatrixT<T>& X,
         const VectorT<T>& Y,

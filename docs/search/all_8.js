@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['matprodtest',['MatProdTest',['../class_mat_prod_test.html',1,'']]],
-  ['matvectprodtest',['MatVectProdTest',['../class_mat_vect_prod_test.html',1,'']]]
+  ['logscalevector',['LogScaleVector',['../generics_8h.html#adcfe66fb65d373b24a6b30d67672a368',1,'hdim']]]
 ];

@@ -65,7 +65,7 @@ std::string get_type_name () {
 #ifdef DEBUG
 # define DEBUG_PRINT( x, ... ) std::cout << x __VA_ARGS__ << std::endl;
 #else
-# define DEBUG_PRINT(x) do {} while (0)
+# define DEBUG_PRINT( x, ... )
 #endif
 
 #endif // FOS_DEBUG_H

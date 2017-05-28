@@ -17,8 +17,10 @@
 // FISTA Headers
 //
 // Project Specific Headers
-#include "../Generic/debug.h"
 #include "../Generic/generics.h"
+#include "../Solvers/SubGradientDescent/ISTA/ista.h"
+#include "../Solvers/SubGradientDescent/FISTA/fista.h"
+#include "../Solvers/CoordinateDescent/coordinate_descent.h"
 
 namespace hdim {
 
@@ -80,85 +82,8 @@ class X_FOS {
                       const VectorT& Beta,
                       T r_stats_it );
 
-    T duality_gap ( const MatrixT& X,
-                    const VectorT& Y,
-                    const VectorT& Beta,
-                    T r_stats_it );
-
-    MatrixT ISTA (
-        const MatrixT& X,
-        const VectorT& Y,
-        const VectorT& Beta_0,
-        T L_0, \
-        T lambda,
-        T duality_gap_target );
-
-    MatrixT ISTA_OPT (
-        const MatrixT& X,
-        const VectorT& Y,
-        const VectorT& Beta_0,
-        T L_0, \
-        T lambda,
-        T duality_gap_target );
-
-    MatrixT FISTA (
-        const MatrixT& X,
-        const VectorT& Y,
-        const VectorT& Beta_0,
-        T L_0, \
-        T lambda,
-        T duality_gap_target );
-
-    MatrixT FISTA_OPT (
-        const MatrixT& X,
-        const VectorT& Y,
-        const VectorT& Beta_0,
-        T L_0, \
-        T lambda,
-        T duality_gap_target );
-
-    MatrixT CoordinateDescent (
-        const MatrixT& X,
-        const VectorT& Y,
-        const VectorT& Beta_0,
-        T lambda,
-        T duality_gap_target );
-
-    VectorT update_beta_ista (
-        const MatrixT& X,
-        const VectorT& Y,
-        const VectorT& Beta,
-        T L,
-        T thres );
-
-    VectorT update_beta_fista (
-        const MatrixT& X,
-        const VectorT& Y,
-        const VectorT& Beta,
-        T L,
-        T thres );
-
-    VectorT update_beta_cd (
-        const MatrixT& X,
-        const VectorT& Y,
-        const VectorT& Beta );
-
-    T f_beta_tilda (
-        const MatrixT& X,
-        const VectorT& Y,
-        const VectorT& Beta,
-        const VectorT& Beta_prime,
-        T L );
-
-    T f_beta (
-        const MatrixT& X,
-        const VectorT& Y,
-        const VectorT& Beta );
-
-    VectorT y_k;
-    VectorT y_k_old;
-
-    MatrixT x_k_less_1;
+    ISTA<T> ista_solver;
+    FISTA<T> fista_solver;
 
     MatrixT Betas;
 
@@ -173,7 +98,6 @@ class X_FOS {
     uint statsIt = 1;
     std::vector< T > lambda_grid;
 
-    T t_k = 1;
     T hot_start_L = 0.1;
     const T L_0 = 0.1;
 
@@ -284,52 +208,6 @@ std::vector< T > X_FOS<T>::GenerateLambdaGrid (
 
 }
 
-//template < typename T >
-///*!
-// * \brief Compute the target for the duality gap used in the inner loop
-// *
-// * The duality gap should be less than or equal to this target in order to
-// * exit the inner loop.
-// *
-// * \param r_stats_it
-// *
-// * \return Target quantity
-// */
-//T X_FOS<T>::DualityGapTarget( uint r_stats_it ) {
-//    T r_stats_it_f = static_cast<T>( r_stats_it );
-//    return square(C) * square( r_stats_it_f ) / static_cast<T>( n );
-//}
-
-template < typename T >
-T X_FOS<T>::duality_gap ( const MatrixT& X, \
-                          const VectorT& Y, \
-                          const VectorT& Beta, \
-                          T r_stats_it ) {
-
-    //Computation of Primal Objective
-
-    VectorT error = X*Beta - Y;
-    T error_sqr_norm = error.squaredNorm();
-
-    T f_beta = error_sqr_norm + r_stats_it*Beta.template lpNorm < 1 >();
-
-    //Computation of Dual Objective
-
-    //Compute dual point
-
-    T alternative = r_stats_it /( ( 2.0*X.transpose()*error ).template lpNorm< Eigen::Infinity >() );
-    T alt_part_1 = static_cast<T>( Y.transpose()*error );
-    T alternative_0 = alt_part_1/( error_sqr_norm );
-
-    T s = std::min( std::max( alternative, alternative_0 ), -alternative );
-
-    VectorT nu_part = ( - 2.0*s / r_stats_it ) * error + 2.0/r_stats_it*Y;
-
-    T d_nu = 0.25*square( r_stats_it )*nu_part.squaredNorm() - Y.squaredNorm();
-
-    return f_beta + d_nu;
-}
-
 template < typename T >
 T X_FOS< T >::primal_objective( const MatrixT& X, \
                                 const VectorT& Y, \
@@ -371,367 +249,6 @@ T X_FOS<T>::duality_gap_target( T gamma, T C, T r_stats_it, uint n ) {
 }
 
 template < typename T >
-T X_FOS<T>::f_beta (const MatrixT& X,
-                    const VectorT &Y,
-                    const VectorT& Beta ) {
-
-    return (X*Beta - Y).squaredNorm();
-
-}
-
-template < typename T >
-T X_FOS<T>::f_beta_tilda (
-    const MatrixT& X,
-    const VectorT& Y,
-    const VectorT& Beta,
-    const VectorT& Beta_prime,
-    T L ) {
-
-    VectorT f_beta = X*Beta_prime - Y;
-    T taylor_term_0 = f_beta.squaredNorm();
-
-    VectorT f_grad = 2.0*X.transpose()*( f_beta );
-    VectorT beta_diff = ( Beta - Beta_prime );
-
-    T taylor_term_1 = f_grad.transpose()*beta_diff;
-
-    T taylor_term_2 = L/2.0*beta_diff.squaredNorm();
-
-//    VectorT f_grad = 2.0*X.transpose()*( f_beta );
-//    T taylor_term_1 = static_cast<T>( f_grad.transpose()*Beta ) - static_cast<T>( f_grad.transpose()*Beta_prime );
-//    T taylor_term_2 = L/2.0*( std::abs( Beta.squaredNorm() - Beta_prime.squaredNorm() ) );
-
-    return taylor_term_0 + taylor_term_1 + taylor_term_2;
-}
-
-template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, 1 >  X_FOS<T>::update_beta_ista (
-    const MatrixT& X,
-    const VectorT& Y,
-    const VectorT& Beta,
-    T L,
-    T thres ) {
-
-    VectorT f_grad = 2.0*( X.transpose()*( X*Beta - Y ) );
-    VectorT beta_to_modify = Beta - (1.0/L)*f_grad;
-
-    return beta_to_modify.unaryExpr( SoftThres<T>( thres/L ) );
-
-//    return ( Beta + 2.0/L*(  X.transpose()*Y - X.transpose()*( X*Beta ) ) ).unaryExpr( SoftThres<T>( thres/L ) );
-
-}
-
-template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, 1 > X_FOS<T>::update_beta_fista (
-    const MatrixT& X,
-    const VectorT& Y,
-    const VectorT& Beta,
-    T L,
-    T thres ) {
-
-    VectorT x_k = Beta;
-
-    x_k_less_1 = x_k;
-    x_k = update_beta_ista( X, Y, y_k, L, thres );
-
-    T t_k_plus_1 = ( 1.0 + std::sqrt( 1.0 + 4.0 * square( t_k ) ) ) / 2.0;
-    t_k = t_k_plus_1;
-
-    y_k = x_k + ( t_k - 1.0 ) / ( t_k_plus_1 ) * ( x_k - x_k_less_1 );
-
-    return x_k;
-}
-
-template<class T>
-typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type
-almost_equal(T x, T y, int ulp) {
-    // the machine epsilon has to be scaled to the magnitude of the values used
-    // and multiplied by the desired precision in ULPs (units in the last place)
-    return std::abs(x-y) < std::numeric_limits<T>::epsilon() * std::abs(x+y) * ulp
-           // unless the result is subnormal
-           || std::abs(x-y) < std::numeric_limits<T>::min();
-}
-
-
-template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS<T>::FISTA_OPT (
-    const MatrixT& X,
-    const VectorT& Y,
-    const VectorT& Beta_0,
-    T L_0, \
-    T lambda,
-    T duality_gap_target ) {
-
-    T eta = 1.5;
-    T L = L_0;
-
-    VectorT Beta = Beta_0;
-    y_k = Beta;
-    t_k = 1;
-
-    uint outer_counter = 0;
-
-    do {
-
-        outer_counter ++;
-        DEBUG_PRINT( "Outer loop iteration: " << outer_counter );
-
-        y_k_old = y_k;
-
-        VectorT f_grad = 2.0*( X.transpose()*( X*y_k_old - Y ) );
-
-        VectorT to_modify = y_k_old - (1.0/L)*f_grad;
-        VectorT y_k_temp = to_modify.unaryExpr( SoftThres<T>( lambda/L ) );
-
-        uint counter = 0;
-
-        T f_beta = ( X*y_k_temp - Y ).squaredNorm();
-
-        VectorT f_part = X*y_k_old - Y;
-        T taylor_term_0 = f_part.squaredNorm();
-
-        VectorT beta_diff = ( y_k_temp - y_k_old );
-
-        T taylor_term_1 = f_grad.transpose()*beta_diff;
-
-        T taylor_term_2 = L/2.0*beta_diff.squaredNorm();
-
-        T f_beta_tilde = taylor_term_0 + taylor_term_1 + taylor_term_2;
-
-        while( f_beta > f_beta_tilde ) {
-
-            counter++;
-            DEBUG_PRINT( "Backtrace iteration: " << counter );
-
-            L*= eta;
-
-            DEBUG_PRINT( "L: " << L );
-            to_modify = y_k_old - (1.0/L)*f_grad;
-            y_k_temp = to_modify.unaryExpr( SoftThres<T>( lambda/L ) );
-
-            f_beta = ( X*y_k_temp - Y ).squaredNorm();;
-
-            beta_diff = ( y_k_temp - y_k_old );
-            taylor_term_1 = f_grad.transpose()*beta_diff;
-            taylor_term_2 = L/2.0*beta_diff.squaredNorm();
-
-            f_beta_tilde = taylor_term_0 + taylor_term_1 + taylor_term_2;
-
-        }
-
-        VectorT x_k = Beta;
-
-        x_k_less_1 = x_k;
-
-        to_modify = y_k_old - (1.0/L)*f_grad;
-        x_k = to_modify.unaryExpr( SoftThres<T>( lambda/L ) );
-
-        T t_k_plus_1 = ( 1.0 + std::sqrt( 1.0 + 4.0 * square( t_k ) ) ) / 2.0;
-        t_k = t_k_plus_1;
-
-        y_k = x_k + ( t_k - 1.0 ) / ( t_k_plus_1 ) * ( x_k - x_k_less_1 );
-
-        Beta = x_k;
-
-    } while ( ( duality_gap( X, Y, Beta, lambda ) > duality_gap_target ));
-
-    return Beta;
-
-}
-
-template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS<T>::FISTA (
-    const MatrixT& X,
-    const VectorT& Y,
-    const VectorT& Beta_0,
-    T L_0, \
-    T lambda,
-    T duality_gap_target ) {
-
-    T eta = 1.5;
-    T L = L_0;
-
-    VectorT Beta = Beta_0;
-    y_k = Beta;
-    t_k = 1;
-
-    uint outer_counter = 0;
-
-    do {
-
-        outer_counter ++;
-        DEBUG_PRINT( "Outer loop iteration: " << outer_counter );
-
-        y_k_old = y_k;
-
-        VectorT y_k_temp = update_beta_ista( X, Y, y_k, L, lambda );
-
-        uint counter = 0;
-
-        while( ( f_beta( X, Y, y_k_temp ) > f_beta_tilda( X, Y, y_k_temp, y_k_old, L ) ) ) {
-
-            counter++;
-            DEBUG_PRINT( "Backtrace iteration: " << counter );
-
-            L*= eta;
-
-            DEBUG_PRINT( "L: " << L );
-            y_k_temp = update_beta_ista( X, Y, Beta, L, lambda );
-
-        }
-
-        Beta = update_beta_fista( X, Y, Beta, L, lambda );
-
-    } while ( ( duality_gap( X, Y, Beta, lambda ) > duality_gap_target ));
-
-    return Beta;
-
-}
-
-template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS<T>::ISTA_OPT (
-    const MatrixT& X,
-    const VectorT& Y,
-    const VectorT& Beta_0,
-    T L_0, \
-    T lambda,
-    T duality_gap_target ) {
-
-    T eta = 1.5;
-    T L = L_0;
-
-    VectorT Beta = Beta_0;
-
-    do {
-
-        VectorT f_grad = 2.0*( X.transpose()*( X*Beta - Y ) );
-        VectorT Beta_temp = ( Beta - (1.0/L)*f_grad ).unaryExpr( SoftThres<T>( lambda/L ) );
-
-        T f_beta = ( X*Beta_temp - Y ).squaredNorm();
-
-        VectorT f_part = X*Beta - Y;
-        T taylor_term_0 = f_part.squaredNorm();
-
-        VectorT beta_diff = ( Beta_temp - Beta );
-
-        T taylor_term_1 = f_grad.transpose()*beta_diff;
-
-        T taylor_term_2 = L/2.0*beta_diff.squaredNorm();
-
-        T f_beta_tilde = taylor_term_0 + taylor_term_1 + taylor_term_2;
-
-        while( f_beta > f_beta_tilde ) {
-
-            L*= eta;
-
-            Beta_temp = ( Beta - (1.0/L)*f_grad ).unaryExpr( SoftThres<T>( lambda/L ) );
-
-            f_beta = ( X*Beta_temp - Y ).squaredNorm();;
-
-            beta_diff = ( Beta_temp - Beta );
-            taylor_term_1 = f_grad.transpose()*beta_diff;
-            taylor_term_2 = L/2.0*beta_diff.squaredNorm();
-
-            f_beta_tilde = taylor_term_0 + taylor_term_1 + taylor_term_2;
-
-        }
-
-        Beta = ( Beta - (1.0/L)*f_grad ).unaryExpr( SoftThres<T>( lambda/L ) );
-
-    } while ( ( duality_gap( X, Y, Beta, lambda ) > duality_gap_target ) );
-
-    hot_start_L = L;
-
-    return Beta;
-}
-
-template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS<T>::ISTA (
-    const MatrixT& X,
-    const VectorT& Y,
-    const VectorT& Beta_0,
-    T L_0, \
-    T lambda,
-    T duality_gap_target ) {
-
-    T eta = 1.5;
-    T L = L_0;
-
-    VectorT Beta = Beta_0;
-
-    uint outer_counter = 0;
-
-    do {
-
-        outer_counter ++;
-        DEBUG_PRINT( "Outer loop iteration: " << outer_counter );
-
-        uint counter = 0;
-
-        VectorT Beta_temp = update_beta_ista( X, Y, Beta, L, lambda );
-
-        counter++;
-        DEBUG_PRINT( "Backtrace iteration: " << counter );
-
-        while( f_beta( X, Y, Beta_temp ) > f_beta_tilda( X, Y, Beta_temp, Beta, L ) ) {
-            counter++;
-            //DEBUG_PRINT( "Backtrace iteration: " << counter );
-
-            L*= eta;
-            Beta_temp = update_beta_ista( X, Y, Beta, L, lambda );
-
-        }
-
-        Beta = update_beta_ista( X, Y, Beta, L, lambda );
-
-        DEBUG_PRINT( "Duality Gap:" << duality_gap( X, Y, Beta, lambda ) );
-
-    } while ( duality_gap( X, Y, Beta, lambda ) > duality_gap_target );
-
-    hot_start_L = L;
-
-    return Beta;
-}
-
-template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS< T >::CoordinateDescent (
-    const MatrixT& X,
-    const VectorT& Y,
-    const VectorT& Beta_0,
-    T lambda,
-    T duality_gap_target ) {
-
-    VectorT Beta = Beta_0;
-
-    do {
-
-        for( int i = 0; i < Beta.size() ; i++ ) {
-
-            VectorT X_i = X.col( i );
-            T inverse_norm = static_cast<T>( 1 )/( 2.0 * X_i.squaredNorm() );
-
-//            MatrixT X_negative_i = X;
-//            X_negative_i.col( i ) = VectorT::Zero( X.rows() );
-
-            VectorT Beta_negative_i = Beta;
-            Beta_negative_i( i ) = static_cast<T>( 0 );
-
-//            VectorT r_i = 2.0*( Y - X_negative_i*Beta_negative_i );
-//            T elem = r_i.transpose()*X_i;
-            T elem = (2.0*( Y - X*Beta_negative_i ) ).transpose()*X_i;
-            Beta( i ) = inverse_norm*soft_threshold<T>( elem, lambda );
-
-        }
-
-        DEBUG_PRINT( "Current Duality Gap: " << duality_gap( X, Y, Beta, lambda ) << " Current Target: " << duality_gap_target );
-        DEBUG_PRINT( "Norm Squared of updated Beta: " << Beta.squaredNorm() );
-
-    } while ( duality_gap( X, Y, Beta, lambda ) > duality_gap_target );
-
-    return Beta;
-}
-
-template < typename T >
 void X_FOS< T >::operator()( const MatrixT& x, const VectorT& y ) {
 
     VectorT old_Betas;
@@ -759,7 +276,6 @@ void X_FOS< T >::operator()( const MatrixT& x, const VectorT& y ) {
         T rStatsIt = lambda_grid.at( statsIt - 1 );
 
         T gap = duality_gap( X, Y, old_Betas, rStatsIt );
-//        T gap = primal_objective( X, Y, beta_k, rStatsIt ) + dual_objective( X, Y, beta_k, rStatsIt );
 
         T gap_target = duality_gap_target( gamma, C, rStatsIt, n );
 
@@ -770,8 +286,8 @@ void X_FOS< T >::operator()( const MatrixT& x, const VectorT& y ) {
         } else {
 
             DEBUG_PRINT( "Current Lambda: " << rStatsIt );
-//            Betas.col( statsIt - 1 ) = ISTA_OPT( X, Y, old_Betas, 0.1, rStatsIt, gap_target );
-            Betas.col( statsIt - 1 ) = CoordinateDescent( X, Y, old_Betas, rStatsIt, gap_target );
+            Betas.col( statsIt - 1 ) = fista_solver( X, Y, old_Betas, 0.1, rStatsIt, gap_target );
+//            Betas.col( statsIt - 1 ) = CoordinateDescent( X, Y, old_Betas, rStatsIt, gap_target );
 
         }
 

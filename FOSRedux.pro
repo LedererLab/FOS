@@ -22,6 +22,9 @@ CONFIG(debug, debug|release) {
     QMAKE_CXXFLAGS_RELEASE *= -march=native
 }
 
+#gnuplot iostreams
+INCLUDEPATH += ../gnuplot-iostream
+
 # Boost
 LIBS += -L/usr/local/lib \
         -L/usr/lib \
@@ -30,7 +33,7 @@ LIBS += -L/usr/local/lib \
         -lboost_filesystem \
 
 # Eigen
-INCLUDEPATH += /usr/include/eigen30
+INCLUDEPATH += /usr/include/eigen3
 
 QMAKE_CXXFLAGS += -fopenmp
 QMAKE_LFLAGS += -fopenmp
@@ -67,6 +70,7 @@ HEADERS += FOS/fos.h \
     OpenCL_Generics/matvectprodtest.h \
     Solvers/SubGradientDescent/FISTA/fista.h \
     Solvers/CoordinateDescent/coordinate_descent.h \
+    Solvers/SubGradientDescent/subgradient_descent.h
 
 SOURCES += main.cpp \
     OpenCL_Base/openclbase.cpp \

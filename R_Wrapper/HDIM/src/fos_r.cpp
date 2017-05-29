@@ -98,10 +98,12 @@ Rcpp::List FOS( Rcpp::NumericMatrix X, Rcpp::NumericVector Y ) {
 
     unsigned int stopping_index = fos.ReturnOptimIndex();
     double lambda = fos.ReturnLambda();
+    double intercept = fos.ReturnIntercept();
 
     return Rcpp::List::create(Rcpp::Named("beta") = beta,
                               Rcpp::Named("index") = stopping_index,
-                              Rcpp::Named("lambda") = lambda);
+                              Rcpp::Named("lambda") = lambda,
+                              Rcpp::Named("intercept") = intercept );
 
 }
 

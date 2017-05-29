@@ -48,6 +48,7 @@ class X_FOS {
     void operator()( const MatrixT& x, const VectorT& y );
 
     T ReturnLambda();
+    T ReturnIntercept();
     MatrixT ReturnBetas();
     uint ReturnOptimIndex();
     VectorT ReturnCoefficients();
@@ -65,6 +66,9 @@ class X_FOS {
     VectorT RescaleCoefficients( const VectorT& raw_coefs,
                                  const VectorT& x_weights,
                                  T y_weight);
+    T compute_intercept( const VectorT& X,
+                         const VectorT& Y,
+                         const VectorT& Beta );
 
     std::vector< T > GenerateLambdaGrid (
         const MatrixT& X,
@@ -95,6 +99,7 @@ class X_FOS {
     MatrixT Betas;
     VectorT x_std_devs;
     T y_std_dev = 0;
+    T intercept = 0;
 
     const T C = 0.75;
     const uint M = 100;
@@ -160,6 +165,28 @@ Eigen::Matrix<int, Eigen::Dynamic, 1> X_FOS<T>::ReturnSupport() {
 
 //    return fos_fit.unaryExpr( SupportSift<T>( C_t, lambda, n_t ) );
 
+}
+
+template < typename T >
+T X_FOS<T>::compute_intercept( const VectorT& X,
+                               const VectorT& Y,
+                               const VectorT& Beta ) {
+
+    T intercept_part = 0.0;
+
+    for( uint i = 0; i < X.cols() ; i++ ) {
+
+        T X_i_bar = X.col( i ).mean();
+        intercept_part += Beta( i )*X_i_bar;
+
+    }
+
+    return Y.mean() - intercept_part;
+}
+
+template < typename T >
+T X_FOS<T>::ReturnIntercept() {
+    return intercept;
 }
 
 //Member functions
@@ -346,6 +373,7 @@ void X_FOS< T >::operator()( const MatrixT& x, const VectorT& y ) {
     fos_fit = Betas.col( statsIt - 2 );
     lambda = lambda_grid.at( statsIt - 2 );
     optim_index = statsIt;
+    intercept = compute_intercept( x, y, fos_fit );
 
 }
 

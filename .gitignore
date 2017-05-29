@@ -78,6 +78,3 @@ doxygen/
 Python_Wrapper/Test
 Python_Wrapper/*.cxx
 Python_Wrapper/__pycache__
-
-# R Wrapper files -- not ready for deployment yet
-R_Wrapper

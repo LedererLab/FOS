@@ -17,8 +17,8 @@
 // FISTA Headers
 //
 // Project Specific Headers
-#include "../../Generic/debug.h"
-#include "../../Generic/generics.h"
+#include "../../Generic/debug.hpp"
+#include "../../Generic/generics.hpp"
 
 namespace hdim {
 

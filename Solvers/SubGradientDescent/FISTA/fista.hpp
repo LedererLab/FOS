@@ -14,8 +14,8 @@
 // OpenMP Headers
 //
 // Project Specific Headers
-#include "../../../Generic/generics.h"
-#include "../subgradient_descent.h"
+#include "../../../Generic/generics.hpp"
+#include "../subgradient_descent.hpp"
 
 namespace hdim {
 

@@ -1,5 +1,5 @@
-#ifndef TEST_FOS_EXPERIMENTAL_H
-#define TEST_FOS_EXPERIMENTAL_H
+#ifndef TEST_FOS_H
+#define TEST_FOS_H
 
 // C System-Headers
 //
@@ -14,17 +14,14 @@
 // Armadillo Headers
 //
 // Project Specific Headers
-#include "../Generic/generics.h"
-#include "x_fos.h"
+#include "fos.hpp"
 
 namespace hdim {
 
-namespace experimental {
-
 template < typename T >
-std::vector< T > TestX_FOS() {
+std::vector< T > TestFOS() {
 
-    std::cout << "Running X_FOS test for data type: " << get_type_name<T>() << std::endl;
+    std::cout << "Running FOS test for data type: " << get_type_name<T>() << std::endl;
 
     std::string data_set_path = "/home/bephillips2/Desktop/Hanger Bay 1/Academia/HDIM/test_data.csv";
 
@@ -43,8 +40,9 @@ std::vector< T > TestX_FOS() {
                   << "Matrix: \n" \
                   << std::endl;
 
-        Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X = raw_data.block( 0, 1, k, k );
-        Eigen::Matrix< T, Eigen::Dynamic, 1 > Y = raw_data.block( 0, 0, k, 1 );
+        auto X = raw_data.block( 0, 1, k, k );
+
+        auto Y = raw_data.block( 0, 0, k, 1 );
 
         std::cout << "Froebenius squared norm of X " \
                   << X.squaredNorm()\
@@ -52,8 +50,8 @@ std::vector< T > TestX_FOS() {
                   << Y.squaredNorm() \
                   << std::endl;
 
-        X_FOS< T > algo_fos;
-        TIME_IT( algo_fos( X, Y ); );
+        FOS< T > algo_fos ( X, Y );
+        TIME_IT( algo_fos.Algorithm(); );
 
         std::cout << "Stopping index: " << algo_fos.ReturnOptimIndex() << std::endl;
         T sqr_norm = algo_fos.ReturnCoefficients().squaredNorm();
@@ -68,6 +66,4 @@ std::vector< T > TestX_FOS() {
 
 }
 
-}
-
-#endif // TEST_FOS_EXPERIMENTAL_H
+#endif // TEST_FOS_H

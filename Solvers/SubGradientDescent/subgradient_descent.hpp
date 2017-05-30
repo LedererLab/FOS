@@ -15,8 +15,8 @@
 // OpenMP Headers
 //
 // Project Specific Headers
-#include "../../Generic/generics.h"
-#include "../../Generic/generics.h"
+#include "../../Generic/generics.hpp"
+#include "../../Generic/generics.hpp"
 
 namespace hdim {
 

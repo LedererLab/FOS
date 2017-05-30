@@ -17,10 +17,10 @@
 // FISTA Headers
 //
 // Project Specific Headers
-#include "../Generic/generics.h"
-#include "../Solvers/SubGradientDescent/ISTA/ista.h"
-#include "../Solvers/SubGradientDescent/FISTA/fista.h"
-#include "../Solvers/CoordinateDescent/coordinate_descent.h"
+#include "../Generic/generics.hpp"
+#include "../Solvers/SubGradientDescent/ISTA/ista.hpp"
+#include "../Solvers/SubGradientDescent/FISTA/fista.hpp"
+#include "../Solvers/CoordinateDescent/coordinate_descent.hpp"
 
 namespace hdim {
 

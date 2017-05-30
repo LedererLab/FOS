@@ -1,4 +1,4 @@
-#include "matvectprodtest.h"
+#include "matvectprodtest.hpp"
 
 // C System-Headers
 //
@@ -13,9 +13,9 @@
 // CL BLAS
 #include <clBLAS.h>
 // Project Specific Headers
-#include "perf_cl_product.h"
-#include "../Generic/debug.h"
-#include "../Generic/generics.h"
+#include "perf_cl_product.hpp"
+#include "../Generic/debug.hpp"
+#include "../Generic/generics.hpp"
 
 MatVectProdTest::MatVectProdTest( uint platform_number, uint device_number ) : OpenCLBase( platform_number, device_number ) {
 

@@ -15,8 +15,8 @@
 // CL BLAS
 //
 // Project Specific Headers
-#include "../Generic/debug.h"
-#include "../OpenCL_Base/openclbase.h"
+#include "../Generic/debug.hpp"
+#include "../OpenCL_Base/openclbase.hpp"
 
 class MatProdTest : public ocl::OpenCLBase {
 

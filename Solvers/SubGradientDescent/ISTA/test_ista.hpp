@@ -1,5 +1,6 @@
-#ifndef TEST_FISTA_H
-#define TEST_FISTA_H
+#ifndef TEST_ISTA_H
+#define TEST_ISTA_H
+
 
 // C System-Headers
 //
@@ -7,6 +8,7 @@
 #include <cmath>
 // Eigen Headers
 #include <eigen3/Eigen/Dense>
+#include <Eigen/IterativeLinearSolvers>
 // Boost Headers
 //
 // SPAMS Headers
@@ -14,11 +16,11 @@
 // Armadillo Headers
 //
 // Project Specific Headers
-#include "../Generic/debug.h"
-#include "../Generic/generics.h"
-#include "../Generic/algorithm.h"
+#include "../Generic/debug.hpp"
+#include "../Generic/generics.hpp"
+#include "ista.hpp"
 
-void TestFistaFlat( uint num_rows, uint num_cols ) {
+void TestIsta( uint num_rows, uint num_cols ) {
 
     auto X = build_matrix<float>( num_rows, num_cols, &eucl_distance );
     auto Y = X.col(0);
@@ -27,16 +29,16 @@ void TestFistaFlat( uint num_rows, uint num_cols ) {
 
     float lambda = 1.0;
 
-    auto spams_retval =  FistaFlat< float >( Y, X, W_0, 0.5*lambda );
+    Eigen::Matrix< float, Eigen::Dynamic, 1 > ista_retval = ISTA< float >( X, Y, W_0, 10, 0.1, lambda );
 
-    std::cout << "fistaFlat result:\n" << spams_retval.squaredNorm() << std::endl;
+    std::cout << "ISTA result:\n" << ista_retval.squaredNorm() << std::endl;
 }
 
-void RunFistaTests() {
+void RunIstaTests() {
 
     for ( uint k = 200; k <= 2000; k+= 200 ) {
 
-        std::cout << "Testing fistaFlat for a " \
+        std::cout << "Testing ISTA for a " \
                   << k \
                   << "x" \
                   << k \
@@ -44,8 +46,8 @@ void RunFistaTests() {
 //                  << build_matrix<float>( k, k, &eucl_distance )
                   << std::endl;
 
-        TestFistaFlat( k, k );
+        TestIsta( k, k );
     }
 }
 
-#endif // TEST_FISTA_H
+#endif // TEST_ISTA_H

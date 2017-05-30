@@ -14,8 +14,8 @@
 // Armadillo Headers
 //
 // Project Specific Headers
-#include "fos.h"
-#include "x_fos.h"
+#include "fos.hpp"
+#include "x_fos.hpp"
 
 namespace hdim {
 

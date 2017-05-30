@@ -11,10 +11,10 @@
 // JASPL
 #include "../JASPL/jPlot/jplot.h"
 // Project Specific Headers
-#include "FOS/test_fos.h"
-#include "FOS/test_fos_experimental.h"
-#include "FOS/perf_fos.h"
-#include "FOS/perf_fos_experimental.h"
+#include "FOS/test_fos.hpp"
+#include "FOS/test_fos_experimental.hpp"
+#include "FOS/perf_fos.hpp"
+#include "FOS/perf_fos_experimental.hpp"
 
 int main(int argc, char *argv[]) {
 

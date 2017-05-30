@@ -49,28 +49,28 @@ LIBS += -lOpenCL
 # Armadillo
 LIBS += -larmadillo
 
-HEADERS += FOS/fos.h \
-    FOS/test_fos.h \
-    Generic/debug.h \
-    Generic/generics.h \
-    Solvers/SubGradientDescent/ISTA/ista.h \
-    Solvers/SubGradientDescent/ISTA/test_ista.h \
-    R_Wrapper/fos_r.h \
-    ISTA/perf_ista.h \
-    test_eigen3.h \
-    OpenCL_Generics/cl_generics.h \
-    OpenCL_Generics/cl_algorithm.h \
-    OpenCL_Base/openclbase.h \
-    OpenCL_Generics/perf_cl_product.h \
-    FOS/test_fos_experimental.h \
-    FOS/perf_fos.h \
-    FOS/perf_fos_experimental.h \
-    FOS/x_fos.h \
-    test_armadillo.h \
-    OpenCL_Generics/matvectprodtest.h \
-    Solvers/SubGradientDescent/FISTA/fista.h \
-    Solvers/CoordinateDescent/coordinate_descent.h \
-    Solvers/SubGradientDescent/subgradient_descent.h
+HEADERS += FOS/fos.hpp \
+    FOS/test_fos.hpp \
+    Generic/debug.hpp \
+    Generic/generics.hpp \
+    Solvers/SubGradientDescent/ISTA/ista.hpp \
+    Solvers/SubGradientDescent/ISTA/test_ista.hpp \
+    R_Wrapper/fos_r.hpp \
+    ISTA/perf_ista.hpp \
+    test_eigen3.hpp \
+    OpenCL_Generics/cl_generics.hpp \
+    OpenCL_Generics/cl_algorithm.hpp \
+    OpenCL_Base/openclbase.hpp \
+    OpenCL_Generics/perf_cl_product.hpp \
+    FOS/test_fos_experimental.hpp \
+    FOS/perf_fos.hpp \
+    FOS/perf_fos_experimental.hpp \
+    FOS/x_fos.hpp \
+    test_armadillo.hpp \
+    OpenCL_Generics/matvectprodtest.hpp \
+    Solvers/SubGradientDescent/FISTA/fista.hpp \
+    Solvers/CoordinateDescent/coordinate_descent.hpp \
+    Solvers/SubGradientDescent/subgradient_descent.hpp
 
 SOURCES += main.cpp \
     OpenCL_Base/openclbase.cpp \

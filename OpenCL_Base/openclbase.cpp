@@ -1,5 +1,5 @@
 // Header for this file
-#include "openclbase.h"
+#include "openclbase.hpp"
 // C System-Headers
 //
 // C++ System headers
@@ -10,7 +10,7 @@
 // Miscellaneous Headers
 //
 //Headers for this project
-#include "../Generic/debug.h"
+#include "../Generic/debug.hpp"
 
 namespace ocl {
 

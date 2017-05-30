@@ -12,7 +12,7 @@
 // Rcpp Headers
 #include <Rcpp.h>
 // Project Specific Headers
-#include "FOS/x_fos.h"
+#include "FOS/x_fos.hpp"
 
  template < typename T >
  Eigen::Matrix< T, Eigen::Dynamic, 1 > NumVect2Eigen( const Rcpp::NumericVector& vec ) {

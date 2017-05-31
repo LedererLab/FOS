@@ -98,6 +98,7 @@ class X_FOS {
 
     MatrixT Betas;
     VectorT x_std_devs;
+
     T y_std_dev = 0;
     T intercept = 0;
 
@@ -150,7 +151,8 @@ uint X_FOS< T >::ReturnOptimIndex() {
 
 template < typename T >
 Eigen::Matrix< T, Eigen::Dynamic, 1 > X_FOS< T >::ReturnCoefficients() {
-    return RescaleCoefficients(fos_fit, x_std_devs, y_std_dev );
+//    return RescaleCoefficients(fos_fit, x_std_devs, y_std_dev );
+    return fos_fit;
 }
 
 template < typename T >
@@ -172,12 +174,14 @@ T X_FOS<T>::compute_intercept( const VectorT& X,
                                const VectorT& Y,
                                const VectorT& Beta ) {
 
+    VectorT scaled_beta = RescaleCoefficients(Beta, x_std_devs, y_std_dev );
+
     T intercept_part = 0.0;
 
     for( uint i = 0; i < X.cols() ; i++ ) {
 
         T X_i_bar = X.col( i ).mean();
-        intercept_part += Beta( i )*X_i_bar;
+        intercept_part += scaled_beta( i )*X_i_bar;
 
     }
 
@@ -362,8 +366,8 @@ void X_FOS< T >::operator()( const MatrixT& x, const VectorT& y ) {
         } else {
 
             DEBUG_PRINT( "Current Lambda: " << rStatsIt );
-            Betas.col( statsIt - 1 ) = fista_solver( X, Y, old_Betas, 0.1, rStatsIt, gap_target );
-//            Betas.col( statsIt - 1 ) = CoordinateDescent( X, Y, old_Betas, rStatsIt, gap_target );
+//            Betas.col( statsIt - 1 ) = fista_solver( X, Y, old_Betas, 0.1, rStatsIt, gap_target );
+            Betas.col( statsIt - 1 ) = CoordinateDescent( X, Y, old_Betas, rStatsIt, gap_target );
 
         }
 

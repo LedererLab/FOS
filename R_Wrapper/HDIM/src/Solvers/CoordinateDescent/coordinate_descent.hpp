@@ -58,6 +58,43 @@ template < typename T >
   \Return $\widetilde{\beta}$
  \f}
  */
+//Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > CoordinateDescent (
+//    const MatrixT<T>& X,
+//    const VectorT<T>& Y,
+//    const VectorT<T>& Beta_0,
+//    T lambda,
+//    T duality_gap_target ) {
+
+//    VectorT<T> Beta = Beta_0;
+
+//    do {
+
+//        for( int i = 0; i < Beta.size() ; i++ ) {
+
+//            VectorT<T> X_i = X.col( i );
+//            T inverse_norm = static_cast<T>( 1 )/( 2.0 * X_i.squaredNorm() );
+
+////            MatrixT X_negative_i = X;
+////            X_negative_i.col( i ) = VectorT::Zero( X.rows() );
+
+//            VectorT<T> Beta_negative_i = Beta;
+//            Beta_negative_i( i ) = static_cast<T>( 0 );
+
+////            VectorT r_i = 2.0*( Y - X_negative_i*Beta_negative_i );
+////            T elem = r_i.transpose()*X_i;
+//            T elem = (2.0*( Y - X*Beta_negative_i ) ).transpose()*X_i;
+//            Beta( i ) = inverse_norm*soft_threshold<T>( elem, lambda );
+
+//        }
+
+//        DEBUG_PRINT( "Current Duality Gap: " << duality_gap( X, Y, Beta, lambda ) << " Current Target: " << duality_gap_target );
+//        DEBUG_PRINT( "Norm Squared of updated Beta: " << Beta.squaredNorm() );
+
+//    } while ( duality_gap( X, Y, Beta, lambda ) > duality_gap_target );
+
+//    return Beta;
+//}
+
 Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > CoordinateDescent (
     const MatrixT<T>& X,
     const VectorT<T>& Y,
@@ -72,18 +109,18 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > CoordinateDescent (
         for( int i = 0; i < Beta.size() ; i++ ) {
 
             VectorT<T> X_i = X.col( i );
-            T inverse_norm = static_cast<T>( 1 )/( 2.0 * X_i.squaredNorm() );
+            T inverse_norm = static_cast<T>( 1 )/( X_i.squaredNorm() );
 
-//            MatrixT X_negative_i = X;
-//            X_negative_i.col( i ) = VectorT::Zero( X.rows() );
+//            MatrixT<T> X_negative_i = X;
+//            X_negative_i.col( i ) = VectorT<T>::Zero( X.rows() );
 
             VectorT<T> Beta_negative_i = Beta;
             Beta_negative_i( i ) = static_cast<T>( 0 );
 
-//            VectorT r_i = 2.0*( Y - X_negative_i*Beta_negative_i );
-//            T elem = r_i.transpose()*X_i;
-            T elem = (2.0*( Y - X*Beta_negative_i ) ).transpose()*X_i;
-            Beta( i ) = inverse_norm*soft_threshold<T>( elem, lambda );
+            T threshold = lambda / ( 2.0*X_i.squaredNorm() );
+            T elem = inverse_norm*X_i.transpose()*( Y - X*Beta_negative_i );
+
+            Beta( i ) = soft_threshold<T>( elem, threshold );
 
         }
 
@@ -109,7 +146,19 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > CoordinateDescentStandardized
 
         for( int i = 0; i < Beta.size() ; i++ ) {
 
-            Beta( i ) = soft_threshold<T>( Beta( i ), lambda );
+            VectorT<T> X_i = X.col( i );
+            T inverse_norm = static_cast<T>( 1 )/( X_i.rows() );
+
+//            MatrixT<T> X_negative_i = X;
+//            X_negative_i.col( i ) = VectorT<T>::Zero( X.rows() );
+
+            VectorT<T> Beta_negative_i = Beta;
+            Beta_negative_i( i ) = static_cast<T>( 0 );
+
+            T threshold = lambda / ( 2.0*X_i.rows() );
+            T elem = inverse_norm*X_i.transpose()*( Y - X*Beta_negative_i );
+
+            Beta( i ) = soft_threshold<T>( elem, threshold );
 
         }
 

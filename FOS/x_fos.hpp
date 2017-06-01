@@ -66,6 +66,7 @@ class X_FOS {
     VectorT RescaleCoefficients( const VectorT& raw_coefs,
                                  const VectorT& x_weights,
                                  T y_weight);
+
     T compute_intercept( const VectorT& X,
                          const VectorT& Y,
                          const VectorT& Beta );
@@ -151,20 +152,17 @@ uint X_FOS< T >::ReturnOptimIndex() {
 
 template < typename T >
 Eigen::Matrix< T, Eigen::Dynamic, 1 > X_FOS< T >::ReturnCoefficients() {
-//    return RescaleCoefficients(fos_fit, x_std_devs, y_std_dev );
-    return fos_fit;
+    return RescaleCoefficients(fos_fit, x_std_devs, y_std_dev );
 }
 
 template < typename T >
 Eigen::Matrix<int, Eigen::Dynamic, 1> X_FOS<T>::ReturnSupport() {
 
     T n_t = static_cast<T>( n );
-
     T cut_off = static_cast<T>( 6 )*C*lambda/n_t;
     DEBUG_PRINT( "Cut-off for Support Computation: " << cut_off );
 
     return GenerateSupport( fos_fit, cut_off );
-
 //    return fos_fit.unaryExpr( SupportSift<T>( C_t, lambda, n_t ) );
 
 }
@@ -316,7 +314,7 @@ VectorT<T> X_FOS< T >::RescaleCoefficients(
 
     for( uint i = 0; i < raw_coefs.size() ; i++ ) {
 
-        T weight = y_weight / static_cast<T>( x_weights( i ) );
+        T weight = y_weight / x_weights( i );
         scaled_coefs( i ) = weight*raw_coefs( i );
 
     }
@@ -366,8 +364,8 @@ void X_FOS< T >::operator()( const MatrixT& x, const VectorT& y ) {
         } else {
 
             DEBUG_PRINT( "Current Lambda: " << rStatsIt );
-//            Betas.col( statsIt - 1 ) = fista_solver( X, Y, old_Betas, 0.1, rStatsIt, gap_target );
-            Betas.col( statsIt - 1 ) = CoordinateDescentStandardized( X, Y, old_Betas, rStatsIt, gap_target );
+            Betas.col( statsIt - 1 ) = fista_solver( X, Y, old_Betas, 0.1, rStatsIt, gap_target );
+//            Betas.col( statsIt - 1 ) = CoordinateDescent( X, Y, old_Betas, rStatsIt, gap_target );
 
         }
 

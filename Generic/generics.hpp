@@ -397,11 +397,11 @@ Eigen::Matrix< int, Eigen::Dynamic, 1 > GenerateSupport(
     const Eigen::Matrix<T, Eigen::Dynamic, 1 >& coefficients,
     T cut_off ) {
 
-    Eigen::Matrix< int, Eigen::Dynamic, 1 > support( coefficients.rows(), 1 );
+    Eigen::Matrix< int, Eigen::Dynamic, 1 > support( coefficients.rows() );
 
-    for( uint i = 0; i < coefficients.rows() ; i ++ ) {
+    for( uint i = 0; i < coefficients.size() ; i ++ ) {
         T x = coefficients( i );
-        support( i ) = ( std::abs( x ) >= cut_off )?( 1 ):( 0 );
+        support( i ) = ( std::abs( x ) >= cut_off );
     }
 
     return support;

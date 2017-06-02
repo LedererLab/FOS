@@ -67,9 +67,9 @@ class X_FOS {
                                  const VectorT& x_weights,
                                  T y_weight);
 
-    T compute_intercept( const VectorT& X,
-                         const VectorT& Y,
-                         const VectorT& Beta );
+    T compute_intercept(const VectorT& x,
+                        const VectorT& y,
+                        const VectorT& Beta );
 
     std::vector< T > GenerateLambdaGrid (
         const MatrixT& X,
@@ -168,22 +168,22 @@ Eigen::Matrix<int, Eigen::Dynamic, 1> X_FOS<T>::ReturnSupport() {
 }
 
 template < typename T >
-T X_FOS<T>::compute_intercept( const VectorT& X,
-                               const VectorT& Y,
+T X_FOS<T>::compute_intercept( const VectorT& x,
+                               const VectorT& y,
                                const VectorT& Beta ) {
 
     VectorT scaled_beta = RescaleCoefficients(Beta, x_std_devs, y_std_dev );
 
     T intercept_part = 0.0;
 
-    for( uint i = 0; i < X.cols() ; i++ ) {
+    for( uint i = 0; i < x.cols() ; i++ ) {
 
-        T X_i_bar = X.col( i ).mean();
+        T X_i_bar = x.col( i ).mean();
         intercept_part += scaled_beta( i )*X_i_bar;
 
     }
 
-    return Y.mean() - intercept_part;
+    return y.mean() - intercept_part;
 }
 
 template < typename T >
@@ -343,6 +343,8 @@ void X_FOS< T >::operator()( const MatrixT& x, const VectorT& y ) {
 
     Betas = Eigen::Matrix< T , Eigen::Dynamic, Eigen::Dynamic >::Zero( X.cols(), M );
 
+    CoordinateDescentSolver<T> cd_solver( X, Y, Betas.col( 0 ) );
+
     //Outer Loop
     while( statsCont && ( statsIt < M ) ) {
 
@@ -366,7 +368,7 @@ void X_FOS< T >::operator()( const MatrixT& x, const VectorT& y ) {
             DEBUG_PRINT( "Current Lambda: " << rStatsIt );
             Betas.col( statsIt - 1 ) = fista_solver( X, Y, old_Betas, 0.1, rStatsIt, gap_target );
 //            Betas.col( statsIt - 1 ) = CoordinateDescent( X, Y, old_Betas, rStatsIt, gap_target );
-
+//            Betas.col( statsIt - 1 ) = cd_solver( X, Y, old_Betas, rStatsIt, gap_target );
         }
 
         statsCont = ComputeStatsCond( C, statsIt, rStatsIt, lambda_grid, Betas );

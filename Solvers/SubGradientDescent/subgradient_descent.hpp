@@ -34,15 +34,12 @@ template < typename T >
 /*!
  * \brief Abstract base class for Sub-Gradient Descent algorithms
  * ,such as ISTA and FISTA, with backtracking line search.
- *
- * This class supports two types of convergence criteria -- iterative and duality gap.
- *
- * The iterative criteria will run the algorithm will run u
  */
 class SubGradientSolver : public Solver<T> {
 
   public:
     SubGradientSolver( T L = 0.1 );
+    ~SubGradientSolver();
 
   protected:
 
@@ -66,6 +63,7 @@ class SubGradientSolver : public Solver<T> {
         T thres );
 
     const T L_0;
+
 };
 
 template < typename T >
@@ -73,6 +71,9 @@ SubGradientSolver<T>::SubGradientSolver( T L ) : L_0( L ) {
     static_assert(std::is_floating_point< T >::value,\
                   "Subgradient descent methods can only be used with floating point types.");
 }
+
+template < typename T >
+SubGradientSolver<T>::~SubGradientSolver() {}
 
 template < typename T >
 T SubGradientSolver<T>::f_beta (

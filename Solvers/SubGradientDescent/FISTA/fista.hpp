@@ -43,7 +43,7 @@ class FISTA : public internal::SubGradientSolver<T> {
         const MatrixT<T>& X,
         const VectorT<T>& Y,
         const VectorT<T>& Beta,
-        T L,
+        T L_0,
         T lambda );
 
     const T eta = 1.5;
@@ -59,8 +59,9 @@ class FISTA : public internal::SubGradientSolver<T> {
     VectorT<T> y_k_old;
 
     MatrixT<T> x_k_less_1;
+    T t_k = static_cast<T>( 1 );
 
-    T t_k = 1;
+    T L = static_cast<T>( 0 );
 };
 
 template < typename T >
@@ -116,15 +117,13 @@ VectorT<T> FISTA<T>::operator() (
     T lambda,
     T duality_gap_target ) {
 
-    T L = internal::SubGradientSolver<T>::L_0;
-
     VectorT<T> Beta = Beta_0;
     y_k = Beta;
     t_k = 1;
 
     do {
 
-        Beta = update_rule( X, Y, Beta, L, lambda );
+        Beta = update_rule( X, Y, Beta, internal::SubGradientSolver<T>::L_0, lambda );
 
         DEBUG_PRINT( "Duality Gap:" << duality_gap( X, Y, Beta, lambda ) );
 
@@ -140,8 +139,10 @@ VectorT<T> FISTA<T>::update_rule(
     const MatrixT<T>& X,
     const VectorT<T>& Y,
     const VectorT<T>& Beta,
-    T L,
+    T L_0,
     T lambda ) {
+
+    L = L_0;
 
     y_k_old = y_k;
 
@@ -169,8 +170,10 @@ VectorT<T> FISTA<T>::update_rule(
     const MatrixT<T>& X,
     const VectorT<T>& Y,
     const VectorT<T>& Beta,
-    T L,
+    T L_0,
     T lambda ) {
+
+    L = L_0;
 
     y_k_old = y_k;
 

@@ -20,6 +20,12 @@
 
 namespace hdim {
 
+template< typename T >
+using MatrixT = Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >;
+
+template< typename T >
+using VectorT = Eigen::Matrix< T, Eigen::Dynamic, 1 >;
+
 template < typename T >
 /*!
  * \brief Run the Iterative Shrinking and Thresholding Algorthim.
@@ -27,7 +33,6 @@ template < typename T >
 class ISTA : public internal::SubGradientSolver<T> {
 
   public:
-    ISTA();
 
     /*!
     \f{algorithm}{
@@ -59,7 +64,6 @@ class ISTA : public internal::SubGradientSolver<T> {
         const MatrixT<T>& X,
         const VectorT<T>& Y,
         const VectorT<T>& Beta_0,
-        T L_0,
         T lambda,
         uint num_iterations );
 
@@ -93,7 +97,6 @@ class ISTA : public internal::SubGradientSolver<T> {
         const MatrixT<T>& X,
         const VectorT<T>& Y,
         const VectorT<T>& Beta_0,
-        T L_0, \
         T lambda,
         T duality_gap_target );
 
@@ -105,31 +108,23 @@ class ISTA : public internal::SubGradientSolver<T> {
                            T lambda );
 
     const T eta = 1.5;
+    T L = static_cast<T>( 0 );
 
 };
-
-template < typename T >
-ISTA<T>::ISTA() {
-    static_assert(std::is_floating_point< T >::value,\
-                  "ISTA can only be used with floating point types.");
-}
 
 template < typename T >
 VectorT<T> ISTA<T>::operator()(
     const MatrixT<T>& X,
     const VectorT<T>& Y,
     const VectorT<T>& Beta_0,
-    T L_0,
     T lambda,
     uint num_iterations ) {
-
-    T L = L_0;
 
     VectorT<T> Beta = Beta_0;
 
     for( uint i = 0; i < num_iterations; i++ ) {
 
-        Beta = update_rule( X, Y, Beta, L, lambda );
+        Beta = update_rule( X, Y, Beta, internal::SubGradientSolver<T>::L_0, lambda );
 
     }
 
@@ -142,18 +137,14 @@ VectorT<T> ISTA<T>::operator()(
     const MatrixT<T>& X,
     const VectorT<T>& Y,
     const VectorT<T>& Beta_0,
-    T L_0, \
     T lambda,
     T duality_gap_target ) {
-
-    T L = L_0;
 
     VectorT<T> Beta = Beta_0;
 
     do {
 
-        Beta = update_rule( X, Y, Beta, L, lambda );
-
+        Beta = update_rule( X, Y, Beta, internal::SubGradientSolver<T>::L_0, lambda );
         DEBUG_PRINT( "Duality Gap:" << duality_gap( X, Y, Beta, lambda ) );
 
     } while ( duality_gap( X, Y, Beta, lambda ) > duality_gap_target );
@@ -172,7 +163,7 @@ VectorT<T> ISTA<T>::update_rule(
     T lambda ) {
 
     uint counter = 0;
-    T L = L_0;
+    L = L_0;
 
     VectorT<T> Beta_temp = internal::SubGradientSolver<T>::update_beta_ista( X, Y, Beta, L, lambda );
 
@@ -189,7 +180,7 @@ VectorT<T> ISTA<T>::update_rule(
 
     }
 
-    return internal::SubGradientSolver<T>::update_beta_ista( X, Y, Beta, L, lambda );;
+    return internal::SubGradientSolver<T>::update_beta_ista( X, Y, Beta, L, lambda );
 }
 #else
 template < typename T >
@@ -197,8 +188,10 @@ VectorT<T> ISTA<T>::update_rule(
     const MatrixT<T>& X,
     const VectorT<T>& Y,
     const VectorT<T>& Beta,
-    T L,
+    T L_0,
     T lambda ) {
+
+    L = L_0;
 
     VectorT<T> f_grad = 2.0*( X.transpose()*( X*Beta - Y ) );
     VectorT<T> Beta_temp = ( Beta - (1.0/L)*f_grad ).unaryExpr( SoftThres<T>( lambda/L ) );
@@ -232,7 +225,7 @@ VectorT<T> ISTA<T>::update_rule(
 
     }
 
-    return ( Beta - 1.0/L*f_grad ).unaryExpr( SoftThres<T>( lambda/L ) );;
+    return ( Beta - 1.0/L*f_grad ).unaryExpr( SoftThres<T>( lambda/L ) );
 }
 #endif
 

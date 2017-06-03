@@ -87,13 +87,13 @@ Rcpp::NumericMatrix Eigen2NumMat( const Eigen::Matrix< T, Eigen::Dynamic, Eigen:
 
 Rcpp::List FOS( Rcpp::NumericMatrix X, Rcpp::NumericVector Y ) {
 
-    Eigen::MatrixXd mat_X = NumMat2Eigen<double>(X);
-    Eigen::VectorXd vect_Y = NumVect2Eigen<double>(Y);
+    Eigen::MatrixXf mat_X = NumMat2Eigen<float>(X);
+    Eigen::VectorXf vect_Y = NumVect2Eigen<float>(Y);
 
-    hdim::experimental::X_FOS<double> fos;
-    fos(  mat_X, vect_Y  );
+    hdim::experimental::X_FOS<float> fos;
+    fos(  mat_X, vect_Y, hdim::SolverType::fista );
 
-    Rcpp::NumericVector beta = Eigen2NumVec<double>( fos.ReturnCoefficients() );
+    Rcpp::NumericVector beta = Eigen2NumVec<float>( fos.ReturnCoefficients() );
     beta.attr("names") = Rcpp::colnames(X);
 
     unsigned int stopping_index = fos.ReturnOptimIndex();

@@ -21,14 +21,11 @@ int main(int argc, char *argv[]) {
     (void)argc;
     (void)argv;
 
-//    auto x_fos = hdim::experimental::PerfX_FOS< float >( hdim::SolverType::ista );
-//    auto old_fos = hdim::PerfFOS< double >();
+    auto x_fos_cd = hdim::experimental::TestX_FOS< float >( hdim::SolverType::cd );
+    auto x_fos_fista = hdim::experimental::TestX_FOS< float >( hdim::SolverType::ista );
 
-//    auto x_fos = hdim::experimental::TestX_FOS< float >();
-//    auto old_fos = hdim::TestFOS< double >();
-
-    auto x_fos_cd = hdim::experimental::PerfX_FOS< float >( hdim::SolverType::cd );
-    auto x_fos_fista = hdim::experimental::PerfX_FOS< double >( hdim::SolverType::ista );
+//    auto x_fos_cd = hdim::experimental::PerfX_FOS< float >( hdim::SolverType::ista );
+//    auto x_fos_fista = hdim::experimental::PerfX_FOS< float >( hdim::SolverType::fista );
 
     std::vector< double > ratio_results;
 
@@ -38,18 +35,18 @@ int main(int argc, char *argv[]) {
     }
 
 
-    jaspl::plot_to_disk< std::vector< double > >( ratio_results,
-                                                  "Timing Results Ratio",
-                                                  "Row Size / 200",
-                                                  "Execution time X FOS w CD v. X FOS w ISTA (ms).",
-                                                  "Ratio of time, X FOS w CD v. X FOS w ISTA ",
-                                                  "/home/bephillips2/");
-
 //    jaspl::plot_to_disk< std::vector< double > >( ratio_results,
-//                                                  "L2 Norm of Beta Ratio",
+//                                                  "Timing Results Ratio",
 //                                                  "Row Size / 200",
-//                                                  "L2 Norm of Beta ( X FOS w X_2 CD v. FOS w ISTA ).",
-//                                                  "Ratio of results X FOS w CD v. FOS w ISTA",
+//                                                  "Execution time X FOS w ISTA v. X FOS w FISTA (ms).",
+//                                                  "Ratio of time, X FOS w ISTA v. X FOS w FISTA ",
 //                                                  "/home/bephillips2/");
+
+    jaspl::plot_to_disk< std::vector< double > >( ratio_results,
+                                                  "L2 Norm of Beta Ratio",
+                                                  "Row Size / 200",
+                                                  "L2 Norm of Beta ( X FOS w CD v. X FOS w ISTA ).",
+                                                  "Ratio of results X FOS w CD v. X FOS w ISTA ",
+                                                  "/home/bephillips2/");
 
 }

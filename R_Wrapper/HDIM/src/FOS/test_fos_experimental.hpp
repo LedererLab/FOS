@@ -22,7 +22,7 @@ namespace hdim {
 namespace experimental {
 
 template < typename T >
-std::vector< T > TestX_FOS() {
+std::vector< T > TestX_FOS( SolverType s_type ) {
 
     std::cout << "Running X_FOS test for data type: " << get_type_name<T>() << std::endl;
 
@@ -53,7 +53,7 @@ std::vector< T > TestX_FOS() {
                   << std::endl;
 
         X_FOS< T > algo_fos;
-        TIME_IT( algo_fos( X, Y ); );
+        TIME_IT( algo_fos( X, Y, s_type ); );
 
         std::cout << "Stopping index: " << algo_fos.ReturnOptimIndex() << std::endl;
         T sqr_norm = algo_fos.ReturnCoefficients().squaredNorm();

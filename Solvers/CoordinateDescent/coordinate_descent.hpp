@@ -43,6 +43,7 @@ class CoordinateDescentSolver : public internal::Solver<T> {
     CoordinateDescentSolver(const MatrixT<T>& X,
                             const VectorT<T>& Y,
                             const VectorT<T>& Beta_0 );
+    ~CoordinateDescentSolver();
 
     VectorT<T> operator()(
         const MatrixT<T>& X,
@@ -97,6 +98,9 @@ CoordinateDescentSolver<T>::CoordinateDescentSolver(
 }
 
 template < typename T >
+CoordinateDescentSolver<T>::~CoordinateDescentSolver() {}
+
+template < typename T >
 VectorT<T> CoordinateDescentSolver<T>::operator () (
     const MatrixT<T>& X,
     const VectorT<T>& Y,
@@ -134,6 +138,9 @@ VectorT<T> CoordinateDescentSolver<T>::operator () (
     const VectorT<T>& Beta_0,
     T lambda,
     uint num_iterations) {
+
+    (void)X;
+    (void)Y;
 
     VectorT<T> Beta = Beta_0;
 

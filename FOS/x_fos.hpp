@@ -25,6 +25,8 @@
 
 namespace hdim {
 
+enum class SolverType { ista, fista, cd };
+
 namespace experimental {
 
 template < typename T >
@@ -36,9 +38,8 @@ class X_FOS {
     using MatrixT = Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >;
     using VectorT = Eigen::Matrix< T, Eigen::Dynamic, 1 >;
 
-    enum class SolverType { ista, fista, cd };
-
   public:
+
     X_FOS();
     ~X_FOS();
 

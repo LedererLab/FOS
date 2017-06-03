@@ -21,16 +21,19 @@ int main(int argc, char *argv[]) {
     (void)argc;
     (void)argv;
 
-    auto x_fos = hdim::experimental::PerfX_FOS< float >();
-    auto old_fos = hdim::PerfFOS< double >();
+//    auto x_fos = hdim::experimental::PerfX_FOS< float >( hdim::SolverType::ista );
+//    auto old_fos = hdim::PerfFOS< double >();
 
 //    auto x_fos = hdim::experimental::TestX_FOS< float >();
 //    auto old_fos = hdim::TestFOS< double >();
 
+    auto x_fos_cd = hdim::experimental::PerfX_FOS< float >( hdim::SolverType::cd );
+    auto x_fos_fista = hdim::experimental::PerfX_FOS< double >( hdim::SolverType::ista );
+
     std::vector< double > ratio_results;
 
-    for( uint i = 0 ; i < x_fos.size() ; i++ ) {
-        auto ratio = x_fos.at(i) / old_fos.at(i);
+    for( uint i = 0 ; i < x_fos_cd.size() ; i++ ) {
+        auto ratio = x_fos_cd.at(i) / x_fos_fista.at(i);
         ratio_results.push_back( ratio );
     }
 
@@ -38,8 +41,8 @@ int main(int argc, char *argv[]) {
     jaspl::plot_to_disk< std::vector< double > >( ratio_results,
                                                   "Timing Results Ratio",
                                                   "Row Size / 200",
-                                                  "Execution time X FOS w CD v. FOS w ISTA (ms).",
-                                                  "Ratio of X FOS w CD v. FOS w ISTA",
+                                                  "Execution time X FOS w CD v. X FOS w ISTA (ms).",
+                                                  "Ratio of time, X FOS w CD v. X FOS w ISTA ",
                                                   "/home/bephillips2/");
 
 //    jaspl::plot_to_disk< std::vector< double > >( ratio_results,

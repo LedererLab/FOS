@@ -65,7 +65,7 @@ std::vector< T > PerfFOS() {
 namespace experimental {
 
 template < typename T >
-std::vector< T > PerfX_FOS() {
+std::vector< T > PerfX_FOS( SolverType s_type ) {
 
     std::cout << "Timing FOS for data type: " << get_type_name<T>() << std::endl;
 
@@ -93,7 +93,7 @@ std::vector< T > PerfX_FOS() {
 
         auto start = std::chrono::high_resolution_clock::now();
 
-        algo_fos( X, Y );
+        algo_fos( X, Y, s_type );
 
         auto end = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double, std::milli> ms = end - start;

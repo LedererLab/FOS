@@ -70,7 +70,8 @@ HEADERS += FOS/fos.hpp \
     OpenCL_Generics/matvectprodtest.hpp \
     Solvers/SubGradientDescent/FISTA/fista.hpp \
     Solvers/CoordinateDescent/coordinate_descent.hpp \
-    Solvers/SubGradientDescent/subgradient_descent.hpp
+    Solvers/SubGradientDescent/subgradient_descent.hpp \
+    Solvers/solver.hpp
 
 SOURCES += main.cpp \
     OpenCL_Base/openclbase.cpp \

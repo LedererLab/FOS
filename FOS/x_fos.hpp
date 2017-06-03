@@ -18,6 +18,7 @@
 //
 // Project Specific Headers
 #include "../Generic/generics.hpp"
+#include "../Solvers/solver.hpp"
 #include "../Solvers/SubGradientDescent/ISTA/ista.hpp"
 #include "../Solvers/SubGradientDescent/FISTA/fista.hpp"
 #include "../Solvers/CoordinateDescent/coordinate_descent.hpp"
@@ -35,8 +36,11 @@ class X_FOS {
     using MatrixT = Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >;
     using VectorT = Eigen::Matrix< T, Eigen::Dynamic, 1 >;
 
+    enum class SolverType { ista, fista, cd };
+
   public:
     X_FOS();
+    ~X_FOS();
 
     /*!
      * \brief Run the main X_FOS algorithm
@@ -45,7 +49,7 @@ class X_FOS {
      * X and Y.
      *
      */
-    void operator()( const MatrixT& x, const VectorT& y );
+    void operator()( const MatrixT& x, const VectorT& y, SolverType s_type = SolverType::ista );
 
     T ReturnLambda();
     T ReturnIntercept();
@@ -94,8 +98,7 @@ class X_FOS {
                       const VectorT& Beta,
                       T r_stats_it );
 
-    ISTA<T> ista_solver;
-    FISTA<T> fista_solver;
+    internal::Solver<T>* solver;
 
     MatrixT Betas;
     VectorT x_std_devs;
@@ -114,7 +117,6 @@ class X_FOS {
     uint statsIt = 1;
     std::vector< T > lambda_grid;
 
-    T hot_start_L = 0.1;
     const T L_0 = 0.1;
 
     int n = 1, p = 1;
@@ -133,6 +135,11 @@ template< typename T >
  */
 X_FOS< T >::X_FOS() {
     static_assert(std::is_floating_point< T >::value, "X_FOS can only be used with floating point types.");
+}
+
+template < typename T >
+X_FOS<T>::~X_FOS() {
+    delete solver;
 }
 
 template < typename T >
@@ -324,7 +331,7 @@ VectorT<T> X_FOS< T >::RescaleCoefficients(
 }
 
 template < typename T >
-void X_FOS< T >::operator()( const MatrixT& x, const VectorT& y ) {
+void X_FOS< T >::operator()( const MatrixT& x, const VectorT& y, SolverType s_type ) {
 
     VectorT old_Betas;
 
@@ -343,7 +350,17 @@ void X_FOS< T >::operator()( const MatrixT& x, const VectorT& y ) {
 
     Betas = Eigen::Matrix< T , Eigen::Dynamic, Eigen::Dynamic >::Zero( X.cols(), M );
 
-    CoordinateDescentSolver<T> cd_solver( X, Y, Betas.col( 0 ) );
+    switch( s_type ) {
+    case SolverType::ista:
+        solver = new ISTA<T>();
+        break;
+    case SolverType::fista:
+        solver = new FISTA<T>();
+        break;
+    case SolverType::cd:
+        solver = new CoordinateDescentSolver<T>( X, Y, Betas.col( 0 ) );
+        break;
+    }
 
     //Outer Loop
     while( statsCont && ( statsIt < M ) ) {
@@ -366,9 +383,9 @@ void X_FOS< T >::operator()( const MatrixT& x, const VectorT& y ) {
         } else {
 
             DEBUG_PRINT( "Current Lambda: " << rStatsIt );
-            Betas.col( statsIt - 1 ) = fista_solver( X, Y, old_Betas, 0.1, rStatsIt, gap_target );
+//            Betas.col( statsIt - 1 ) = fista_solver( X, Y, old_Betas, 0.1, rStatsIt, gap_target );
 //            Betas.col( statsIt - 1 ) = CoordinateDescent( X, Y, old_Betas, rStatsIt, gap_target );
-//            Betas.col( statsIt - 1 ) = cd_solver( X, Y, old_Betas, rStatsIt, gap_target );
+            Betas.col( statsIt - 1 ) = solver->operator()( X, Y, old_Betas, rStatsIt, gap_target );
         }
 
         statsCont = ComputeStatsCond( C, statsIt, rStatsIt, lambda_grid, Betas );

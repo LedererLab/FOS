@@ -20,16 +20,14 @@
 namespace hdim {
 
 template < typename T >
-class FISTA : internal::SubGradientSolver<T> {
+class FISTA : public internal::SubGradientSolver<T> {
 
   public:
-    FISTA();
 
     VectorT<T> operator()(
         const MatrixT<T>& X,
         const VectorT<T>& Y,
         const VectorT<T>& Beta_0,
-        T L_0,
         T lambda,
         uint num_iterations );
 
@@ -37,7 +35,6 @@ class FISTA : internal::SubGradientSolver<T> {
         const MatrixT<T>& X,
         const VectorT<T>& Y,
         const VectorT<T>& Beta_0,
-        T L_0, \
         T lambda,
         T duality_gap_target );
 
@@ -67,11 +64,6 @@ class FISTA : internal::SubGradientSolver<T> {
 };
 
 template < typename T >
-FISTA<T>::FISTA() {
-    static_assert(std::is_floating_point< T >::value, "FISTA can only be used with floating point types.");
-}
-
-template < typename T >
 VectorT<T> FISTA<T>::update_beta_fista (
     const MatrixT<T>& X,
     const VectorT<T>& Y,
@@ -97,11 +89,10 @@ VectorT<T> FISTA<T>::operator() (
     const MatrixT<T>& X,
     const VectorT<T>& Y,
     const VectorT<T>& Beta_0,
-    T L_0,
     T lambda,
     uint num_iterations ) {
 
-    T L = L_0;
+    T L = internal::SubGradientSolver<T>::L_0;
 
     VectorT<T> Beta = Beta_0;
     y_k = Beta;
@@ -122,11 +113,10 @@ VectorT<T> FISTA<T>::operator() (
     const MatrixT<T>& X,
     const VectorT<T>& Y,
     const VectorT<T>& Beta_0,
-    T L_0,
     T lambda,
     T duality_gap_target ) {
 
-    T L = L_0;
+    T L = internal::SubGradientSolver<T>::L_0;
 
     VectorT<T> Beta = Beta_0;
     y_k = Beta;

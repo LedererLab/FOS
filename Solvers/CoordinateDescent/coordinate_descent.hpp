@@ -19,6 +19,7 @@
 // Project Specific Headers
 #include "../../Generic/debug.hpp"
 #include "../../Generic/generics.hpp"
+#include "../solver.hpp"
 
 namespace hdim {
 
@@ -36,7 +37,7 @@ template< typename T >
 using RowVectorT = Eigen::Matrix< T, 1, Eigen::Dynamic >;
 
 template < typename T >
-class CoordinateDescentSolver {
+class CoordinateDescentSolver : public internal::Solver<T> {
 
   public:
     CoordinateDescentSolver(const MatrixT<T>& X,
@@ -49,6 +50,13 @@ class CoordinateDescentSolver {
         const VectorT<T>& Beta_0,
         T lambda,
         T duality_gap_target );
+
+    VectorT<T> operator()(
+        const MatrixT<T>& X,
+        const VectorT<T>& Y,
+        const VectorT<T>& Beta_0,
+        T lambda,
+        uint num_iterations );
 
   private:
     std::vector<T> thresholds;
@@ -115,6 +123,36 @@ VectorT<T> CoordinateDescentSolver<T>::operator () (
         DEBUG_PRINT( "Norm Squared of updated Beta: " << Beta.squaredNorm() );
 
     } while ( duality_gap( X, Y, Beta, lambda ) > duality_gap_target );
+
+    return Beta;
+}
+
+template < typename T >
+VectorT<T> CoordinateDescentSolver<T>::operator () (
+    const MatrixT<T>& X,
+    const VectorT<T>& Y,
+    const VectorT<T>& Beta_0,
+    T lambda,
+    uint num_iterations) {
+
+    VectorT<T> Beta = Beta_0;
+
+    for( uint j = 0; j < num_iterations; j ++) {
+
+        for( int i = 0; i < Beta.size() ; i++ ) {
+
+            VectorT<T> Beta_negative_i = Beta;
+            Beta_negative_i( i ) = static_cast<T>( 0 );
+
+            T elem = p_1.at( i ) - p_2.at( i )*Beta_negative_i;
+
+            Beta( i ) = soft_threshold<T>( elem, lambda*thresholds.at( i ) );
+
+        }
+
+        DEBUG_PRINT( "Norm Squared of updated Beta: " << Beta.squaredNorm() );
+
+    }
 
     return Beta;
 }

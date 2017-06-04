@@ -9,7 +9,7 @@
 // SPAMS Headers
 //
 // JASPL
-#include "../JASPL/jPlot/jplot.h"
+//#include "../JASPL/jPlot/jplot.h"
 // Project Specific Headers
 #include "FOS/test_fos.hpp"
 #include "FOS/test_fos_experimental.hpp"
@@ -41,11 +41,11 @@ int main(int argc, char *argv[]) {
 //                                                  "Ratio of time, X FOS w ISTA v. X FOS w FISTA ",
 //                                                  "/home/bephillips2/");
 
-    jaspl::plot_to_disk< std::vector< double > >( ratio_results,
-                                                  "L2 Norm of Beta Ratio",
-                                                  "Row Size / 200",
-                                                  "L2 Norm of Beta ( X FOS w CD v. X FOS w FISTA ).",
-                                                  "Ratio of results X FOS w CD v. X FOS w FISTA ",
-                                                  "/home/bephillips2/");
+//    jaspl::plot_to_disk< std::vector< double > >( ratio_results,
+//                                                  "L2 Norm of Beta Ratio",
+//                                                  "Row Size / 200",
+//                                                  "L2 Norm of Beta ( X FOS w CD v. X FOS w FISTA ).",
+//                                                  "Ratio of results X FOS w CD v. X FOS w FISTA ",
+//                                                  "/home/bephillips2/");
 
 }

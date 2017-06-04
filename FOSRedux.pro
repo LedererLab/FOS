@@ -35,16 +35,13 @@ LIBS += -L/usr/local/lib \
 # Eigen
 INCLUDEPATH += /usr/include/eigen3
 
-QMAKE_CXXFLAGS += -fopenmp
-QMAKE_LFLAGS += -fopenmp
+## clBLAS
+#LIBS += -L/usr/local/lib64/
+#LIBS += -lclBLAS
 
-# clBLAS
-LIBS += -L/usr/local/lib64/
-LIBS += -lclBLAS
-
-# OpenCL
-LIBS += -L/usr/local/cuda/lib64
-LIBS += -lOpenCL
+## OpenCL
+#LIBS += -L/usr/local/cuda/lib64
+#LIBS += -lOpenCL
 
 HEADERS += FOS/fos.hpp \
     FOS/test_fos.hpp \
@@ -64,6 +61,9 @@ HEADERS += FOS/fos.hpp \
 SOURCES += main.cpp \
     FOS/x_fos.cpp \
     FOS/fos.cpp \
+    Solvers/SubGradientDescent/ISTA/ista.cpp \
+    Solvers/SubGradientDescent/FISTA/fista.cpp \
+    Solvers/CoordinateDescent/coordinate_descent.cpp
 
 DISTFILES += \
     Python_Wrapper/build.sh \

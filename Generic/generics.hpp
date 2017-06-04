@@ -417,22 +417,6 @@ Eigen::Matrix< int, Eigen::Dynamic, 1 > GenerateSupport(
 }
 
 template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, 1 > ParallelMatVect(
-    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& mat,
-    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& vect ) {
-
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > out( vect.rows(), 1 );
-
-    #pragma omp parallel for
-    for( unsigned int i = 0; i < mat.rows() ; i ++ ) {
-        out( i ) = static_cast<T>( mat.row( i )*vect );
-    }
-
-    return out;
-
-}
-
-template < typename T >
 Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > negative_index(
     const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& mat_in,
     int index ) {

@@ -1,0 +1,6 @@
+<map id="hdim::internal::Solver&lt; T &gt;" name="hdim::internal::Solver&lt; T &gt;">
+<area shape="rect" id="node2" href="$classhdim_1_1_coordinate_descent_solver.html" title="hdim::CoordinateDescentSolver\&lt; T \&gt;" alt="" coords="5,87,244,114"/>
+<area shape="rect" id="node3" href="$classhdim_1_1internal_1_1_sub_gradient_solver.html" title="Abstract base class for Sub&#45;Gradient Descent algorithms ,such as ISTA and FISTA, with backtracking li..." alt="" coords="268,80,448,121"/>
+<area shape="rect" id="node4" href="$classhdim_1_1_f_i_s_t_a.html" title="hdim::FISTA\&lt; T \&gt;" alt="" coords="219,169,347,196"/>
+<area shape="rect" id="node5" href="$classhdim_1_1_i_s_t_a.html" title="Run the Iterative Shrinking and Thresholding Algorthim. " alt="" coords="371,169,491,196"/>
+</map>

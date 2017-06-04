@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['openclbase',['OpenCLBase',['../classocl_1_1_open_c_l_base.html',1,'ocl']]]
+  ['matprodtest',['MatProdTest',['../class_mat_prod_test.html',1,'']]],
+  ['matvectprodtest',['MatVectProdTest',['../class_mat_vect_prod_test.html',1,'']]]
 ];

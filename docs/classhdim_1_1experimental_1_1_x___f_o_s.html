@@ -120,19 +120,22 @@ $(document).ready(function(){initNavTree('classhdim_1_1experimental_1_1_x___f_o_
 <p>The <a class="el" href="classhdim_1_1_f_o_s.html" title="The main FOS algorithim. ">FOS</a> algorithim.  
  <a href="classhdim_1_1experimental_1_1_x___f_o_s.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="x__fos_8h_source.html">x_fos.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="x__fos_8hpp_source.html">x_fos.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a1c7804223ae195cd33864303a301d86e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhdim_1_1experimental_1_1_x___f_o_s.html#a1c7804223ae195cd33864303a301d86e">X_FOS</a> ()</td></tr>
 <tr class="memdesc:a1c7804223ae195cd33864303a301d86e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize a new algorithm, and instantiate member attributes X and Y.  <a href="#a1c7804223ae195cd33864303a301d86e">More...</a><br /></td></tr>
 <tr class="separator:a1c7804223ae195cd33864303a301d86e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab94de50897bfeeeaf3f3793c02e80a0d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhdim_1_1experimental_1_1_x___f_o_s.html#ab94de50897bfeeeaf3f3793c02e80a0d">operator()</a> (const MatrixT &amp;x, const VectorT &amp;y)</td></tr>
-<tr class="memdesc:ab94de50897bfeeeaf3f3793c02e80a0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the main <a class="el" href="classhdim_1_1experimental_1_1_x___f_o_s.html" title="The FOS algorithim. ">X_FOS</a> algorithm.  <a href="#ab94de50897bfeeeaf3f3793c02e80a0d">More...</a><br /></td></tr>
-<tr class="separator:ab94de50897bfeeeaf3f3793c02e80a0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd66698ca09f71576de6660e8cf6916e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhdim_1_1experimental_1_1_x___f_o_s.html#acd66698ca09f71576de6660e8cf6916e">operator()</a> (const MatrixT &amp;x, const VectorT &amp;y, SolverType s_type=SolverType::ista)</td></tr>
+<tr class="memdesc:acd66698ca09f71576de6660e8cf6916e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the main <a class="el" href="classhdim_1_1experimental_1_1_x___f_o_s.html" title="The FOS algorithim. ">X_FOS</a> algorithm.  <a href="#acd66698ca09f71576de6660e8cf6916e">More...</a><br /></td></tr>
+<tr class="separator:acd66698ca09f71576de6660e8cf6916e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abc38a86700b585a621b6a5156858e5d2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abc38a86700b585a621b6a5156858e5d2"></a>
 T&#160;</td><td class="memItemRight" valign="bottom"><b>ReturnLambda</b> ()</td></tr>
 <tr class="separator:abc38a86700b585a621b6a5156858e5d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32a83de9ae7afe03ae7456992a04fe5e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a32a83de9ae7afe03ae7456992a04fe5e"></a>
+T&#160;</td><td class="memItemRight" valign="bottom"><b>ReturnIntercept</b> ()</td></tr>
+<tr class="separator:a32a83de9ae7afe03ae7456992a04fe5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab8117b36da518aad94704ff8fdf7cf13"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab8117b36da518aad94704ff8fdf7cf13"></a>
 MatrixT&#160;</td><td class="memItemRight" valign="bottom"><b>ReturnBetas</b> ()</td></tr>
 <tr class="separator:ab8117b36da518aad94704ff8fdf7cf13"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -164,7 +167,7 @@ class hdim::experimental::X_FOS&lt; T &gt;</h3>
 
 <p>The <a class="el" href="classhdim_1_1_f_o_s.html" title="The main FOS algorithim. ">FOS</a> algorithim. </p>
 
-<p>Definition at line <a class="el" href="x__fos_8h_source.html#l00033">33</a> of file <a class="el" href="x__fos_8h_source.html">x_fos.h</a>.</p>
+<p>Definition at line <a class="el" href="x__fos_8hpp_source.html#l00036">36</a> of file <a class="el" href="x__fos_8hpp_source.html">x_fos.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a1c7804223ae195cd33864303a301d86e"></a>
 <div class="memitem">
@@ -190,12 +193,12 @@ template&lt;typename T &gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="x__fos_8h_source.html#l00118">118</a> of file <a class="el" href="x__fos_8h_source.html">x_fos.h</a>.</p>
+<p>Definition at line <a class="el" href="x__fos_8hpp_source.html#l00137">137</a> of file <a class="el" href="x__fos_8hpp_source.html">x_fos.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="ab94de50897bfeeeaf3f3793c02e80a0d"></a>
+<a class="anchor" id="acd66698ca09f71576de6660e8cf6916e"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -211,7 +214,13 @@ template&lt;typename T &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const VectorT &amp;&#160;</td>
-          <td class="paramname"><em>y</em>&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">SolverType&#160;</td>
+          <td class="paramname"><em>s_type</em> = <code>SolverType::ista</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -224,7 +233,7 @@ template&lt;typename T &gt; </div>
 <p>Run the main <a class="el" href="classhdim_1_1experimental_1_1_x___f_o_s.html" title="The FOS algorithim. ">X_FOS</a> algorithm. </p>
 <p>Calling this function will run the <a class="el" href="classhdim_1_1experimental_1_1_x___f_o_s.html" title="The FOS algorithim. ">X_FOS</a> algorithm using the values of X and Y. </p>
 
-<p>Definition at line <a class="el" href="x__fos_8h_source.html#l00252">252</a> of file <a class="el" href="x__fos_8h_source.html">x_fos.h</a>.</p>
+<p>Definition at line <a class="el" href="x__fos_8hpp_source.html#l00335">335</a> of file <a class="el" href="x__fos_8hpp_source.html">x_fos.hpp</a>.</p>
 
 </div>
 </div>

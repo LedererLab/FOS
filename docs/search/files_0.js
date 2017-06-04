@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['coordinate_5fdescent_2eh',['coordinate_descent.h',['../coordinate__descent_8h.html',1,'']]]
+  ['coordinate_5fdescent_2ehpp',['coordinate_descent.hpp',['../coordinate__descent_8hpp.html',1,'']]]
 ];

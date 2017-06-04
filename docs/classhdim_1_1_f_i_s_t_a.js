@@ -1,6 +1,5 @@
 var classhdim_1_1_f_i_s_t_a =
 [
-    [ "FISTA", "classhdim_1_1_f_i_s_t_a.html#aea858656ceb6b73908f519090a1fd0ca", null ],
-    [ "operator()", "classhdim_1_1_f_i_s_t_a.html#aaeb1c9a63fc211c8b816a15c711444df", null ],
-    [ "operator()", "classhdim_1_1_f_i_s_t_a.html#a0829c5b9f553ed2b60aba2d6fc5cc79b", null ]
+    [ "operator()", "classhdim_1_1_f_i_s_t_a.html#a807de1f069c3d41ed69d8f7454742b93", null ],
+    [ "operator()", "classhdim_1_1_f_i_s_t_a.html#aeb89ed781ff6be5a8418ae33b0a1a04d", null ]
 ];

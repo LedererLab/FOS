@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['hingeloss',['HingeLoss',['../class_f_i_s_t_a_1_1_hinge_loss.html',1,'FISTA']]]
+  ['x_5ffos',['X_FOS',['../classhdim_1_1experimental_1_1_x___f_o_s.html',1,'hdim::experimental']]]
 ];

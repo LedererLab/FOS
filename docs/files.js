@@ -6,8 +6,7 @@ var files =
     [ "OpenCL_Base", "dir_b34738e4897d4fab4ca811e2d3b116f4.html", "dir_b34738e4897d4fab4ca811e2d3b116f4" ],
     [ "OpenCL_Generics", "dir_2c6f6aa72448d67687ebd00140699186.html", "dir_2c6f6aa72448d67687ebd00140699186" ],
     [ "Solvers", "dir_bdfa83abd3770e9236d0774c4efb3ff7.html", "dir_bdfa83abd3770e9236d0774c4efb3ff7" ],
-    [ "SPAMS", "dir_46c2e4c76a8789d3d9dfe4582751439f.html", "dir_46c2e4c76a8789d3d9dfe4582751439f" ],
     [ "main.cpp", "main_8cpp_source.html", null ],
-    [ "test_armadillo.h", "test__armadillo_8h_source.html", null ],
-    [ "test_eigen3.h", "test__eigen3_8h_source.html", null ]
+    [ "test_armadillo.hpp", "test__armadillo_8hpp_source.html", null ],
+    [ "test_eigen3.hpp", "test__eigen3_8hpp_source.html", null ]
 ];

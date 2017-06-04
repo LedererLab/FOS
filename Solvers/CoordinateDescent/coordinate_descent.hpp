@@ -118,7 +118,6 @@ VectorT<T> CoordinateDescentSolver<T>::operator () (
             Beta_negative_i( i ) = static_cast<T>( 0 );
 
             T elem = p_1.at( i ) - p_2.at( i )*Beta_negative_i;
-
             Beta( i ) = soft_threshold<T>( elem, lambda*thresholds.at( i ) );
 
         }
@@ -152,7 +151,6 @@ VectorT<T> CoordinateDescentSolver<T>::operator () (
             Beta_negative_i( i ) = static_cast<T>( 0 );
 
             T elem = p_1.at( i ) - p_2.at( i )*Beta_negative_i;
-
             Beta( i ) = soft_threshold<T>( elem, lambda*thresholds.at( i ) );
 
         }
@@ -255,62 +253,6 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > CoordinateDescentStandardized
             T elem = inverse_norm*X_i.transpose()*( Y - X*Beta_negative_i );
 
             Beta( i ) = soft_threshold<T>( elem, threshold );
-
-        }
-
-        DEBUG_PRINT( "Current Duality Gap: " << duality_gap( X, Y, Beta, lambda ) << " Current Target: " << duality_gap_target );
-        DEBUG_PRINT( "Norm Squared of updated Beta: " << Beta.squaredNorm() );
-
-    } while ( duality_gap( X, Y, Beta, lambda ) > duality_gap_target );
-
-    return Beta;
-}
-
-template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > CoordinateDescentFancy (
-    const MatrixT<T>& X,
-    const VectorT<T>& Y,
-    const VectorT<T>& Beta_0,
-    T lambda,
-    T duality_gap_target ) {
-
-    VectorT<T> Beta = Beta_0;
-
-    std::vector<T> thresholds;
-    thresholds.reserve ( Beta.size() );
-
-    std::vector<T> p_1;
-    p_1.reserve( Beta.size() );
-
-    std::vector< Eigen::Matrix< T, 1, Eigen::Dynamic > > p_2;
-    p_2.reserve( Beta.size() );
-
-    for( int i = 0; i < Beta.size() ; i++ ) {
-
-        VectorT<T> X_i = X.col( i );
-        T inverse_norm = static_cast<T>( 1 )/( X_i.squaredNorm() );
-
-        T threshold = lambda / ( 2.0 )*inverse_norm;
-
-        T element_piece_1 = inverse_norm*X_i.transpose()*Y;
-        Eigen::Matrix< T, 1, Eigen::Dynamic > element_piece_2 = inverse_norm*X_i.transpose()*X;
-
-        thresholds.push_back( threshold );
-        p_1.push_back( element_piece_1 );
-        p_2.push_back( element_piece_2 );
-
-    }
-
-    do {
-
-        for( int i = 0; i < Beta.size() ; i++ ) {
-
-            VectorT<T> Beta_negative_i = Beta;
-            Beta_negative_i( i ) = static_cast<T>( 0 );
-
-            T elem = p_1.at( i ) - p_2.at( i )*Beta_negative_i;
-
-            Beta( i ) = soft_threshold<T>( elem, thresholds.at( i ) );
 
         }
 

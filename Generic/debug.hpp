@@ -26,12 +26,6 @@
  *  \brief Functions designed to aid in debugging.
  */
 
-#ifdef DEBUG
-#define DEBUG_ON 1
-#else
-#define DEBUG_ON 0
-#endif
-
 template <typename T>
 /*!
  * \brief Get the de-mangled name of a type ( as it would

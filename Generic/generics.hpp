@@ -71,7 +71,7 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > CSV2Eigen( std::string file_p
         while (std::getline(lineStream, cell, ',')) {
             values.push_back( boost::lexical_cast<T>(cell) );
         }
-        ++rows;
+        rows ++;
     }
 
     file_stream.close();
@@ -89,21 +89,21 @@ T StdDev( const Eigen::Matrix< T, Eigen::Dynamic, 1 >& vect ) {
         return static_cast<T>( 0 );
     }
 
-    T K = vect[0];
-    T n = 0.0;
-    T sum = 0.0;
-    T sum_sqr = 0.0;
-    T variance = 0.0;
+    T K = vect( 0 );
+    T n = static_cast<T>(0.0);
+    T sum = static_cast<T>(0.0);
+    T sum_sqr = static_cast<T>(0.0);
+    T variance = static_cast<T>(0.0);
 
     for( unsigned int i = 0; i < vect.size() ; i ++ ) {
 
-        n = n + 1.0;
+        n = n + static_cast<T>(1.0);
 
         T x = vect( i );
 
         sum += x - K;
         sum_sqr += ( x - K ) * ( x - K );
-        variance = ( sum_sqr - (sum*sum)/n)/( n - 1.0 );
+        variance = ( sum_sqr - (sum*sum)/n)/( n - static_cast<T>(1.0) );
 
     }
 

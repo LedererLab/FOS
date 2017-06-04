@@ -53,28 +53,17 @@ HEADERS += FOS/fos.hpp \
     Solvers/SubGradientDescent/ISTA/ista.hpp \
     Solvers/SubGradientDescent/ISTA/test_ista.hpp \
     R_Wrapper/fos_r.hpp \
-    ISTA/perf_ista.hpp \
-    test_eigen3.hpp \
-    OpenCL_Generics/cl_generics.hpp \
-    OpenCL_Generics/cl_algorithm.hpp \
-    OpenCL_Base/openclbase.hpp \
-    OpenCL_Generics/perf_cl_product.hpp \
     FOS/test_fos_experimental.hpp \
     FOS/perf_fos.hpp \
     FOS/x_fos.hpp \
-    test_armadillo.hpp \
-    OpenCL_Generics/matvectprodtest.hpp \
     Solvers/SubGradientDescent/FISTA/fista.hpp \
     Solvers/CoordinateDescent/coordinate_descent.hpp \
     Solvers/SubGradientDescent/subgradient_descent.hpp \
     Solvers/solver.hpp
 
 SOURCES += main.cpp \
-    OpenCL_Base/openclbase.cpp \
-    OpenCL_Generics/perf_cl_product.cpp \
     FOS/x_fos.cpp \
     FOS/fos.cpp \
-    OpenCL_Generics/matvectprodtest.cpp \
 
 DISTFILES += \
     Python_Wrapper/build.sh \

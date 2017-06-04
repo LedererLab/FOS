@@ -57,7 +57,7 @@ class CoordinateDescentSolver : public internal::Solver<T> {
         const VectorT<T>& Y,
         const VectorT<T>& Beta_0,
         T lambda,
-        uint num_iterations );
+        unsigned int num_iterations );
 
   private:
     std::vector<T> thresholds;
@@ -136,14 +136,14 @@ VectorT<T> CoordinateDescentSolver<T>::operator () (
     const VectorT<T>& Y,
     const VectorT<T>& Beta_0,
     T lambda,
-    uint num_iterations) {
+    unsigned int num_iterations) {
 
     (void)X;
     (void)Y;
 
     VectorT<T> Beta = Beta_0;
 
-    for( uint j = 0; j < num_iterations; j ++) {
+    for( unsigned int j = 0; j < num_iterations; j ++) {
 
         for( int i = 0; i < Beta.size() ; i++ ) {
 

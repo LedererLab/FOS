@@ -68,7 +68,7 @@ class Solver {
         const VectorT<T>& Y,
         const VectorT<T>& Beta_0,
         T lambda,
-        uint num_iterations ) = 0;
+        unsigned int num_iterations ) = 0;
 
     /*!
      * \brief Run the Sub-Gradient Descent algorithm until the duality gap is below

@@ -29,7 +29,7 @@ class FISTA : public internal::SubGradientSolver<T> {
         const VectorT<T>& Y,
         const VectorT<T>& Beta_0,
         T lambda,
-        uint num_iterations );
+        unsigned int num_iterations );
 
     VectorT<T> operator()(
         const MatrixT<T>& X,
@@ -91,7 +91,7 @@ VectorT<T> FISTA<T>::operator() (
     const VectorT<T>& Y,
     const VectorT<T>& Beta_0,
     T lambda,
-    uint num_iterations ) {
+    unsigned int num_iterations ) {
 
     T L = internal::SubGradientSolver<T>::L_0;
 
@@ -99,7 +99,7 @@ VectorT<T> FISTA<T>::operator() (
     y_k = Beta;
     t_k = 1;
 
-    for( uint i = 0; i < num_iterations; i++ ) {
+    for( unsigned int i = 0; i < num_iterations; i++ ) {
 
         update_rule( X, Y, Beta, L, lambda );
 
@@ -148,7 +148,7 @@ VectorT<T> FISTA<T>::update_rule(
 
     VectorT<T> y_k_temp = internal::SubGradientSolver<T>::update_beta_ista( X, Y, y_k, L, lambda );
 
-    uint counter = 0;
+    unsigned int counter = 0;
 
     while( ( internal::SubGradientSolver<T>::f_beta( X, Y, y_k_temp ) > internal::SubGradientSolver<T>::f_beta_tilda( X, Y, y_k_temp, y_k_old, L ) ) ) {
 
@@ -182,7 +182,7 @@ VectorT<T> FISTA<T>::update_rule(
     VectorT<T> to_modify = y_k_old - (1.0/L)*f_grad;
     VectorT<T> y_k_temp = to_modify.unaryExpr( SoftThres<T>( lambda/L ) );
 
-    uint counter = 0;
+    unsigned int counter = 0;
 
     T f_beta = ( X*y_k_temp - Y ).squaredNorm();
 

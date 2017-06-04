@@ -32,30 +32,30 @@ class FOS {
 
     T ReturnLambda();
     MatrixT ReturnBetas();
-    uint ReturnOptimIndex();
+    unsigned int ReturnOptimIndex();
     VectorT ReturnCoefficients();
     VectorT ReturnSupport();
 
   protected:
     VectorT avfos_fit;
     T lambda;
-    uint optim_index;
+    unsigned int optim_index;
 
   private:
     std::vector< T > GenerateLambdaGrid(const Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> &X,
                                         const Eigen::Matrix<T, Eigen::Dynamic, 1 > &Y,
-                                        uint M);
+                                        unsigned int M);
 
 
     bool ComputeStatsCond(
         T C,
-        uint stats_it,
+        unsigned int stats_it,
         T r_stats_it,
         const std::vector<T>& lambdas,
         const MatrixT& X,
         const MatrixT& Betas );
 
-    T duality_gap_target( T gamma, T C, T r_stats_it, uint n );
+    T duality_gap_target( T gamma, T C, T r_stats_it, unsigned int n );
     T dual_objective ( const MatrixT& X, \
                        const VectorT& Y, \
                        const VectorT& Beta, \
@@ -88,7 +88,7 @@ class FOS {
         const MatrixT& X, \
         const VectorT& Y, \
         const VectorT& Beta_0, \
-        uint num_iterations, \
+        unsigned int num_iterations, \
         T L_0, \
         T lambda );
 
@@ -99,20 +99,20 @@ class FOS {
     VectorT Y;
 
     const T C = 0.75;
-    const uint M = 100;
+    const unsigned int M = 100;
     const T gamma = 1;
 
     T rMax;
     T rMin;
 
     T L_k_less_1 = 0.1;
-    uint statsIt = 1;
+    unsigned int statsIt = 1;
 
-    uint n = 0, p = 0;
+    unsigned int n = 0, p = 0;
 
     std::vector< T > lambda_grid;
 
-    uint loop_index = 0;
+    unsigned int loop_index = 0;
 
 };
 
@@ -141,7 +141,7 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > FOS< T >::ReturnBetas() {
 }
 
 template < typename T >
-uint FOS< T >::ReturnOptimIndex() {
+unsigned int FOS< T >::ReturnOptimIndex() {
     return optim_index;
 }
 
@@ -184,7 +184,7 @@ template < typename T >
  * \return True if outer loop should continue, false otherwise
  */
 bool FOS<T>::ComputeStatsCond(T C,
-                              uint stats_it,
+                              unsigned int stats_it,
                               T r_stats_it,
                               const std::vector<T> &lambdas,
                               const MatrixT& X,
@@ -192,7 +192,7 @@ bool FOS<T>::ComputeStatsCond(T C,
 
     bool stats_cond = true;
 
-    for ( uint i = 1; i <= stats_it; i++ ) {
+    for ( unsigned int i = 1; i <= stats_it; i++ ) {
 
         VectorT beta_k = Betas.col( i - 1 );
         T rk = lambdas.at( i - 1 );
@@ -219,7 +219,7 @@ template < typename T >
  */
 std::vector< T > FOS<T>::GenerateLambdaGrid( const MatrixT& X,
         const VectorT& Y,
-        uint M ) {
+        unsigned int M ) {
 
     T rMax = 2.0*( X.transpose() * Y ).template lpNorm< Eigen::Infinity >();
     T rMin = 0.001*rMax;
@@ -239,7 +239,7 @@ template < typename T >
  *
  * \return Target quantity
  */
-T FOS< T >::duality_gap_target( T gamma, T C, T r_stats_it, uint n ) {
+T FOS< T >::duality_gap_target( T gamma, T C, T r_stats_it, unsigned int n ) {
 
     T n_f = static_cast<T>( n );
     return gamma*square( C )*square( r_stats_it )/n_f;
@@ -329,7 +329,7 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >  FOS<T>::ISTA (
     const MatrixT& X, \
     const VectorT& Y, \
     const VectorT& Beta_0, \
-    uint num_iterations, \
+    unsigned int num_iterations, \
     T L_0, \
     T lambda ) {
 
@@ -338,9 +338,9 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >  FOS<T>::ISTA (
 
     VectorT Beta = Beta_0;
 
-    for( uint i = 0; i < num_iterations; i++ ) {
+    for( unsigned int i = 0; i < num_iterations; i++ ) {
 
-        uint counter = 0;
+        unsigned int counter = 0;
 
         VectorT Beta_temp = update_beta_ista( X, Y, Beta, L, lambda );
 
@@ -382,7 +382,7 @@ void FOS< T >::Algorithm() {
     lambda_grid = GenerateLambdaGrid( X, Y, M );
 
     bool statsCont = true;
-    uint statsIt = 1;
+    unsigned int statsIt = 1;
 
     Betas = MatrixT::Zero( X.cols(), M );
 
@@ -406,7 +406,7 @@ void FOS< T >::Algorithm() {
             T duality_gap = primal_objective( X, Y, old_Betas, rStatsIt ) + dual_objective( X, Y, old_Betas, rStatsIt );
 
 
-            uint n = static_cast< uint >( X.rows() );
+            unsigned int n = static_cast< unsigned int >( X.rows() );
             T gap_target = duality_gap_target( gamma, C, rStatsIt, n );
 
             DEBUG_PRINT( "Duality gap is " << duality_gap << " gap target is " << gap_target );

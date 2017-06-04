@@ -15,7 +15,7 @@
 #include "../Generic/debug.hpp"
 #include "../Generic/generics.hpp"
 
-MatProdTest::MatProdTest( uint platform_number, uint device_number ) : OpenCLBase( platform_number, device_number ) {
+MatProdTest::MatProdTest( unsigned int platform_number, unsigned int device_number ) : OpenCLBase( platform_number, device_number ) {
 
     err = clblasSetup();
 }
@@ -26,7 +26,7 @@ MatProdTest::~MatProdTest() {
 
 }
 
-double MatProdTest::CPUMatMul( uint num_rows, uint num_cols ) {
+double MatProdTest::CPUMatMul( unsigned int num_rows, unsigned int num_cols ) {
 
     std::cout << "Testing matrix product using Eigen3." << std::endl;
 
@@ -52,7 +52,7 @@ double MatProdTest::CPUMatMul( uint num_rows, uint num_cols ) {
 
 }
 
-double MatProdTest::CLMatMul( uint num_rows, uint num_cols ) {
+double MatProdTest::CLMatMul( unsigned int num_rows, unsigned int num_cols ) {
 
     std::cout << "Testing matrix product using clBLAS." << std::endl;
 
@@ -110,7 +110,7 @@ double MatProdTest::CLMatMul( uint num_rows, uint num_cols ) {
 
 }
 
-double MatProdTest::CLMatMulBiased( uint num_rows, uint num_cols ) {
+double MatProdTest::CLMatMulBiased( unsigned int num_rows, unsigned int num_cols ) {
 
     std::cout << "Testing matrix product using clBLAS." << std::endl;
 
@@ -165,7 +165,7 @@ double MatProdTest::CLMatMulBiased( uint num_rows, uint num_cols ) {
 
 }
 
-std::pair< double, double > MatProdTest::Run( uint num_rows, uint num_cols ) {
+std::pair< double, double > MatProdTest::Run( unsigned int num_rows, unsigned int num_cols ) {
 
     std::cout << "Matrix size of " << num_rows << " x " << num_cols << std::endl;
 
@@ -176,7 +176,7 @@ std::pair< double, double > MatProdTest::Run( uint num_rows, uint num_cols ) {
 
 }
 
-std::pair< double, double > MatProdTest::RunBiased( uint num_rows, uint num_cols ) {
+std::pair< double, double > MatProdTest::RunBiased( unsigned int num_rows, unsigned int num_cols ) {
 
     std::cout << "Matrix size of " << num_rows << " x " << num_cols << std::endl;
 

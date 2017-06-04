@@ -17,7 +17,7 @@
 #include "../Generic/debug.hpp"
 #include "../Generic/generics.hpp"
 
-MatVectProdTest::MatVectProdTest( uint platform_number, uint device_number ) : OpenCLBase( platform_number, device_number ) {
+MatVectProdTest::MatVectProdTest( unsigned int platform_number, unsigned int device_number ) : OpenCLBase( platform_number, device_number ) {
 
     err = clblasSetup();
 }
@@ -28,7 +28,7 @@ MatVectProdTest::~MatVectProdTest() {
 
 }
 
-double MatVectProdTest::CPUMatMul( uint num_rows, uint num_cols ) {
+double MatVectProdTest::CPUMatMul( unsigned int num_rows, unsigned int num_cols ) {
 
     std::cout << "Testing matrix product using Eigen3." << std::endl;
 
@@ -53,7 +53,7 @@ double MatVectProdTest::CPUMatMul( uint num_rows, uint num_cols ) {
 
 }
 
-double MatVectProdTest::CLMatMul( uint num_rows, uint num_cols ) {
+double MatVectProdTest::CLMatMul( unsigned int num_rows, unsigned int num_cols ) {
 
     std::cout << "Testing matrix product using clBLAS." << std::endl;
 
@@ -119,7 +119,7 @@ double MatVectProdTest::CLMatMul( uint num_rows, uint num_cols ) {
 
 }
 
-double MatVectProdTest::CLMatMulBiased( uint num_rows, uint num_cols ) {
+double MatVectProdTest::CLMatMulBiased( unsigned int num_rows, unsigned int num_cols ) {
 
     std::cout << "Testing matrix product using clBLAS." << std::endl;
 
@@ -171,7 +171,7 @@ double MatVectProdTest::CLMatMulBiased( uint num_rows, uint num_cols ) {
 
 }
 
-std::pair< double, double > MatVectProdTest::Run( uint num_rows, uint num_cols ) {
+std::pair< double, double > MatVectProdTest::Run( unsigned int num_rows, unsigned int num_cols ) {
 
     std::cout << "Matrix size of " << num_rows << " x " << num_cols << std::endl;
 
@@ -182,7 +182,7 @@ std::pair< double, double > MatVectProdTest::Run( uint num_rows, uint num_cols )
 
 }
 
-std::pair< double, double > MatVectProdTest::RunBiased( uint num_rows, uint num_cols ) {
+std::pair< double, double > MatVectProdTest::RunBiased( unsigned int num_rows, unsigned int num_cols ) {
 
     std::cout << "Matrix size of " << num_rows << " x " << num_cols << std::endl;
 

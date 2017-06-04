@@ -46,9 +46,6 @@ LIBS += -lclBLAS
 LIBS += -L/usr/local/cuda/lib64
 LIBS += -lOpenCL
 
-# Armadillo
-LIBS += -larmadillo
-
 HEADERS += FOS/fos.hpp \
     FOS/test_fos.hpp \
     Generic/debug.hpp \
@@ -64,7 +61,6 @@ HEADERS += FOS/fos.hpp \
     OpenCL_Generics/perf_cl_product.hpp \
     FOS/test_fos_experimental.hpp \
     FOS/perf_fos.hpp \
-    FOS/perf_fos_experimental.hpp \
     FOS/x_fos.hpp \
     test_armadillo.hpp \
     OpenCL_Generics/matvectprodtest.hpp \

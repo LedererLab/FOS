@@ -14,7 +14,6 @@
 #include "FOS/test_fos.hpp"
 #include "FOS/test_fos_experimental.hpp"
 #include "FOS/perf_fos.hpp"
-#include "FOS/perf_fos_experimental.hpp"
 
 int main(int argc, char *argv[]) {
 
@@ -29,7 +28,7 @@ int main(int argc, char *argv[]) {
 
 //    std::vector< double > ratio_results;
 
-//    for( uint i = 0 ; i < x_fos_cd.size() ; i++ ) {
+//    for( unsigned int i = 0 ; i < x_fos_cd.size() ; i++ ) {
 //        auto ratio = x_fos_cd.at(i) / x_fos_fista.at(i);
 //        ratio_results.push_back( ratio );
 //    }

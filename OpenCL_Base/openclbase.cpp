@@ -12,6 +12,12 @@
 //Headers for this project
 #include "../Generic/debug.hpp"
 
+#ifdef DEBUG
+#define DEBUG_ON 1
+#else
+#define BEBUG_ON 0
+#endif
+
 namespace ocl {
 
 std::vector<cl::Platform> OpenCLBase::all_platforms;
@@ -22,7 +28,7 @@ cl::Context OpenCLBase::context;
 cl::CommandQueue OpenCLBase::command_queue;
 bool OpenCLBase::initalized = false;
 
-void OpenCLBase::SetUp( uint platform_number, uint device_number ) {
+void OpenCLBase::SetUp( unsigned int platform_number, unsigned int device_number ) {
 
     if( DEBUG_ON ) {
         //Force kernels to be compiled each time
@@ -73,7 +79,7 @@ void OpenCLBase::SetUp( uint platform_number, uint device_number ) {
 
 }
 
-OpenCLBase::OpenCLBase(uint platform_number, uint device_number ) {
+OpenCLBase::OpenCLBase(unsigned int platform_number, unsigned int device_number ) {
 
     //Static variables are initalized once and only once
     //these variables need to be consistent across all derived classes

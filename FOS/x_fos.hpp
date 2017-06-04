@@ -55,14 +55,14 @@ class X_FOS {
     T ReturnLambda();
     T ReturnIntercept();
     MatrixT ReturnBetas();
-    uint ReturnOptimIndex();
+    unsigned int ReturnOptimIndex();
     VectorT ReturnCoefficients();
     Eigen::Matrix< int, Eigen::Dynamic, 1 > ReturnSupport();
 
   protected:
     VectorT fos_fit;
     T lambda;
-    uint optim_index;
+    unsigned int optim_index;
 
   private:
 
@@ -79,15 +79,15 @@ class X_FOS {
     std::vector< T > GenerateLambdaGrid (
         const MatrixT& X,
         const VectorT& Y,
-        uint M );
+        unsigned int M );
 
     bool ComputeStatsCond(T C,
-                          uint stats_it,
+                          unsigned int stats_it,
                           T r_stats_it,
                           const std::vector<T> &lambdas,
                           const MatrixT& Betas );
 
-    T duality_gap_target( T gamma, T C, T r_stats_it, uint n );
+    T duality_gap_target( T gamma, T C, T r_stats_it, unsigned int n );
 
     T primal_objective( const MatrixT& X,
                         const VectorT& Y,
@@ -108,14 +108,14 @@ class X_FOS {
     T intercept = 0;
 
     const T C = 0.75;
-    const uint M = 100;
+    const unsigned int M = 100;
     const T gamma = 1;
 
     bool statsCont = true;
 
-    uint loop_index = 0;
+    unsigned int loop_index = 0;
 
-    uint statsIt = 1;
+    unsigned int statsIt = 1;
     std::vector< T > lambda_grid;
 
     const T L_0 = 0.1;
@@ -154,7 +154,7 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS< T >::ReturnBetas() {
 }
 
 template < typename T >
-uint X_FOS< T >::ReturnOptimIndex() {
+unsigned int X_FOS< T >::ReturnOptimIndex() {
     return optim_index;
 }
 
@@ -184,7 +184,7 @@ T X_FOS<T>::compute_intercept( const VectorT& x,
 
     T intercept_part = 0.0;
 
-    for( uint i = 0; i < x.cols() ; i++ ) {
+    for( unsigned int i = 0; i < x.cols() ; i++ ) {
 
         T X_i_bar = x.col( i ).mean();
         intercept_part += scaled_beta( i )*X_i_bar;
@@ -211,14 +211,14 @@ template < typename T >
  * \return True if outer loop should continue, false otherwise
  */
 bool X_FOS<T>::ComputeStatsCond( T C,
-                                 uint stats_it,
+                                 unsigned int stats_it,
                                  T r_stats_it,
                                  const std::vector <T>& lambdas,
                                  const MatrixT& Betas ) {
 
     bool stats_cond = true;
 
-    for ( uint i = 1; i <= stats_it; i++ ) {
+    for ( unsigned int i = 1; i <= stats_it; i++ ) {
 
         VectorT beta_k = Betas.col( i - 1 );
         T rk = lambdas.at( i - 1 );
@@ -245,7 +245,7 @@ std::vector< T > X_FOS<T>::GenerateLambdaGrid (
 
     const MatrixT& X,
     const VectorT& Y,
-    uint M ) {
+    unsigned int M ) {
 
     T rMax = 2.0*( X.transpose() * Y ).template lpNorm< Eigen::Infinity >();
     T rMin = 0.001*rMax;
@@ -287,7 +287,7 @@ T X_FOS< T >::dual_objective ( const MatrixT& X, \
 }
 
 template < typename T >
-T X_FOS<T>::duality_gap_target( T gamma, T C, T r_stats_it, uint n ) {
+T X_FOS<T>::duality_gap_target( T gamma, T C, T r_stats_it, unsigned int n ) {
 
     T n_f = static_cast<T>( n );
     return gamma*square( C )*square( r_stats_it )/n_f;
@@ -299,7 +299,7 @@ VectorT<T> X_FOS< T >::X_weights( const MatrixT& X ) {
 
     VectorT weights( X.cols() );
 
-    for( uint i = 0; i < X.cols() ; i ++ ) {
+    for( unsigned int i = 0; i < X.cols() ; i ++ ) {
         VectorT X_i = X.col( i );
         weights( i ) = StdDev( X_i );
     }
@@ -320,7 +320,7 @@ VectorT<T> X_FOS< T >::RescaleCoefficients(
 
     VectorT scaled_coefs( raw_coefs.size() );
 
-    for( uint i = 0; i < raw_coefs.size() ; i++ ) {
+    for( unsigned int i = 0; i < raw_coefs.size() ; i++ ) {
 
         T weight = y_weight / x_weights( i );
         scaled_coefs( i ) = weight*raw_coefs( i );

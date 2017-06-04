@@ -65,7 +65,7 @@ class ISTA : public internal::SubGradientSolver<T> {
         const VectorT<T>& Y,
         const VectorT<T>& Beta_0,
         T lambda,
-        uint num_iterations );
+        unsigned int num_iterations );
 
     /*!
     \f{algorithm}{
@@ -118,11 +118,11 @@ VectorT<T> ISTA<T>::operator()(
     const VectorT<T>& Y,
     const VectorT<T>& Beta_0,
     T lambda,
-    uint num_iterations ) {
+    unsigned int num_iterations ) {
 
     VectorT<T> Beta = Beta_0;
 
-    for( uint i = 0; i < num_iterations; i++ ) {
+    for( unsigned int i = 0; i < num_iterations; i++ ) {
 
         Beta = update_rule( X, Y, Beta, internal::SubGradientSolver<T>::L_0, lambda );
 
@@ -162,7 +162,7 @@ VectorT<T> ISTA<T>::update_rule(
     T L_0,
     T lambda ) {
 
-    uint counter = 0;
+    unsigned int counter = 0;
     L = L_0;
 
     VectorT<T> Beta_temp = internal::SubGradientSolver<T>::update_beta_ista( X, Y, Beta, L, lambda );

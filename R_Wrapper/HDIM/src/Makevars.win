@@ -22,6 +22,7 @@ PKG_CXXFLAGS += -I. $(SHLIB_OPENMP_CXXFLAGS) $(OPT_DBG) $(EXTRA_OPT)
 
 # Link to R package include folder which will contain symlinks to actual header files
 PKG_CXXFLAGS += -I../inst/include
+PKG_CXXFLAGS += -I../inst/include/boost_1_64_0
 
 # -s to strip the .so
 PKG_LIBS = $(STRIP_OPT) $(SHLIB_OPENMP_CXXFLAGS) $(EXTRA_LIBS) $(FLIBS)

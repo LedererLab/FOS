@@ -17,7 +17,6 @@
 #include <eigen3/Eigen/Dense>
 // Boost Headers
 #include <boost/lexical_cast.hpp>// lexical_cast<T>
-#include <boost/algorithm/string.hpp>//split() and is_any_of for parsing .csv files
 // OpenMP
 //
 // Armadillo Headers

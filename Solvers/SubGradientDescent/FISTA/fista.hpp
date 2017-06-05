@@ -23,6 +23,7 @@ template < typename T >
 class FISTA : public internal::SubGradientSolver<T> {
 
   public:
+    FISTA( T L_0 = 0.1 );
 
     Eigen::Matrix< T, Eigen::Dynamic, 1 > operator()(
         const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
@@ -63,6 +64,9 @@ class FISTA : public internal::SubGradientSolver<T> {
 
     T L = static_cast<T>( 0 );
 };
+
+template < typename T >
+FISTA<T>::FISTA( T L_0 ) : internal::SubGradientSolver<T>( L_0 ) {}
 
 template < typename T >
 Eigen::Matrix< T, Eigen::Dynamic, 1 > FISTA<T>::update_beta_fista (

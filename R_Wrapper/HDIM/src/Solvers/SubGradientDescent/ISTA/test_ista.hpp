@@ -20,7 +20,7 @@
 #include "../Generic/generics.hpp"
 #include "ista.hpp"
 
-void TestIsta( uint num_rows, uint num_cols ) {
+void TestIsta( unsigned int num_rows, unsigned int num_cols ) {
 
     auto X = build_matrix<float>( num_rows, num_cols, &eucl_distance );
     auto Y = X.col(0);
@@ -36,7 +36,7 @@ void TestIsta( uint num_rows, uint num_cols ) {
 
 void RunIstaTests() {
 
-    for ( uint k = 200; k <= 2000; k+= 200 ) {
+    for ( unsigned int k = 200; k <= 2000; k+= 200 ) {
 
         std::cout << "Testing ISTA for a " \
                   << k \

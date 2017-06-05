@@ -32,7 +32,7 @@ std::vector< T > PerfFOS() {
 
     std::vector < T > timing_results;
 
-    for( uint k = 200; k <= 2000 ; k += 200 ) {
+    for( unsigned int k = 200; k <= 2000 ; k += 200 ) {
 
         std::cout << "Testing FOS for a " \
                   << k \
@@ -77,7 +77,7 @@ std::vector< T > PerfX_FOS( SolverType s_type ) {
 
     std::vector < T > timing_results;
 
-    for( uint k = 200; k <= 2000 ; k += 200 ) {
+    for( unsigned int k = 200; k <= 2000 ; k += 200 ) {
 
         std::cout << "Testing FOS for a " \
                   << k \

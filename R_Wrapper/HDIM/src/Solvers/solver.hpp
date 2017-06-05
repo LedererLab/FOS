@@ -20,11 +20,11 @@
 
 namespace hdim {
 
-template< typename T >
-using MatrixT = Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >;
+//template< typename T >
+//using MatrixT = Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >;
 
-template< typename T >
-using VectorT = Eigen::Matrix< T, Eigen::Dynamic, 1 >;
+//template< typename T >
+//using VectorT = Eigen::Matrix< T, Eigen::Dynamic, 1 >;
 
 namespace internal {
 
@@ -63,12 +63,12 @@ class Solver {
      * \return
      * A 1 x n vector of results from the algorithm.
      */
-    virtual VectorT<T> operator()(
-        const MatrixT<T>& X,
-        const VectorT<T>& Y,
-        const VectorT<T>& Beta_0,
+    virtual Eigen::Matrix< T, Eigen::Dynamic, 1 > operator()(
+        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
         T lambda,
-        uint num_iterations ) = 0;
+        unsigned int num_iterations ) = 0;
 
     /*!
      * \brief Run the Sub-Gradient Descent algorithm until the duality gap is below
@@ -93,10 +93,10 @@ class Solver {
      * \return
      * A 1 x n vector of results from the algorithm.
      */
-    virtual VectorT<T> operator()(
-        const MatrixT<T>& X,
-        const VectorT<T>& Y,
-        const VectorT<T>& Beta_0,
+    virtual Eigen::Matrix< T, Eigen::Dynamic, 1 > operator()(
+        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
         T lambda,
         T duality_gap_target ) = 0;
 };

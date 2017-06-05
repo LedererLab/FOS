@@ -31,7 +31,7 @@ std::vector< T > TestFOS() {
 
     std::vector < T > sqr_norm_results;
 
-    for( uint k = 200; k <= 2000 ; k += 200 ) {
+    for( unsigned int k = 200; k <= 2000 ; k += 200 ) {
 
         std::cout << "Testing FOS for a " \
                   << k \

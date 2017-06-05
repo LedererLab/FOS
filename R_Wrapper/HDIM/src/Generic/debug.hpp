@@ -16,7 +16,11 @@
 #include <assert.h> //static_assert
 #include <fstream>
 #include <typeinfo>  // typeid, typeof
+
+#ifdef __linux__
 #include <cxxabi.h>// abi::__cxa_demangle
+#endif
+
 // Boost Headers
 //
 // Miscellaneous Headers
@@ -26,12 +30,6 @@
  *  \brief Functions designed to aid in debugging.
  */
 
-#ifdef DEBUG
-#define DEBUG_ON 1
-#else
-#define DEBUG_ON 0
-#endif
-
 template <typename T>
 /*!
  * \brief Get the de-mangled name of a type ( as it would
@@ -40,6 +38,7 @@ template <typename T>
  * \return
  * name of the template parameter type
  */
+#ifdef __linux__
 std::string get_type_name () {
     int status;
     char* type_name = abi::__cxa_demangle(typeid(T).name(), 0, 0, &status);
@@ -49,6 +48,11 @@ std::string get_type_name () {
 
     return type_str;
 }
+#elif _WIN32
+std::string get_type_name() {
+    return std::string( typeid(T).name() );
+}
+#endif
 
 /** Measure how long a function takes to execute.*/
 #define TIME_IT( func, ... ) \

@@ -23,56 +23,60 @@ template < typename T >
 class FISTA : public internal::SubGradientSolver<T> {
 
   public:
+    FISTA( T L_0 = 0.1 );
 
-    VectorT<T> operator()(
-        const MatrixT<T>& X,
-        const VectorT<T>& Y,
-        const VectorT<T>& Beta_0,
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > operator()(
+        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
         T lambda,
-        uint num_iterations );
+        unsigned int num_iterations );
 
-    VectorT<T> operator()(
-        const MatrixT<T>& X,
-        const VectorT<T>& Y,
-        const VectorT<T>& Beta_0,
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > operator()(
+        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
         T lambda,
         T duality_gap_target );
 
   private:
-    VectorT<T> update_rule(
-        const MatrixT<T>& X,
-        const VectorT<T>& Y,
-        const VectorT<T>& Beta,
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > update_rule(
+        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
         T L_0,
         T lambda );
 
     const T eta = 1.5;
 
-    VectorT<T> update_beta_fista (
-        const MatrixT<T>& X,
-        const VectorT<T>& Y,
-        const VectorT<T>& Beta,
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > update_beta_fista (
+        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
         T L,
         T thres );
 
-    VectorT<T> y_k;
-    VectorT<T> y_k_old;
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > y_k;
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > y_k_old;
 
-    MatrixT<T> x_k_less_1;
+    Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > x_k_less_1;
     T t_k = static_cast<T>( 1 );
 
     T L = static_cast<T>( 0 );
 };
 
 template < typename T >
-VectorT<T> FISTA<T>::update_beta_fista (
-    const MatrixT<T>& X,
-    const VectorT<T>& Y,
-    const VectorT<T>& Beta,
+FISTA<T>::FISTA( T L_0 ) : internal::SubGradientSolver<T>( L_0 ) {}
+
+template < typename T >
+Eigen::Matrix< T, Eigen::Dynamic, 1 > FISTA<T>::update_beta_fista (
+    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
     T L,
     T thres ) {
 
-    VectorT<T> x_k = Beta;
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > x_k = Beta;
 
     x_k_less_1 = x_k;
     x_k = internal::SubGradientSolver<T>::update_beta_ista( X, Y, y_k, L, thres );
@@ -86,20 +90,20 @@ VectorT<T> FISTA<T>::update_beta_fista (
 }
 
 template < typename T >
-VectorT<T> FISTA<T>::operator() (
-    const MatrixT<T>& X,
-    const VectorT<T>& Y,
-    const VectorT<T>& Beta_0,
+Eigen::Matrix< T, Eigen::Dynamic, 1 > FISTA<T>::operator() (
+    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
     T lambda,
-    uint num_iterations ) {
+    unsigned int num_iterations ) {
 
     T L = internal::SubGradientSolver<T>::L_0;
 
-    VectorT<T> Beta = Beta_0;
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta = Beta_0;
     y_k = Beta;
     t_k = 1;
 
-    for( uint i = 0; i < num_iterations; i++ ) {
+    for( unsigned int i = 0; i < num_iterations; i++ ) {
 
         update_rule( X, Y, Beta, L, lambda );
 
@@ -110,14 +114,14 @@ VectorT<T> FISTA<T>::operator() (
 }
 
 template < typename T >
-VectorT<T> FISTA<T>::operator() (
-    const MatrixT<T>& X,
-    const VectorT<T>& Y,
-    const VectorT<T>& Beta_0,
+Eigen::Matrix< T, Eigen::Dynamic, 1 > FISTA<T>::operator() (
+    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
     T lambda,
     T duality_gap_target ) {
 
-    VectorT<T> Beta = Beta_0;
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta = Beta_0;
     y_k = Beta;
     t_k = 1;
 
@@ -135,10 +139,10 @@ VectorT<T> FISTA<T>::operator() (
 
 #ifdef DEBUG
 template < typename T >
-VectorT<T> FISTA<T>::update_rule(
-    const MatrixT<T>& X,
-    const VectorT<T>& Y,
-    const VectorT<T>& Beta,
+Eigen::Matrix< T, Eigen::Dynamic, 1 > FISTA<T>::update_rule(
+    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
     T L_0,
     T lambda ) {
 
@@ -146,9 +150,9 @@ VectorT<T> FISTA<T>::update_rule(
 
     y_k_old = y_k;
 
-    VectorT<T> y_k_temp = internal::SubGradientSolver<T>::update_beta_ista( X, Y, y_k, L, lambda );
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > y_k_temp = internal::SubGradientSolver<T>::update_beta_ista( X, Y, y_k, L, lambda );
 
-    uint counter = 0;
+    unsigned int counter = 0;
 
     while( ( internal::SubGradientSolver<T>::f_beta( X, Y, y_k_temp ) > internal::SubGradientSolver<T>::f_beta_tilda( X, Y, y_k_temp, y_k_old, L ) ) ) {
 
@@ -166,10 +170,10 @@ VectorT<T> FISTA<T>::update_rule(
 }
 #else
 template < typename T >
-VectorT<T> FISTA<T>::update_rule(
-    const MatrixT<T>& X,
-    const VectorT<T>& Y,
-    const VectorT<T>& Beta,
+Eigen::Matrix< T, Eigen::Dynamic, 1 > FISTA<T>::update_rule(
+    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
     T L_0,
     T lambda ) {
 
@@ -177,19 +181,19 @@ VectorT<T> FISTA<T>::update_rule(
 
     y_k_old = y_k;
 
-    VectorT<T> f_grad = 2.0*( X.transpose()*( X*y_k_old - Y ) );
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > f_grad = 2.0*( X.transpose()*( X*y_k_old - Y ) );
 
-    VectorT<T> to_modify = y_k_old - (1.0/L)*f_grad;
-    VectorT<T> y_k_temp = to_modify.unaryExpr( SoftThres<T>( lambda/L ) );
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > to_modify = y_k_old - (1.0/L)*f_grad;
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > y_k_temp = to_modify.unaryExpr( SoftThres<T>( lambda/L ) );
 
-    uint counter = 0;
+    unsigned int counter = 0;
 
     T f_beta = ( X*y_k_temp - Y ).squaredNorm();
 
-    VectorT<T> f_part = X*y_k_old - Y;
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > f_part = X*y_k_old - Y;
     T taylor_term_0 = f_part.squaredNorm();
 
-    VectorT<T> beta_diff = ( y_k_temp - y_k_old );
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > beta_diff = ( y_k_temp - y_k_old );
 
     T taylor_term_1 = f_grad.transpose()*beta_diff;
 
@@ -218,7 +222,7 @@ VectorT<T> FISTA<T>::update_rule(
 
     }
 
-    VectorT<T> x_k = Beta;
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > x_k = Beta;
 
     x_k_less_1 = x_k;
 

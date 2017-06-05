@@ -21,11 +21,11 @@
 
 namespace hdim {
 
-template< typename T >
-using MatrixT = Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >;
+//template< typename T >
+//using MatrixT = Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >;
 
-template< typename T >
-using VectorT = Eigen::Matrix< T, Eigen::Dynamic, 1 >;
+//template< typename T >
+//using VectorT = Eigen::Matrix< T, Eigen::Dynamic, 1 >;
 
 namespace internal {
 
@@ -44,21 +44,21 @@ class SubGradientSolver : public Solver<T> {
   protected:
 
     T f_beta (
-        const MatrixT<T>& X,
-        const VectorT<T>& Y,
-        const VectorT<T>& Beta );
+        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta );
 
     T f_beta_tilda (
-        const MatrixT<T>& X,
-        const VectorT<T>& Y,
-        const VectorT<T>& Beta,
-        const VectorT<T>& Beta_prime,
+        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_prime,
         T L );
 
-    VectorT<T> update_beta_ista (
-        const MatrixT<T>& X,
-        const VectorT<T>& Y,
-        const VectorT<T>& Beta,
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > update_beta_ista (
+        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
         T L,
         T thres );
 
@@ -77,9 +77,9 @@ SubGradientSolver<T>::~SubGradientSolver() {}
 
 template < typename T >
 T SubGradientSolver<T>::f_beta (
-    const MatrixT<T>& X,
-    const VectorT<T>& Y,
-    const VectorT<T>& Beta ) {
+    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta ) {
 
     return (X*Beta - Y).squaredNorm();
 
@@ -87,10 +87,10 @@ T SubGradientSolver<T>::f_beta (
 
 template < typename T >
 T SubGradientSolver<T>::f_beta_tilda (
-    const MatrixT<T>& X,
-    const VectorT<T>& Y,
-    const VectorT<T>& Beta,
-    const VectorT<T>& Beta_prime,
+    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_prime,
     T L ) {
 
     Eigen::Matrix< T, Eigen::Dynamic, 1  > f_beta = X*Beta_prime - Y;
@@ -107,15 +107,15 @@ T SubGradientSolver<T>::f_beta_tilda (
 }
 
 template < typename T >
-VectorT<T> SubGradientSolver<T>::update_beta_ista (
-    const MatrixT<T>& X,
-    const VectorT<T>& Y,
-    const VectorT<T>& Beta,
+Eigen::Matrix< T, Eigen::Dynamic, 1 > SubGradientSolver<T>::update_beta_ista (
+    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
     T L,
     T thres ) {
 
-    VectorT<T> f_grad = 2.0*( X.transpose()*( X*Beta - Y ) );
-    VectorT<T> beta_to_modify = Beta - (1.0/L)*f_grad;
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > f_grad = 2.0*( X.transpose()*( X*Beta - Y ) );
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > beta_to_modify = Beta - (1.0/L)*f_grad;
 
     return beta_to_modify.unaryExpr( SoftThres<T>( thres/L ) );
 

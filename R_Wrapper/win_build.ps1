@@ -11,8 +11,13 @@ New-Item -ItemType SymbolicLink -Path ..\inst\include -Name boost_1_64_0 -Value 
 
 $R_PATH = Get-Command R.exe | Select-Object source
 $R_PATH_STR = $R_PATH.Source
+
+$R_SCRIPT_PATH = Get-Command Rscript.exe | Select-Object source
+$R_SCRIPT_PATH_STR = $R_PATH.Source
+
 $R_INST_CMD = "CMD INSTALL --no-lock --preclean --no-multiarch --with-keep.source HDIM"
 
-echo "$R_PATH_STR $R_INST_CMD"
+#Let Rcpp update ./HDIM/R/RcppExports.R and ./HDIM/src/RcppExports.R
+Start-Process -FilePath "$R_SCRIPT_PATH_STR" -ArgumentList "rcpp_preprocess.R"
 
 Start-Process -FilePath "$R_PATH_STR" -ArgumentList "$R_INST_CMD"

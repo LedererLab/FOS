@@ -5,3 +5,27 @@ FOS <- function(X, Y) {
     .Call('HDIM_FOS', PACKAGE = 'HDIM', X, Y)
 }
 
+CoordinateDescent <- function(X, Y, Beta_0, lambda, num_iterations) {
+    .Call('HDIM_CoordinateDescent', PACKAGE = 'HDIM', X, Y, Beta_0, lambda, num_iterations)
+}
+
+CoordinateDescent_DG <- function(X, Y, Beta_0, lambda, duality_gap_target) {
+    .Call('HDIM_CoordinateDescent_DG', PACKAGE = 'HDIM', X, Y, Beta_0, lambda, duality_gap_target)
+}
+
+ISTA <- function(X, Y, Beta_0, lambda, num_iterations, L_0 = 0.1) {
+    .Call('HDIM_ISTA', PACKAGE = 'HDIM', X, Y, Beta_0, lambda, num_iterations, L_0)
+}
+
+ISTA_DG <- function(X, Y, Beta_0, lambda, duality_gap_target, L_0 = 0.1) {
+    .Call('HDIM_ISTA_DG', PACKAGE = 'HDIM', X, Y, Beta_0, lambda, duality_gap_target, L_0)
+}
+
+FISTA <- function(X, Y, Beta_0, lambda, num_iterations, L_0 = 0.1) {
+    .Call('HDIM_FISTA', PACKAGE = 'HDIM', X, Y, Beta_0, lambda, num_iterations, L_0)
+}
+
+FISTA_DG <- function(X, Y, Beta_0, lambda, duality_gap_target, L_0 = 0.1) {
+    .Call('HDIM_FISTA_DG', PACKAGE = 'HDIM', X, Y, Beta_0, lambda, duality_gap_target, L_0)
+}
+

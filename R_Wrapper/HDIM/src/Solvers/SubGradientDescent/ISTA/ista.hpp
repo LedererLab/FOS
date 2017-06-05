@@ -20,11 +20,11 @@
 
 namespace hdim {
 
-template< typename T >
-using MatrixT = Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >;
+//template< typename T >
+//using MatrixT = Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >;
 
-template< typename T >
-using VectorT = Eigen::Matrix< T, Eigen::Dynamic, 1 >;
+//template< typename T >
+//using VectorT = Eigen::Matrix< T, Eigen::Dynamic, 1 >;
 
 template < typename T >
 /*!
@@ -33,7 +33,7 @@ template < typename T >
 class ISTA : public internal::SubGradientSolver<T> {
 
   public:
-
+    ISTA( T L_0 = 0.1 );
     /*!
     \f{algorithm}{
       \caption{ISTA with backtracking line search and iterative convergence criteria}
@@ -60,12 +60,12 @@ class ISTA : public internal::SubGradientSolver<T> {
       \Return $\beta$
      \f}
      */
-    VectorT<T> operator()(
-        const MatrixT<T>& X,
-        const VectorT<T>& Y,
-        const VectorT<T>& Beta_0,
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > operator()(
+        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
         T lambda,
-        uint num_iterations );
+        unsigned int num_iterations );
 
     /*!
     \f{algorithm}{
@@ -93,17 +93,17 @@ class ISTA : public internal::SubGradientSolver<T> {
       \Return $\beta$
      \f}
      */
-    VectorT<T> operator()(
-        const MatrixT<T>& X,
-        const VectorT<T>& Y,
-        const VectorT<T>& Beta_0,
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > operator()(
+        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
         T lambda,
         T duality_gap_target );
 
   private:
-    VectorT<T> update_rule(const MatrixT<T>& X,
-                           const VectorT<T>& Y,
-                           const VectorT<T>& Beta,
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > update_rule(const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+                           const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+                           const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
                            T L_0,
                            T lambda );
 
@@ -113,16 +113,19 @@ class ISTA : public internal::SubGradientSolver<T> {
 };
 
 template < typename T >
-VectorT<T> ISTA<T>::operator()(
-    const MatrixT<T>& X,
-    const VectorT<T>& Y,
-    const VectorT<T>& Beta_0,
+ISTA<T>::ISTA( T L_0 ) : internal::SubGradientSolver<T>( L_0 ) {}
+
+template < typename T >
+Eigen::Matrix< T, Eigen::Dynamic, 1 > ISTA<T>::operator()(
+    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
     T lambda,
-    uint num_iterations ) {
+    unsigned int num_iterations ) {
 
-    VectorT<T> Beta = Beta_0;
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta = Beta_0;
 
-    for( uint i = 0; i < num_iterations; i++ ) {
+    for( unsigned int i = 0; i < num_iterations; i++ ) {
 
         Beta = update_rule( X, Y, Beta, internal::SubGradientSolver<T>::L_0, lambda );
 
@@ -133,14 +136,14 @@ VectorT<T> ISTA<T>::operator()(
 }
 
 template < typename T >
-VectorT<T> ISTA<T>::operator()(
-    const MatrixT<T>& X,
-    const VectorT<T>& Y,
-    const VectorT<T>& Beta_0,
+Eigen::Matrix< T, Eigen::Dynamic, 1 > ISTA<T>::operator()(
+    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
     T lambda,
     T duality_gap_target ) {
 
-    VectorT<T> Beta = Beta_0;
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta = Beta_0;
 
     do {
 
@@ -155,17 +158,17 @@ VectorT<T> ISTA<T>::operator()(
 
 #ifdef DEBUG
 template < typename T >
-VectorT<T> ISTA<T>::update_rule(
-    const MatrixT<T>& X,
-    const VectorT<T>& Y,
-    const VectorT<T>& Beta,
+Eigen::Matrix< T, Eigen::Dynamic, 1 > ISTA<T>::update_rule(
+    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
     T L_0,
     T lambda ) {
 
-    uint counter = 0;
+    unsigned int counter = 0;
     L = L_0;
 
-    VectorT<T> Beta_temp = internal::SubGradientSolver<T>::update_beta_ista( X, Y, Beta, L, lambda );
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta_temp = internal::SubGradientSolver<T>::update_beta_ista( X, Y, Beta, L, lambda );
 
     counter++;
     DEBUG_PRINT( "Backtrace iteration: " << counter );
@@ -184,17 +187,17 @@ VectorT<T> ISTA<T>::update_rule(
 }
 #else
 template < typename T >
-VectorT<T> ISTA<T>::update_rule(
-    const MatrixT<T>& X,
-    const VectorT<T>& Y,
-    const VectorT<T>& Beta,
+Eigen::Matrix< T, Eigen::Dynamic, 1 > ISTA<T>::update_rule(
+    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
     T L_0,
     T lambda ) {
 
     L = L_0;
 
-    VectorT<T> f_grad = 2.0*( X.transpose()*( X*Beta - Y ) );
-    VectorT<T> Beta_temp = ( Beta - (1.0/L)*f_grad ).unaryExpr( SoftThres<T>( lambda/L ) );
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > f_grad = 2.0*( X.transpose()*( X*Beta - Y ) );
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta_temp = ( Beta - (1.0/L)*f_grad ).unaryExpr( SoftThres<T>( lambda/L ) );
 
     T f_beta = ( X*Beta_temp - Y ).squaredNorm();
 

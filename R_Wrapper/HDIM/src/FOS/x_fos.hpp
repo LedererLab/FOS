@@ -35,8 +35,8 @@ template < typename T >
  */
 class X_FOS {
 
-    using MatrixT = Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >;
-    using VectorT = Eigen::Matrix< T, Eigen::Dynamic, 1 >;
+//    using Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > = Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >;
+//    using Eigen::Matrix< T, Eigen::Dynamic, 1 > = Eigen::Matrix< T, Eigen::Dynamic, 1 >;
 
   public:
 
@@ -50,72 +50,72 @@ class X_FOS {
      * X and Y.
      *
      */
-    void operator()( const MatrixT& x, const VectorT& y, SolverType s_type = SolverType::ista );
+    void operator()( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& x,const Eigen::Matrix< T, Eigen::Dynamic, 1 >& y, SolverType s_type = SolverType::ista );
 
     T ReturnLambda();
     T ReturnIntercept();
-    MatrixT ReturnBetas();
-    uint ReturnOptimIndex();
-    VectorT ReturnCoefficients();
+    Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > ReturnBetas();
+    unsigned int ReturnOptimIndex();
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > ReturnCoefficients();
     Eigen::Matrix< int, Eigen::Dynamic, 1 > ReturnSupport();
 
   protected:
-    VectorT fos_fit;
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > fos_fit;
     T lambda;
-    uint optim_index;
+    unsigned int optim_index;
 
   private:
 
-    VectorT X_weights( const MatrixT& X );
-    T Y_weight( const VectorT& Y );
-    VectorT RescaleCoefficients( const VectorT& raw_coefs,
-                                 const VectorT& x_weights,
-                                 T y_weight);
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > X_weights( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X );
+    T Y_weight( const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y );
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > RescaleCoefficients( const Eigen::Matrix< T, Eigen::Dynamic, 1 >& raw_coefs,
+            const Eigen::Matrix< T, Eigen::Dynamic, 1 >& x_weights,
+            T y_weight);
 
-    T compute_intercept(const VectorT& x,
-                        const VectorT& y,
-                        const VectorT& Beta );
+    T compute_intercept(const Eigen::Matrix< T, Eigen::Dynamic, 1 >& x,
+                        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& y,
+                        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta );
 
     std::vector< T > GenerateLambdaGrid (
-        const MatrixT& X,
-        const VectorT& Y,
-        uint M );
+        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+        unsigned int M );
 
     bool ComputeStatsCond(T C,
-                          uint stats_it,
+                          unsigned int stats_it,
                           T r_stats_it,
                           const std::vector<T> &lambdas,
-                          const MatrixT& Betas );
+                          const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& Betas );
 
-    T duality_gap_target( T gamma, T C, T r_stats_it, uint n );
+    T duality_gap_target( T gamma, T C, T r_stats_it, unsigned int n );
 
-    T primal_objective( const MatrixT& X,
-                        const VectorT& Y,
-                        const VectorT& Beta,
+    T primal_objective( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+                        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+                        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
                         T r_stats_it );
 
-    T dual_objective( const MatrixT& X,
-                      const VectorT& Y,
-                      const VectorT& Beta,
+    T dual_objective( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+                      const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+                      const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
                       T r_stats_it );
 
     internal::Solver<T>* solver;
 
-    MatrixT Betas;
-    VectorT x_std_devs;
+    Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > Betas;
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > x_std_devs;
 
     T y_std_dev = 0;
     T intercept = 0;
 
     const T C = 0.75;
-    const uint M = 100;
+    const unsigned int M = 100;
     const T gamma = 1;
 
     bool statsCont = true;
 
-    uint loop_index = 0;
+    unsigned int loop_index = 0;
 
-    uint statsIt = 1;
+    unsigned int statsIt = 1;
     std::vector< T > lambda_grid;
 
     const T L_0 = 0.1;
@@ -154,7 +154,7 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_FOS< T >::ReturnBetas() {
 }
 
 template < typename T >
-uint X_FOS< T >::ReturnOptimIndex() {
+unsigned int X_FOS< T >::ReturnOptimIndex() {
     return optim_index;
 }
 
@@ -176,15 +176,15 @@ Eigen::Matrix<int, Eigen::Dynamic, 1> X_FOS<T>::ReturnSupport() {
 }
 
 template < typename T >
-T X_FOS<T>::compute_intercept( const VectorT& x,
-                               const VectorT& y,
-                               const VectorT& Beta ) {
+T X_FOS<T>::compute_intercept( const Eigen::Matrix< T, Eigen::Dynamic, 1 >& x,
+                               const Eigen::Matrix< T, Eigen::Dynamic, 1 >& y,
+                               const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta ) {
 
-    VectorT scaled_beta = RescaleCoefficients(Beta, x_std_devs, y_std_dev );
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > scaled_beta = RescaleCoefficients(Beta, x_std_devs, y_std_dev );
 
     T intercept_part = 0.0;
 
-    for( uint i = 0; i < x.cols() ; i++ ) {
+    for( unsigned int i = 0; i < x.cols() ; i++ ) {
 
         T X_i_bar = x.col( i ).mean();
         intercept_part += scaled_beta( i )*X_i_bar;
@@ -211,19 +211,19 @@ template < typename T >
  * \return True if outer loop should continue, false otherwise
  */
 bool X_FOS<T>::ComputeStatsCond( T C,
-                                 uint stats_it,
+                                 unsigned int stats_it,
                                  T r_stats_it,
                                  const std::vector <T>& lambdas,
-                                 const MatrixT& Betas ) {
+                                 const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& Betas ) {
 
     bool stats_cond = true;
 
-    for ( uint i = 1; i <= stats_it; i++ ) {
+    for ( unsigned int i = 1; i <= stats_it; i++ ) {
 
-        VectorT beta_k = Betas.col( i - 1 );
+        Eigen::Matrix< T, Eigen::Dynamic, 1 > beta_k = Betas.col( i - 1 );
         T rk = lambdas.at( i - 1 );
 
-        VectorT beta_diff = Betas.col( stats_it - 1 ) - beta_k;
+        Eigen::Matrix< T, Eigen::Dynamic, 1 > beta_diff = Betas.col( stats_it - 1 ) - beta_k;
         T abs_max_betas = beta_diff.template lpNorm< Eigen::Infinity >();
 
         T n_t = static_cast<T>( n );
@@ -243,9 +243,9 @@ template < typename T >
  */
 std::vector< T > X_FOS<T>::GenerateLambdaGrid (
 
-    const MatrixT& X,
-    const VectorT& Y,
-    uint M ) {
+    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+    unsigned int M ) {
 
     T rMax = 2.0*( X.transpose() * Y ).template lpNorm< Eigen::Infinity >();
     T rMin = 0.001*rMax;
@@ -255,12 +255,12 @@ std::vector< T > X_FOS<T>::GenerateLambdaGrid (
 }
 
 template < typename T >
-T X_FOS< T >::primal_objective( const MatrixT& X, \
-                                const VectorT& Y, \
-                                const VectorT& Beta, \
+T X_FOS< T >::primal_objective( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
+                                const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y, \
+                                const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta, \
                                 T r_stats_it ) {
 
-    VectorT error = Y - X*Beta;
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > error = Y - X*Beta;
     T f_beta = error.squaredNorm() + r_stats_it*Beta.template lpNorm < 1 >();
 
     return f_beta;
@@ -268,9 +268,9 @@ T X_FOS< T >::primal_objective( const MatrixT& X, \
 }
 
 template < typename T >
-T X_FOS< T >::dual_objective ( const MatrixT& X, \
-                               const VectorT& Y, \
-                               const VectorT& Beta, \
+T X_FOS< T >::dual_objective ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
+                               const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y, \
+                               const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta, \
                                T r_stats_it ) {
 
     //Computation of s
@@ -279,7 +279,7 @@ T X_FOS< T >::dual_objective ( const MatrixT& X, \
     T s = std::min( std::max( - s_chunk, s_chunk_prime ), s_chunk );
 
     //Computation of nu tilde
-    VectorT nu_tilde = 2.0*s/r_stats_it*( X*Beta - Y );
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > nu_tilde = 2.0*s/r_stats_it*( X*Beta - Y );
 
     T d_nu = square( r_stats_it )/4.0*( nu_tilde + 2.0/r_stats_it*Y ).squaredNorm() - Y.squaredNorm();
 
@@ -287,7 +287,7 @@ T X_FOS< T >::dual_objective ( const MatrixT& X, \
 }
 
 template < typename T >
-T X_FOS<T>::duality_gap_target( T gamma, T C, T r_stats_it, uint n ) {
+T X_FOS<T>::duality_gap_target( T gamma, T C, T r_stats_it, unsigned int n ) {
 
     T n_f = static_cast<T>( n );
     return gamma*square( C )*square( r_stats_it )/n_f;
@@ -295,12 +295,12 @@ T X_FOS<T>::duality_gap_target( T gamma, T C, T r_stats_it, uint n ) {
 }
 
 template < typename T >
-VectorT<T> X_FOS< T >::X_weights( const MatrixT& X ) {
+Eigen::Matrix< T, Eigen::Dynamic, 1 > X_FOS< T >::X_weights( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X ) {
 
-    VectorT weights( X.cols() );
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > weights( X.cols() );
 
-    for( uint i = 0; i < X.cols() ; i ++ ) {
-        VectorT X_i = X.col( i );
+    for( unsigned int i = 0; i < X.cols() ; i ++ ) {
+        Eigen::Matrix< T, Eigen::Dynamic, 1 > X_i = X.col( i );
         weights( i ) = StdDev( X_i );
     }
 
@@ -308,19 +308,19 @@ VectorT<T> X_FOS< T >::X_weights( const MatrixT& X ) {
 }
 
 template < typename T >
-T X_FOS< T >::Y_weight( const VectorT& Y ) {
+T X_FOS< T >::Y_weight( const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y ) {
     return StdDev( Y );
 }
 
 template < typename T >
-VectorT<T> X_FOS< T >::RescaleCoefficients(
-    const VectorT& raw_coefs,
-    const VectorT& x_weights,
+Eigen::Matrix< T, Eigen::Dynamic, 1 > X_FOS< T >::RescaleCoefficients(
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& raw_coefs,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& x_weights,
     T y_weight ) {
 
-    VectorT scaled_coefs( raw_coefs.size() );
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > scaled_coefs( raw_coefs.size() );
 
-    for( uint i = 0; i < raw_coefs.size() ; i++ ) {
+    for( unsigned int i = 0; i < raw_coefs.size() ; i++ ) {
 
         T weight = y_weight / x_weights( i );
         scaled_coefs( i ) = weight*raw_coefs( i );
@@ -332,9 +332,9 @@ VectorT<T> X_FOS< T >::RescaleCoefficients(
 }
 
 template < typename T >
-void X_FOS< T >::operator()( const MatrixT& x, const VectorT& y, SolverType s_type ) {
+void X_FOS< T >::operator()( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& x, const Eigen::Matrix< T, Eigen::Dynamic, 1 >& y, SolverType s_type ) {
 
-    VectorT old_Betas;
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > old_Betas;
 
     bool statsCont = true;
 
@@ -384,8 +384,7 @@ void X_FOS< T >::operator()( const MatrixT& x, const VectorT& y, SolverType s_ty
         } else {
 
             DEBUG_PRINT( "Current Lambda: " << rStatsIt );
-//            Betas.col( statsIt - 1 ) = fista_solver( X, Y, old_Betas, 0.1, rStatsIt, gap_target );
-//            Betas.col( statsIt - 1 ) = CoordinateDescent( X, Y, old_Betas, rStatsIt, gap_target );
+
             Betas.col( statsIt - 1 ) = solver->operator()( X, Y, old_Betas, rStatsIt, gap_target );
         }
 

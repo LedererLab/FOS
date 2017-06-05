@@ -3,18 +3,25 @@
 
 // C System-Headers
 #include <fenv.h>
+
+#ifdef __linux__
 #include <tgmath.h>
+#elif _WIN32
+#include <ctgmath>
+#endif
+
 // C++ System headers
 #include <chrono>
+#include <fstream>      // std::ifstream
 // Eigen Headers
 #include <eigen3/Eigen/Dense>
 // Boost Headers
-#include <boost/random.hpp>
-#include <boost/random/normal_distribution.hpp>
+#include <boost/lexical_cast.hpp>// lexical_cast<T>
+#include <boost/algorithm/string.hpp>//split() and is_any_of for parsing .csv files
 // OpenMP
-#include <omp.h>
+//
 // Armadillo Headers
-#include <armadillo>
+//
 // Project Specific Headers
 //
 
@@ -46,33 +53,35 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > CSV2Eigen( std::string file_p
         std::string err_str = __func__;
         err_str += "\nCould not open CSV file at location :";
         err_str += file_path;
+        file_stream.close();
         throw std::ios_base::failure( err_str );
     } else {
         file_stream.close();
     }
 
-    arma::Mat<T> X;
-    X.load( file_path, arma::csv_ascii );
-    std::cout << X.n_rows << "x" << X.n_cols << std::endl;
+    std::string line;
+    std::vector<T> values;
+    unsigned int rows = 0;
 
-    return Eigen::Map< const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > >( X.memptr(), X.n_rows, X.n_cols );
+    while (std::getline(file_stream, line)) {
+
+        std::stringstream lineStream(line);
+        std::string cell;
+
+        while (std::getline(lineStream, cell, ',')) {
+            values.push_back( boost::lexical_cast<T>(cell) );
+        }
+        rows ++;
+    }
+
+    file_stream.close();
+
+    unsigned int num_cols = values.size() / rows;
+
+//    return Eigen::Map< Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic, Eigen::ColMajor> >( values.data(), num_cols, rows );
+    return Eigen::Map< Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(values.data(), rows, num_cols );
 
 }
-
-/*
-template< typename T >
-Eigen::Matrix< T, Eigen::Dynamic, 1 > StdDev( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& mat ) {
-
-    Eigen::Matrix< T, 1, Eigen::Dynamic >  mean = mat.colwise().mean();
-    return ((mat.rowwise() - mean).array().square().colwise().sum() / (mat.rows() - 1)).sqrt();
-}
-
-template< typename T >
-Eigen::Matrix< T, Eigen::Dynamic, 1 > StdDev( const Eigen::Matrix< T, Eigen::Dynamic, 1 >& vect ) {
-
-    Eigen::Matrix< T, 1, Eigen::Dynamic >  mean = vect.colwise().mean();
-    return ((vect.rowwise() - mean).array().square().colwise().sum() / (vect.rows() - 1)).sqrt();
-} */
 
 template < typename T >
 T StdDev( const Eigen::Matrix< T, Eigen::Dynamic, 1 >& vect ) {
@@ -80,21 +89,21 @@ T StdDev( const Eigen::Matrix< T, Eigen::Dynamic, 1 >& vect ) {
         return static_cast<T>( 0 );
     }
 
-    T K = vect[0];
-    T n = 0.0;
-    T sum = 0.0;
-    T sum_sqr = 0.0;
-    T variance = 0.0;
+    T K = vect( 0 );
+    T n = static_cast<T>(0.0);
+    T sum = static_cast<T>(0.0);
+    T sum_sqr = static_cast<T>(0.0);
+    T variance = static_cast<T>(0.0);
 
-    for( uint i = 0; i < vect.size() ; i ++ ) {
+    for( unsigned int i = 0; i < vect.size() ; i ++ ) {
 
-        n = n + 1.0;
+        n = n + static_cast<T>(1.0);
 
         T x = vect( i );
 
         sum += x - K;
         sum_sqr += ( x - K ) * ( x - K );
-        variance = ( sum_sqr - (sum*sum)/n)/( n - 1.0 );
+        variance = ( sum_sqr - (sum*sum)/n)/( n - static_cast<T>(1.0) );
 
     }
 
@@ -175,13 +184,13 @@ template< typename T >
  * \return
  * A matrix populated with values assigned by mat_func( i, j )
  */
-Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> build_matrix( uint num_rows, uint num_cols, T (*mat_func)(uint,uint) ) {
+Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> build_matrix( unsigned int num_rows, unsigned int num_cols, T (*mat_func)(unsigned int,unsigned int) ) {
 
     Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> mat( num_rows, num_cols );
 
-    for( uint i = 0; i < num_rows ; i ++ ) {
+    for( unsigned int i = 0; i < num_rows ; i ++ ) {
 
-        for( uint j = 0; j < num_cols ; j++ ) {
+        for( unsigned int j = 0; j < num_cols ; j++ ) {
             mat( i, j ) = (*mat_func)( i, j );
         }
     }
@@ -194,11 +203,11 @@ template< typename T >
  * \brief sweep_matrix
  * \param mat
  */
-void sweep_matrix( Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>& mat, T (*mat_func)(uint,uint) ) {
+void sweep_matrix( Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>& mat, T (*mat_func)(unsigned int,unsigned int) ) {
 
-    for( uint i = 0; i < mat.rows() ; i ++ ) {
+    for( unsigned int i = 0; i < mat.rows() ; i ++ ) {
 
-        for( uint j = 0; j < mat.cols() ; j++ ) {
+        for( unsigned int j = 0; j < mat.cols() ; j++ ) {
             mat( i, j ) = (*mat_func)( i, j );
         }
     }
@@ -242,7 +251,7 @@ template < typename T >
  *
  * Vector of logarithmically equally spaced points
  */
-std::vector < T > LogScaleVector( T lower_bound, T upper_bound, uint num_elements ) {
+std::vector < T > LogScaleVector( T lower_bound, T upper_bound, unsigned int num_elements ) {
 
     T min_elem = static_cast<T>( log10(lower_bound) );
     T max_elem = static_cast<T>( log10(upper_bound) );
@@ -251,7 +260,7 @@ std::vector < T > LogScaleVector( T lower_bound, T upper_bound, uint num_element
     std::vector < T > log_space_vector;
     log_space_vector.reserve( num_elements );
 
-    for ( uint i = 0; i < num_elements ; i ++ ) {
+    for ( unsigned int i = 0; i < num_elements ; i ++ ) {
 
         T step = static_cast<T>( i )/static_cast<T>( num_elements - 1 );
         auto lin_step = delta*step + min_elem;
@@ -371,7 +380,7 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 > soft_threshold_mat(
     Eigen::Matrix<T, Eigen::Dynamic, 1 > mat_x( mat.rows() );
 
 //    #pragma omp parallel for collapse(2)
-    for( uint i = 0; i < mat.rows() ; i ++ ) {
+    for( unsigned int i = 0; i < mat.rows() ; i ++ ) {
         mat_x( i ) =  prox( mat( i ), lambda );
     }
 
@@ -399,7 +408,7 @@ Eigen::Matrix< int, Eigen::Dynamic, 1 > GenerateSupport(
 
     Eigen::Matrix< int, Eigen::Dynamic, 1 > support( coefficients.rows() );
 
-    for( uint i = 0; i < coefficients.size() ; i ++ ) {
+    for( unsigned int i = 0; i < coefficients.size() ; i ++ ) {
         T x = coefficients( i );
         support( i ) = ( std::abs( x ) >= cut_off );
     }
@@ -408,28 +417,12 @@ Eigen::Matrix< int, Eigen::Dynamic, 1 > GenerateSupport(
 }
 
 template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, 1 > ParallelMatVect(
-    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& mat,
-    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& vect ) {
-
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > out( vect.rows(), 1 );
-
-    #pragma omp parallel for
-    for( uint i = 0; i < mat.rows() ; i ++ ) {
-        out( i ) = static_cast<T>( mat.row( i )*vect );
-    }
-
-    return out;
-
-}
-
-template < typename T >
 Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > negative_index(
     const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& mat_in,
     int index ) {
 
-    uint n = mat_in.rows();
-    uint p = mat_in.cols();
+    unsigned int n = mat_in.rows();
+    unsigned int p = mat_in.cols();
 
     //            MatrixT A_negative_i ( n, p - 1 );
 

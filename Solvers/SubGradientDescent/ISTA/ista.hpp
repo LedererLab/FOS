@@ -33,7 +33,7 @@ template < typename T >
 class ISTA : public internal::SubGradientSolver<T> {
 
   public:
-
+    ISTA( T L_0 = 0.1 );
     /*!
     \f{algorithm}{
       \caption{ISTA with backtracking line search and iterative convergence criteria}
@@ -111,6 +111,9 @@ class ISTA : public internal::SubGradientSolver<T> {
     T L = static_cast<T>( 0 );
 
 };
+
+template < typename T >
+ISTA<T>::ISTA( T L_0 ) : internal::SubGradientSolver<T>( L_0 ) {}
 
 template < typename T >
 Eigen::Matrix< T, Eigen::Dynamic, 1 > ISTA<T>::operator()(

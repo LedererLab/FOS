@@ -127,9 +127,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a1c7804223ae195cd33864303a301d86e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhdim_1_1experimental_1_1_x___f_o_s.html#a1c7804223ae195cd33864303a301d86e">X_FOS</a> ()</td></tr>
 <tr class="memdesc:a1c7804223ae195cd33864303a301d86e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize a new algorithm, and instantiate member attributes X and Y.  <a href="#a1c7804223ae195cd33864303a301d86e">More...</a><br /></td></tr>
 <tr class="separator:a1c7804223ae195cd33864303a301d86e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acd66698ca09f71576de6660e8cf6916e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhdim_1_1experimental_1_1_x___f_o_s.html#acd66698ca09f71576de6660e8cf6916e">operator()</a> (const MatrixT &amp;x, const VectorT &amp;y, SolverType s_type=SolverType::ista)</td></tr>
-<tr class="memdesc:acd66698ca09f71576de6660e8cf6916e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the main <a class="el" href="classhdim_1_1experimental_1_1_x___f_o_s.html" title="The FOS algorithim. ">X_FOS</a> algorithm.  <a href="#acd66698ca09f71576de6660e8cf6916e">More...</a><br /></td></tr>
-<tr class="separator:acd66698ca09f71576de6660e8cf6916e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46bc81647005a8abdc72fc185e8ff915"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhdim_1_1experimental_1_1_x___f_o_s.html#a46bc81647005a8abdc72fc185e8ff915">operator()</a> (const Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;x, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;y, SolverType s_type=SolverType::ista)</td></tr>
+<tr class="memdesc:a46bc81647005a8abdc72fc185e8ff915"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the main <a class="el" href="classhdim_1_1experimental_1_1_x___f_o_s.html" title="The FOS algorithim. ">X_FOS</a> algorithm.  <a href="#a46bc81647005a8abdc72fc185e8ff915">More...</a><br /></td></tr>
+<tr class="separator:a46bc81647005a8abdc72fc185e8ff915"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abc38a86700b585a621b6a5156858e5d2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abc38a86700b585a621b6a5156858e5d2"></a>
 T&#160;</td><td class="memItemRight" valign="bottom"><b>ReturnLambda</b> ()</td></tr>
 <tr class="separator:abc38a86700b585a621b6a5156858e5d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -137,13 +137,13 @@ T&#160;</td><td class="memItemRight" valign="bottom"><b>ReturnLambda</b> ()</td>
 T&#160;</td><td class="memItemRight" valign="bottom"><b>ReturnIntercept</b> ()</td></tr>
 <tr class="separator:a32a83de9ae7afe03ae7456992a04fe5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab8117b36da518aad94704ff8fdf7cf13"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab8117b36da518aad94704ff8fdf7cf13"></a>
-MatrixT&#160;</td><td class="memItemRight" valign="bottom"><b>ReturnBetas</b> ()</td></tr>
+Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ReturnBetas</b> ()</td></tr>
 <tr class="separator:ab8117b36da518aad94704ff8fdf7cf13"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab608fdf34957be02d08063e20e82cff3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab608fdf34957be02d08063e20e82cff3"></a>
-uint&#160;</td><td class="memItemRight" valign="bottom"><b>ReturnOptimIndex</b> ()</td></tr>
-<tr class="separator:ab608fdf34957be02d08063e20e82cff3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d9693dfbec88a11275795a1f28c196e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9d9693dfbec88a11275795a1f28c196e"></a>
+unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>ReturnOptimIndex</b> ()</td></tr>
+<tr class="separator:a9d9693dfbec88a11275795a1f28c196e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8b8846a478bd6d77716ea3a094cfa133"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8b8846a478bd6d77716ea3a094cfa133"></a>
-VectorT&#160;</td><td class="memItemRight" valign="bottom"><b>ReturnCoefficients</b> ()</td></tr>
+Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ReturnCoefficients</b> ()</td></tr>
 <tr class="separator:a8b8846a478bd6d77716ea3a094cfa133"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa719f2746cbaf70ab2bb051aaf682a98"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa719f2746cbaf70ab2bb051aaf682a98"></a>
 Eigen::Matrix&lt; int, Eigen::Dynamic, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ReturnSupport</b> ()</td></tr>
@@ -151,15 +151,15 @@ Eigen::Matrix&lt; int, Eigen::Dynamic, 1 &gt;&#160;</td><td class="memItemRight"
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:a3ec2c8563ce047cf5c2d34ace022351f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3ec2c8563ce047cf5c2d34ace022351f"></a>
-VectorT&#160;</td><td class="memItemRight" valign="bottom"><b>fos_fit</b></td></tr>
-<tr class="separator:a3ec2c8563ce047cf5c2d34ace022351f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab52a1f9edadf4866c0b9b6206d9f62ed"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab52a1f9edadf4866c0b9b6206d9f62ed"></a>
+Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>fos_fit</b></td></tr>
+<tr class="separator:ab52a1f9edadf4866c0b9b6206d9f62ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab970a7326cf78df3c54af7ab34c2e631"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab970a7326cf78df3c54af7ab34c2e631"></a>
 T&#160;</td><td class="memItemRight" valign="bottom"><b>lambda</b></td></tr>
 <tr class="separator:ab970a7326cf78df3c54af7ab34c2e631"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a877d7da4fbf355432224c5716761362b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a877d7da4fbf355432224c5716761362b"></a>
-uint&#160;</td><td class="memItemRight" valign="bottom"><b>optim_index</b></td></tr>
-<tr class="separator:a877d7da4fbf355432224c5716761362b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab10b814e3f716ddc1eacdc9dae403f44"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab10b814e3f716ddc1eacdc9dae403f44"></a>
+unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>optim_index</b></td></tr>
+<tr class="separator:ab10b814e3f716ddc1eacdc9dae403f44"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename T&gt;<br />
@@ -198,7 +198,7 @@ template&lt;typename T &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="acd66698ca09f71576de6660e8cf6916e"></a>
+<a class="anchor" id="a46bc81647005a8abdc72fc185e8ff915"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -207,13 +207,13 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="memname">void <a class="el" href="classhdim_1_1experimental_1_1_x___f_o_s.html">hdim::experimental::X_FOS</a>&lt; T &gt;::operator() </td>
           <td>(</td>
-          <td class="paramtype">const MatrixT &amp;&#160;</td>
+          <td class="paramtype">const Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;&#160;</td>
           <td class="paramname"><em>x</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const VectorT &amp;&#160;</td>
+          <td class="paramtype">const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;&#160;</td>
           <td class="paramname"><em>y</em>, </td>
         </tr>
         <tr>

@@ -1,0 +1,28 @@
+ifndef SHLIB_OPENMP_CXXFLAGS
+  SHLIB_OPENMP_CXXFLAGS= -fopenmp
+endif
+EXTRA_LIBS=
+EXTRA_OPT=
+STRIP_OPT=-s
+ifeq ($(shell uname),Darwin)
+   ifeq ($(shell R CMD config CXX),clang++) # test if clang++ is C++ compiler
+      EXTRA_LIBS += -stdlib=libstdc++
+      EXTRA_OPT += -stdlib=libstdc++
+      STRIP_OPT=
+   endif
+endif
+
+# Enforce use of C++11
+PKG_CXXFLAGS = -std=c++11
+
+# Optimization
+PKG_CXXFLAGS += -O3 -mtune=native -march=native -DNDEBUG
+
+PKG_CXXFLAGS += -I. $(SHLIB_OPENMP_CXXFLAGS) $(OPT_DBG) $(EXTRA_OPT)
+
+# Link to R package include folder which will contain symlinks to actual header files
+PKG_CXXFLAGS += -I../inst/include
+
+# -s to strip the .so
+PKG_LIBS = $(STRIP_OPT) $(SHLIB_OPENMP_CXXFLAGS) $(EXTRA_LIBS) $(FLIBS)
+

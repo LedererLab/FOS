@@ -2,10 +2,6 @@ var hierarchy =
 [
     [ "hdim::Binarize< T >", "structhdim_1_1_binarize.html", null ],
     [ "hdim::FOS< T >", "classhdim_1_1_f_o_s.html", null ],
-    [ "ocl::OpenCLBase", "classocl_1_1_open_c_l_base.html", [
-      [ "MatProdTest", "class_mat_prod_test.html", null ],
-      [ "MatVectProdTest", "class_mat_vect_prod_test.html", null ]
-    ] ],
     [ "hdim::SoftThres< T >", "structhdim_1_1_soft_thres.html", null ],
     [ "hdim::internal::Solver< T >", "classhdim_1_1internal_1_1_solver.html", [
       [ "hdim::CoordinateDescentSolver< T >", "classhdim_1_1_coordinate_descent_solver.html", null ],

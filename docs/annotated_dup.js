@@ -15,10 +15,5 @@ var annotated_dup =
       [ "ISTA", "classhdim_1_1_i_s_t_a.html", "classhdim_1_1_i_s_t_a" ],
       [ "SoftThres", "structhdim_1_1_soft_thres.html", "structhdim_1_1_soft_thres" ],
       [ "SupportSift", "structhdim_1_1_support_sift.html", "structhdim_1_1_support_sift" ]
-    ] ],
-    [ "ocl", null, [
-      [ "OpenCLBase", "classocl_1_1_open_c_l_base.html", "classocl_1_1_open_c_l_base" ]
-    ] ],
-    [ "MatProdTest", "class_mat_prod_test.html", "class_mat_prod_test" ],
-    [ "MatVectProdTest", "class_mat_vect_prod_test.html", "class_mat_vect_prod_test" ]
+    ] ]
 ];

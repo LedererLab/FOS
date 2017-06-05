@@ -107,8 +107,7 @@ $(document).ready(function(){initNavTree('debug_8hpp.html','');});
 
 <div class="header">
   <div class="summary">
-<a href="#define-members">Macros</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#define-members">Macros</a>  </div>
   <div class="headertitle">
 <div class="title">debug.hpp File Reference</div>  </div>
 </div><!--header-->
@@ -125,23 +124,16 @@ $(document).ready(function(){initNavTree('debug_8hpp.html','');});
 <code>#include &lt;assert.h&gt;</code><br />
 <code>#include &lt;fstream&gt;</code><br />
 <code>#include &lt;typeinfo&gt;</code><br />
-<code>#include &lt;cxxabi.h&gt;</code><br />
 </div>
 <p><a href="debug_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:ae7cd57cebd2ba2707f8d54ef09abbd12"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="debug_8hpp.html#ae7cd57cebd2ba2707f8d54ef09abbd12">TIME_IT</a>(func, ...)</td></tr>
+<tr class="memdesc:ae7cd57cebd2ba2707f8d54ef09abbd12"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the de-mangled name of a type ( as it would appear in the source code ).  <a href="#ae7cd57cebd2ba2707f8d54ef09abbd12">More...</a><br /></td></tr>
 <tr class="separator:ae7cd57cebd2ba2707f8d54ef09abbd12"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9e21a2a88f554186e2b2380b00eab944"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="debug_8hpp.html#a9e21a2a88f554186e2b2380b00eab944">DEBUG_PRINT</a>(x, ...)</td></tr>
 <tr class="separator:a9e21a2a88f554186e2b2380b00eab944"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
-Functions</h2></td></tr>
-<tr class="memitem:aa8a72a35421f5ce138a724551e155560"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:aa8a72a35421f5ce138a724551e155560"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="debug_8hpp.html#aa8a72a35421f5ce138a724551e155560">get_type_name</a> ()</td></tr>
-<tr class="memdesc:aa8a72a35421f5ce138a724551e155560"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the de-mangled name of a type ( as it would appear in the source code ).  <a href="#aa8a72a35421f5ce138a724551e155560">More...</a><br /></td></tr>
-<tr class="separator:aa8a72a35421f5ce138a724551e155560"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Preprocessor macros used for debugging and profiling. </p>
@@ -174,7 +166,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Print a sequence of statements if program is compilied with the -DDEBUG flag. </p>
 
-<p>Definition at line <a class="el" href="debug_8hpp_source.html#l00062">62</a> of file <a class="el" href="debug_8hpp_source.html">debug.hpp</a>.</p>
+<p>Definition at line <a class="el" href="debug_8hpp_source.html#l00072">72</a> of file <a class="el" href="debug_8hpp_source.html">debug.hpp</a>.</p>
 
 </div>
 </div>
@@ -201,32 +193,11 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line"><span class="keywordflow">do</span> { \</div><div class="line">        auto start = std::chrono::high_resolution_clock::now(); \</div><div class="line">        func \</div><div class="line">        auto end = std::chrono::high_resolution_clock::now();\</div><div class="line">        std::chrono::duration&lt;double, std::milli&gt; ms = end - start;\</div><div class="line">        auto time_taken = ms.count();\</div><div class="line">        std::cout&lt;&lt; <span class="stringliteral">&quot;Function took &quot;</span> &lt;&lt; time_taken &lt;&lt;<span class="stringliteral">&quot; ms.&quot;</span> &lt;&lt; std::endl;\</div><div class="line">    } <span class="keywordflow">while</span> (0)</div></div><!-- fragment --><p>Measure how long a function takes to execute. </p>
-
-<p>Definition at line <a class="el" href="debug_8hpp_source.html#l00048">48</a> of file <a class="el" href="debug_8hpp_source.html">debug.hpp</a>.</p>
-
-</div>
-</div>
-<h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="aa8a72a35421f5ce138a724551e155560"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string get_type_name </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
+<b>Value:</b><div class="fragment"><div class="line"><span class="keywordflow">do</span> { \</div><div class="line">        auto start = std::chrono::high_resolution_clock::now(); \</div><div class="line">        func \</div><div class="line">        auto end = std::chrono::high_resolution_clock::now();\</div><div class="line">        std::chrono::duration&lt;double, std::milli&gt; ms = end - start;\</div><div class="line">        auto time_taken = ms.count();\</div><div class="line">        std::cout&lt;&lt; <span class="stringliteral">&quot;Function took &quot;</span> &lt;&lt; time_taken &lt;&lt;<span class="stringliteral">&quot; ms.&quot;</span> &lt;&lt; std::endl;\</div><div class="line">    } <span class="keywordflow">while</span> (0)</div></div><!-- fragment -->
 <p>Get the de-mangled name of a type ( as it would appear in the source code ). </p>
-<dl class="section return"><dt>Returns</dt><dd>name of the template parameter type </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>name of the template parameter typeMeasure how long a function takes to execute. </dd></dl>
 
-<p>Definition at line <a class="el" href="debug_8hpp_source.html#l00037">37</a> of file <a class="el" href="debug_8hpp_source.html">debug.hpp</a>.</p>
+<p>Definition at line <a class="el" href="debug_8hpp_source.html#l00058">58</a> of file <a class="el" href="debug_8hpp_source.html">debug.hpp</a>.</p>
 
 </div>
 </div>

@@ -15,7 +15,6 @@ var NAVTREE =
       [ "File List", "files.html", "files" ],
       [ "File Members", "globals.html", [
         [ "All", "globals.html", null ],
-        [ "Functions", "globals_func.html", null ],
         [ "Macros", "globals_defs.html", null ]
       ] ]
     ] ]
@@ -25,7 +24,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"dir__41d62ced9328012dbec90ee8937322b0_8js_source.html"
+"dir__b34738e4897d4fab4ca811e2d3b116f4_8js_source.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

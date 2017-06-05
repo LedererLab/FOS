@@ -117,13 +117,11 @@ $(document).ready(function(){initNavTree('generics_8hpp.html','');});
 <p>Generic linear algebra functions.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;fenv.h&gt;</code><br />
-<code>#include &lt;tgmath.h&gt;</code><br />
 <code>#include &lt;chrono&gt;</code><br />
+<code>#include &lt;fstream&gt;</code><br />
 <code>#include &lt;eigen3/Eigen/Dense&gt;</code><br />
-<code>#include &lt;boost/random.hpp&gt;</code><br />
-<code>#include &lt;boost/random/normal_distribution.hpp&gt;</code><br />
-<code>#include &lt;omp.h&gt;</code><br />
-<code>#include &lt;armadillo&gt;</code><br />
+<code>#include &lt;boost/lexical_cast.hpp&gt;</code><br />
+<code>#include &lt;boost/algorithm/string.hpp&gt;</code><br />
 </div>
 <p><a href="generics_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -166,22 +164,22 @@ template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a3d4a53a1b93612e5dd9147aed0b45d13"><td class="memTemplItemLeft" align="right" valign="top">Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="generics_8hpp.html#a3d4a53a1b93612e5dd9147aed0b45d13">hdim::Normalize</a> (Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;mat)</td></tr>
 <tr class="memdesc:a3d4a53a1b93612e5dd9147aed0b45d13"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overloaded version of hdim::Normalize to accomadate vectors. <br /></td></tr>
 <tr class="separator:a3d4a53a1b93612e5dd9147aed0b45d13"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac0e0b7abe91f28f11caa8b921a8e3675"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:ac0e0b7abe91f28f11caa8b921a8e3675"><td class="memTemplItemLeft" align="right" valign="top">Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="generics_8hpp.html#ac0e0b7abe91f28f11caa8b921a8e3675">hdim::build_matrix</a> (uint num_rows, uint num_cols, T(*mat_func)(uint, uint))</td></tr>
-<tr class="memdesc:ac0e0b7abe91f28f11caa8b921a8e3675"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate a matrix using a function that depends on row and column indices.  <a href="generics_8hpp.html#ac0e0b7abe91f28f11caa8b921a8e3675">More...</a><br /></td></tr>
-<tr class="separator:ac0e0b7abe91f28f11caa8b921a8e3675"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad48bd98070510225385a66b499fb4741"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:ad48bd98070510225385a66b499fb4741"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="generics_8hpp.html#ad48bd98070510225385a66b499fb4741">hdim::sweep_matrix</a> (Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;mat, T(*mat_func)(uint, uint))</td></tr>
-<tr class="memdesc:ad48bd98070510225385a66b499fb4741"><td class="mdescLeft">&#160;</td><td class="mdescRight">sweep_matrix  <a href="generics_8hpp.html#ad48bd98070510225385a66b499fb4741">More...</a><br /></td></tr>
-<tr class="separator:ad48bd98070510225385a66b499fb4741"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a406e0732a7d43381d66ecdb1d973cdab"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a406e0732a7d43381d66ecdb1d973cdab"><td class="memTemplItemLeft" align="right" valign="top">Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="generics_8hpp.html#a406e0732a7d43381d66ecdb1d973cdab">hdim::build_matrix</a> (unsigned int num_rows, unsigned int num_cols, T(*mat_func)(unsigned int, unsigned int))</td></tr>
+<tr class="memdesc:a406e0732a7d43381d66ecdb1d973cdab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate a matrix using a function that depends on row and column indices.  <a href="generics_8hpp.html#a406e0732a7d43381d66ecdb1d973cdab">More...</a><br /></td></tr>
+<tr class="separator:a406e0732a7d43381d66ecdb1d973cdab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abecf037eb29874df8545541dd3840da8"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:abecf037eb29874df8545541dd3840da8"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="generics_8hpp.html#abecf037eb29874df8545541dd3840da8">hdim::sweep_matrix</a> (Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;mat, T(*mat_func)(unsigned int, unsigned int))</td></tr>
+<tr class="memdesc:abecf037eb29874df8545541dd3840da8"><td class="mdescLeft">&#160;</td><td class="mdescRight">sweep_matrix  <a href="generics_8hpp.html#abecf037eb29874df8545541dd3840da8">More...</a><br /></td></tr>
+<tr class="separator:abecf037eb29874df8545541dd3840da8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad17061e0f1835159012dabbb24097141"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:ad17061e0f1835159012dabbb24097141"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="generics_8hpp.html#ad17061e0f1835159012dabbb24097141">hdim::square</a> (T &amp;val)</td></tr>
 <tr class="memdesc:ad17061e0f1835159012dabbb24097141"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the square of a value.  <a href="generics_8hpp.html#ad17061e0f1835159012dabbb24097141">More...</a><br /></td></tr>
 <tr class="separator:ad17061e0f1835159012dabbb24097141"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adcfe66fb65d373b24a6b30d67672a368"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:adcfe66fb65d373b24a6b30d67672a368"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="generics_8hpp.html#adcfe66fb65d373b24a6b30d67672a368">hdim::LogScaleVector</a> (T lower_bound, T upper_bound, uint num_elements)</td></tr>
-<tr class="memdesc:adcfe66fb65d373b24a6b30d67672a368"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate a vector of logarithmically equally spaced points.  <a href="generics_8hpp.html#adcfe66fb65d373b24a6b30d67672a368">More...</a><br /></td></tr>
-<tr class="separator:adcfe66fb65d373b24a6b30d67672a368"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4e74a775b3bf698a6eb15db78148f18"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ad4e74a775b3bf698a6eb15db78148f18"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="generics_8hpp.html#ad4e74a775b3bf698a6eb15db78148f18">hdim::LogScaleVector</a> (T lower_bound, T upper_bound, unsigned int num_elements)</td></tr>
+<tr class="memdesc:ad4e74a775b3bf698a6eb15db78148f18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate a vector of logarithmically equally spaced points.  <a href="generics_8hpp.html#ad4e74a775b3bf698a6eb15db78148f18">More...</a><br /></td></tr>
+<tr class="separator:ad4e74a775b3bf698a6eb15db78148f18"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa6cd4248c58b9027ac878a3e768d3f9e"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:aa6cd4248c58b9027ac878a3e768d3f9e"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="generics_8hpp.html#aa6cd4248c58b9027ac878a3e768d3f9e">hdim::sgn</a> (T val)</td></tr>
 <tr class="memdesc:aa6cd4248c58b9027ac878a3e768d3f9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The sign function defined as.  <a href="generics_8hpp.html#aa6cd4248c58b9027ac878a3e768d3f9e">More...</a><br /></td></tr>
@@ -207,10 +205,6 @@ template&lt;typename T &gt; </td></tr>
 template&lt;typename T &gt; </td></tr>
 <tr class="memitem:af47ad04252e8cb657f1efd10d8e03f42"><td class="memTemplItemLeft" align="right" valign="top">Eigen::Matrix&lt; int, Eigen::Dynamic, 1 &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>hdim::GenerateSupport</b> (const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;coefficients, T cut_off)</td></tr>
 <tr class="separator:af47ad04252e8cb657f1efd10d8e03f42"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af3e1dc94fa752e33a5684d0d8af5597d"><td class="memTemplParams" colspan="2"><a class="anchor" id="af3e1dc94fa752e33a5684d0d8af5597d"></a>
-template&lt;typename T &gt; </td></tr>
-<tr class="memitem:af3e1dc94fa752e33a5684d0d8af5597d"><td class="memTemplItemLeft" align="right" valign="top">Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>hdim::ParallelMatVect</b> (const Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;mat, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;vect)</td></tr>
-<tr class="separator:af3e1dc94fa752e33a5684d0d8af5597d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5c49962cdf45ef046e1b0600eed65487"><td class="memTemplParams" colspan="2"><a class="anchor" id="a5c49962cdf45ef046e1b0600eed65487"></a>
 template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a5c49962cdf45ef046e1b0600eed65487"><td class="memTemplItemLeft" align="right" valign="top">Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>hdim::negative_index</b> (const Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;mat_in, int index)</td></tr>
@@ -225,7 +219,7 @@ template&lt;typename T &gt; </td></tr>
 
 <p>Definition in file <a class="el" href="generics_8hpp_source.html">generics.hpp</a>.</p>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="file_ac0e0b7abe91f28f11caa8b921a8e3675"></a>
+<a class="anchor" id="file_a406e0732a7d43381d66ecdb1d973cdab"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -234,19 +228,19 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="memname">Eigen::Matrix&lt;T, Eigen::Dynamic, Eigen::Dynamic&gt; hdim::build_matrix </td>
           <td>(</td>
-          <td class="paramtype">uint&#160;</td>
+          <td class="paramtype">unsigned int&#160;</td>
           <td class="paramname"><em>num_rows</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint&#160;</td>
+          <td class="paramtype">unsigned int&#160;</td>
           <td class="paramname"><em>num_cols</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">T(*)(uint, uint)&#160;</td>
+          <td class="paramtype">T(*)(unsigned int, unsigned int)&#160;</td>
           <td class="paramname"><em>mat_func</em>&#160;</td>
         </tr>
         <tr>
@@ -268,7 +262,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A matrix populated with values assigned by mat_func( i, j ) </dd></dl>
 
-<p>Definition at line <a class="el" href="generics_8hpp_source.html#l00178">178</a> of file <a class="el" href="generics_8hpp_source.html">generics.hpp</a>.</p>
+<p>Definition at line <a class="el" href="generics_8hpp_source.html#l00187">187</a> of file <a class="el" href="generics_8hpp_source.html">generics.hpp</a>.</p>
 
 </div>
 </div>
@@ -298,11 +292,11 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>An Eigen matrix with rows/cols determined by data file. </dd></dl>
 
-<p>Definition at line <a class="el" href="generics_8hpp_source.html#l00041">41</a> of file <a class="el" href="generics_8hpp_source.html">generics.hpp</a>.</p>
+<p>Definition at line <a class="el" href="generics_8hpp_source.html#l00048">48</a> of file <a class="el" href="generics_8hpp_source.html">generics.hpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="file_adcfe66fb65d373b24a6b30d67672a368"></a>
+<a class="anchor" id="file_ad4e74a775b3bf698a6eb15db78148f18"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -323,7 +317,7 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint&#160;</td>
+          <td class="paramtype">unsigned int&#160;</td>
           <td class="paramname"><em>num_elements</em>&#160;</td>
         </tr>
         <tr>
@@ -348,7 +342,7 @@ template&lt;typename T &gt; </div>
 <dl class="section return"><dt>Returns</dt><dd></dd></dl>
 <p>Vector of logarithmically equally spaced points </p>
 
-<p>Definition at line <a class="el" href="generics_8hpp_source.html#l00245">245</a> of file <a class="el" href="generics_8hpp_source.html">generics.hpp</a>.</p>
+<p>Definition at line <a class="el" href="generics_8hpp_source.html#l00254">254</a> of file <a class="el" href="generics_8hpp_source.html">generics.hpp</a>.</p>
 
 </div>
 </div>
@@ -377,7 +371,7 @@ template&lt;typename T &gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="generics_8hpp_source.html#l00114">114</a> of file <a class="el" href="generics_8hpp_source.html">generics.hpp</a>.</p>
+<p>Definition at line <a class="el" href="generics_8hpp_source.html#l00123">123</a> of file <a class="el" href="generics_8hpp_source.html">generics.hpp</a>.</p>
 
 </div>
 </div>
@@ -402,7 +396,7 @@ template&lt;typename T &gt; </div>
 <img class="formulaDsp" alt="\[ x^{+} \equiv \begin{cases} x &amp; \text{if } x \geq 0\\ 0 &amp; \text{if } x &lt; 0\\ \end{cases} \]" src="form_2.png"/>
 </p>
  
-<p>Definition at line <a class="el" href="generics_8hpp_source.html#l00309">309</a> of file <a class="el" href="generics_8hpp_source.html">generics.hpp</a>.</p>
+<p>Definition at line <a class="el" href="generics_8hpp_source.html#l00318">318</a> of file <a class="el" href="generics_8hpp_source.html">generics.hpp</a>.</p>
 
 </div>
 </div>
@@ -427,7 +421,7 @@ template&lt;typename T &gt; </div>
 <img class="formulaDsp" alt="\[ sgn(x) \equiv \begin{cases} 1 &amp; \text{if } x &gt; 0 \\ 0 &amp; \text{if } x = 0 \\ -1&amp; \text{if } x &lt; 0 \end{cases} \]" src="form_1.png"/>
 </p>
  
-<p>Definition at line <a class="el" href="generics_8hpp_source.html#l00293">293</a> of file <a class="el" href="generics_8hpp_source.html">generics.hpp</a>.</p>
+<p>Definition at line <a class="el" href="generics_8hpp_source.html#l00302">302</a> of file <a class="el" href="generics_8hpp_source.html">generics.hpp</a>.</p>
 
 </div>
 </div>
@@ -469,7 +463,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd></dd></dl>
 
-<p>Definition at line <a class="el" href="generics_8hpp_source.html#l00323">323</a> of file <a class="el" href="generics_8hpp_source.html">generics.hpp</a>.</p>
+<p>Definition at line <a class="el" href="generics_8hpp_source.html#l00332">332</a> of file <a class="el" href="generics_8hpp_source.html">generics.hpp</a>.</p>
 
 </div>
 </div>
@@ -498,11 +492,11 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The squared quantity </dd></dl>
 
-<p>Definition at line <a class="el" href="generics_8hpp_source.html#l00216">216</a> of file <a class="el" href="generics_8hpp_source.html">generics.hpp</a>.</p>
+<p>Definition at line <a class="el" href="generics_8hpp_source.html#l00225">225</a> of file <a class="el" href="generics_8hpp_source.html">generics.hpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="file_ad48bd98070510225385a66b499fb4741"></a>
+<a class="anchor" id="file_abecf037eb29874df8545541dd3840da8"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -517,7 +511,7 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">T(*)(uint, uint)&#160;</td>
+          <td class="paramtype">T(*)(unsigned int, unsigned int)&#160;</td>
           <td class="paramname"><em>mat_func</em>&#160;</td>
         </tr>
         <tr>
@@ -536,7 +530,7 @@ template&lt;typename T &gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="generics_8hpp_source.html#l00197">197</a> of file <a class="el" href="generics_8hpp_source.html">generics.hpp</a>.</p>
+<p>Definition at line <a class="el" href="generics_8hpp_source.html#l00206">206</a> of file <a class="el" href="generics_8hpp_source.html">generics.hpp</a>.</p>
 
 </div>
 </div>

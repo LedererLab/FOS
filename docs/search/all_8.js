@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['logscalevector',['LogScaleVector',['../generics_8hpp.html#adcfe66fb65d373b24a6b30d67672a368',1,'hdim']]]
+  ['logscalevector',['LogScaleVector',['../generics_8hpp.html#ad4e74a775b3bf698a6eb15db78148f18',1,'hdim']]]
 ];

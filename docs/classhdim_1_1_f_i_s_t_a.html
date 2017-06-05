@@ -136,12 +136,12 @@ Collaboration diagram for hdim::FISTA&lt; T &gt;:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a807de1f069c3d41ed69d8f7454742b93"><td class="memItemLeft" align="right" valign="top">VectorT&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhdim_1_1_f_i_s_t_a.html#a807de1f069c3d41ed69d8f7454742b93">operator()</a> (const MatrixT&lt; T &gt; &amp;X, const VectorT&lt; T &gt; &amp;Y, const VectorT&lt; T &gt; &amp;Beta_0, T lambda, uint num_iterations)</td></tr>
-<tr class="memdesc:a807de1f069c3d41ed69d8f7454742b93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the Solver for a fixed number of steps, specified by num_iterations.  <a href="#a807de1f069c3d41ed69d8f7454742b93">More...</a><br /></td></tr>
-<tr class="separator:a807de1f069c3d41ed69d8f7454742b93"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeb89ed781ff6be5a8418ae33b0a1a04d"><td class="memItemLeft" align="right" valign="top">VectorT&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhdim_1_1_f_i_s_t_a.html#aeb89ed781ff6be5a8418ae33b0a1a04d">operator()</a> (const MatrixT&lt; T &gt; &amp;X, const VectorT&lt; T &gt; &amp;Y, const VectorT&lt; T &gt; &amp;Beta_0, T lambda, T duality_gap_target)</td></tr>
-<tr class="memdesc:aeb89ed781ff6be5a8418ae33b0a1a04d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the Sub-Gradient Descent algorithm until the duality gap is below the threshold specified by duality_gap_target.  <a href="#aeb89ed781ff6be5a8418ae33b0a1a04d">More...</a><br /></td></tr>
-<tr class="separator:aeb89ed781ff6be5a8418ae33b0a1a04d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02cc3c1ef2dc20f14131cfd7d335ccef"><td class="memItemLeft" align="right" valign="top">Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhdim_1_1_f_i_s_t_a.html#a02cc3c1ef2dc20f14131cfd7d335ccef">operator()</a> (const Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;X, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Y, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Beta_0, T lambda, unsigned int num_iterations)</td></tr>
+<tr class="memdesc:a02cc3c1ef2dc20f14131cfd7d335ccef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the Solver for a fixed number of steps, specified by num_iterations.  <a href="#a02cc3c1ef2dc20f14131cfd7d335ccef">More...</a><br /></td></tr>
+<tr class="separator:a02cc3c1ef2dc20f14131cfd7d335ccef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f83a9a2ed3d8cbf6ce2ca64600d74b8"><td class="memItemLeft" align="right" valign="top">Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhdim_1_1_f_i_s_t_a.html#a1f83a9a2ed3d8cbf6ce2ca64600d74b8">operator()</a> (const Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;X, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Y, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Beta_0, T lambda, T duality_gap_target)</td></tr>
+<tr class="memdesc:a1f83a9a2ed3d8cbf6ce2ca64600d74b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the Sub-Gradient Descent algorithm until the duality gap is below the threshold specified by duality_gap_target.  <a href="#a1f83a9a2ed3d8cbf6ce2ca64600d74b8">More...</a><br /></td></tr>
+<tr class="separator:a1f83a9a2ed3d8cbf6ce2ca64600d74b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classhdim_1_1internal_1_1_sub_gradient_solver"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classhdim_1_1internal_1_1_sub_gradient_solver')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classhdim_1_1internal_1_1_sub_gradient_solver.html">hdim::internal::SubGradientSolver&lt; T &gt;</a></td></tr>
 <tr class="memitem:a897addba6ed674c328072e1228b72407 inherit pub_methods_classhdim_1_1internal_1_1_sub_gradient_solver"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a897addba6ed674c328072e1228b72407"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>SubGradientSolver</b> (T L=0.1)</td></tr>
@@ -150,15 +150,15 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pro_methods_classhdim_1_1internal_1_1_sub_gradient_solver"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classhdim_1_1internal_1_1_sub_gradient_solver')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classhdim_1_1internal_1_1_sub_gradient_solver.html">hdim::internal::SubGradientSolver&lt; T &gt;</a></td></tr>
-<tr class="memitem:a5001210a95dfd5c2bdd39200d7c6fda3 inherit pro_methods_classhdim_1_1internal_1_1_sub_gradient_solver"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5001210a95dfd5c2bdd39200d7c6fda3"></a>
-T&#160;</td><td class="memItemRight" valign="bottom"><b>f_beta</b> (const MatrixT&lt; T &gt; &amp;X, const VectorT&lt; T &gt; &amp;Y, const VectorT&lt; T &gt; &amp;Beta)</td></tr>
-<tr class="separator:a5001210a95dfd5c2bdd39200d7c6fda3 inherit pro_methods_classhdim_1_1internal_1_1_sub_gradient_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9f2e40570dc82e3fdb84040eaa204548 inherit pro_methods_classhdim_1_1internal_1_1_sub_gradient_solver"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9f2e40570dc82e3fdb84040eaa204548"></a>
-T&#160;</td><td class="memItemRight" valign="bottom"><b>f_beta_tilda</b> (const MatrixT&lt; T &gt; &amp;X, const VectorT&lt; T &gt; &amp;Y, const VectorT&lt; T &gt; &amp;Beta, const VectorT&lt; T &gt; &amp;Beta_prime, T L)</td></tr>
-<tr class="separator:a9f2e40570dc82e3fdb84040eaa204548 inherit pro_methods_classhdim_1_1internal_1_1_sub_gradient_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7d954caffc52795f495f6a6f4d9efe4c inherit pro_methods_classhdim_1_1internal_1_1_sub_gradient_solver"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7d954caffc52795f495f6a6f4d9efe4c"></a>
-VectorT&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>update_beta_ista</b> (const MatrixT&lt; T &gt; &amp;X, const VectorT&lt; T &gt; &amp;Y, const VectorT&lt; T &gt; &amp;Beta, T L, T thres)</td></tr>
-<tr class="separator:a7d954caffc52795f495f6a6f4d9efe4c inherit pro_methods_classhdim_1_1internal_1_1_sub_gradient_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aadc82a7bd785c827e13c4f92c18cea96 inherit pro_methods_classhdim_1_1internal_1_1_sub_gradient_solver"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aadc82a7bd785c827e13c4f92c18cea96"></a>
+T&#160;</td><td class="memItemRight" valign="bottom"><b>f_beta</b> (const Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;X, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Y, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Beta)</td></tr>
+<tr class="separator:aadc82a7bd785c827e13c4f92c18cea96 inherit pro_methods_classhdim_1_1internal_1_1_sub_gradient_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d37b012b412ea0c338866986c186cba inherit pro_methods_classhdim_1_1internal_1_1_sub_gradient_solver"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0d37b012b412ea0c338866986c186cba"></a>
+T&#160;</td><td class="memItemRight" valign="bottom"><b>f_beta_tilda</b> (const Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;X, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Y, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Beta, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Beta_prime, T L)</td></tr>
+<tr class="separator:a0d37b012b412ea0c338866986c186cba inherit pro_methods_classhdim_1_1internal_1_1_sub_gradient_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68c68415c4773be683f91c84984b7411 inherit pro_methods_classhdim_1_1internal_1_1_sub_gradient_solver"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a68c68415c4773be683f91c84984b7411"></a>
+Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>update_beta_ista</b> (const Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;X, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Y, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Beta, T L, T thres)</td></tr>
+<tr class="separator:a68c68415c4773be683f91c84984b7411 inherit pro_methods_classhdim_1_1internal_1_1_sub_gradient_solver"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classhdim_1_1internal_1_1_sub_gradient_solver"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classhdim_1_1internal_1_1_sub_gradient_solver')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classhdim_1_1internal_1_1_sub_gradient_solver.html">hdim::internal::SubGradientSolver&lt; T &gt;</a></td></tr>
 <tr class="memitem:a04f3e3adfbd6419fa9ea23130c2bd041 inherit pro_attribs_classhdim_1_1internal_1_1_sub_gradient_solver"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a04f3e3adfbd6419fa9ea23130c2bd041"></a>
 const T&#160;</td><td class="memItemRight" valign="bottom"><b>L_0</b></td></tr>
@@ -171,7 +171,7 @@ class hdim::FISTA&lt; T &gt;</h3>
 
 <p>Definition at line <a class="el" href="fista_8hpp_source.html#l00023">23</a> of file <a class="el" href="fista_8hpp_source.html">fista.hpp</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a807de1f069c3d41ed69d8f7454742b93"></a>
+<a class="anchor" id="a02cc3c1ef2dc20f14131cfd7d335ccef"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -181,21 +181,21 @@ template&lt;typename T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">VectorT&lt; T &gt; <a class="el" href="classhdim_1_1_f_i_s_t_a.html">hdim::FISTA</a>&lt; T &gt;::operator() </td>
+          <td class="memname">Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; <a class="el" href="classhdim_1_1_f_i_s_t_a.html">hdim::FISTA</a>&lt; T &gt;::operator() </td>
           <td>(</td>
-          <td class="paramtype">const MatrixT&lt; T &gt; &amp;&#160;</td>
+          <td class="paramtype">const Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;&#160;</td>
           <td class="paramname"><em>X</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const VectorT&lt; T &gt; &amp;&#160;</td>
+          <td class="paramtype">const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;&#160;</td>
           <td class="paramname"><em>Y</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const VectorT&lt; T &gt; &amp;&#160;</td>
+          <td class="paramtype">const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;&#160;</td>
           <td class="paramname"><em>Beta_0</em>, </td>
         </tr>
         <tr>
@@ -207,7 +207,7 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint&#160;</td>
+          <td class="paramtype">unsigned int&#160;</td>
           <td class="paramname"><em>num_iterations</em>&#160;</td>
         </tr>
         <tr>
@@ -236,13 +236,13 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A 1 x n vector of results from the algorithm. </dd></dl>
 
-<p>Implements <a class="el" href="classhdim_1_1internal_1_1_solver.html#a024ad966419ae82fb6c20cbcbb046805">hdim::internal::Solver&lt; T &gt;</a>.</p>
+<p>Implements <a class="el" href="classhdim_1_1internal_1_1_solver.html#ab80abad55bf83fa3de261b249138f85f">hdim::internal::Solver&lt; T &gt;</a>.</p>
 
 <p>Definition at line <a class="el" href="fista_8hpp_source.html#l00089">89</a> of file <a class="el" href="fista_8hpp_source.html">fista.hpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="aeb89ed781ff6be5a8418ae33b0a1a04d"></a>
+<a class="anchor" id="a1f83a9a2ed3d8cbf6ce2ca64600d74b8"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -252,21 +252,21 @@ template&lt;typename T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">VectorT&lt; T &gt; <a class="el" href="classhdim_1_1_f_i_s_t_a.html">hdim::FISTA</a>&lt; T &gt;::operator() </td>
+          <td class="memname">Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; <a class="el" href="classhdim_1_1_f_i_s_t_a.html">hdim::FISTA</a>&lt; T &gt;::operator() </td>
           <td>(</td>
-          <td class="paramtype">const MatrixT&lt; T &gt; &amp;&#160;</td>
+          <td class="paramtype">const Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;&#160;</td>
           <td class="paramname"><em>X</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const VectorT&lt; T &gt; &amp;&#160;</td>
+          <td class="paramtype">const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;&#160;</td>
           <td class="paramname"><em>Y</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const VectorT&lt; T &gt; &amp;&#160;</td>
+          <td class="paramtype">const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;&#160;</td>
           <td class="paramname"><em>Beta_0</em>, </td>
         </tr>
         <tr>
@@ -307,7 +307,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A 1 x n vector of results from the algorithm. </dd></dl>
 
-<p>Implements <a class="el" href="classhdim_1_1internal_1_1_solver.html#a6541761d79e284b549fa5b110d4fa490">hdim::internal::Solver&lt; T &gt;</a>.</p>
+<p>Implements <a class="el" href="classhdim_1_1internal_1_1_solver.html#a9562351eb8c3ed4dc675398cc8109159">hdim::internal::Solver&lt; T &gt;</a>.</p>
 
 <p>Definition at line <a class="el" href="fista_8hpp_source.html#l00113">113</a> of file <a class="el" href="fista_8hpp_source.html">fista.hpp</a>.</p>
 

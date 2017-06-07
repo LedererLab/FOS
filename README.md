@@ -28,12 +28,6 @@ You will need to have the following packages installed in order to use the base 
 
 * [Rcpp](https://cran.r-project.org/web/packages/Rcpp/index.html)
 
-### GPU Acceleration
-
-To use GPU accelerated functions you will need a working OpenCL implementation and the following:
-
-* [clBLAS](https://github.com/clMathLibraries/clBLAS)
-
 ## Authors
 
 * **Benjamin J Phillips** - *Initial work*

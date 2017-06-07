@@ -27,12 +27,6 @@ namespace hdim {
  *  \brief Coordinate Descent iterative solvers.
  */
 
-//template< typename T >
-//using MatrixT = Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >;
-
-//template< typename T >
-//using VectorT = Eigen::Matrix< T, Eigen::Dynamic, 1 >;
-
 template < typename T >
 class CoordinateDescentSolver : public internal::Solver<T> {
 
@@ -160,71 +154,136 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 > CoordinateDescentSolver<T>::operator () (
 }
 
 template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > CoordinateDescent (
+class LazyCoordinateDescent : public internal::Solver<T> {
+
+  public:
+    LazyCoordinateDescent(const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+                          const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+                          const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0 );
+    ~LazyCoordinateDescent();
+
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > operator()(
+        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
+        T lambda,
+        T duality_gap_target );
+
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > operator()(
+        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
+        T lambda,
+        unsigned int num_iterations );
+
+  private:
+    std::vector<T> inverse_norms;
+
+};
+
+template < typename T >
+LazyCoordinateDescent<T>::LazyCoordinateDescent(
+    const Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> &X,
+    const Eigen::Matrix<T, Eigen::Dynamic, 1> &Y,
+    const Eigen::Matrix<T, Eigen::Dynamic, 1> &Beta_0 ) {
+
+    (void)Y;
+    (void)X;
+
+    inverse_norms.reserve( Beta_0.size() );
+
+    for( int i = 0; i < Beta_0.size() ; i++ ) {
+
+        T inverse_norm = static_cast<T>( 1 )/( X.col( i ).squaredNorm() );
+        inverse_norms.push_back( inverse_norm );
+
+    }
+}
+
+template < typename T >
+LazyCoordinateDescent<T>::~LazyCoordinateDescent() {}
+
+template < typename T >
+Eigen::Matrix< T, Eigen::Dynamic, 1 > LazyCoordinateDescent<T>::operator () (
     const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
     T lambda,
-    T duality_gap_target ) {
+    unsigned int num_iterations) {
+
+    (void)Y;
 
     Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta = Beta_0;
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > Residual = Y - X*Beta_0;
 
-    do {
+    for( unsigned int j = 0; j < num_iterations; j ++) {
+
 
         for( int i = 0; i < Beta.size() ; i++ ) {
 
             Eigen::Matrix< T, Eigen::Dynamic, 1 > X_i = X.col( i );
-            T inverse_norm = static_cast<T>( 1 )/( X_i.squaredNorm() );
+//            T inverse_norm = static_cast<T>(1)/X_i.squaredNorm();
+            T inverse_norm = inverse_norms.at( i );
 
-//            Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_negative_i = X;
-//            X_negative_i.col( i ) = Eigen::Matrix< T, Eigen::Dynamic, 1 >::Zero( X.rows() );
+            if( Beta( i ) != static_cast<T>(0) ) {
+                Residual = Residual + X_i*Beta( i );
+            }
 
-            Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta_negative_i = Beta;
-            Beta_negative_i( i ) = static_cast<T>( 0 );
 
-            T threshold = lambda / ( 2.0*X_i.squaredNorm() );
-            T elem = inverse_norm*X_i.transpose()*( Y - X*Beta_negative_i );
+            T threshold = lambda / ( static_cast<T>(2) ) * inverse_norm;
+            T elem = inverse_norm*X_i.transpose()*Residual;
 
             Beta( i ) = soft_threshold<T>( elem, threshold );
 
+            if( Beta( i ) != static_cast<T>(0) ) {
+                Residual = Residual - X_i*Beta( i );
+            }
+
         }
 
-        DEBUG_PRINT( "Current Duality Gap: " << duality_gap( X, Y, Beta, lambda ) << " Current Target: " << duality_gap_target );
         DEBUG_PRINT( "Norm Squared of updated Beta: " << Beta.squaredNorm() );
 
-    } while ( duality_gap( X, Y, Beta, lambda ) > duality_gap_target );
+    }
 
     return Beta;
 }
 
 template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > CoordinateDescentStandardized (
+Eigen::Matrix< T, Eigen::Dynamic, 1 > LazyCoordinateDescent<T>::operator () (
     const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
     T lambda,
     T duality_gap_target ) {
 
+    (void)Y;
+
     Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta = Beta_0;
-    T X_rows = static_cast<T>( X.rows() );
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > Residual = Y - X*Beta_0;
+
 
     do {
 
         for( int i = 0; i < Beta.size() ; i++ ) {
 
             Eigen::Matrix< T, Eigen::Dynamic, 1 > X_i = X.col( i );
-            T inverse_norm = static_cast<T>( 1 )/( X_rows );
+//            T inverse_norm = static_cast<T>(1)/X_i.squaredNorm();
 
-//            Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_negative_i = X;
-//            X_negative_i.col( i ) = Eigen::Matrix< T, Eigen::Dynamic, 1 >::Zero( X.rows() );
+            T inverse_norm = inverse_norms.at( i );
 
-            Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta_negative_i = Beta;
-            Beta_negative_i( i ) = static_cast<T>( 0 );
+            if( Beta( i ) != static_cast<T>(0) ) {
+                Residual = Residual + X_i*Beta( i );
+            }
 
-            T threshold = lambda / ( 2.0*X_rows );
-            T elem = inverse_norm*X_i.transpose()*( Y - X*Beta_negative_i );
+
+            T threshold = lambda / ( static_cast<T>(2) ) * inverse_norm;
+            T elem = inverse_norm*X_i.transpose()*Residual;
 
             Beta( i ) = soft_threshold<T>( elem, threshold );
+
+            if( Beta( i ) != static_cast<T>(0) ) {
+                Residual = Residual - X_i*Beta( i );
+            }
 
         }
 

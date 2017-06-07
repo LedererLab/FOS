@@ -25,7 +25,7 @@
 
 namespace hdim {
 
-enum class SolverType { ista, fista, cd };
+enum class SolverType { ista, fista, cd, lazy_cd };
 
 namespace experimental {
 
@@ -99,6 +99,10 @@ class X_FOS {
                       const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
                       T r_stats_it );
 
+    void choose_solver( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& x,
+                        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& y,
+                        SolverType s_type );
+
     internal::Solver<T>* solver;
 
     Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > Betas;
@@ -119,7 +123,6 @@ class X_FOS {
     std::vector< T > lambda_grid;
 
     const T L_0 = 0.1;
-
     int n = 1, p = 1;
 
 };
@@ -180,7 +183,7 @@ T X_FOS<T>::compute_intercept( const Eigen::Matrix< T, Eigen::Dynamic, 1 >& x,
                                const Eigen::Matrix< T, Eigen::Dynamic, 1 >& y,
                                const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta ) {
 
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > scaled_beta = RescaleCoefficients(Beta, x_std_devs, y_std_dev );
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > scaled_beta = RescaleCoefficients( Beta, x_std_devs, y_std_dev );
 
     T intercept_part = 0.0;
 
@@ -332,6 +335,28 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 > X_FOS< T >::RescaleCoefficients(
 }
 
 template < typename T >
+void X_FOS< T >::choose_solver( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& x,
+                                const Eigen::Matrix< T, Eigen::Dynamic, 1 >& y,
+                                SolverType s_type ) {
+
+    switch( s_type ) {
+    case SolverType::ista:
+        solver = new ISTA<T>();
+        break;
+    case SolverType::fista:
+        solver = new FISTA<T>();
+        break;
+    case SolverType::cd:
+        solver = new CoordinateDescentSolver<T>( x, y, Betas.col( 0 ) );
+        break;
+    case SolverType::lazy_cd:
+        solver = new LazyCoordinateDescent<T>( x, y, Betas.col( 0 ) );
+        break;
+    }
+
+}
+
+template < typename T >
 void X_FOS< T >::operator()( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& x, const Eigen::Matrix< T, Eigen::Dynamic, 1 >& y, SolverType s_type ) {
 
     Eigen::Matrix< T, Eigen::Dynamic, 1 > old_Betas;
@@ -351,17 +376,8 @@ void X_FOS< T >::operator()( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dyna
 
     Betas = Eigen::Matrix< T , Eigen::Dynamic, Eigen::Dynamic >::Zero( X.cols(), M );
 
-    switch( s_type ) {
-    case SolverType::ista:
-        solver = new ISTA<T>();
-        break;
-    case SolverType::fista:
-        solver = new FISTA<T>();
-        break;
-    case SolverType::cd:
-        solver = new CoordinateDescentSolver<T>( X, Y, Betas.col( 0 ) );
-        break;
-    }
+
+    choose_solver( X, Y, s_type );
 
     //Outer Loop
     while( statsCont && ( statsIt < M ) ) {
@@ -386,6 +402,7 @@ void X_FOS< T >::operator()( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dyna
             DEBUG_PRINT( "Current Lambda: " << rStatsIt );
 
             Betas.col( statsIt - 1 ) = solver->operator()( X, Y, old_Betas, rStatsIt, gap_target );
+
         }
 
         statsCont = ComputeStatsCond( C, statsIt, rStatsIt, lambda_grid, Betas );
@@ -394,7 +411,8 @@ void X_FOS< T >::operator()( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dyna
     fos_fit = Betas.col( statsIt - 2 );
     lambda = lambda_grid.at( statsIt - 2 );
     optim_index = statsIt;
-    intercept = compute_intercept( x, y, fos_fit );
+//    intercept = compute_intercept( x, y, fos_fit );
+    intercept = 0.0;
 
 }
 

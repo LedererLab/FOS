@@ -13,6 +13,7 @@ var annotated_dup =
       [ "FISTA", "classhdim_1_1_f_i_s_t_a.html", "classhdim_1_1_f_i_s_t_a" ],
       [ "FOS", "classhdim_1_1_f_o_s.html", "classhdim_1_1_f_o_s" ],
       [ "ISTA", "classhdim_1_1_i_s_t_a.html", "classhdim_1_1_i_s_t_a" ],
+      [ "LazyCoordinateDescent", "classhdim_1_1_lazy_coordinate_descent.html", "classhdim_1_1_lazy_coordinate_descent" ],
       [ "SoftThres", "structhdim_1_1_soft_thres.html", "structhdim_1_1_soft_thres" ],
       [ "SupportSift", "structhdim_1_1_support_sift.html", "structhdim_1_1_support_sift" ]
     ] ]

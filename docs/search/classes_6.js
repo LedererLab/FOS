@@ -1,7 +1,4 @@
 var searchData=
 [
-  ['softthres',['SoftThres',['../structhdim_1_1_soft_thres.html',1,'hdim']]],
-  ['solver',['Solver',['../classhdim_1_1internal_1_1_solver.html',1,'hdim::internal']]],
-  ['subgradientsolver',['SubGradientSolver',['../classhdim_1_1internal_1_1_sub_gradient_solver.html',1,'hdim::internal']]],
-  ['supportsift',['SupportSift',['../structhdim_1_1_support_sift.html',1,'hdim']]]
+  ['x_5ffos',['X_FOS',['../classhdim_1_1experimental_1_1_x___f_o_s.html',1,'hdim::experimental']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['debug_2ehpp',['debug.hpp',['../debug_8hpp.html',1,'']]]
+  ['generics_2ehpp',['generics.hpp',['../generics_8hpp.html',1,'']]]
 ];

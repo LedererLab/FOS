@@ -35,13 +35,13 @@ LIBS += -L/usr/local/lib \
 # Eigen
 INCLUDEPATH += /usr/include/eigen3
 
-## clBLAS
-LIBS += -L/usr/local/lib64/
-LIBS += -lclBLAS
+### clBLAS
+#LIBS += -L/usr/local/lib64/
+#LIBS += -lclBLAS
 
-## OpenCL
-LIBS += -L/usr/local/cuda/lib64
-LIBS += -lOpenCL
+### OpenCL
+#LIBS += -L/usr/local/cuda/lib64
+#LIBS += -lOpenCL
 
 HEADERS += FOS/fos.hpp \
     FOS/test_fos.hpp \

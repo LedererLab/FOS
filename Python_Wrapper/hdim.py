@@ -99,6 +99,9 @@ SolverType_fista = _hdim.SolverType_fista
 
 _hdim.SolverType_cd_swigconstant(_hdim)
 SolverType_cd = _hdim.SolverType_cd
+
+_hdim.SolverType_lazy_cd_swigconstant(_hdim)
+SolverType_lazy_cd = _hdim.SolverType_lazy_cd
 class FOS_d(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, FOS_d, name, value)
@@ -330,15 +333,15 @@ class ISTA_f(SGD_f):
     __getattr__ = lambda self, name: _swig_getattr(self, ISTA_f, name)
     __repr__ = _swig_repr
 
-    def __call__(self, *args):
-        return _hdim.ISTA_f___call__(self, *args)
-
-    def __init__(self):
-        this = _hdim.new_ISTA_f()
+    def __init__(self, L_0=0.1):
+        this = _hdim.new_ISTA_f(L_0)
         try:
             self.this.append(this)
         except Exception:
             self.this = this
+
+    def __call__(self, *args):
+        return _hdim.ISTA_f___call__(self, *args)
     __swig_destroy__ = _hdim.delete_ISTA_f
     __del__ = lambda self: None
 ISTA_f_swigregister = _hdim.ISTA_f_swigregister
@@ -355,15 +358,15 @@ class ISTA_d(SGD_d):
     __getattr__ = lambda self, name: _swig_getattr(self, ISTA_d, name)
     __repr__ = _swig_repr
 
-    def __call__(self, *args):
-        return _hdim.ISTA_d___call__(self, *args)
-
-    def __init__(self):
-        this = _hdim.new_ISTA_d()
+    def __init__(self, L_0=0.1):
+        this = _hdim.new_ISTA_d(L_0)
         try:
             self.this.append(this)
         except Exception:
             self.this = this
+
+    def __call__(self, *args):
+        return _hdim.ISTA_d___call__(self, *args)
     __swig_destroy__ = _hdim.delete_ISTA_d
     __del__ = lambda self: None
 ISTA_d_swigregister = _hdim.ISTA_d_swigregister
@@ -380,15 +383,15 @@ class FISTA_f(SGD_f):
     __getattr__ = lambda self, name: _swig_getattr(self, FISTA_f, name)
     __repr__ = _swig_repr
 
-    def __call__(self, *args):
-        return _hdim.FISTA_f___call__(self, *args)
-
-    def __init__(self):
-        this = _hdim.new_FISTA_f()
+    def __init__(self, L_0=0.1):
+        this = _hdim.new_FISTA_f(L_0)
         try:
             self.this.append(this)
         except Exception:
             self.this = this
+
+    def __call__(self, *args):
+        return _hdim.FISTA_f___call__(self, *args)
     __swig_destroy__ = _hdim.delete_FISTA_f
     __del__ = lambda self: None
 FISTA_f_swigregister = _hdim.FISTA_f_swigregister
@@ -405,15 +408,15 @@ class FISTA_d(SGD_d):
     __getattr__ = lambda self, name: _swig_getattr(self, FISTA_d, name)
     __repr__ = _swig_repr
 
-    def __call__(self, *args):
-        return _hdim.FISTA_d___call__(self, *args)
-
-    def __init__(self):
-        this = _hdim.new_FISTA_d()
+    def __init__(self, L_0=0.1):
+        this = _hdim.new_FISTA_d(L_0)
         try:
             self.this.append(this)
         except Exception:
             self.this = this
+
+    def __call__(self, *args):
+        return _hdim.FISTA_d___call__(self, *args)
     __swig_destroy__ = _hdim.delete_FISTA_d
     __del__ = lambda self: None
 FISTA_d_swigregister = _hdim.FISTA_d_swigregister

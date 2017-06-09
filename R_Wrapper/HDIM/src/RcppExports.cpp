@@ -6,14 +6,15 @@
 using namespace Rcpp;
 
 // FOS
-Rcpp::List FOS(Rcpp::NumericMatrix X, Rcpp::NumericVector Y);
-RcppExport SEXP HDIM_FOS(SEXP XSEXP, SEXP YSEXP) {
+Rcpp::List FOS(Rcpp::NumericMatrix X, Rcpp::NumericVector Y, std::string solver_type);
+RcppExport SEXP HDIM_FOS(SEXP XSEXP, SEXP YSEXP, SEXP solver_typeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type X(XSEXP);
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type Y(YSEXP);
-    rcpp_result_gen = Rcpp::wrap(FOS(X, Y));
+    Rcpp::traits::input_parameter< std::string >::type solver_type(solver_typeSEXP);
+    rcpp_result_gen = Rcpp::wrap(FOS(X, Y, solver_type));
     return rcpp_result_gen;
 END_RCPP
 }

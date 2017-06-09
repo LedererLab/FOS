@@ -11,13 +11,13 @@ def test_FOS( X, Y ):
 	fos_test = hdim.FOS_d( X, Y )
 
 	fos_test.Algorithm()
-	return fos_test.ReturnSupport()
+	return fos_test.ReturnCoefficients()
 
 def test_X_FOS( X, Y ):
 	fos_test = hdim.X_FOS_d()
 
 	fos_test( X, Y )
-	return fos_test.ReturnSupport()
+	return fos_test.ReturnCoefficients()
 
 def main():
 	N = 200
@@ -43,12 +43,6 @@ def main():
 	x_fos_results = test_X_FOS( X, y )
 
 	L2_sqr_norm = np.linalg.norm( x_fos_results, ord='fro' )**2
-
-	nz_indices = x_fos_results.nonzero()[0]
-	print( nz_indices )
-
-	test_indices = [ 99, 177, 224, 250, 345, 427 ]
-	print( x_fos_results[ test_indices ] )
 
 	ind = np.arange( len( fos_results ) )
 

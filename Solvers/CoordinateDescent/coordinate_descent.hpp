@@ -184,7 +184,6 @@ LazyCoordinateDescent<T>::LazyCoordinateDescent(
     const Eigen::Matrix<T, Eigen::Dynamic, 1> &Beta_0 ) {
 
     (void)Y;
-    (void)X;
 
     inverse_norms.reserve( Beta_0.size() );
 

@@ -87,13 +87,24 @@ Rcpp::NumericMatrix Eigen2NumMat( const Eigen::Matrix< T, Eigen::Dynamic, Eigen:
 // [[Rcpp::plugins(cpp11)]]
 
 // [[Rcpp::export]]
-Rcpp::List FOS( Rcpp::NumericMatrix X, Rcpp::NumericVector Y ) {
+Rcpp::List FOS( Rcpp::NumericMatrix X, Rcpp::NumericVector Y, std::string solver_type ) {
 
     Eigen::MatrixXf mat_X = NumMat2Eigen<float>(X);
     Eigen::VectorXf vect_Y = NumVect2Eigen<float>(Y);
 
     hdim::experimental::X_FOS<float> fos;
-    fos(  mat_X, vect_Y, hdim::SolverType::fista );
+
+    if ( solver_type == "ista" ) {
+      fos(  mat_X, vect_Y, hdim::SolverType::ista );
+    } else if ( solver_type == "fista" ) {
+      fos(  mat_X, vect_Y, hdim::SolverType::fista );
+    } else if ( solver_type == "cd" ) {
+      fos(  mat_X, vect_Y, hdim::SolverType::cd );
+    } else if ( solver_type == "lazy_cd" ) {
+      fos(  mat_X, vect_Y, hdim::SolverType::lazy_cd );
+    } else {
+      fos(  mat_X, vect_Y, hdim::SolverType::ista );
+    }
 
     Rcpp::NumericVector beta = Eigen2NumVec<float>( fos.ReturnCoefficients() );
     beta.attr("names") = Rcpp::colnames(X);

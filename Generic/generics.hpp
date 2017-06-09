@@ -19,8 +19,6 @@
 #include <boost/lexical_cast.hpp>// lexical_cast<T>
 // OpenMP
 //
-// Armadillo Headers
-//
 // Project Specific Headers
 //
 

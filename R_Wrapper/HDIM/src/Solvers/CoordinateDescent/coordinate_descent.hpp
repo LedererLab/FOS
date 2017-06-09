@@ -23,10 +23,6 @@
 
 namespace hdim {
 
-/*! \file
- *  \brief Coordinate Descent iterative solvers.
- */
-
 template < typename T >
 class CoordinateDescentSolver : public internal::Solver<T> {
 
@@ -188,7 +184,6 @@ LazyCoordinateDescent<T>::LazyCoordinateDescent(
     const Eigen::Matrix<T, Eigen::Dynamic, 1> &Beta_0 ) {
 
     (void)Y;
-    (void)X;
 
     inverse_norms.reserve( Beta_0.size() );
 
@@ -211,8 +206,6 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 > LazyCoordinateDescent<T>::operator () (
     T lambda,
     unsigned int num_iterations) {
 
-    (void)Y;
-
     Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta = Beta_0;
     Eigen::Matrix< T, Eigen::Dynamic, 1 > Residual = Y - X*Beta_0;
 
@@ -223,7 +216,7 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 > LazyCoordinateDescent<T>::operator () (
 
             Eigen::Matrix< T, Eigen::Dynamic, 1 > X_i = X.col( i );
 //            T inverse_norm = static_cast<T>(1)/X_i.squaredNorm();
-            T inverse_norm = inverse_norms.at( i );
+            T inverse_norm = inverse_norms[i];
 
             if( Beta( i ) != static_cast<T>(0) ) {
                 Residual = Residual + X_i*Beta( i );
@@ -256,8 +249,6 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 > LazyCoordinateDescent<T>::operator () (
     T lambda,
     T duality_gap_target ) {
 
-    (void)Y;
-
     Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta = Beta_0;
     Eigen::Matrix< T, Eigen::Dynamic, 1 > Residual = Y - X*Beta_0;
 
@@ -269,7 +260,7 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 > LazyCoordinateDescent<T>::operator () (
             Eigen::Matrix< T, Eigen::Dynamic, 1 > X_i = X.col( i );
 //            T inverse_norm = static_cast<T>(1)/X_i.squaredNorm();
 
-            T inverse_norm = inverse_norms.at( i );
+            T inverse_norm = inverse_norms[i];
 
             if( Beta( i ) != static_cast<T>(0) ) {
                 Residual = Residual + X_i*Beta( i );

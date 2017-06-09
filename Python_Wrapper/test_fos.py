@@ -7,52 +7,37 @@ import matplotlib.pyplot as plt
 import math
 import scipy.io as sio
 
-def test_FOS( X, Y ):
-	fos_test = hdim.FOS_d( X, Y )
-
-	fos_test.Algorithm()
-	return fos_test.ReturnCoefficients()
-
-def test_X_FOS( X, Y ):
+def test_X_FOS( X, Y, solver_type ):
 	fos_test = hdim.X_FOS_d()
 
-	fos_test( X, Y )
+	fos_test( X, Y, solver_type )
 	return fos_test.ReturnCoefficients()
 
 def main():
-	N = 200
-	P = 500
+	N = 20
+	P = 50
 
-	#ind = np.arange(P)  # the x locations for the groups
+	ind = np.arange(P)  # the x locations for the groups
 
-	# X, y, beta = test_data_gen.generate_data( N, P, int( math.ceil(P/10) ), 0.3, 5 )
+	X, y, beta = test_data_gen.generate_data( N, P, int( math.ceil(P/10) ), 0.3, 5 )
 
-	old_data = sio.loadmat('Bundled_data.mat')
-	X = old_data['X']
-	y = np.transpose( old_data['y'] )
-	beta = old_data['beta']
+	fos_ista_results = test_X_FOS( X, y, 0 )
+	fos_fista_results = test_X_FOS( X, y, 1 )
+	fos_cd_results = test_X_FOS( X, y, 2 )
+	fos_lazy_cd_results = test_X_FOS( X, y, 3 )
 
-	# Mat_dict = {}
-	# Mat_dict['X'] = X
-	# Mat_dict['y'] = y
-	# Mat_dict['beta'] = beta
+	ind = np.arange( len( fos_ista_results ) )
 
-	# sio.savemat( 'Bundled_data.mat', Mat_dict )
-
-	fos_results = test_FOS( X, y )
-	x_fos_results = test_X_FOS( X, y )
-
-	L2_sqr_norm = np.linalg.norm( x_fos_results, ord='fro' )**2
-
-	ind = np.arange( len( fos_results ) )
-
-	width = 0.35       # the width of the bars
+	width = 0.2       # the width of the bars
 
 	fig, ax = plt.subplots()
-	rects1 = ax.bar(ind, fos_results, width, color='#800080')
-	rects2 = ax.bar(ind + width, x_fos_results, width, color='y')
 
-	ax.legend((rects1[0], rects2[0]), ('FOS', 'X_FOS'))
+	rects1 = ax.bar(ind, fos_ista_results, width, color='#800080')
+	rects2 = ax.bar(ind + width, fos_fista_results, width, color='b')
+	rects3 = ax.bar(ind + 2*width, fos_cd_results, width, color='g')
+	rects4 = ax.bar(ind + 3*width, fos_lazy_cd_results, width, color='y')
+
+	ax.legend((rects1[0], rects2[0], rects3[0], rects4[0]), ('ISTA', 'FISTA', 'CD', 'Lazy_CD'))
 
 	plt.show()
 

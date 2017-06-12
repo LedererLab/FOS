@@ -22,6 +22,7 @@ PKG_CXXFLAGS += -I. $(SHLIB_OPENMP_CXXFLAGS) $(OPT_DBG) $(EXTRA_OPT)
 
 # Eigen3
 PKG_CXXFLAGS += -I/usr/include/eigen3
+PKG_CXXFLAGS += -I./include
 
 # -s to strip the .so
 PKG_LIBS = $(STRIP_OPT) $(SHLIB_OPENMP_CXXFLAGS) $(EXTRA_LIBS) $(FLIBS)

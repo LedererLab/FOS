@@ -4,7 +4,7 @@
 // C System-Headers
 //
 // C++ System headers
-//
+#include <type_traits>
 // Eigen Headers
 //
 // Boost Headers
@@ -20,21 +20,10 @@
 template < typename T >
 Eigen::Matrix< T, Eigen::Dynamic, 1 > NumVect2Eigen( const Rcpp::NumericVector& vec ) {
 
-    // int len = vec.length();
-    //
-    // Eigen::Matrix< T, Eigen::Dynamic, 1 > matrixOutput(len);
-    //
-    // //#pragma omp parallel for
-    // for( int j = 0; j < len; j++ ) {
-    //     matrixOutput( j ) = static_cast< T >( vec( j ) );
-    // }
-    //
-    // return matrixOutput;
-
     int len = vec.length();
 
     T* non_const_vec_data = new T[ len ];
-    const T* vec_data = &vec[0];
+    const double* vec_data = &vec[0];
 
     std::copy( vec_data, vec_data + len, non_const_vec_data );
 
@@ -44,45 +33,20 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 > NumVect2Eigen( const Rcpp::NumericVector& 
 template < typename T >
 Rcpp::NumericVector Eigen2NumVec( const Eigen::Matrix< T, Eigen::Dynamic, 1 >& vec ) {
 
-    // int rows = vec.rows();
-    //
-    // Rcpp::NumericVector vectorOutput(rows);
-    //
-    // //#pragma omp parallel for
-    // for( int i = 0; i < rows; i++ ) {
-    //     vectorOutput( i ) = static_cast<double>( vec( i ) );
-    // }
-    //
-    // return vectorOutput;
-
     const T* vect_data = vec.data();
-    return Rcpp::NumericVector( vect_data, vect_data + vec.size() );
+    return Rcpp::NumericVector::import( vect_data, vect_data + vec.size() );
 }
 
 template < typename T >
 Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > NumMat2Eigen( const Rcpp::NumericMatrix& mat ) {
-    //
-    // int rows = mat.rows();
-    // int cols = mat.cols();
-    //
-    // Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > matrixOutput(rows,cols);
-    //
-    // //#pragma omp parallel for collapse(2)
-    // for( int i = 0; i < rows; i++ ) {
-    //     for( int j = 0; j < cols; j++ ) {
-    //         matrixOutput( i,j ) = static_cast< T >( mat( i,j ) );
-    //     }
-    // }
-    //
-    // return matrixOutput;
-    //
+
     int rows = mat.rows();
     int cols = mat.cols();
 
     int eigen_mat_size = rows*cols;
 
     T* non_const_mat_data = new T[ eigen_mat_size ];
-    const T* mat_data = &mat[0];
+    const double* mat_data = &mat[0];
 
     std::copy( mat_data, mat_data + eigen_mat_size, non_const_mat_data );
 
@@ -93,22 +57,8 @@ Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > NumMat2Eigen( const Rcpp::Num
 template < typename T >
 Rcpp::NumericMatrix Eigen2NumMat( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& mat ) {
 
-    // int rows = mat.rows();
-    // int cols = mat.cols();
-    //
-    // Rcpp::NumericMatrix matrixOutput(rows,cols);
-    //
-    // //#pragma omp parallel for collapse(2)
-    // for( int i=0; i<rows; i++ ) {
-    //     for( int j = 0; j < cols; j++ ) {
-    //         matrixOutput( i,j ) = static_cast<double>( mat( i,j ) );
-    //     }
-    // }
-    //
-    // return matrixOutput;
-
     const T* mat_data = mat.data();
-    return Rcpp::NumericMatrix( mat_data, mat_data + mat_data.size() );
+    return Rcpp::NumericMatrix::import( mat_data, mat_data + mat_data.size() );
 }
 
 // Enable C++11 via this plugin (Rcpp 0.10.3 or later)
@@ -117,10 +67,15 @@ Rcpp::NumericMatrix Eigen2NumMat( const Eigen::Matrix< T, Eigen::Dynamic, Eigen:
 // [[Rcpp::export]]
 Rcpp::List FOS( const Rcpp::NumericMatrix& X, const Rcpp::NumericVector& Y, const std::string solver_type ) {
 
-    Eigen::MatrixXd mat_X = NumMat2Eigen<double>(X);
-    Eigen::VectorXd vect_Y = NumVect2Eigen<double>(Y);
+    // Eigen::MatrixXd mat_X = NumMat2Eigen<double>(X);
+    // Eigen::VectorXd vect_Y = NumVect2Eigen<double>(Y);
+    //
+    // hdim::experimental::X_FOS<double> fos;
 
-    hdim::experimental::X_FOS<double> fos;
+    Eigen::MatrixXf mat_X = NumMat2Eigen<float>(X);
+    Eigen::VectorXf vect_Y = NumVect2Eigen<float>(Y);
+
+    hdim::experimental::X_FOS<float> fos;
 
     if ( solver_type == "ista" ) {
       fos(  mat_X, vect_Y, hdim::SolverType::ista );
@@ -134,7 +89,9 @@ Rcpp::List FOS( const Rcpp::NumericMatrix& X, const Rcpp::NumericVector& Y, cons
       fos(  mat_X, vect_Y, hdim::SolverType::ista );
     }
 
-    Rcpp::NumericVector beta = Eigen2NumVec<double>( fos.ReturnCoefficients() );
+    // Rcpp::NumericVector beta = Eigen2NumVec<double>( fos.ReturnCoefficients() );
+
+    Rcpp::NumericVector beta = Eigen2NumVec<float>( fos.ReturnCoefficients() );
 
     beta.attr("names") = Rcpp::colnames(X);
 
@@ -144,11 +101,11 @@ Rcpp::List FOS( const Rcpp::NumericMatrix& X, const Rcpp::NumericVector& Y, cons
 
     Rcpp::NumericVector support = Eigen2NumVec<int>( fos.ReturnSupport() );
 
-    return Rcpp::List::create(Rcpp::Named("beta") = beta,
+    return Rcpp::List::create( Rcpp::Named("beta") = beta,
                               Rcpp::Named("index") = stopping_index,
                               Rcpp::Named("lambda") = lambda,
                               Rcpp::Named("intercept") = intercept,
-                              Rcpp::Named("support") = support);
+                              Rcpp::Named("support") = support );
 
 }
 

@@ -101,11 +101,12 @@ class ISTA : public internal::SubGradientSolver<T> {
         T duality_gap_target );
 
   private:
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > update_rule(const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
-                           const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
-                           const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
-                           T L_0,
-                           T lambda );
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > update_rule(
+        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
+        T L_0,
+        T lambda );
 
     const T eta = 1.5;
     T L = static_cast<T>( 0 );

@@ -40,6 +40,7 @@ template <typename T>
  */
 #ifdef __linux__
 std::string get_type_name () {
+
     int status;
     char* type_name = abi::__cxa_demangle(typeid(T).name(), 0, 0, &status);
     std::string type_str = std::string( type_name );

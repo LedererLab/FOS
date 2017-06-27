@@ -153,7 +153,7 @@ template < typename T >
 class LazyCoordinateDescent : public internal::Solver<T> {
 
   public:
-    LazyCoordinateDescent(const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+    LazyCoordinateDescent( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
                           const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
                           const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0 );
     ~LazyCoordinateDescent();
@@ -189,7 +189,9 @@ LazyCoordinateDescent<T>::LazyCoordinateDescent(
 
     for( int i = 0; i < Beta_0.size() ; i++ ) {
 
-        T inverse_norm = static_cast<T>( 1 )/( X.col( i ).squaredNorm() );
+        T X_i_norm = X.col( i ).squaredNorm();
+
+        T inverse_norm = ( X_i_norm == 0 )?( 0.0 ):( static_cast<T>(1)/X_i_norm );
         inverse_norms.push_back( inverse_norm );
 
     }

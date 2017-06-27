@@ -15,8 +15,6 @@
 #include <fstream>      // std::ifstream
 // Eigen Headers
 #include <eigen3/Eigen/Dense>
-// Boost Headers
-#include <boost/lexical_cast.hpp>// lexical_cast<T>
 // OpenMP
 //
 // Project Specific Headers
@@ -27,58 +25,6 @@
  */
 
 namespace hdim {
-
-template < typename T >
-/*!
- * \brief Read a .csv file into an Eigen Matrix
- *
- * Files must -not- have header information of any kind (e.g. row/col labels etc. )
- * Rows are determined by line breakers, columns are determined by comma-delimiter.
- *
- * \param file_path
- *
- * The (hard) path to the data file.
- *
- * \return
- * An Eigen matrix with rows/cols determined by data file.
- */
-Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > CSV2Eigen( std::string file_path ) {
-
-    std::ifstream file_stream( file_path.c_str() );
-
-    if ( !file_stream.good() ) {
-        std::string err_str = __func__;
-        err_str += "\nCould not open CSV file at location :";
-        err_str += file_path;
-        file_stream.close();
-        throw std::ios_base::failure( err_str );
-    } else {
-        file_stream.close();
-    }
-
-    std::string line;
-    std::vector<T> values;
-    unsigned int rows = 0;
-
-    while (std::getline(file_stream, line)) {
-
-        std::stringstream lineStream(line);
-        std::string cell;
-
-        while (std::getline(lineStream, cell, ',')) {
-            values.push_back( boost::lexical_cast<T>(cell) );
-        }
-        rows ++;
-    }
-
-    file_stream.close();
-
-    unsigned int num_cols = values.size() / rows;
-
-//    return Eigen::Map< Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic, Eigen::ColMajor> >( values.data(), num_cols, rows );
-    return Eigen::Map< Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(values.data(), rows, num_cols );
-
-}
 
 template < typename T >
 T StdDev( const Eigen::Matrix< T, Eigen::Dynamic, 1 >& vect ) {

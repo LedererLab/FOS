@@ -4,12 +4,12 @@
 // C System-Headers
 //
 // C++ System headers
-//#include <cmath>
 #include <limits>
 #include <iomanip>
 #include <iostream>
 #include <type_traits>
 #include <algorithm>
+#include <memory>
 // Eigen Headers
 #include <eigen3/Eigen/Dense>
 // Boost Headers
@@ -50,7 +50,9 @@ class X_FOS {
      * X and Y.
      *
      */
-    void operator()( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& x,const Eigen::Matrix< T, Eigen::Dynamic, 1 >& y, SolverType s_type = SolverType::ista );
+    void operator()( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& x,
+                     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& y,
+                     SolverType s_type = SolverType::ista );
 
     T ReturnLambda();
     T ReturnIntercept();
@@ -60,6 +62,7 @@ class X_FOS {
     Eigen::Matrix< int, Eigen::Dynamic, 1 > ReturnSupport();
 
   protected:
+
     Eigen::Matrix< T, Eigen::Dynamic, 1 > fos_fit;
     T lambda;
     unsigned int optim_index;
@@ -67,7 +70,9 @@ class X_FOS {
   private:
 
     Eigen::Matrix< T, Eigen::Dynamic, 1 > X_weights( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X );
+
     T Y_weight( const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y );
+
     Eigen::Matrix< T, Eigen::Dynamic, 1 > RescaleCoefficients( const Eigen::Matrix< T, Eigen::Dynamic, 1 >& raw_coefs,
             const Eigen::Matrix< T, Eigen::Dynamic, 1 >& x_weights,
             T y_weight);
@@ -103,7 +108,7 @@ class X_FOS {
                         const Eigen::Matrix< T, Eigen::Dynamic, 1 >& y,
                         SolverType s_type );
 
-    internal::Solver<T>* solver;
+    std::unique_ptr< internal::Solver<T> > solver;
 
     Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > Betas;
     Eigen::Matrix< T, Eigen::Dynamic, 1 > x_std_devs;
@@ -115,12 +120,9 @@ class X_FOS {
     const unsigned int M = 100;
     const T gamma = 1;
 
-    bool statsCont = true;
-
     unsigned int loop_index = 0;
 
     unsigned int statsIt = 1;
-    std::vector< T > lambda_grid;
 
     const T L_0 = 0.1;
     int n = 1, p = 1;
@@ -142,9 +144,7 @@ X_FOS< T >::X_FOS() {
 }
 
 template < typename T >
-X_FOS<T>::~X_FOS() {
-    delete solver;
-}
+X_FOS<T>::~X_FOS() {}
 
 template < typename T >
 T X_FOS< T >::ReturnLambda() {
@@ -245,7 +245,6 @@ template < typename T >
  * \return
  */
 std::vector< T > X_FOS<T>::GenerateLambdaGrid (
-
     const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
     unsigned int M ) {
@@ -325,7 +324,7 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 > X_FOS< T >::RescaleCoefficients(
 
     for( unsigned int i = 0; i < raw_coefs.size() ; i++ ) {
 
-        T weight = y_weight / x_weights( i );
+        T weight = ( x_weights(i) == 0.0 )?( 0.0 ):( y_weight / x_weights(i) );
         scaled_coefs( i ) = weight*raw_coefs( i );
 
     }
@@ -339,25 +338,29 @@ void X_FOS< T >::choose_solver( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::D
                                 const Eigen::Matrix< T, Eigen::Dynamic, 1 >& y,
                                 SolverType s_type ) {
 
+    solver.reset();
+
     switch( s_type ) {
     case SolverType::ista:
-        solver = new ISTA<T>();
+        solver = std::unique_ptr< ISTA<T> >( new ISTA<T>() );
         break;
     case SolverType::fista:
-        solver = new FISTA<T>();
+        solver = std::unique_ptr< FISTA<T> >( new FISTA<T>() );
         break;
     case SolverType::cd:
-        solver = new CoordinateDescentSolver<T>( x, y, Betas.col( 0 ) );
+        solver = std::unique_ptr< CoordinateDescentSolver<T> >( new CoordinateDescentSolver<T>( x, y, Betas.col( 0 ) ) );
         break;
     case SolverType::lazy_cd:
-        solver = new LazyCoordinateDescent<T>( x, y, Betas.col( 0 ) );
+        solver = std::unique_ptr< LazyCoordinateDescent<T> >( new LazyCoordinateDescent<T>( x, y, Betas.col( 0 ) ) );
         break;
     }
 
 }
 
 template < typename T >
-void X_FOS< T >::operator()( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& x, const Eigen::Matrix< T, Eigen::Dynamic, 1 >& y, SolverType s_type ) {
+void X_FOS< T >::operator()( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& x,
+                             const Eigen::Matrix< T, Eigen::Dynamic, 1 >& y,
+                             SolverType s_type ) {
 
     Eigen::Matrix< T, Eigen::Dynamic, 1 > old_Betas;
 
@@ -372,10 +375,9 @@ void X_FOS< T >::operator()( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dyna
     n = X.rows();
     p = X.cols();
 
-    lambda_grid = GenerateLambdaGrid( X, Y, M );
+    std::vector<T> lambda_grid = GenerateLambdaGrid( X, Y, M );
 
     Betas = Eigen::Matrix< T , Eigen::Dynamic, Eigen::Dynamic >::Zero( X.cols(), M );
-
 
     choose_solver( X, Y, s_type );
 
@@ -411,8 +413,7 @@ void X_FOS< T >::operator()( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dyna
     fos_fit = Betas.col( statsIt - 2 );
     lambda = lambda_grid.at( statsIt - 2 );
     optim_index = statsIt;
-//    intercept = compute_intercept( x, y, fos_fit );
-    intercept = 0.0;
+    intercept = compute_intercept( x, y, fos_fit );
 
 }
 

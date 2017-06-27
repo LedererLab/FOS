@@ -472,6 +472,56 @@ class CD_d(Solver_d):
 CD_d_swigregister = _hdim.CD_d_swigregister
 CD_d_swigregister(CD_d)
 
+class Lazy_CD_f(Solver_f):
+    __swig_setmethods__ = {}
+    for _s in [Solver_f]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, Lazy_CD_f, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Solver_f]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, Lazy_CD_f, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, X, Y, Beta_0):
+        this = _hdim.new_Lazy_CD_f(X, Y, Beta_0)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _hdim.delete_Lazy_CD_f
+    __del__ = lambda self: None
+
+    def __call__(self, *args):
+        return _hdim.Lazy_CD_f___call__(self, *args)
+Lazy_CD_f_swigregister = _hdim.Lazy_CD_f_swigregister
+Lazy_CD_f_swigregister(Lazy_CD_f)
+
+class Lazy_CD_d(Solver_d):
+    __swig_setmethods__ = {}
+    for _s in [Solver_d]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, Lazy_CD_d, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Solver_d]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, Lazy_CD_d, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, X, Y, Beta_0):
+        this = _hdim.new_Lazy_CD_d(X, Y, Beta_0)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _hdim.delete_Lazy_CD_d
+    __del__ = lambda self: None
+
+    def __call__(self, *args):
+        return _hdim.Lazy_CD_d___call__(self, *args)
+Lazy_CD_d_swigregister = _hdim.Lazy_CD_d_swigregister
+Lazy_CD_d_swigregister(Lazy_CD_d)
+
 # This file is compatible with both classic and new-style classes.
 
 

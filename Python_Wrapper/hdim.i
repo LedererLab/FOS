@@ -158,6 +158,31 @@ class CoordinateDescentSolver : public hdim::internal::Solver<T> {
 
 };
 
+template < typename T >
+class LazyCoordinateDescent : public internal::Solver<T> {
+
+  public:
+    LazyCoordinateDescent( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+                          const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+                          const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0 );
+    ~LazyCoordinateDescent();
+
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > operator()(
+        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
+        T lambda,
+        T duality_gap_target );
+
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > operator()(
+        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
+        T lambda,
+        unsigned int num_iterations );
+
+};
+
 %template(FOS_d) hdim::FOS<double>;
 %template(FOS_f) hdim::FOS<float>;
 
@@ -178,3 +203,6 @@ class CoordinateDescentSolver : public hdim::internal::Solver<T> {
 
 %template(CD_f) hdim::CoordinateDescentSolver<float>;
 %template(CD_d) hdim::CoordinateDescentSolver<double>;
+
+%template(Lazy_CD_f) hdim::LazyCoordinateDescent<float>;
+%template(Lazy_CD_d) hdim::LazyCoordinateDescent<double>;

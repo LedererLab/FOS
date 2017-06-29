@@ -43,7 +43,11 @@
 
 %{
   #define SWIG_FILE_WITH_INIT
-  #include "Eigen/Core"
+  #ifdef __APPLE__
+    #include "eigen3/Eigen/Core"
+  #else
+    #include "Eigen/Core"
+  #endif
   #include <vector>
 %}
 

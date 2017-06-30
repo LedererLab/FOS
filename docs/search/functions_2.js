@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['csv2eigen',['CSV2Eigen',['../generics_8hpp.html#a642d645f002b201061222b2047af7d6e',1,'hdim']]]
+  ['fos',['FOS',['../classhdim_1_1_f_o_s.html#a417a66dfbbd353669a08a6501a9ce39e',1,'hdim::FOS']]]
 ];

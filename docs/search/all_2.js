@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['coordinatedescentsolver',['CoordinateDescentSolver',['../classhdim_1_1_coordinate_descent_solver.html',1,'hdim']]],
-  ['csv2eigen',['CSV2Eigen',['../generics_8hpp.html#a642d645f002b201061222b2047af7d6e',1,'hdim']]]
+  ['coordinatedescentsolver',['CoordinateDescentSolver',['../classhdim_1_1_coordinate_descent_solver.html',1,'hdim']]]
 ];

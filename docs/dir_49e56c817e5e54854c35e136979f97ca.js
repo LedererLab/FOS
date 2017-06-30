@@ -102,6 +102,7 @@ var dir_49e56c817e5e54854c35e136979f97ca =
     [ "classhdim_1_1_f_o_s__d.js", "classhdim__1__1__f__o__s____d_8js_source.html", null ],
     [ "classhdim_1_1_f_o_s__f.js", "classhdim__1__1__f__o__s____f_8js_source.html", null ],
     [ "classhdim_1_1_i_s_t_a.js", "classhdim__1__1__i__s__t__a_8js_source.html", null ],
+    [ "classhdim_1_1_lazy_coordinate_descent.js", "classhdim__1__1__lazy__coordinate__descent_8js_source.html", null ],
     [ "classhdim_1_1_x___f_o_s__d.js", "classhdim__1__1__x______f__o__s____d_8js_source.html", null ],
     [ "classhdim_1_1_x___f_o_s__f.js", "classhdim__1__1__x______f__o__s____f_8js_source.html", null ],
     [ "classhdim_1_1experimental_1_1_f_o_s.js", "classhdim__1__1experimental__1__1__f__o__s_8js_source.html", null ],

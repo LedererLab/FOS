@@ -4,7 +4,6 @@ var generics_8hpp =
     [ "SoftThres", "structhdim_1_1_soft_thres.html", "structhdim_1_1_soft_thres" ],
     [ "SupportSift", "structhdim_1_1_support_sift.html", "structhdim_1_1_support_sift" ],
     [ "build_matrix", "generics_8hpp.html#a406e0732a7d43381d66ecdb1d973cdab", null ],
-    [ "CSV2Eigen", "generics_8hpp.html#a642d645f002b201061222b2047af7d6e", null ],
     [ "duality_gap", "generics_8hpp.html#ac820f56b18e1300af055bf51f33c5b97", null ],
     [ "GenerateSupport", "generics_8hpp.html#af47ad04252e8cb657f1efd10d8e03f42", null ],
     [ "LogScaleVector", "generics_8hpp.html#ad4e74a775b3bf698a6eb15db78148f18", null ],

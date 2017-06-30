@@ -104,30 +104,97 @@ $(document).ready(function(){initNavTree('md__home_bephillips2_Qt-Projects_FOSRe
 <div class="title">HDIM </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>HDIM is a collection of packages provided by the <a href="https://lederer.stat.washington.edu/">Lederer and Hauser HDIM Group</a></p>
-<p>HDIM provides fast methods to perform high-dimensional linear regression &ndash; most notably the FOS ( Fast and Optimal Selection ) method for minimizing the LASSO objective function.</p>
-<h1>Dependencies</h1>
-<h3>Base</h3>
-<p>You will need to have the following packages installed in order to use the base HDIM package:</p>
+<div class="textblock"><p>HDIM is a toolkit for working with high-dimensional data that emphasizes speed and statistical guarantees. Specifically, it provides tools for working with the LASSO objective function.</p>
+<p>HDIM provides traditional iterative solvers for the LASSO objective function including ISTA, FISTA and Coordinate Descent. HDIM also provides FOS, the Fast and Optimal Selection algorithm, a novel new method for performing high-dimensional linear regression.</p>
+<p>HDIM is a product of the research conducted by <a href="https://lederer.stat.washington.edu/">Lederer and Hauser HDIM Group</a> in affiliation with the University of Washington.</p>
+<h2>Supported Languages</h2>
+<p>The HDIM package is written in C++, and can be used in native form or via the supplied Python or R language wrappers.</p>
+<h2>Supported Platforms</h2>
+<p>HDIM currently supports the following operating systems and languages.</p>
+<table class="doxtable">
+<tr>
+<th>Operating System </th><th align="center">Supported Languages  </th></tr>
+<tr>
+<td>Windows </td><td align="center">C++, R </td></tr>
+<tr>
+<td>OS X </td><td align="center">C++, Python </td></tr>
+<tr>
+<td>Linux </td><td align="center">C++, R, Python </td></tr>
+</table>
+<h1>Installation</h1>
+<h2>Native C++</h2>
+<p>HDIM's native code base is cross-platform and header-only. There is no installation step &ndash; just clone the git repository and <code>#include</code> the appropriate source files in your C++ projects. Just be sure to link against the appropriate dependencies, as outlined in the <em>Dependencies</em> section below.</p>
+<h5>Dependencies</h5>
+<p>HDIM's native code base depends on the following libraries.</p>
 <ul>
 <li><a href="http://eigen.tuxfamily.org/index.php?title=Main_Page">Eigen3</a></li>
 </ul>
-<h3>Testing Framework</h3>
-<ul>
-<li><a href="http://arma.sourceforge.net/download.html">Armadillo</a></li>
-</ul>
-<h3>Python Wrapper</h3>
+<p>These libraries will need to be installed in order to use the native C++ or any of the wrappers.</p>
+<h2>Wrappers</h2>
+<p>Using the Python or R wrapper requires additional dependencies and build steps compared to using the native code base. Currently both wrappers require building from source &ndash; in the future we hope to provide users with more convenient installation options.</p>
+<h3>Linux</h3>
+<h4>Python</h4>
+<h5>Dependencies</h5>
 <ul>
 <li><a href="http://www.swig.org/download.html">SWIG</a> The Simplified Wrapper and Interface Generator</li>
-<li>[Python Development Headers]</li>
+<li>Python Development Headers</li>
+<li>Numpy, including Development Headers</li>
 </ul>
-<h3>R Wrapper</h3>
+<h5>Building</h5>
+<ul>
+<li>Clone the HDIM package into a convenient location.</li>
+<li>Navigate to $PKG_DIR/Python_Wrapper, where PKG_DIR is the root directory of the cloned repository.</li>
+<li>Find the file <code>nix_build.sh</code> and mark it as executable ( <code>chmod +x ./nix_build.sh</code> ).</li>
+<li>This will run SWIG and build the Python wrapper.</li>
+<li>The Python package path will <em>not</em> be updated.</li>
+</ul>
+<h4>R</h4>
+<h5>Dependencies</h5>
 <ul>
 <li><a href="https://cran.r-project.org/web/packages/Rcpp/index.html">Rcpp</a></li>
 </ul>
+<h5>Building</h5>
+<ul>
+<li>Clone the HDIM package into a convenient location.</li>
+<li>Navigate to $PKG_DIR/R_Wrapper, where PKG_DIR is the root directory of the cloned repository.</li>
+<li>Find the file <code>nix_build.sh</code> and mark it as executable ( <code>chmod +x ./nix_build.sh</code> ).</li>
+<li>This will run a preprocessing step using Rcpp then build and install the R Wrapper.</li>
+</ul>
+<h3>OS X</h3>
+<h4>Python</h4>
+<h5>Dependencies</h5>
+<ul>
+<li><a href="http://www.swig.org/download.html">SWIG</a> The Simplified Wrapper and Interface Generator</li>
+<li>Python Development Headers</li>
+<li>Numpy, including Development Headers</li>
+<li>gcc &ndash; installation will not work with the default C++ complier, clang</li>
+</ul>
+<h5>Building</h5>
+<ul>
+<li>Clone the HDIM package into a convenient location.</li>
+<li>Navigate to $PKG_DIR/Python_Wrapper, where PKG_DIR is the root directory of the cloned repository.</li>
+<li>Find the file <code>os_x_build.sh</code> and mark it as executable ( <code>chmod +x ./os_x_build.sh</code> ).</li>
+<li>This will run SWIG and build the Python wrapper.</li>
+<li>The Python package path will <em>not</em> be updated.</li>
+</ul>
+<h3>Windows</h3>
+<p>Installation under Windows <em>requires</em> that the root directory of the Eigen3 library be located in the same directory as the root of the HDIM package.</p>
+<h4>R</h4>
+<h5>Dependencies</h5>
+<ul>
+<li><a href="https://cran.r-project.org/bin/windows/Rtools/">Rtools</a></li>
+<li><a href="https://cran.r-project.org/web/packages/Rcpp/index.html">Rcpp</a></li>
+</ul>
+<h5>Building</h5>
+<ul>
+<li>Clone the HDIM package into the directory where the Eigen3 library is located.</li>
+<li>Navigate to $PKG_DIR/R_Wrapper, where PKG_DIR is the root directory of the cloned repository.</li>
+<li>Find the file <code>win_build.ps1</code> and run it using PowerShell.</li>
+<li>This will run a preprocessing step using Rcpp then build and install the R Wrapper.</li>
+</ul>
 <h2>Authors</h2>
 <ul>
-<li><b>Benjamin J Phillips</b> - <em>Initial work</em></li>
+<li><b>Benjamin J Phillips</b> - <em>Work on native C++, R wrapper, and Python wrapper</em></li>
 </ul>
 <h2>References</h2>
 <p><a href="https://arxiv.org/abs/1609.07195">FOS</a> </p>

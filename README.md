@@ -25,16 +25,14 @@ HDIM currently supports the following operating systems and languages.
 | Operating System | Supported Languages |
 | ---------------- |:-------------------:|
 | Windows          | C++, R              |
+| OS X             | C++, Python         |
 | Linux            | C++, R, Python      |
-
-We have not yet tested our code on Apple OS X, but most of the installation steps
-for Linux *should* also apply to OS X.
 
 # Installation
 
 ## Native C++
 
-HDIM's native code base is cross-platform ( Windows and Linux only ) and header-only.
+HDIM's native code base is cross-platform and header-only.
  There is no installation step -- just clone the git repository and `#include`
  the appropriate source files in your C++ projects. Just be sure to link against the
 appropriate dependencies, as outlined in the *Dependencies* section below.
@@ -84,6 +82,25 @@ compared to using the native code base. Currently both wrappers require building
 - Navigate to $PKG_DIR/R_Wrapper, where PKG_DIR is the root directory of the cloned repository.
 - Find the file `nix_build.sh` and mark it as executable ( `chmod +x ./nix_build.sh` ).
 - This will run a preprocessing step using Rcpp then build and install the R Wrapper.
+
+### OS X
+
+#### Python
+
+##### Dependencies
+
+* [SWIG](http://www.swig.org/download.html) The Simplified Wrapper and Interface Generator
+* Python Development Headers
+* Numpy, including Development Headers
+* gcc -- installation will not work with the default C++ complier, clang
+
+##### Building
+
+- Clone the HDIM package into a convenient location.
+- Navigate to $PKG_DIR/Python_Wrapper, where PKG_DIR is the root directory of the cloned repository.
+- Find the file `os_x_build.sh` and mark it as executable ( `chmod +x ./os_x_build.sh` ).
+- This will run SWIG and build the Python wrapper.
+- The Python package path will *not* be updated.
 
 ### Windows
 

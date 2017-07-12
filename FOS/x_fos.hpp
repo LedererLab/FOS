@@ -104,6 +104,11 @@ class X_FOS {
                       const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
                       T r_stats_it );
 
+    Eigen::Matrix< int, Eigen::Dynamic, 1 > ApplyScreening( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& x,
+            const Eigen::Matrix< T, Eigen::Dynamic, 1 >& nu_tilde,
+            const T duality_gap,
+            const T lambda );
+
     void choose_solver( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& x,
                         const Eigen::Matrix< T, Eigen::Dynamic, 1 >& y,
                         SolverType s_type );
@@ -112,6 +117,8 @@ class X_FOS {
 
     Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > Betas;
     Eigen::Matrix< T, Eigen::Dynamic, 1 > x_std_devs;
+
+    Eigen::Matrix< int, Eigen::Dynamic, 1 > script_A;
 
     T y_std_dev = 0;
     T intercept = 0;
@@ -334,6 +341,34 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 > X_FOS< T >::RescaleCoefficients(
 }
 
 template < typename T >
+Eigen::Matrix< int, Eigen::Dynamic, 1 > X_FOS< T >::ApplyScreening( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& x,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& nu_tilde,
+        const T duality_gap,
+        const T lambda ) {
+
+    Eigen::Matrix< int, Eigen::Dynamic, 1 > A( x.cols() );
+    unsigned int counter = 0;
+
+    for( unsigned int j = 0; j < x.cols(); j ++ ) {
+
+        Eigen::Matrix< T, Eigen::Dynamic, 1 > X_j = x.col( j );
+
+        T radius = std::abs( static_cast<T>( X_j.transpose() * nu_tilde ) ) + std::sqrt( 2.0 / square( lambda ) * duality_gap )*X_j.norm();
+        A[j] = ( radius > 1.0 );
+
+        if ( radius > 1.0 ) {
+            counter ++;
+        }
+
+    }
+
+    DEBUG_PRINT( "Number of active variables: " << counter );
+
+    return A;
+
+}
+
+template < typename T >
 void X_FOS< T >::choose_solver( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& x,
                                 const Eigen::Matrix< T, Eigen::Dynamic, 1 >& y,
                                 SolverType s_type ) {
@@ -403,6 +438,7 @@ void X_FOS< T >::operator()( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dyna
 
             DEBUG_PRINT( "Current Lambda: " << rStatsIt );
 
+//            script_A = ApplyScreening( X, nu_tilde, gap, lambda_grid.at( statsIt ) );
             Betas.col( statsIt - 1 ) = solver->operator()( X, Y, old_Betas, rStatsIt, gap_target );
 
         }

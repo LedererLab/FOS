@@ -44,14 +44,11 @@ INCLUDEPATH += /usr/include/eigen3
 #LIBS += -lOpenCL
 
 HEADERS += FOS/fos.hpp \
-    FOS/test_fos.hpp \
     Generic/debug.hpp \
     Generic/generics.hpp \
     Solvers/SubGradientDescent/ISTA/ista.hpp \
     Solvers/SubGradientDescent/ISTA/test_ista.hpp \
     R_Wrapper/fos_r.hpp \
-    FOS/test_fos_experimental.hpp \
-    FOS/perf_fos.hpp \
     FOS/x_fos.hpp \
     Solvers/SubGradientDescent/FISTA/fista.hpp \
     Solvers/CoordinateDescent/coordinate_descent.hpp \

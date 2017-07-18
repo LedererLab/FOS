@@ -22,10 +22,11 @@
 #include "../Solvers/SubGradientDescent/ISTA/ista.hpp"
 #include "../Solvers/SubGradientDescent/FISTA/fista.hpp"
 #include "../Solvers/CoordinateDescent/coordinate_descent.hpp"
+#include "../Solvers/CoordinateDescent/coordinatedescentwithscreen.hpp"
 
 namespace hdim {
 
-enum class SolverType { ista, fista, cd, lazy_cd };
+enum class SolverType { ista, fista, cd, lazy_cd, screen_cd };
 
 namespace experimental {
 
@@ -117,8 +118,6 @@ class X_FOS {
 
     Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > Betas;
     Eigen::Matrix< T, Eigen::Dynamic, 1 > x_std_devs;
-
-    Eigen::Matrix< int, Eigen::Dynamic, 1 > script_A;
 
     T y_std_dev = 0;
     T intercept = 0;
@@ -388,6 +387,9 @@ void X_FOS< T >::choose_solver( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::D
     case SolverType::lazy_cd:
         solver = std::unique_ptr< LazyCoordinateDescent<T> >( new LazyCoordinateDescent<T>( x, y, Betas.col( 0 ) ) );
         break;
+    case SolverType::screen_cd:
+        solver = std::unique_ptr< CoordinateDescentWithScreen<T> >( new CoordinateDescentWithScreen<T>( x, y, Betas.col( 0 ) ) );
+        break;
     }
 
 }
@@ -437,8 +439,6 @@ void X_FOS< T >::operator()( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dyna
         } else {
 
             DEBUG_PRINT( "Current Lambda: " << rStatsIt );
-
-//            script_A = ApplyScreening( X, nu_tilde, gap, lambda_grid.at( statsIt ) );
             Betas.col( statsIt - 1 ) = solver->operator()( X, Y, old_Betas, rStatsIt, gap_target );
 
         }
@@ -449,7 +449,8 @@ void X_FOS< T >::operator()( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dyna
     fos_fit = Betas.col( statsIt - 2 );
     lambda = lambda_grid.at( statsIt - 2 );
     optim_index = statsIt;
-    intercept = compute_intercept( x, y, fos_fit );
+//    intercept = compute_intercept( x, y, fos_fit );
+    intercept = 0;
 
 }
 

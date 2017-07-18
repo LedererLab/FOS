@@ -102,6 +102,9 @@ SolverType_cd = _hdim.SolverType_cd
 
 _hdim.SolverType_lazy_cd_swigconstant(_hdim)
 SolverType_lazy_cd = _hdim.SolverType_lazy_cd
+
+_hdim.SolverType_screen_cd_swigconstant(_hdim)
+SolverType_screen_cd = _hdim.SolverType_screen_cd
 class FOS_d(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, FOS_d, name, value)

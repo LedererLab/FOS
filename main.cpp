@@ -11,8 +11,13 @@
 // JASPL
 //
 // Project Specific Headers
-//
+#include "FOS/test_x_fos.hpp"
 
 int main(int argc, char *argv[]) {
+
+    (void)argc;
+    (void)argv;
+
+    hdim::TestXFOS<double>( 200, 500, hdim::SolverType::screen_cd );
 
 }

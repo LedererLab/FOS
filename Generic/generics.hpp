@@ -422,6 +422,36 @@ T duality_gap ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
     return f_beta + d_nu;
 }
 
+template < typename T >
+Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > slice (
+        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& org,
+        const std::vector< unsigned int >& indices ) {
+
+    Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > sliced ( org.rows(), indices.size() );
+
+    for( unsigned int j = 0 ; j < indices.size() ; j++ ) {
+        sliced.col( j ) = org.col( indices[ j ] );
+    }
+
+    return sliced;
+
+}
+
+template < typename T >
+Eigen::Matrix< T, Eigen::Dynamic, 1 > slice (
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& org,
+        const std::vector< unsigned int >& indices ) {
+
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > sliced ( indices.size() );
+
+    for( unsigned int j = 0 ; j < indices.size() ; j++ ) {
+        sliced[ j ] = org[ indices[ j ] ];
+    }
+
+    return sliced;
+
+}
+
 }
 
 #endif // FOS_GENERICS_H

@@ -2,12 +2,18 @@
 
 swig -c++ -python hdim.i
 
-g++ -std=c++11 -DNDEBUG -fpic -O3 -mtune=native -march=native -I/usr/include/eigen3 -c ../FOS/fos.cpp -o fos.o
-g++ -std=c++11 -DNDEBUG -fpic -O3 -mtune=native -march=native -I/usr/include/eigen3 -c ../FOS/x_fos.cpp -o x_fos.o
+SHARED_ARGS="-std=c++11 -DNDEBUG -fpic -O3 -mtune=native -march=native"
+SWIG_OBJ_ARGS="-I/usr/include/eigen3 -c"
 
-g++ -std=c++11 -DNDEBUG -fpic -O3 -mtune=native -march=native -I/usr/include/eigen3 -c ../Solvers/SubGradientDescent/ISTA/ista.cpp -o ista.o
-g++ -std=c++11 -DNDEBUG -fpic -O3 -mtune=native -march=native -I/usr/include/eigen3 -c ../Solvers/SubGradientDescent/FISTA/fista.cpp -o fista.o
-g++ -std=c++11 -DNDEBUG -fpic -O3 -mtune=native -march=native -I/usr/include/eigen3 -c ../Solvers/CoordinateDescent/coordinate_descent.cpp -o cd.o
+g++ $SHARED_ARGS $SWIG_OBJ_ARGS ../FOS/fos.cpp -o fos.o &
+g++ $SHARED_ARGS $SWIG_OBJ_ARGS ../FOS/x_fos.cpp -o x_fos.o &
 
-g++ -std=c++11 -DNDEBUG -fpic -O3 -mtune=native -march=native -I/usr/include/python3.5 -I/usr/include/eigen3 -c hdim_wrap.cxx
+g++ $SHARED_ARGS $SWIG_OBJ_ARGS ../Solvers/SubGradientDescent/ISTA/ista.cpp -o ista.o &
+g++ $SHARED_ARGS $SWIG_OBJ_ARGS ../Solvers/SubGradientDescent/FISTA/fista.cpp -o fista.o &
+g++ $SHARED_ARGS $SWIG_OBJ_ARGS ../Solvers/CoordinateDescent/coordinate_descent.cpp -o cd.o &
+
+g++ $SHARED_ARGS -I/usr/include/python3.5 $SWIG_OBJ_ARGS -c hdim_wrap.cxx &
+
+wait
+
 g++ -shared x_fos.o fos.o ista.o fista.o cd.o hdim_wrap.o -o _hdim.so

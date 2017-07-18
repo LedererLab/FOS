@@ -23,7 +23,13 @@ def main():
 	X, y, beta = test_data_gen.generate_data( N, P, int( math.ceil(P/10) ), 0.3, 5 )
 
 	fos_ista_results = test_X_FOS( X, y, 0 )
+
+	start_fista = time.clock()
 	fos_fista_results = test_X_FOS( X, y, 1 )
+	end_fista = time.clock()
+
+	print( end_fista - start_fista )
+
 	fos_cd_results = test_X_FOS( X, y, 2 )
 
 	start_cd = time.clock()

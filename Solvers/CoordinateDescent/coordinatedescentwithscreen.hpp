@@ -146,31 +146,36 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 > CoordinateDescentWithScreen<T>::operator (
 
     std::vector< unsigned int > active_set, inactive_set;
 
+    // Initialize vector of values [ 0, 1, ..., p - 1, p ]
     std::vector< unsigned int > universe ( X.cols() );
     std::iota ( std::begin(universe), std::end(universe) , 0 );
 
     T duality_gap_2 = static_cast<T>( 0 );
 
+    unsigned int counter = 0;
+
     do {
 
-        // TODO : Replace X and Beta with X corresponding to the active set and same for Beta.
         Eigen::Matrix< T, Eigen::Dynamic, 1 > nu = DualPoint( X_A, Y, Beta_A, lambda_half );
         duality_gap_2 = DualityGap2( X_A, Y, Beta_A, nu, lambda_half );
-        active_set = SafeActiveSet( X, nu, duality_gap_2 );
 
-        X_A = slice( X, active_set );
-        Beta_A = slice( Beta, active_set );
+        if( counter % 10 == 0 ) {
 
-        std::set_difference( universe.begin(),
-                             universe.end(),
-                             active_set.begin(),
-                             active_set.end(),
-                             std::inserter(inactive_set, inactive_set.begin()) );
+            active_set = SafeActiveSet( X, nu, duality_gap_2 );
+
+            X_A = slice( X, active_set );
+            Beta_A = slice( Beta, active_set );
+
+            std::set_difference( universe.begin(),
+                                 universe.end(),
+                                 active_set.begin(),
+                                 active_set.end(),
+                                 std::inserter(inactive_set, inactive_set.begin()) );
+        }
 
         for( const auto& active_index : active_set ) {
 
             Eigen::Matrix< T, Eigen::Dynamic, 1 > X_j = X.col( active_index );
-
 
             if( Beta( active_index ) != static_cast<T>(0) ) {
                 Residual = Residual + X_j*Beta( active_index );
@@ -195,6 +200,8 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 > CoordinateDescentWithScreen<T>::operator (
 
         DEBUG_PRINT( "Current Duality Gap: " << duality_gap_2 << " Current Target: " << dgt_half );
         DEBUG_PRINT( "Norm Squared of updated Beta: " << Beta.squaredNorm() );
+
+        counter ++;
 
     } while ( duality_gap_2 > dgt_half );
 

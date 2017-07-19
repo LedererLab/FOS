@@ -83,33 +83,55 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 > CoordinateDescentWithScreen<T>::operator (
     const T lambda,
     const unsigned int num_iterations ) {
 
+    const T lambda_half = lambda / 2.0;
+
     Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta = Beta_0;
     Eigen::Matrix< T, Eigen::Dynamic, 1 > Residual = Y - X*Beta_0;
 
+    Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_A = X;
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta_A = Beta;
 
-    std::vector< unsigned int > active_set;
+
+    std::vector< unsigned int > active_set, inactive_set;
+
+    // Initialize vector of values [ 0, 1, ..., p - 1, p ]
+    std::vector< unsigned int > universe ( X.cols() );
+    std::iota ( std::begin(universe), std::end(universe) , 0 );
+
     T duality_gap_2 = static_cast<T>( 0 );
 
-    for( unsigned int j = 0; j < num_iterations; j ++) {
+    for( unsigned int j = 0; j < num_iterations ; j ++ ) {
 
-        Eigen::Matrix< T, Eigen::Dynamic, 1 > nu = DualPoint( X, Y, Beta, lambda );
-        duality_gap_2 = DualityGap2( X, Y, Beta, nu, lambda );
-        active_set = SafeActiveSet( X, nu, duality_gap_2 );
+        Eigen::Matrix< T, Eigen::Dynamic, 1 > nu = DualPoint( X_A, Y, Beta_A, lambda_half );
+        duality_gap_2 = DualityGap2( X_A, Y, Beta_A, nu, lambda_half );
+
+        if( j % 10 == 0 ) {
+
+            T radius = std::sqrt( 2.0 * duality_gap_2 / square( lambda ) );
+            active_set = SafeActiveSet( X, nu, radius );
+
+            X_A = slice( X, active_set );
+            Beta_A = slice( Beta, active_set );
+
+            std::set_difference( universe.begin(),
+                                 universe.end(),
+                                 active_set.begin(),
+                                 active_set.end(),
+                                 std::inserter(inactive_set, inactive_set.begin()) );
+        }
 
         for( const auto& active_index : active_set ) {
 
             Eigen::Matrix< T, Eigen::Dynamic, 1 > X_j = X.col( active_index );
-//            T inverse_norm = static_cast<T>(1)/X_i.squaredNorm();
-
-            T inverse_norm = inverse_norms[ active_index ];
 
             if( Beta( active_index ) != static_cast<T>(0) ) {
                 Residual = Residual + X_j*Beta( active_index );
             }
 
+            T inverse_norm_j = inverse_norms[ active_index ];
 
-            T threshold = lambda / ( static_cast<T>(2) ) * inverse_norm;
-            T elem = inverse_norm*X_j.transpose()*Residual;
+            T threshold = lambda_half * inverse_norm_j;
+            T elem = inverse_norm_j*X_j.transpose()*Residual;
 
             Beta( active_index ) = soft_threshold<T>( elem, threshold );
 
@@ -117,6 +139,10 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 > CoordinateDescentWithScreen<T>::operator (
                 Residual = Residual - X_j*Beta( active_index );
             }
 
+        }
+
+        for( const auto& inactive_index : inactive_set ) {
+            Beta( inactive_index ) = 0.0;
         }
 
         DEBUG_PRINT( "Norm Squared of updated Beta: " << Beta.squaredNorm() );

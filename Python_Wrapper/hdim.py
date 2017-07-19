@@ -525,6 +525,48 @@ class Lazy_CD_d(Solver_d):
 Lazy_CD_d_swigregister = _hdim.Lazy_CD_d_swigregister
 Lazy_CD_d_swigregister(Lazy_CD_d)
 
+class CDSR_f(Solver_f):
+    __swig_setmethods__ = {}
+    for _s in [Solver_f]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CDSR_f, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Solver_f]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, CDSR_f, name)
+
+    def __init__(self, *args, **kwargs):
+        raise AttributeError("No constructor defined - class is abstract")
+    __repr__ = _swig_repr
+    __swig_destroy__ = _hdim.delete_CDSR_f
+    __del__ = lambda self: None
+
+    def __call__(self, *args):
+        return _hdim.CDSR_f___call__(self, *args)
+CDSR_f_swigregister = _hdim.CDSR_f_swigregister
+CDSR_f_swigregister(CDSR_f)
+
+class CDSR_d(Solver_d):
+    __swig_setmethods__ = {}
+    for _s in [Solver_d]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CDSR_d, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Solver_d]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, CDSR_d, name)
+
+    def __init__(self, *args, **kwargs):
+        raise AttributeError("No constructor defined - class is abstract")
+    __repr__ = _swig_repr
+    __swig_destroy__ = _hdim.delete_CDSR_d
+    __del__ = lambda self: None
+
+    def __call__(self, *args):
+        return _hdim.CDSR_d___call__(self, *args)
+CDSR_d_swigregister = _hdim.CDSR_d_swigregister
+CDSR_d_swigregister(CDSR_d)
+
 # This file is compatible with both classic and new-style classes.
 
 

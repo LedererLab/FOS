@@ -16,30 +16,30 @@ def test_X_FOS( X, Y, solver_type ):
 
 def main():
 	N = 100
-	P = 5000
+	P = 500
 
 	ind = np.arange(P)  # the x locations for the groups
 
 	X, y, beta = test_data_gen.generate_data( N, P, int( math.ceil(P/10) ), 0.3, 5 )
 
-	fos_ista_results = test_X_FOS( X, y, 0 )
+	fos_ista_results = test_X_FOS( X, y, hdim.SolverType_ista )
 
 	start_fista = time.clock()
-	fos_fista_results = test_X_FOS( X, y, 1 )
+	fos_fista_results = test_X_FOS( X, y, hdim.SolverType_fista )
 	end_fista = time.clock()
 
 	print( end_fista - start_fista )
 
-	fos_cd_results = test_X_FOS( X, y, 2 )
+	fos_cd_results = test_X_FOS( X, y, hdim.SolverType_cd )
 
 	start_cd = time.clock()
-	fos_lazy_cd_results = test_X_FOS( X, y, 3 )
+	fos_lazy_cd_results = test_X_FOS( X, y, hdim.SolverType_lazy_cd )
 	end_cd = time.clock()
 
 	print( end_cd - start_cd )
 
 	start_screen_cd = time.clock()
-	fos_screen_cd_results = test_X_FOS( X, y, 4 )
+	fos_screen_cd_results = test_X_FOS( X, y, hdim.SolverType_screen_cd )
 	end_screen_cd = time.clock()
 
 	print( end_screen_cd - start_screen_cd )

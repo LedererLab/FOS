@@ -8,6 +8,7 @@
 #include "../Solvers/SubGradientDescent/ISTA/ista.hpp"
 #include "../Solvers/SubGradientDescent/FISTA/fista.hpp"
 #include "../Solvers/CoordinateDescent/coordinate_descent.hpp"
+#include "../Solvers/CoordinateDescent/coordinatedescentwithscreen.hpp"
 %}
 
 %include <typemaps.i>
@@ -30,6 +31,7 @@
 %include "../Solvers/SubGradientDescent/ISTA/ista.hpp"
 %include "../Solvers/SubGradientDescent/FISTA/fista.hpp"
 %include "../Solvers/CoordinateDescent/coordinate_descent.hpp"
+%include "../Solvers/CoordinateDescent/coordinatedescentwithscreen.hpp"
 
 template < typename T >
 class Solver {
@@ -183,6 +185,30 @@ class LazyCoordinateDescent : public internal::Solver<T> {
 
 };
 
+template < typename T >
+class CoordinateDescentWithScreen : public internal::Solver<T> {
+
+  public:
+    CoordinateDescentWithScreen( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+                                 const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+                                 const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0 );
+    ~CoordinateDescentWithScreen();
+
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > operator()(const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+            const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+            const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
+            const T lambda,
+            const T duality_gap_target );
+
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > operator()(
+        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
+        const T lambda,
+        const unsigned int num_iterations );
+
+};
+
 %template(FOS_d) hdim::FOS<double>;
 %template(FOS_f) hdim::FOS<float>;
 
@@ -206,3 +232,6 @@ class LazyCoordinateDescent : public internal::Solver<T> {
 
 %template(Lazy_CD_f) hdim::LazyCoordinateDescent<float>;
 %template(Lazy_CD_d) hdim::LazyCoordinateDescent<double>;
+
+%template(CDSR_f) hdim::CoordinateDescentWithScreen<float>;
+%template(CDSR_d) hdim::CoordinateDescentWithScreen<double>;

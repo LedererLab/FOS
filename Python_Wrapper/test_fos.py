@@ -15,8 +15,8 @@ def test_X_FOS( X, Y, solver_type ):
 	return fos_test.ReturnCoefficients()
 
 def main():
-	N = 50
-	P = 500
+	N = 100
+	P = 5000
 
 	ind = np.arange(P)  # the x locations for the groups
 

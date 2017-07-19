@@ -161,7 +161,8 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 > CoordinateDescentWithScreen<T>::operator (
 
         if( counter % 10 == 0 ) {
 
-            active_set = SafeActiveSet( X, nu, duality_gap_2 );
+            T radius = std::sqrt( 2.0 * duality_gap_2 / square( lambda ) );
+            active_set = SafeActiveSet( X, nu, radius );
 
             X_A = slice( X, active_set );
             Beta_A = slice( Beta, active_set );

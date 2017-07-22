@@ -4,7 +4,7 @@
 // C System-Headers
 //
 // C++ System headers
-//
+#include <functional> // std::function
 // Eigen Headers
 #include <eigen3/Eigen/Dense>
 #include <eigen3/Eigen/Core>
@@ -16,15 +16,10 @@
 //
 // Project Specific Headers
 #include "../Generic/generics.hpp"
-#include "../Generic/generics.hpp"
+#include "../Generic/debug.hpp"
+#include "abstractsolver.hpp"
 
 namespace hdim {
-
-//template< typename T >
-//using MatrixT = Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >;
-
-//template< typename T >
-//using VectorT = Eigen::Matrix< T, Eigen::Dynamic, 1 >;
 
 namespace internal {
 
@@ -35,11 +30,12 @@ template < typename T >
  *
  * This class supports two types of convergence criteria -- iterative and duality gap.
  */
-class Solver {
+class Solver : public AbstractSolver < T > {
 
   public:
 
-    virtual ~Solver() {}
+    Solver();
+    virtual ~Solver() = 0;
 
     /*!
      * \brief Run the Solver for a fixed number of steps,
@@ -68,7 +64,7 @@ class Solver {
         const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
         const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
         T lambda,
-        unsigned int num_iterations ) = 0;
+        unsigned int num_iterations );
 
     /*!
      * \brief Run the Sub-Gradient Descent algorithm until the duality gap is below
@@ -98,8 +94,69 @@ class Solver {
         const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
         const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
         T lambda,
-        T duality_gap_target ) = 0;
+        T duality_gap_target );
+
+  protected:
+
+    virtual Eigen::Matrix< T, Eigen::Dynamic, 1 > update_rule(
+        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
+        T lambda ) = 0;
+
 };
+
+template < typename T >
+Solver<T>::Solver() {
+    DEBUG_PRINT( "Using Plain Solver.");
+}
+
+template < typename T >
+Solver<T>::~Solver() {}
+
+// Iterative
+template < typename T >
+Eigen::Matrix< T, Eigen::Dynamic, 1 > Solver<T>::operator()(
+    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
+    T lambda,
+    T duality_gap_target ) {
+
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta = Beta_0;
+
+    do {
+
+        Beta = update_rule( X, Y, Beta_0, lambda );
+        DEBUG_PRINT( "Duality Gap:" << duality_gap( X, Y, Beta, lambda ) );
+
+    } while( duality_gap( X, Y, Beta, lambda ) > duality_gap_target );
+
+    return Beta;
+
+}
+
+// Duality Gap Convergence Criteria
+template < typename T >
+Eigen::Matrix< T, Eigen::Dynamic, 1 > Solver<T>::operator()(
+    const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+    const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
+    T lambda,
+    unsigned int num_iterations ) {
+
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta = Beta_0;
+
+    for( unsigned int i = 0; i < num_iterations ; i++ ) {
+
+        Beta = update_rule( X, Y, Beta_0, lambda );
+        DEBUG_PRINT( "Duality Gap:" << duality_gap( X, Y, Beta, lambda ) );
+
+    }
+
+    return Beta;
+
+}
 
 }
 

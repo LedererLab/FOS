@@ -1,9 +1,9 @@
 var classhdim_1_1internal_1_1_sub_gradient_solver =
 [
-    [ "SubGradientSolver", "classhdim_1_1internal_1_1_sub_gradient_solver.html#a897addba6ed674c328072e1228b72407", null ],
-    [ "~SubGradientSolver", "classhdim_1_1internal_1_1_sub_gradient_solver.html#a3a7444adf012d8ec6d5bb134b82afb9b", null ],
-    [ "f_beta", "classhdim_1_1internal_1_1_sub_gradient_solver.html#aadc82a7bd785c827e13c4f92c18cea96", null ],
-    [ "f_beta_tilda", "classhdim_1_1internal_1_1_sub_gradient_solver.html#a0d37b012b412ea0c338866986c186cba", null ],
-    [ "update_beta_ista", "classhdim_1_1internal_1_1_sub_gradient_solver.html#a68c68415c4773be683f91c84984b7411", null ],
-    [ "L_0", "classhdim_1_1internal_1_1_sub_gradient_solver.html#a04f3e3adfbd6419fa9ea23130c2bd041", null ]
+    [ "SubGradientSolver", "classhdim_1_1internal_1_1_sub_gradient_solver.html#a1ddbede53568489e6af1d04339b97bd4", null ],
+    [ "~SubGradientSolver", "classhdim_1_1internal_1_1_sub_gradient_solver.html#abbc1079b086865be833aae3255594fe3", null ],
+    [ "f_beta", "classhdim_1_1internal_1_1_sub_gradient_solver.html#aabaa9d92c5e78d26d0bb158920aab2be", null ],
+    [ "f_beta_tilda", "classhdim_1_1internal_1_1_sub_gradient_solver.html#ac8a19f53deadb143444e36fadc8acca4", null ],
+    [ "update_beta_ista", "classhdim_1_1internal_1_1_sub_gradient_solver.html#a70714d8501a74d36351c749f84b86b80", null ],
+    [ "L_0", "classhdim_1_1internal_1_1_sub_gradient_solver.html#a03bd9c51dda75facd3068e54f4ee5515", null ]
 ];

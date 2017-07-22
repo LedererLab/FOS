@@ -35,14 +35,6 @@ LIBS += -L/usr/local/lib \
 # Eigen
 INCLUDEPATH += /usr/include/eigen3
 
-### clBLAS
-#LIBS += -L/usr/local/lib64/
-#LIBS += -lclBLAS
-
-### OpenCL
-#LIBS += -L/usr/local/cuda/lib64
-#LIBS += -lOpenCL
-
 HEADERS += FOS/fos.hpp \
     Generic/debug.hpp \
     Generic/generics.hpp \
@@ -57,7 +49,9 @@ HEADERS += FOS/fos.hpp \
     FOS/duality.hpp \
     Screening/screening_rules.hpp \
     Solvers/CoordinateDescent/coordinatedescentwithscreen.hpp \
-    FOS/test_x_fos.hpp
+    FOS/test_x_fos.hpp \
+    Solvers/screeningsolver.hpp \
+    Solvers/abstractsolver.hpp
 
 SOURCES += main.cpp \
     FOS/x_fos.cpp \
@@ -65,7 +59,8 @@ SOURCES += main.cpp \
     Solvers/SubGradientDescent/ISTA/ista.cpp \
     Solvers/SubGradientDescent/FISTA/fista.cpp \
     Solvers/CoordinateDescent/coordinate_descent.cpp \
-    Solvers/CoordinateDescent/coordinatedescentwithscreen.cpp
+    Solvers/CoordinateDescent/coordinatedescentwithscreen.cpp \
+    Solvers/screeningsolver.cpp
 
 DISTFILES += \
     Python_Wrapper/build.sh \

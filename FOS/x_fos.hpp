@@ -18,7 +18,9 @@
 //
 // Project Specific Headers
 #include "../Generic/generics.hpp"
+#include "../Solvers/abstractsolver.hpp"
 #include "../Solvers/solver.hpp"
+#include "../Solvers/screeningsolver.hpp"
 #include "../Solvers/SubGradientDescent/ISTA/ista.hpp"
 #include "../Solvers/SubGradientDescent/FISTA/fista.hpp"
 #include "../Solvers/CoordinateDescent/coordinate_descent.hpp"
@@ -26,7 +28,7 @@
 
 namespace hdim {
 
-enum class SolverType { ista, fista, cd, lazy_cd, screen_cd };
+enum class SolverType { ista, screen_ista, fista, screen_fista, cd, screen_cd };
 
 namespace experimental {
 
@@ -35,9 +37,6 @@ template < typename T >
  * \brief The FOS algorithim
  */
 class X_FOS {
-
-//    using Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > = Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >;
-//    using Eigen::Matrix< T, Eigen::Dynamic, 1 > = Eigen::Matrix< T, Eigen::Dynamic, 1 >;
 
   public:
 
@@ -114,7 +113,7 @@ class X_FOS {
                         const Eigen::Matrix< T, Eigen::Dynamic, 1 >& y,
                         SolverType s_type );
 
-    std::unique_ptr< internal::Solver<T> > solver;
+    std::unique_ptr< internal::AbstractSolver<T> > solver;
 
     Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > Betas;
     Eigen::Matrix< T, Eigen::Dynamic, 1 > x_std_devs;
@@ -376,19 +375,22 @@ void X_FOS< T >::choose_solver( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::D
 
     switch( s_type ) {
     case SolverType::ista:
-        solver = std::unique_ptr< ISTA<T> >( new ISTA<T>() );
+        solver = std::unique_ptr< ISTA<T,internal::Solver<T>> >( new ISTA<T,internal::Solver<T>>() );
+        break;
+    case SolverType::screen_ista:
+        solver = std::unique_ptr< ISTA<T,internal::ScreeningSolver<T>> >( new ISTA<T,internal::ScreeningSolver<T>>() );
         break;
     case SolverType::fista:
-        solver = std::unique_ptr< FISTA<T> >( new FISTA<T>() );
+        solver = std::unique_ptr< FISTA<T,internal::Solver<T>> >( new FISTA<T,internal::Solver<T>>() );
+        break;
+    case SolverType::screen_fista:
+        solver = std::unique_ptr< FISTA<T,internal::ScreeningSolver<T>> >( new FISTA<T,internal::ScreeningSolver<T>>() );
         break;
     case SolverType::cd:
-        solver = std::unique_ptr< CoordinateDescentSolver<T> >( new CoordinateDescentSolver<T>( x, y, Betas.col( 0 ) ) );
-        break;
-    case SolverType::lazy_cd:
-        solver = std::unique_ptr< LazyCoordinateDescent<T> >( new LazyCoordinateDescent<T>( x, y, Betas.col( 0 ) ) );
+        solver = std::unique_ptr< LazyCoordinateDescent<T,internal::Solver<T>> >( new LazyCoordinateDescent<T,internal::Solver<T>>( x, y, Betas.col( 0 ) ) );
         break;
     case SolverType::screen_cd:
-        solver = std::unique_ptr< CoordinateDescentWithScreen<T> >( new CoordinateDescentWithScreen<T>( x, y, Betas.col( 0 ) ) );
+        solver = std::unique_ptr< LazyCoordinateDescent<T,internal::ScreeningSolver<T>> >( new LazyCoordinateDescent<T,internal::ScreeningSolver<T>>( x, y, Betas.col( 0 ) ) );
         break;
     }
 
@@ -428,20 +430,11 @@ void X_FOS< T >::operator()( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dyna
         old_Betas = Betas.col( statsIt - 2 );
         T rStatsIt = lambda_grid.at( statsIt - 1 );
 
-        T gap = duality_gap( X, Y, old_Betas, rStatsIt );
-
         T gap_target = duality_gap_target( gamma, C, rStatsIt, n );
 
-        if( gap <= gap_target ) {
+        DEBUG_PRINT( "Current Lambda: " << rStatsIt );
+        Betas.col( statsIt - 1 ) = solver->operator()( X, Y, old_Betas, rStatsIt, gap_target );
 
-            Betas.col( statsIt - 1 ) = old_Betas;
-
-        } else {
-
-            DEBUG_PRINT( "Current Lambda: " << rStatsIt );
-            Betas.col( statsIt - 1 ) = solver->operator()( X, Y, old_Betas, rStatsIt, gap_target );
-
-        }
 
         statsCont = ComputeStatsCond( C, statsIt, rStatsIt, lambda_grid, Betas );
     }
@@ -449,8 +442,7 @@ void X_FOS< T >::operator()( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dyna
     fos_fit = Betas.col( statsIt - 2 );
     lambda = lambda_grid.at( statsIt - 2 );
     optim_index = statsIt;
-//    intercept = compute_intercept( x, y, fos_fit );
-    intercept = 0;
+    intercept = compute_intercept( x, y, fos_fit );
 
 }
 

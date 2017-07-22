@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['coordinatedescentsolver',['CoordinateDescentSolver',['../classhdim_1_1_coordinate_descent_solver.html',1,'hdim']]]
+  ['coordinatedescentwithscreen',['CoordinateDescentWithScreen',['../classhdim_1_1_coordinate_descent_with_screen.html',1,'hdim']]]
 ];

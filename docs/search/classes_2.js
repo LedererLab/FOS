@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['fista',['FISTA',['../classhdim_1_1_f_i_s_t_a.html',1,'hdim']]],
-  ['fos',['FOS',['../classhdim_1_1_f_o_s.html',1,'hdim']]]
+  ['coordinatedescentwithscreen',['CoordinateDescentWithScreen',['../classhdim_1_1_coordinate_descent_with_screen.html',1,'hdim']]]
 ];

@@ -1,5 +1,4 @@
-<map id="hdim::internal::SubGradientSolver&lt; T &gt;" name="hdim::internal::SubGradientSolver&lt; T &gt;">
-<area shape="rect" id="node3" href="$classhdim_1_1_f_i_s_t_a.html" title="hdim::FISTA\&lt; T \&gt;" alt="" coords="5,169,133,196"/>
-<area shape="rect" id="node4" href="$classhdim_1_1_i_s_t_a.html" title="Run the Iterative Shrinking and Thresholding Algorthim. " alt="" coords="157,169,277,196"/>
-<area shape="rect" id="node2" href="$classhdim_1_1internal_1_1_solver.html" title="Abstract base class for Solvers. " alt="" coords="54,5,231,32"/>
+<map id="hdim::internal::SubGradientSolver&lt; T, Base &gt;" name="hdim::internal::SubGradientSolver&lt; T, Base &gt;">
+<area shape="rect" id="node3" href="$classhdim_1_1_f_i_s_t_a.html" title="Run the Fast Iterative Shrinking and Thresholding Algorthim. " alt="" coords="5,169,172,196"/>
+<area shape="rect" id="node4" href="$classhdim_1_1_i_s_t_a.html" title="Run the Iterative Shrinking and Thresholding Algorthim. " alt="" coords="196,169,355,196"/>
 </map>

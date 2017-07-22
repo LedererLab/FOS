@@ -15,6 +15,8 @@ var generics_8hpp =
     [ "pos_part", "generics_8hpp.html#a9873ec5b4ca42c2bd280841d4585389f", null ],
     [ "prox", "generics_8hpp.html#a8c8be46b7676a3d3327625568b16bcc3", null ],
     [ "sgn", "generics_8hpp.html#aa6cd4248c58b9027ac878a3e768d3f9e", null ],
+    [ "slice", "generics_8hpp.html#a778b95188823d0257c1f6223f3bd0e28", null ],
+    [ "slice", "generics_8hpp.html#a3cf89e30bfdb4c10c94b24fa3c654528", null ],
     [ "soft_threshold", "generics_8hpp.html#a56fdb512c670ac5bb5d060bfe3511ff1", null ],
     [ "soft_threshold_mat", "generics_8hpp.html#acdd207ec607eebf0edc774c69f533265", null ],
     [ "square", "generics_8hpp.html#ad17061e0f1835159012dabbb24097141", null ],

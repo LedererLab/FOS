@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['binarize',['Binarize',['../structhdim_1_1_binarize.html',1,'hdim']]]
+  ['abstractsolver',['AbstractSolver',['../classhdim_1_1internal_1_1_abstract_solver.html',1,'hdim::internal']]]
 ];

@@ -26,7 +26,7 @@ template < typename T, typename Base = internal::Solver< T > >
 class FISTA : public internal::SubGradientSolver<T,Base> {
 
   public:
-    FISTA( T L_0 = 0.1 );
+    FISTA( const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta, T L_0 = 0.1 );
 
   protected:
     Eigen::Matrix< T, Eigen::Dynamic, 1 > update_rule(
@@ -55,7 +55,10 @@ class FISTA : public internal::SubGradientSolver<T,Base> {
 };
 
 template < typename T, typename Base >
-FISTA<T,Base>::FISTA( T L_0 ) : internal::SubGradientSolver<T,Base>( L_0 ) {}
+FISTA<T,Base>::FISTA( const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta, T L_0 ) : internal::SubGradientSolver<T,Base>( L_0 ) {
+    y_k = Beta;
+    t_k = 1;
+}
 
 template < typename T, typename Base >
 Eigen::Matrix< T, Eigen::Dynamic, 1 > FISTA<T,Base>::update_beta_fista (

@@ -125,12 +125,18 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 > Solver<T>::operator()(
 
     Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta = Beta_0;
 
-    do {
+    bool optim_continue = true;
 
-        Beta = update_rule( X, Y, Beta_0, lambda );
-        DEBUG_PRINT( "Duality Gap:" << duality_gap( X, Y, Beta, lambda ) );
+    while( optim_continue ) {
 
-    } while( duality_gap( X, Y, Beta, lambda ) > duality_gap_target );
+        T dg = duality_gap( X, Y, Beta, lambda );
+
+        if( dg <= duality_gap_target ) {
+            optim_continue = false;
+        }
+
+        Beta = update_rule( X, Y, Beta, lambda );
+    }
 
     return Beta;
 
@@ -149,7 +155,7 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 > Solver<T>::operator()(
 
     for( unsigned int i = 0; i < num_iterations ; i++ ) {
 
-        Beta = update_rule( X, Y, Beta_0, lambda );
+        Beta = update_rule( X, Y, Beta, lambda );
         DEBUG_PRINT( "Duality Gap:" << duality_gap( X, Y, Beta, lambda ) );
 
     }

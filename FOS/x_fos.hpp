@@ -79,7 +79,7 @@ class X_FOS {
 
     T compute_intercept(const Eigen::Matrix< T, Eigen::Dynamic, 1 >& x,
                         const Eigen::Matrix< T, Eigen::Dynamic, 1 >& y,
-                        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta );
+                        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& fit );
 
     std::vector< T > GenerateLambdaGrid (
         const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
@@ -111,6 +111,7 @@ class X_FOS {
 
     void choose_solver( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& x,
                         const Eigen::Matrix< T, Eigen::Dynamic, 1 >& y,
+                        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& beta,
                         SolverType s_type );
 
     std::unique_ptr< internal::AbstractSolver<T> > solver;
@@ -186,9 +187,9 @@ Eigen::Matrix<int, Eigen::Dynamic, 1> X_FOS<T>::ReturnSupport() {
 template < typename T >
 T X_FOS<T>::compute_intercept( const Eigen::Matrix< T, Eigen::Dynamic, 1 >& x,
                                const Eigen::Matrix< T, Eigen::Dynamic, 1 >& y,
-                               const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta ) {
+                               const Eigen::Matrix< T, Eigen::Dynamic, 1 >& fit ) {
 
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > scaled_beta = RescaleCoefficients( Beta, x_std_devs, y_std_dev );
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > scaled_beta = RescaleCoefficients( fit, x_std_devs, y_std_dev );
 
     T intercept_part = 0.0;
 
@@ -199,7 +200,7 @@ T X_FOS<T>::compute_intercept( const Eigen::Matrix< T, Eigen::Dynamic, 1 >& x,
 
     }
 
-    return y.mean() - intercept_part;
+    return static_cast<T>( y.mean() ) - static_cast<T>( intercept_part );
 }
 
 template < typename T >
@@ -369,6 +370,7 @@ Eigen::Matrix< int, Eigen::Dynamic, 1 > X_FOS< T >::ApplyScreening( const Eigen:
 template < typename T >
 void X_FOS< T >::choose_solver( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& x,
                                 const Eigen::Matrix< T, Eigen::Dynamic, 1 >& y,
+                                const Eigen::Matrix< T, Eigen::Dynamic, 1 >& beta,
                                 SolverType s_type ) {
 
     solver.reset();
@@ -381,10 +383,10 @@ void X_FOS< T >::choose_solver( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::D
         solver = std::unique_ptr< ISTA<T,internal::ScreeningSolver<T>> >( new ISTA<T,internal::ScreeningSolver<T>>() );
         break;
     case SolverType::fista:
-        solver = std::unique_ptr< FISTA<T,internal::Solver<T>> >( new FISTA<T,internal::Solver<T>>() );
+        solver = std::unique_ptr< FISTA<T,internal::Solver<T>> >( new FISTA<T,internal::Solver<T>>(beta) );
         break;
     case SolverType::screen_fista:
-        solver = std::unique_ptr< FISTA<T,internal::ScreeningSolver<T>> >( new FISTA<T,internal::ScreeningSolver<T>>() );
+        solver = std::unique_ptr< FISTA<T,internal::ScreeningSolver<T>> >( new FISTA<T,internal::ScreeningSolver<T>>(beta) );
         break;
     case SolverType::cd:
         solver = std::unique_ptr< LazyCoordinateDescent<T,internal::Solver<T>> >( new LazyCoordinateDescent<T,internal::Solver<T>>( x, y, Betas.col( 0 ) ) );
@@ -418,7 +420,7 @@ void X_FOS< T >::operator()( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dyna
 
     Betas = Eigen::Matrix< T , Eigen::Dynamic, Eigen::Dynamic >::Zero( X.cols(), M );
 
-    choose_solver( X, Y, s_type );
+    choose_solver( X, Y, Betas.col( 0 ), s_type );
 
     //Outer Loop
     while( statsCont && ( statsIt < M ) ) {
@@ -435,14 +437,26 @@ void X_FOS< T >::operator()( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dyna
         DEBUG_PRINT( "Current Lambda: " << rStatsIt );
         Betas.col( statsIt - 1 ) = solver->operator()( X, Y, old_Betas, rStatsIt, gap_target );
 
-
         statsCont = ComputeStatsCond( C, statsIt, rStatsIt, lambda_grid, Betas );
     }
 
     fos_fit = Betas.col( statsIt - 2 );
     lambda = lambda_grid.at( statsIt - 2 );
     optim_index = statsIt;
-    intercept = compute_intercept( x, y, fos_fit );
+//    intercept = compute_intercept( x, y, fos_fit );
+
+    // Computation of Intercept -- function call causes exception when compilied with -DDEBUG flag
+    // No idea why this is happening -- does not seem to be an issue when compilied using release parameters
+
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > scaled_beta = RescaleCoefficients( fos_fit, x_std_devs, y_std_dev );
+
+    T intercept_part = 0.0;
+    for( unsigned int i = 0; i < x.cols() ; i++ ) {
+        T X_i_bar = x.col( i ).mean();
+        intercept_part += scaled_beta( i )*X_i_bar;
+    }
+
+    intercept = y.mean() - intercept_part;
 
 }
 

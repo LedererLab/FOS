@@ -1,4 +1,4 @@
 <map id="hdim::internal::Solver&lt; T &gt;" name="hdim::internal::Solver&lt; T &gt;">
 <area shape="rect" id="node3" href="$classhdim_1_1_coordinate_descent_with_screen.html" title="hdim::CoordinateDescentWith\lScreen\&lt; T \&gt;" alt="" coords="5,169,203,211"/>
-<area shape="rect" id="node2" href="$classhdim_1_1internal_1_1_abstract_solver.html" title="Abstract base class for Solvers. " alt="" coords="25,5,183,47"/>
+<area shape="rect" id="node2" href="$classhdim_1_1internal_1_1_abstract_solver.html" title="Abstract base class for all iterative solvers. " alt="" coords="25,5,183,47"/>
 </map>

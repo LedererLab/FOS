@@ -120,8 +120,8 @@ Inheritance diagram for hdim::CoordinateDescentWithScreen&lt; T &gt;:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhdim_1_1_coordinate_descent_with_screen__inherit__graph.png" border="0" usemap="#hdim_1_1_coordinate_descent_with_screen_3_01_t_01_4_inherit__map" alt="Inheritance graph"/></div>
 <map name="hdim_1_1_coordinate_descent_with_screen_3_01_t_01_4_inherit__map" id="hdim_1_1_coordinate_descent_with_screen_3_01_t_01_4_inherit__map">
-<area shape="rect" id="node2" href="classhdim_1_1internal_1_1_solver.html" title="Abstract base class for Solvers. " alt="" coords="15,95,193,121"/>
-<area shape="rect" id="node3" href="classhdim_1_1internal_1_1_abstract_solver.html" title="Abstract base class for Solvers. " alt="" coords="25,5,183,47"/>
+<area shape="rect" id="node2" href="classhdim_1_1internal_1_1_solver.html" title="Abstract base class for solvers that do not make use of GAP SAFE screening rules. ..." alt="" coords="15,95,193,121"/>
+<area shape="rect" id="node3" href="classhdim_1_1internal_1_1_abstract_solver.html" title="Abstract base class for all iterative solvers. " alt="" coords="25,5,183,47"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
@@ -129,8 +129,8 @@ Collaboration diagram for hdim::CoordinateDescentWithScreen&lt; T &gt;:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhdim_1_1_coordinate_descent_with_screen__coll__graph.png" border="0" usemap="#hdim_1_1_coordinate_descent_with_screen_3_01_t_01_4_coll__map" alt="Collaboration graph"/></div>
 <map name="hdim_1_1_coordinate_descent_with_screen_3_01_t_01_4_coll__map" id="hdim_1_1_coordinate_descent_with_screen_3_01_t_01_4_coll__map">
-<area shape="rect" id="node2" href="classhdim_1_1internal_1_1_solver.html" title="Abstract base class for Solvers. " alt="" coords="15,95,193,121"/>
-<area shape="rect" id="node3" href="classhdim_1_1internal_1_1_abstract_solver.html" title="Abstract base class for Solvers. " alt="" coords="25,5,183,47"/>
+<area shape="rect" id="node2" href="classhdim_1_1internal_1_1_solver.html" title="Abstract base class for solvers that do not make use of GAP SAFE screening rules. ..." alt="" coords="15,95,193,121"/>
+<area shape="rect" id="node3" href="classhdim_1_1internal_1_1_abstract_solver.html" title="Abstract base class for all iterative solvers. " alt="" coords="25,5,183,47"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -143,7 +143,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:ab81b945f129a22992fbdd4703182d49c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the Sub-Gradient Descent algorithm until the duality gap is below the threshold specified by duality_gap_target.  <a href="#ab81b945f129a22992fbdd4703182d49c">More...</a><br /></td></tr>
 <tr class="separator:ab81b945f129a22992fbdd4703182d49c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a21c2a99cb01aaefc127e9dd41e1120a7"><td class="memItemLeft" align="right" valign="top">Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhdim_1_1_coordinate_descent_with_screen.html#a21c2a99cb01aaefc127e9dd41e1120a7">operator()</a> (const Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;X, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Y, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Beta_0, const T lambda, const unsigned int num_iterations)</td></tr>
-<tr class="memdesc:a21c2a99cb01aaefc127e9dd41e1120a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the Solver for a fixed number of steps, specified by num_iterations.  <a href="#a21c2a99cb01aaefc127e9dd41e1120a7">More...</a><br /></td></tr>
+<tr class="memdesc:a21c2a99cb01aaefc127e9dd41e1120a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the AbstractSolver for a fixed number of steps, specified by num_iterations.  <a href="#a21c2a99cb01aaefc127e9dd41e1120a7">More...</a><br /></td></tr>
 <tr class="separator:a21c2a99cb01aaefc127e9dd41e1120a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
@@ -283,7 +283,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Run the Solver for a fixed number of steps, specified by num_iterations. </p>
+<p>Run the AbstractSolver for a fixed number of steps, specified by num_iterations. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">X</td><td>An n x p design matrix.</td></tr>

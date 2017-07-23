@@ -117,7 +117,7 @@ $(document).ready(function(){initNavTree('classhdim_1_1internal_1_1_abstract_sol
 </div><!--header-->
 <div class="contents">
 
-<p>Abstract base class for Solvers.  
+<p>Abstract base class for all iterative solvers.  
  <a href="classhdim_1_1internal_1_1_abstract_solver.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="abstractsolver_8hpp_source.html">abstractsolver.hpp</a>&gt;</code></p>
@@ -126,8 +126,8 @@ Inheritance diagram for hdim::internal::AbstractSolver&lt; T &gt;:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhdim_1_1internal_1_1_abstract_solver__inherit__graph.png" border="0" usemap="#hdim_1_1internal_1_1_abstract_solver_3_01_t_01_4_inherit__map" alt="Inheritance graph"/></div>
 <map name="hdim_1_1internal_1_1_abstract_solver_3_01_t_01_4_inherit__map" id="hdim_1_1internal_1_1_abstract_solver_3_01_t_01_4_inherit__map">
-<area shape="rect" id="node2" href="classhdim_1_1internal_1_1_screening_solver.html" title="Abstract base class for Solvers. " alt="" coords="5,95,172,136"/>
-<area shape="rect" id="node3" href="classhdim_1_1internal_1_1_solver.html" title="Abstract base class for Solvers. " alt="" coords="196,102,373,129"/>
+<area shape="rect" id="node2" href="classhdim_1_1internal_1_1_screening_solver.html" title="Abstract base class for Solvers that use GAP SAFE screening rules. " alt="" coords="5,95,172,136"/>
+<area shape="rect" id="node3" href="classhdim_1_1internal_1_1_solver.html" title="Abstract base class for solvers that do not make use of GAP SAFE screening rules. ..." alt="" coords="196,102,373,129"/>
 <area shape="rect" id="node4" href="classhdim_1_1_coordinate_descent_with_screen.html" title="hdim::CoordinateDescentWith\lScreen\&lt; T \&gt;" alt="" coords="186,184,383,225"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
@@ -135,7 +135,7 @@ Inheritance diagram for hdim::internal::AbstractSolver&lt; T &gt;:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ac845a2103ffeb5d3bfb29678c5f6932e"><td class="memItemLeft" align="right" valign="top">virtual Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhdim_1_1internal_1_1_abstract_solver.html#ac845a2103ffeb5d3bfb29678c5f6932e">operator()</a> (const Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;X, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Y, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Beta_0, T lambda, unsigned int num_iterations)=0</td></tr>
-<tr class="memdesc:ac845a2103ffeb5d3bfb29678c5f6932e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the <a class="el" href="classhdim_1_1internal_1_1_abstract_solver.html" title="Abstract base class for Solvers. ">AbstractSolver</a> for a fixed number of steps, specified by num_iterations.  <a href="#ac845a2103ffeb5d3bfb29678c5f6932e">More...</a><br /></td></tr>
+<tr class="memdesc:ac845a2103ffeb5d3bfb29678c5f6932e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the <a class="el" href="classhdim_1_1internal_1_1_abstract_solver.html" title="Abstract base class for all iterative solvers. ">AbstractSolver</a> for a fixed number of steps, specified by num_iterations.  <a href="#ac845a2103ffeb5d3bfb29678c5f6932e">More...</a><br /></td></tr>
 <tr class="separator:ac845a2103ffeb5d3bfb29678c5f6932e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7840e92d37451d1412412f80623194f7"><td class="memItemLeft" align="right" valign="top">virtual Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhdim_1_1internal_1_1_abstract_solver.html#a7840e92d37451d1412412f80623194f7">operator()</a> (const Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;X, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Y, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Beta_0, T lambda, T duality_gap_target)=0</td></tr>
 <tr class="memdesc:a7840e92d37451d1412412f80623194f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the Sub-Gradient Descent algorithm until the duality gap is below the threshold specified by duality_gap_target.  <a href="#a7840e92d37451d1412412f80623194f7">More...</a><br /></td></tr>
@@ -151,7 +151,7 @@ virtual Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt;&#160;</td><td class="memItem
 <div class="textblock"><h3>template&lt;typename T&gt;<br />
 class hdim::internal::AbstractSolver&lt; T &gt;</h3>
 
-<p>Abstract base class for Solvers. </p>
+<p>Abstract base class for all iterative solvers. </p>
 <p>This class supports two types of convergence criteria &ndash; iterative and duality gap. </p>
 
 <p>Definition at line <a class="el" href="abstractsolver_8hpp_source.html#l00032">32</a> of file <a class="el" href="abstractsolver_8hpp_source.html">abstractsolver.hpp</a>.</p>
@@ -208,7 +208,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Run the <a class="el" href="classhdim_1_1internal_1_1_abstract_solver.html" title="Abstract base class for Solvers. ">AbstractSolver</a> for a fixed number of steps, specified by num_iterations. </p>
+<p>Run the <a class="el" href="classhdim_1_1internal_1_1_abstract_solver.html" title="Abstract base class for all iterative solvers. ">AbstractSolver</a> for a fixed number of steps, specified by num_iterations. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">X</td><td>An n x p design matrix.</td></tr>
@@ -221,7 +221,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A 1 x n vector of results from the algorithm. </dd></dl>
 
-<p>Implemented in <a class="el" href="classhdim_1_1internal_1_1_solver.html#a882960d16aa8f8ca6f72089ae397c4ce">hdim::internal::Solver&lt; T &gt;</a>, <a class="el" href="classhdim_1_1_coordinate_descent_with_screen.html#a21c2a99cb01aaefc127e9dd41e1120a7">hdim::CoordinateDescentWithScreen&lt; T &gt;</a>, and <a class="el" href="classhdim_1_1internal_1_1_screening_solver.html#a524b715dae86e7302b04a0898a0e9e35">hdim::internal::ScreeningSolver&lt; T &gt;</a>.</p>
+<p>Implemented in <a class="el" href="classhdim_1_1_coordinate_descent_with_screen.html#a21c2a99cb01aaefc127e9dd41e1120a7">hdim::CoordinateDescentWithScreen&lt; T &gt;</a>, <a class="el" href="classhdim_1_1internal_1_1_screening_solver.html#a524b715dae86e7302b04a0898a0e9e35">hdim::internal::ScreeningSolver&lt; T &gt;</a>, and <a class="el" href="classhdim_1_1internal_1_1_solver.html#a882960d16aa8f8ca6f72089ae397c4ce">hdim::internal::Solver&lt; T &gt;</a>.</p>
 
 </div>
 </div>
@@ -290,7 +290,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A 1 x n vector of results from the algorithm. </dd></dl>
 
-<p>Implemented in <a class="el" href="classhdim_1_1internal_1_1_solver.html#a90e3b14f85da3c4e9e2c9f9eea298677">hdim::internal::Solver&lt; T &gt;</a>, <a class="el" href="classhdim_1_1internal_1_1_screening_solver.html#af2d1f2a55b8356e521a80cce97993983">hdim::internal::ScreeningSolver&lt; T &gt;</a>, and <a class="el" href="classhdim_1_1_coordinate_descent_with_screen.html#ab81b945f129a22992fbdd4703182d49c">hdim::CoordinateDescentWithScreen&lt; T &gt;</a>.</p>
+<p>Implemented in <a class="el" href="classhdim_1_1internal_1_1_screening_solver.html#af2d1f2a55b8356e521a80cce97993983">hdim::internal::ScreeningSolver&lt; T &gt;</a>, <a class="el" href="classhdim_1_1internal_1_1_solver.html#a90e3b14f85da3c4e9e2c9f9eea298677">hdim::internal::Solver&lt; T &gt;</a>, and <a class="el" href="classhdim_1_1_coordinate_descent_with_screen.html#ab81b945f129a22992fbdd4703182d49c">hdim::CoordinateDescentWithScreen&lt; T &gt;</a>.</p>
 
 </div>
 </div>

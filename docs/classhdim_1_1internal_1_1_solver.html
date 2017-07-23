@@ -117,7 +117,7 @@ $(document).ready(function(){initNavTree('classhdim_1_1internal_1_1_solver.html'
 </div><!--header-->
 <div class="contents">
 
-<p>Abstract base class for Solvers.  
+<p>Abstract base class for solvers that do not make use of GAP SAFE screening rules.  
  <a href="classhdim_1_1internal_1_1_solver.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="solver_8hpp_source.html">solver.hpp</a>&gt;</code></p>
@@ -127,7 +127,7 @@ Inheritance diagram for hdim::internal::Solver&lt; T &gt;:</div>
 <div class="center"><img src="classhdim_1_1internal_1_1_solver__inherit__graph.png" border="0" usemap="#hdim_1_1internal_1_1_solver_3_01_t_01_4_inherit__map" alt="Inheritance graph"/></div>
 <map name="hdim_1_1internal_1_1_solver_3_01_t_01_4_inherit__map" id="hdim_1_1internal_1_1_solver_3_01_t_01_4_inherit__map">
 <area shape="rect" id="node3" href="classhdim_1_1_coordinate_descent_with_screen.html" title="hdim::CoordinateDescentWith\lScreen\&lt; T \&gt;" alt="" coords="5,169,203,211"/>
-<area shape="rect" id="node2" href="classhdim_1_1internal_1_1_abstract_solver.html" title="Abstract base class for Solvers. " alt="" coords="25,5,183,47"/>
+<area shape="rect" id="node2" href="classhdim_1_1internal_1_1_abstract_solver.html" title="Abstract base class for all iterative solvers. " alt="" coords="25,5,183,47"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
@@ -135,14 +135,14 @@ Collaboration diagram for hdim::internal::Solver&lt; T &gt;:</div>
 <div class="dyncontent">
 <div class="center"><img src="classhdim_1_1internal_1_1_solver__coll__graph.png" border="0" usemap="#hdim_1_1internal_1_1_solver_3_01_t_01_4_coll__map" alt="Collaboration graph"/></div>
 <map name="hdim_1_1internal_1_1_solver_3_01_t_01_4_coll__map" id="hdim_1_1internal_1_1_solver_3_01_t_01_4_coll__map">
-<area shape="rect" id="node2" href="classhdim_1_1internal_1_1_abstract_solver.html" title="Abstract base class for Solvers. " alt="" coords="15,5,173,47"/>
+<area shape="rect" id="node2" href="classhdim_1_1internal_1_1_abstract_solver.html" title="Abstract base class for all iterative solvers. " alt="" coords="15,5,173,47"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a882960d16aa8f8ca6f72089ae397c4ce"><td class="memItemLeft" align="right" valign="top">virtual Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhdim_1_1internal_1_1_solver.html#a882960d16aa8f8ca6f72089ae397c4ce">operator()</a> (const Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;X, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Y, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Beta_0, T lambda, unsigned int num_iterations)</td></tr>
-<tr class="memdesc:a882960d16aa8f8ca6f72089ae397c4ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the <a class="el" href="classhdim_1_1internal_1_1_solver.html" title="Abstract base class for Solvers. ">Solver</a> for a fixed number of steps, specified by num_iterations.  <a href="#a882960d16aa8f8ca6f72089ae397c4ce">More...</a><br /></td></tr>
+<tr class="memdesc:a882960d16aa8f8ca6f72089ae397c4ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the <a class="el" href="classhdim_1_1internal_1_1_abstract_solver.html" title="Abstract base class for all iterative solvers. ">AbstractSolver</a> for a fixed number of steps, specified by num_iterations.  <a href="#a882960d16aa8f8ca6f72089ae397c4ce">More...</a><br /></td></tr>
 <tr class="separator:a882960d16aa8f8ca6f72089ae397c4ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a90e3b14f85da3c4e9e2c9f9eea298677"><td class="memItemLeft" align="right" valign="top">virtual Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhdim_1_1internal_1_1_solver.html#a90e3b14f85da3c4e9e2c9f9eea298677">operator()</a> (const Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;X, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Y, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Beta_0, T lambda, T duality_gap_target)</td></tr>
 <tr class="memdesc:a90e3b14f85da3c4e9e2c9f9eea298677"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the Sub-Gradient Descent algorithm until the duality gap is below the threshold specified by duality_gap_target.  <a href="#a90e3b14f85da3c4e9e2c9f9eea298677">More...</a><br /></td></tr>
@@ -158,10 +158,9 @@ virtual Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt;&#160;</td><td class="memItem
 <div class="textblock"><h3>template&lt;typename T&gt;<br />
 class hdim::internal::Solver&lt; T &gt;</h3>
 
-<p>Abstract base class for Solvers. </p>
-<p>This class supports two types of convergence criteria &ndash; iterative and duality gap. </p>
+<p>Abstract base class for solvers that do not make use of GAP SAFE screening rules. </p>
 
-<p>Definition at line <a class="el" href="solver_8hpp_source.html#l00033">33</a> of file <a class="el" href="solver_8hpp_source.html">solver.hpp</a>.</p>
+<p>Definition at line <a class="el" href="solver_8hpp_source.html#l00031">31</a> of file <a class="el" href="solver_8hpp_source.html">solver.hpp</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="a882960d16aa8f8ca6f72089ae397c4ce"></a>
 <div class="memitem">
@@ -215,7 +214,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Run the <a class="el" href="classhdim_1_1internal_1_1_solver.html" title="Abstract base class for Solvers. ">Solver</a> for a fixed number of steps, specified by num_iterations. </p>
+<p>Run the <a class="el" href="classhdim_1_1internal_1_1_abstract_solver.html" title="Abstract base class for all iterative solvers. ">AbstractSolver</a> for a fixed number of steps, specified by num_iterations. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">X</td><td>An n x p design matrix.</td></tr>
@@ -232,7 +231,7 @@ template&lt;typename T &gt; </div>
 
 <p>Reimplemented in <a class="el" href="classhdim_1_1_coordinate_descent_with_screen.html#a21c2a99cb01aaefc127e9dd41e1120a7">hdim::CoordinateDescentWithScreen&lt; T &gt;</a>.</p>
 
-<p>Definition at line <a class="el" href="solver_8hpp_source.html#l00141">141</a> of file <a class="el" href="solver_8hpp_source.html">solver.hpp</a>.</p>
+<p>Definition at line <a class="el" href="solver_8hpp_source.html#l00100">100</a> of file <a class="el" href="solver_8hpp_source.html">solver.hpp</a>.</p>
 
 </div>
 </div>
@@ -305,7 +304,7 @@ template&lt;typename T &gt; </div>
 
 <p>Reimplemented in <a class="el" href="classhdim_1_1_coordinate_descent_with_screen.html#ab81b945f129a22992fbdd4703182d49c">hdim::CoordinateDescentWithScreen&lt; T &gt;</a>.</p>
 
-<p>Definition at line <a class="el" href="solver_8hpp_source.html#l00119">119</a> of file <a class="el" href="solver_8hpp_source.html">solver.hpp</a>.</p>
+<p>Definition at line <a class="el" href="solver_8hpp_source.html#l00072">72</a> of file <a class="el" href="solver_8hpp_source.html">solver.hpp</a>.</p>
 
 </div>
 </div>

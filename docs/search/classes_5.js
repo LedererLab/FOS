@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['ista',['ISTA',['../classhdim_1_1_i_s_t_a.html',1,'hdim']]]
+  ['lazycoordinatedescent',['LazyCoordinateDescent',['../classhdim_1_1_lazy_coordinate_descent.html',1,'hdim']]]
 ];

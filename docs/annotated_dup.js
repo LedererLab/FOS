@@ -18,6 +18,5 @@ var annotated_dup =
       [ "LazyCoordinateDescent", "classhdim_1_1_lazy_coordinate_descent.html", "classhdim_1_1_lazy_coordinate_descent" ],
       [ "SoftThres", "structhdim_1_1_soft_thres.html", "structhdim_1_1_soft_thres" ],
       [ "SupportSift", "structhdim_1_1_support_sift.html", "structhdim_1_1_support_sift" ]
-    ] ],
-    [ "Duality", "class_duality.html", null ]
+    ] ]
 ];

@@ -24,13 +24,10 @@
 #include "../Solvers/SubGradientDescent/ISTA/ista.hpp"
 #include "../Solvers/SubGradientDescent/FISTA/fista.hpp"
 #include "../Solvers/CoordinateDescent/coordinate_descent.hpp"
-#include "../Solvers/CoordinateDescent/coordinatedescentwithscreen.hpp"
 
 namespace hdim {
 
 enum class SolverType { ista, screen_ista, fista, screen_fista, cd, screen_cd };
-
-namespace experimental {
 
 template < typename T >
 /*!
@@ -66,6 +63,7 @@ class X_FOS {
     Eigen::Matrix< T, Eigen::Dynamic, 1 > fos_fit;
     T lambda;
     unsigned int optim_index;
+    T intercept = 0;
 
   private:
 
@@ -120,7 +118,6 @@ class X_FOS {
     Eigen::Matrix< T, Eigen::Dynamic, 1 > x_std_devs;
 
     T y_std_dev = 0;
-    T intercept = 0;
 
     const T C = 0.75;
     const unsigned int M = 100;
@@ -457,8 +454,6 @@ void X_FOS< T >::operator()( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dyna
     }
 
     intercept = y.mean() - intercept_part;
-
-}
 
 }
 

@@ -22,9 +22,6 @@ CONFIG(debug, debug|release) {
     QMAKE_CXXFLAGS_RELEASE *= -march=native
 }
 
-#gnuplot iostreams
-INCLUDEPATH += ../gnuplot-iostream
-
 # Boost
 LIBS += -L/usr/local/lib \
         -L/usr/lib \
@@ -34,6 +31,9 @@ LIBS += -L/usr/local/lib \
 
 # Eigen
 INCLUDEPATH += /usr/include/eigen3
+
+# emscripten
+INCLUDEPATH += /home/bephillips2/Packages/emsdk-portable/emscripten/1.37.16/system/include/
 
 HEADERS += FOS/fos.hpp \
     Generic/debug.hpp \
@@ -50,7 +50,10 @@ HEADERS += FOS/fos.hpp \
     Solvers/CoordinateDescent/coordinatedescentwithscreen.hpp \
     FOS/test_x_fos.hpp \
     Solvers/screeningsolver.hpp \
-    Solvers/abstractsolver.hpp
+    Solvers/abstractsolver.hpp \
+    FOS/perf_fos.hpp \
+    Solvers/SubGradientDescent/ISTA/perf_ista.hpp \
+    JS_Wrapper/fos_js.hpp
 
 SOURCES += main.cpp \
     FOS/x_fos.cpp \
@@ -58,7 +61,8 @@ SOURCES += main.cpp \
     Solvers/SubGradientDescent/ISTA/ista.cpp \
     Solvers/SubGradientDescent/FISTA/fista.cpp \
     Solvers/CoordinateDescent/coordinate_descent.cpp \
-    Solvers/CoordinateDescent/coordinatedescentwithscreen.cpp
+    Solvers/CoordinateDescent/coordinatedescentwithscreen.cpp \
+    JS_Wrapper/fos_js.cpp \
 
 DISTFILES += \
     Python_Wrapper/build.sh \

@@ -27,7 +27,7 @@ void TestXFOS( unsigned int N, unsigned int P, SolverType s_type ) {
     Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X = Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >::Random( N , P );
     Eigen::Matrix< T, Eigen::Dynamic, 1 > Y = Eigen::Matrix< T, Eigen::Dynamic, 1 >::Random( N, 1 );
 
-    experimental::X_FOS<T> fos;
+    X_FOS<T> fos;
     fos( X, Y, s_type );
 
     Eigen::Matrix< T, Eigen::Dynamic, 1 > fos_fit = fos.ReturnCoefficients();

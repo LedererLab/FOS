@@ -4,7 +4,7 @@
 // C System-Headers
 //
 // C++ System headers
-//
+#include <numeric>
 // Eigen Headers
 #include <eigen3/Eigen/Dense>
 #include <eigen3/Eigen/Core>

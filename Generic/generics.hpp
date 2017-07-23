@@ -13,6 +13,7 @@
 // C++ System headers
 #include <chrono>
 #include <fstream>      // std::ifstream
+#include <vector>
 // Eigen Headers
 #include <eigen3/Eigen/Dense>
 // OpenMP

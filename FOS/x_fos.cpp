@@ -1,6 +1,6 @@
-//Explicit Instantiation of X_FOS for Python Wrappers
+//Explicit Instantiation of X_FOS for Wrappers
 
 #include "x_fos.hpp"
 
-template class hdim::experimental::X_FOS<float>;
-template class hdim::experimental::X_FOS<double>;
+template class hdim::X_FOS<float>;
+template class hdim::X_FOS<double>;

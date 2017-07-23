@@ -25,7 +25,7 @@ namespace internal {
 template < typename T >
 
 /*!
- * \brief Abstract base class for Solvers
+ * \brief Abstract base class for all iterative solvers.
  *
  * This class supports two types of convergence criteria -- iterative and duality gap.
  */

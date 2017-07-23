@@ -46,7 +46,6 @@ HEADERS += FOS/fos.hpp \
     Solvers/CoordinateDescent/coordinate_descent.hpp \
     Solvers/SubGradientDescent/subgradient_descent.hpp \
     Solvers/solver.hpp \
-    FOS/duality.hpp \
     Screening/screening_rules.hpp \
     Solvers/CoordinateDescent/coordinatedescentwithscreen.hpp \
     FOS/test_x_fos.hpp \
@@ -59,8 +58,7 @@ SOURCES += main.cpp \
     Solvers/SubGradientDescent/ISTA/ista.cpp \
     Solvers/SubGradientDescent/FISTA/fista.cpp \
     Solvers/CoordinateDescent/coordinate_descent.cpp \
-    Solvers/CoordinateDescent/coordinatedescentwithscreen.cpp \
-    Solvers/screeningsolver.cpp
+    Solvers/CoordinateDescent/coordinatedescentwithscreen.cpp
 
 DISTFILES += \
     Python_Wrapper/build.sh \

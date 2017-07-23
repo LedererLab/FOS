@@ -1,14 +1,14 @@
 %module hdim
 
 %{
-#include "../FOS/fos.hpp"
 #include "../FOS/x_fos.hpp"
+#include "../Solvers/abstractsolver.hpp"
 #include "../Solvers/solver.hpp"
+#include "../Solvers/screeningsolver.hpp"
 #include "../Solvers/SubGradientDescent/subgradient_descent.hpp"
 #include "../Solvers/SubGradientDescent/ISTA/ista.hpp"
 #include "../Solvers/SubGradientDescent/FISTA/fista.hpp"
 #include "../Solvers/CoordinateDescent/coordinate_descent.hpp"
-#include "../Solvers/CoordinateDescent/coordinatedescentwithscreen.hpp"
 %}
 
 %include <typemaps.i>
@@ -24,9 +24,10 @@
 
 %eigen_typemaps(Eigen::Matrix<int,Eigen::Dynamic,1>)
 
-%include "../FOS/fos.hpp"
 %include "../FOS/x_fos.hpp"
+%include "../Solvers/abstractsolver.hpp"
 %include "../Solvers/solver.hpp"
+%include "../Solvers/screeningsolver.hpp"
 %include "../Solvers/SubGradientDescent/subgradient_descent.hpp"
 %include "../Solvers/SubGradientDescent/ISTA/ista.hpp"
 %include "../Solvers/SubGradientDescent/FISTA/fista.hpp"
@@ -34,10 +35,11 @@
 %include "../Solvers/CoordinateDescent/coordinatedescentwithscreen.hpp"
 
 template < typename T >
-class Solver {
+class AbstractSolver {
 
   public:
-    virtual ~Solver() {}
+
+    virtual ~AbstractSolver() = 0;
 
     virtual Eigen::Matrix< T, Eigen::Dynamic, 1 > operator()(
         const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
@@ -52,28 +54,62 @@ class Solver {
         const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
         T lambda,
         T duality_gap_target ) = 0;
+
 };
 
 template < typename T >
-class SubGradientSolver : public hdim::internal::Solver<T> {
+class Solver : public AbstractSolver < T > {
+
+  public:
+
+    Solver();
+    virtual ~Solver() = 0;
+
+    virtual Eigen::Matrix< T, Eigen::Dynamic, 1 > operator()(
+        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
+        T lambda,
+        unsigned int num_iterations );
+
+    virtual Eigen::Matrix< T, Eigen::Dynamic, 1 > operator()(
+        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
+        T lambda,
+        T duality_gap_target );
+};
+
+template < typename T >
+class ScreeningSolver : public AbstractSolver < T >  {
+
+  public:
+
+    ScreeningSolver();
+    virtual ~ScreeningSolver() = 0;
+
+    virtual Eigen::Matrix< T, Eigen::Dynamic, 1 > operator()(
+        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
+        T lambda,
+        unsigned int num_iterations );
+
+    virtual Eigen::Matrix< T, Eigen::Dynamic, 1 > operator()(
+        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
+        T lambda,
+        T duality_gap_target );
+
+};
+
+template < typename T, typename Base = hdim::internal::Solver<T> >
+class SubGradientSolver : public Base {
 
   public:
     SubGradientSolver( T L = 0.1 );
     ~SubGradientSolver();
-};
-
-template < typename T >
-class FOS {
-
-public:
-	FOS( Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > x, Eigen::Matrix< T, Eigen::Dynamic, 1 > y );
-	void Algorithm();
-
-	T ReturnLambda();
-	Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > ReturnBetas();
-	uint ReturnOptimIndex();
-	Eigen::Matrix< T, Eigen::Dynamic, 1 > ReturnCoefficients();
-	Eigen::Matrix< T, Eigen::Dynamic, 1 > ReturnSupport();
 
 };
 
@@ -97,141 +133,54 @@ public:
 
 };
 
-template < typename T >
-class ISTA : public hdim::internal::SubGradientSolver<T> {
 
-	public:
-		Eigen::Matrix< T, Eigen::Dynamic, 1 >  operator()(
-			const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > & X,
-			const Eigen::Matrix< T, Eigen::Dynamic, 1 > & Y,
-			const Eigen::Matrix< T, Eigen::Dynamic, 1 > & Beta_0,
-			T lambda,
-			unsigned int num_iterations );
-
-		Eigen::Matrix< T, Eigen::Dynamic, 1 >  operator()(
-			const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > & X,
-			const Eigen::Matrix< T, Eigen::Dynamic, 1 > & Y,
-			const Eigen::Matrix< T, Eigen::Dynamic, 1 > & Beta_0,
-			T lambda,
-			T duality_gap_target );
-};
-
-template < typename T >
-class FISTA : public hdim::internal::SubGradientSolver<T> {
-
-	public:
-		Eigen::Matrix< T, Eigen::Dynamic, 1 >  operator()(
-			const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > & X,
-			const Eigen::Matrix< T, Eigen::Dynamic, 1 > & Y,
-			const Eigen::Matrix< T, Eigen::Dynamic, 1 > & Beta_0,
-			T lambda,
-			unsigned int num_iterations );
-
-		Eigen::Matrix< T, Eigen::Dynamic, 1 >  operator()(
-			const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > & X,
-			const Eigen::Matrix< T, Eigen::Dynamic, 1 > & Y,
-			const Eigen::Matrix< T, Eigen::Dynamic, 1 > & Beta_0,
-			T lambda,
-			T duality_gap_target );
-};
-
-template < typename T >
-class CoordinateDescentSolver : public hdim::internal::Solver<T> {
+template < typename T, typename Base = hdim::internal::Solver< T > >
+class ISTA : public hdim::internal::SubGradientSolver<T,Base> {
 
   public:
-    CoordinateDescentSolver(const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
-                            const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
-                            const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0 );
-    ~CoordinateDescentSolver();
-
-		Eigen::Matrix< T, Eigen::Dynamic, 1 >  operator()(
-			const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > & X,
-			const Eigen::Matrix< T, Eigen::Dynamic, 1 > & Y,
-			const Eigen::Matrix< T, Eigen::Dynamic, 1 > & Beta_0,
-			T lambda,
-			unsigned int num_iterations );
-
-		Eigen::Matrix< T, Eigen::Dynamic, 1 >  operator()(
-			const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > & X,
-			const Eigen::Matrix< T, Eigen::Dynamic, 1 > & Y,
-			const Eigen::Matrix< T, Eigen::Dynamic, 1 > & Beta_0,
-			T lambda,
-			T duality_gap_target );
+    ISTA( T L_0 = 0.1 );
 
 };
 
-template < typename T >
-class LazyCoordinateDescent : public internal::Solver<T> {
+template < typename T, typename Base = hdim::internal::Solver< T > >
+class FISTA : public hdim::internal::SubGradientSolver<T,Base> {
+
+  public:
+    FISTA( const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta, T L_0 = 0.1 );
+
+};
+
+template < typename T, typename Base = hdim::internal::Solver<T> >
+class LazyCoordinateDescent : public Base {
 
   public:
     LazyCoordinateDescent( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
-                          const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
-                          const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0 );
+                           const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+                           const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0 );
     ~LazyCoordinateDescent();
 
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > operator()(
-        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
-        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
-        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
-        T lambda,
-        T duality_gap_target );
-
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > operator()(
-        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
-        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
-        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
-        T lambda,
-        unsigned int num_iterations );
-
 };
-
-template < typename T >
-class CoordinateDescentWithScreen : public internal::Solver<T> {
-
-  public:
-    CoordinateDescentWithScreen( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
-                                 const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
-                                 const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0 );
-    ~CoordinateDescentWithScreen();
-
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > operator()(const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
-            const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
-            const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
-            const T lambda,
-            const T duality_gap_target );
-
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > operator()(
-        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
-        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
-        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
-        const T lambda,
-        const unsigned int num_iterations );
-
-};
-
-%template(FOS_d) hdim::FOS<double>;
-%template(FOS_f) hdim::FOS<float>;
 
 %template(X_FOS_d) hdim::experimental::X_FOS<double>;
 %template(X_FOS_f) hdim::experimental::X_FOS<float>;
 
+%template(AbstractSolver_f) hdim::internal::AbstractSolver<float>;
+%template(AbstractSolver_d) hdim::internal::AbstractSolver<double>;
+
 %template(Solver_f) hdim::internal::Solver<float>;
 %template(Solver_d) hdim::internal::Solver<double>;
 
-%template(SGD_f) hdim::internal::SubGradientSolver<float>;
-%template(SGD_d) hdim::internal::SubGradientSolver<double>;
+%template(SRSolver_f) hdim::internal::ScreeningSolver<float>;
+%template(SRSolver_d) hdim::internal::ScreeningSolver<double>;
 
-%template(ISTA_f) hdim::ISTA<float>;
-%template(ISTA_d) hdim::ISTA<double>;
+%template(SGD) hdim::internal::SubGradientSolver<double,hdim::internal::Solver<double>>;
+%template(SGD_SR) hdim::internal::SubGradientSolver<double,hdim::internal::ScreeningSolver<double>>;
 
-%template(FISTA_f) hdim::FISTA<float>;
-%template(FISTA_d) hdim::FISTA<double>;
+%template(ISTA) hdim::ISTA<double,hdim::internal::Solver<double>>;
+%template(ISTA_SR) hdim::ISTA<double,hdim::internal::ScreeningSolver<double>>;
 
-%template(CD_f) hdim::CoordinateDescentSolver<float>;
-%template(CD_d) hdim::CoordinateDescentSolver<double>;
+%template(FISTA) hdim::FISTA<double,hdim::internal::Solver<double>>;
+%template(FISTA_SR) hdim::FISTA<double,hdim::internal::ScreeningSolver<double>>;
 
-%template(Lazy_CD_f) hdim::LazyCoordinateDescent<float>;
-%template(Lazy_CD_d) hdim::LazyCoordinateDescent<double>;
-
-%template(CDSR_f) hdim::CoordinateDescentWithScreen<float>;
-%template(CDSR_d) hdim::CoordinateDescentWithScreen<double>;
+%template(CD) hdim::LazyCoordinateDescent<double,hdim::internal::Solver<double>>;
+%template(CD_SR) hdim::LazyCoordinateDescent<double,hdim::internal::ScreeningSolver<double>>;

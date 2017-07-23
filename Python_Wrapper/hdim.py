@@ -94,89 +94,20 @@ except AttributeError:
 _hdim.SolverType_ista_swigconstant(_hdim)
 SolverType_ista = _hdim.SolverType_ista
 
+_hdim.SolverType_screen_ista_swigconstant(_hdim)
+SolverType_screen_ista = _hdim.SolverType_screen_ista
+
 _hdim.SolverType_fista_swigconstant(_hdim)
 SolverType_fista = _hdim.SolverType_fista
+
+_hdim.SolverType_screen_fista_swigconstant(_hdim)
+SolverType_screen_fista = _hdim.SolverType_screen_fista
 
 _hdim.SolverType_cd_swigconstant(_hdim)
 SolverType_cd = _hdim.SolverType_cd
 
-_hdim.SolverType_lazy_cd_swigconstant(_hdim)
-SolverType_lazy_cd = _hdim.SolverType_lazy_cd
-
 _hdim.SolverType_screen_cd_swigconstant(_hdim)
 SolverType_screen_cd = _hdim.SolverType_screen_cd
-class FOS_d(_object):
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, FOS_d, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, FOS_d, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, x, y):
-        this = _hdim.new_FOS_d(x, y)
-        try:
-            self.this.append(this)
-        except Exception:
-            self.this = this
-
-    def Algorithm(self):
-        return _hdim.FOS_d_Algorithm(self)
-
-    def ReturnLambda(self):
-        return _hdim.FOS_d_ReturnLambda(self)
-
-    def ReturnBetas(self):
-        return _hdim.FOS_d_ReturnBetas(self)
-
-    def ReturnOptimIndex(self):
-        return _hdim.FOS_d_ReturnOptimIndex(self)
-
-    def ReturnCoefficients(self):
-        return _hdim.FOS_d_ReturnCoefficients(self)
-
-    def ReturnSupport(self):
-        return _hdim.FOS_d_ReturnSupport(self)
-    __swig_destroy__ = _hdim.delete_FOS_d
-    __del__ = lambda self: None
-FOS_d_swigregister = _hdim.FOS_d_swigregister
-FOS_d_swigregister(FOS_d)
-
-class FOS_f(_object):
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, FOS_f, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, FOS_f, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, x, y):
-        this = _hdim.new_FOS_f(x, y)
-        try:
-            self.this.append(this)
-        except Exception:
-            self.this = this
-
-    def Algorithm(self):
-        return _hdim.FOS_f_Algorithm(self)
-
-    def ReturnLambda(self):
-        return _hdim.FOS_f_ReturnLambda(self)
-
-    def ReturnBetas(self):
-        return _hdim.FOS_f_ReturnBetas(self)
-
-    def ReturnOptimIndex(self):
-        return _hdim.FOS_f_ReturnOptimIndex(self)
-
-    def ReturnCoefficients(self):
-        return _hdim.FOS_f_ReturnCoefficients(self)
-
-    def ReturnSupport(self):
-        return _hdim.FOS_f_ReturnSupport(self)
-    __swig_destroy__ = _hdim.delete_FOS_f
-    __del__ = lambda self: None
-FOS_f_swigregister = _hdim.FOS_f_swigregister
-FOS_f_swigregister(FOS_f)
-
 class X_FOS_d(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, X_FOS_d, name, value)
@@ -255,10 +186,48 @@ class X_FOS_f(_object):
 X_FOS_f_swigregister = _hdim.X_FOS_f_swigregister
 X_FOS_f_swigregister(X_FOS_f)
 
-class Solver_f(_object):
+class AbstractSolver_f(_object):
     __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, AbstractSolver_f, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, AbstractSolver_f, name)
+
+    def __init__(self, *args, **kwargs):
+        raise AttributeError("No constructor defined - class is abstract")
+    __repr__ = _swig_repr
+    __swig_destroy__ = _hdim.delete_AbstractSolver_f
+    __del__ = lambda self: None
+
+    def __call__(self, *args):
+        return _hdim.AbstractSolver_f___call__(self, *args)
+AbstractSolver_f_swigregister = _hdim.AbstractSolver_f_swigregister
+AbstractSolver_f_swigregister(AbstractSolver_f)
+
+class AbstractSolver_d(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, AbstractSolver_d, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, AbstractSolver_d, name)
+
+    def __init__(self, *args, **kwargs):
+        raise AttributeError("No constructor defined - class is abstract")
+    __repr__ = _swig_repr
+    __swig_destroy__ = _hdim.delete_AbstractSolver_d
+    __del__ = lambda self: None
+
+    def __call__(self, *args):
+        return _hdim.AbstractSolver_d___call__(self, *args)
+AbstractSolver_d_swigregister = _hdim.AbstractSolver_d_swigregister
+AbstractSolver_d_swigregister(AbstractSolver_d)
+
+class Solver_f(AbstractSolver_f):
+    __swig_setmethods__ = {}
+    for _s in [AbstractSolver_f]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, Solver_f, name, value)
     __swig_getmethods__ = {}
+    for _s in [AbstractSolver_f]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, Solver_f, name)
 
     def __init__(self, *args, **kwargs):
@@ -272,10 +241,14 @@ class Solver_f(_object):
 Solver_f_swigregister = _hdim.Solver_f_swigregister
 Solver_f_swigregister(Solver_f)
 
-class Solver_d(_object):
+class Solver_d(AbstractSolver_d):
     __swig_setmethods__ = {}
+    for _s in [AbstractSolver_d]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, Solver_d, name, value)
     __swig_getmethods__ = {}
+    for _s in [AbstractSolver_d]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, Solver_d, name)
 
     def __init__(self, *args, **kwargs):
@@ -289,283 +262,171 @@ class Solver_d(_object):
 Solver_d_swigregister = _hdim.Solver_d_swigregister
 Solver_d_swigregister(Solver_d)
 
-class SGD_f(Solver_f):
+class SRSolver_f(AbstractSolver_f):
     __swig_setmethods__ = {}
-    for _s in [Solver_f]:
+    for _s in [AbstractSolver_f]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, SGD_f, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, SRSolver_f, name, value)
     __swig_getmethods__ = {}
-    for _s in [Solver_f]:
+    for _s in [AbstractSolver_f]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, SGD_f, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, SRSolver_f, name)
 
     def __init__(self, *args, **kwargs):
         raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
-    __swig_destroy__ = _hdim.delete_SGD_f
+    __swig_destroy__ = _hdim.delete_SRSolver_f
     __del__ = lambda self: None
-SGD_f_swigregister = _hdim.SGD_f_swigregister
-SGD_f_swigregister(SGD_f)
 
-class SGD_d(Solver_d):
+    def __call__(self, *args):
+        return _hdim.SRSolver_f___call__(self, *args)
+SRSolver_f_swigregister = _hdim.SRSolver_f_swigregister
+SRSolver_f_swigregister(SRSolver_f)
+
+class SRSolver_d(AbstractSolver_d):
     __swig_setmethods__ = {}
-    for _s in [Solver_d]:
+    for _s in [AbstractSolver_d]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, SGD_d, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, SRSolver_d, name, value)
     __swig_getmethods__ = {}
-    for _s in [Solver_d]:
+    for _s in [AbstractSolver_d]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, SGD_d, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, SRSolver_d, name)
 
     def __init__(self, *args, **kwargs):
         raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
-    __swig_destroy__ = _hdim.delete_SGD_d
-    __del__ = lambda self: None
-SGD_d_swigregister = _hdim.SGD_d_swigregister
-SGD_d_swigregister(SGD_d)
-
-class ISTA_f(SGD_f):
-    __swig_setmethods__ = {}
-    for _s in [SGD_f]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, ISTA_f, name, value)
-    __swig_getmethods__ = {}
-    for _s in [SGD_f]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, ISTA_f, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, L_0=0.1):
-        this = _hdim.new_ISTA_f(L_0)
-        try:
-            self.this.append(this)
-        except Exception:
-            self.this = this
-
-    def __call__(self, *args):
-        return _hdim.ISTA_f___call__(self, *args)
-    __swig_destroy__ = _hdim.delete_ISTA_f
-    __del__ = lambda self: None
-ISTA_f_swigregister = _hdim.ISTA_f_swigregister
-ISTA_f_swigregister(ISTA_f)
-
-class ISTA_d(SGD_d):
-    __swig_setmethods__ = {}
-    for _s in [SGD_d]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, ISTA_d, name, value)
-    __swig_getmethods__ = {}
-    for _s in [SGD_d]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, ISTA_d, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, L_0=0.1):
-        this = _hdim.new_ISTA_d(L_0)
-        try:
-            self.this.append(this)
-        except Exception:
-            self.this = this
-
-    def __call__(self, *args):
-        return _hdim.ISTA_d___call__(self, *args)
-    __swig_destroy__ = _hdim.delete_ISTA_d
-    __del__ = lambda self: None
-ISTA_d_swigregister = _hdim.ISTA_d_swigregister
-ISTA_d_swigregister(ISTA_d)
-
-class FISTA_f(SGD_f):
-    __swig_setmethods__ = {}
-    for _s in [SGD_f]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, FISTA_f, name, value)
-    __swig_getmethods__ = {}
-    for _s in [SGD_f]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, FISTA_f, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, L_0=0.1):
-        this = _hdim.new_FISTA_f(L_0)
-        try:
-            self.this.append(this)
-        except Exception:
-            self.this = this
-
-    def __call__(self, *args):
-        return _hdim.FISTA_f___call__(self, *args)
-    __swig_destroy__ = _hdim.delete_FISTA_f
-    __del__ = lambda self: None
-FISTA_f_swigregister = _hdim.FISTA_f_swigregister
-FISTA_f_swigregister(FISTA_f)
-
-class FISTA_d(SGD_d):
-    __swig_setmethods__ = {}
-    for _s in [SGD_d]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, FISTA_d, name, value)
-    __swig_getmethods__ = {}
-    for _s in [SGD_d]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, FISTA_d, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, L_0=0.1):
-        this = _hdim.new_FISTA_d(L_0)
-        try:
-            self.this.append(this)
-        except Exception:
-            self.this = this
-
-    def __call__(self, *args):
-        return _hdim.FISTA_d___call__(self, *args)
-    __swig_destroy__ = _hdim.delete_FISTA_d
-    __del__ = lambda self: None
-FISTA_d_swigregister = _hdim.FISTA_d_swigregister
-FISTA_d_swigregister(FISTA_d)
-
-class CD_f(Solver_f):
-    __swig_setmethods__ = {}
-    for _s in [Solver_f]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, CD_f, name, value)
-    __swig_getmethods__ = {}
-    for _s in [Solver_f]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, CD_f, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, X, Y, Beta_0):
-        this = _hdim.new_CD_f(X, Y, Beta_0)
-        try:
-            self.this.append(this)
-        except Exception:
-            self.this = this
-    __swig_destroy__ = _hdim.delete_CD_f
+    __swig_destroy__ = _hdim.delete_SRSolver_d
     __del__ = lambda self: None
 
     def __call__(self, *args):
-        return _hdim.CD_f___call__(self, *args)
-CD_f_swigregister = _hdim.CD_f_swigregister
-CD_f_swigregister(CD_f)
+        return _hdim.SRSolver_d___call__(self, *args)
+SRSolver_d_swigregister = _hdim.SRSolver_d_swigregister
+SRSolver_d_swigregister(SRSolver_d)
 
-class CD_d(Solver_d):
+class SGD(Solver_d):
     __swig_setmethods__ = {}
     for _s in [Solver_d]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, CD_d, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, SGD, name, value)
     __swig_getmethods__ = {}
     for _s in [Solver_d]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, CD_d, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, X, Y, Beta_0):
-        this = _hdim.new_CD_d(X, Y, Beta_0)
-        try:
-            self.this.append(this)
-        except Exception:
-            self.this = this
-    __swig_destroy__ = _hdim.delete_CD_d
-    __del__ = lambda self: None
-
-    def __call__(self, *args):
-        return _hdim.CD_d___call__(self, *args)
-CD_d_swigregister = _hdim.CD_d_swigregister
-CD_d_swigregister(CD_d)
-
-class Lazy_CD_f(Solver_f):
-    __swig_setmethods__ = {}
-    for _s in [Solver_f]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, Lazy_CD_f, name, value)
-    __swig_getmethods__ = {}
-    for _s in [Solver_f]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, Lazy_CD_f, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, X, Y, Beta_0):
-        this = _hdim.new_Lazy_CD_f(X, Y, Beta_0)
-        try:
-            self.this.append(this)
-        except Exception:
-            self.this = this
-    __swig_destroy__ = _hdim.delete_Lazy_CD_f
-    __del__ = lambda self: None
-
-    def __call__(self, *args):
-        return _hdim.Lazy_CD_f___call__(self, *args)
-Lazy_CD_f_swigregister = _hdim.Lazy_CD_f_swigregister
-Lazy_CD_f_swigregister(Lazy_CD_f)
-
-class Lazy_CD_d(Solver_d):
-    __swig_setmethods__ = {}
-    for _s in [Solver_d]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, Lazy_CD_d, name, value)
-    __swig_getmethods__ = {}
-    for _s in [Solver_d]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, Lazy_CD_d, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, X, Y, Beta_0):
-        this = _hdim.new_Lazy_CD_d(X, Y, Beta_0)
-        try:
-            self.this.append(this)
-        except Exception:
-            self.this = this
-    __swig_destroy__ = _hdim.delete_Lazy_CD_d
-    __del__ = lambda self: None
-
-    def __call__(self, *args):
-        return _hdim.Lazy_CD_d___call__(self, *args)
-Lazy_CD_d_swigregister = _hdim.Lazy_CD_d_swigregister
-Lazy_CD_d_swigregister(Lazy_CD_d)
-
-class CDSR_f(Solver_f):
-    __swig_setmethods__ = {}
-    for _s in [Solver_f]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, CDSR_f, name, value)
-    __swig_getmethods__ = {}
-    for _s in [Solver_f]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, CDSR_f, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, SGD, name)
 
     def __init__(self, *args, **kwargs):
         raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
-    __swig_destroy__ = _hdim.delete_CDSR_f
+    __swig_destroy__ = _hdim.delete_SGD
     __del__ = lambda self: None
+SGD_swigregister = _hdim.SGD_swigregister
+SGD_swigregister(SGD)
 
-    def __call__(self, *args):
-        return _hdim.CDSR_f___call__(self, *args)
-CDSR_f_swigregister = _hdim.CDSR_f_swigregister
-CDSR_f_swigregister(CDSR_f)
-
-class CDSR_d(Solver_d):
+class SGD_SR(SRSolver_d):
     __swig_setmethods__ = {}
-    for _s in [Solver_d]:
+    for _s in [SRSolver_d]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, CDSR_d, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, SGD_SR, name, value)
     __swig_getmethods__ = {}
-    for _s in [Solver_d]:
+    for _s in [SRSolver_d]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, CDSR_d, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, SGD_SR, name)
 
     def __init__(self, *args, **kwargs):
         raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
-    __swig_destroy__ = _hdim.delete_CDSR_d
+    __swig_destroy__ = _hdim.delete_SGD_SR
     __del__ = lambda self: None
+SGD_SR_swigregister = _hdim.SGD_SR_swigregister
+SGD_SR_swigregister(SGD_SR)
 
-    def __call__(self, *args):
-        return _hdim.CDSR_d___call__(self, *args)
-CDSR_d_swigregister = _hdim.CDSR_d_swigregister
-CDSR_d_swigregister(CDSR_d)
+class ISTA_SR(SGD_SR):
+    __swig_setmethods__ = {}
+    for _s in [SGD_SR]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ISTA_SR, name, value)
+    __swig_getmethods__ = {}
+    for _s in [SGD_SR]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, ISTA_SR, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, L_0=0.1):
+        this = _hdim.new_ISTA_SR(L_0)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _hdim.delete_ISTA_SR
+    __del__ = lambda self: None
+ISTA_SR_swigregister = _hdim.ISTA_SR_swigregister
+ISTA_SR_swigregister(ISTA_SR)
+
+class FISTA_SR(SGD_SR):
+    __swig_setmethods__ = {}
+    for _s in [SGD_SR]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, FISTA_SR, name, value)
+    __swig_getmethods__ = {}
+    for _s in [SGD_SR]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, FISTA_SR, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, Beta_0, L_0=0.1):
+        this = _hdim.new_FISTA_SR(Beta_0, L_0)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _hdim.delete_FISTA_SR
+    __del__ = lambda self: None
+FISTA_SR_swigregister = _hdim.FISTA_SR_swigregister
+FISTA_SR_swigregister(FISTA_SR)
+
+class CD(Solver_d):
+    __swig_setmethods__ = {}
+    for _s in [Solver_d]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CD, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Solver_d]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, CD, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, X, Y, Beta_0):
+        this = _hdim.new_CD(X, Y, Beta_0)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _hdim.delete_CD
+    __del__ = lambda self: None
+CD_swigregister = _hdim.CD_swigregister
+CD_swigregister(CD)
+
+class CD_SR(SRSolver_d):
+    __swig_setmethods__ = {}
+    for _s in [SRSolver_d]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CD_SR, name, value)
+    __swig_getmethods__ = {}
+    for _s in [SRSolver_d]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, CD_SR, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, X, Y, Beta_0):
+        this = _hdim.new_CD_SR(X, Y, Beta_0)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _hdim.delete_CD_SR
+    __del__ = lambda self: None
+CD_SR_swigregister = _hdim.CD_SR_swigregister
+CD_SR_swigregister(CD_SR)
 
 # This file is compatible with both classic and new-style classes.
 

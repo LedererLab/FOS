@@ -49,14 +49,7 @@ class ISTA : public internal::SubGradientSolver<T,Base> {
 };
 
 template < typename T, typename Base >
-ISTA<T,Base>::ISTA( T L_0 ) : internal::SubGradientSolver<T,Base>( L_0 ) {
-//    internal::Solver<T>::update_rule = std::bind(&ISTA<T,Base>::ista_update_rule,
-//                                       this,
-//                                       std::placeholders::_1,
-//                                       std::placeholders::_2,
-//                                       std::placeholders::_3,
-//                                       std::placeholders::_4 );
-}
+ISTA<T,Base>::ISTA( T L_0 ) : internal::SubGradientSolver<T,Base>( L_0 ) {}
 
 #ifdef DEBUG
 template < typename T, typename Base >
@@ -94,10 +87,9 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 > ISTA<T,Base>::update_rule(
     const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
-    T L_0,
     T lambda ) {
 
-    L = L_0;
+    L = internal::SubGradientSolver<T,Base>::L_0;
 
     Eigen::Matrix< T, Eigen::Dynamic, 1 > f_grad = 2.0*( X.transpose()*( X*Beta - Y ) );
     Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta_temp = ( Beta - (1.0/L)*f_grad ).unaryExpr( SoftThres<T>( lambda/L ) );

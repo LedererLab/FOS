@@ -1,5 +1,5 @@
-#ifndef SCREENING_RULES_H
-#define SCREENING_RULES_H
+#ifndef SCREENING_RULES_HPP
+#define SCREENING_RULES_HPP
 
 // C System-Headers
 //
@@ -71,4 +71,4 @@ std::vector< unsigned int > SafeActiveSet (
 }
 
 
-#endif // SCREENING_RULES_H
+#endif // SCREENING_RULES_HPP

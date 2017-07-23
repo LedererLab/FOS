@@ -27,9 +27,7 @@ namespace internal {
 template < typename T >
 
 /*!
- * \brief Abstract base class for Solvers
- *
- * This class supports two types of convergence criteria -- iterative and duality gap.
+ * \brief Abstract base class for Solvers that use GAP SAFE screening rules.
  */
 class ScreeningSolver : public AbstractSolver < T >  {
 

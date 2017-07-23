@@ -18,6 +18,7 @@
 #include "../../Generic/generics.hpp"
 #include "../../Generic/debug.hpp"
 #include "../solver.hpp"
+#include "../screeningsolver.hpp"
 
 namespace hdim {
 

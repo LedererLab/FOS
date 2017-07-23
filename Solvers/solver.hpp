@@ -26,9 +26,7 @@ namespace internal {
 template < typename T >
 
 /*!
- * \brief Abstract base class for Solvers
- *
- * This class supports two types of convergence criteria -- iterative and duality gap.
+ * \brief Abstract base class for solvers that do not make use of GAP SAFE screening rules.
  */
 class Solver : public AbstractSolver < T > {
 
@@ -37,28 +35,6 @@ class Solver : public AbstractSolver < T > {
     Solver();
     virtual ~Solver() = 0;
 
-    /*!
-     * \brief Run the Solver for a fixed number of steps,
-     * specified by num_iterations.
-     *
-     * \param X
-     * An n x p design matrix.
-     *
-     * \param Y
-     * A 1 x n vector of predictors.
-     *
-     * \param Beta_0
-     * A 1 x n vector of starting parameters.
-     *
-     * \param lambda
-     * Current grid element.
-     *
-     * \param num_iterations
-     * The number of times the algorithm should iterate.
-     *
-     * \return
-     * A 1 x n vector of results from the algorithm.
-     */
     virtual Eigen::Matrix< T, Eigen::Dynamic, 1 > operator()(
         const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
         const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
@@ -66,29 +42,6 @@ class Solver : public AbstractSolver < T > {
         T lambda,
         unsigned int num_iterations );
 
-    /*!
-     * \brief Run the Sub-Gradient Descent algorithm until the duality gap is below
-     * the threshold specified by duality_gap_target.
-     *
-     * \param X
-     * An n x p design matrix.
-     *
-     * \param Y
-     * A 1 x n vector of predictors.
-     *
-     * \param Beta_0
-     * A 1 x n vector of starting parameters.
-     *
-     * \param lambda
-     * Current grid element.
-     *
-     * \param duality_gap_target
-     * The algorithm will iterate until the compute duality gap is below duality_gap_target.
-     * Note care should be exercised, as the algorithm can iterate ad infinitum.
-     *
-     * \return
-     * A 1 x n vector of results from the algorithm.
-     */
     virtual Eigen::Matrix< T, Eigen::Dynamic, 1 > operator()(
         const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
         const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,

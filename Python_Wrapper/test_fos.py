@@ -16,7 +16,7 @@ def test_X_FOS( X, Y, solver_type ):
 
 def main():
 	N = 100
-	P = 500
+	P = 4000
 
 	ind = np.arange(P)  # the x locations for the groups
 
@@ -24,25 +24,29 @@ def main():
 
 	fos_ista_results = test_X_FOS( X, y, hdim.SolverType_ista )
 
-	start_fista = time.clock()
+	start = time.clock()
 	fos_fista_results = test_X_FOS( X, y, hdim.SolverType_fista )
-	end_fista = time.clock()
+	end = time.clock()
 
-	print( end_fista - start_fista )
+	print( "FISTA timing ", end - start )
 
+	start = time.clock()
+	fos_fista_screen_results = test_X_FOS( X, y, hdim.SolverType_screen_fista )
+	end = time.clock()
+
+	print( "FISTA w/ Screening Rules timing ", end - start )
+
+	start = time.clock()
 	fos_cd_results = test_X_FOS( X, y, hdim.SolverType_cd )
+	end = time.clock()
 
-	start_cd = time.clock()
-	fos_lazy_cd_results = test_X_FOS( X, y, hdim.SolverType_lazy_cd )
-	end_cd = time.clock()
+	print( "CD timing ", end - start )
 
-	print( end_cd - start_cd )
-
-	start_screen_cd = time.clock()
+	start = time.clock()
 	fos_screen_cd_results = test_X_FOS( X, y, hdim.SolverType_screen_cd )
-	end_screen_cd = time.clock()
+	end = time.clock()
 
-	print( end_screen_cd - start_screen_cd )
+	print( "CD w/ Screening Rules timing ", end - start )
 
 	ind = np.arange( len( fos_ista_results ) )
 
@@ -52,11 +56,11 @@ def main():
 
 	rects1 = ax.bar(ind, fos_ista_results, width, color='#800080')
 	rects2 = ax.bar(ind + width, fos_fista_results, width, color='b')
-	rects3 = ax.bar(ind + 2*width, fos_cd_results, width, color='g')
-	rects4 = ax.bar(ind + 3*width, fos_lazy_cd_results, width, color='y')
+	rects3 = ax.bar(ind + 2*width, fos_fista_screen_results, width, color='g')
+	rects4 = ax.bar(ind + 3*width, fos_cd_results, width, color='y')
 	rects5 = ax.bar(ind + 4*width, fos_screen_cd_results, width, color='#ff9900')
 
-	ax.legend((rects1[0], rects2[0], rects3[0], rects4[0], rects5[0]), ('ISTA', 'FISTA', 'CD', 'Lazy_CD', 'Screen_CD'))
+	ax.legend((rects1[0], rects2[0], rects3[0], rects4[0], rects5[0]), ('ISTA', 'FISTA', 'SCREEN_FISTA', 'CD', 'SCREEN_CD'))
 
 	plt.show()
 

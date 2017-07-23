@@ -18,6 +18,6 @@ int main(int argc, char *argv[]) {
     (void)argc;
     (void)argv;
 
-    hdim::TestXFOS<double>( 20, 50, hdim::SolverType::fista );
+    hdim::TestXFOS<double>( 20, 50, hdim::SolverType::screen_fista );
 
 }

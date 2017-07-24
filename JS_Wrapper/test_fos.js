@@ -17,9 +17,12 @@ for ( i = 0; i < n * 1 ; i++ ) {
     Y.push_back( Math.random() );
 }
 
-console.log( "Running FOS for a ", n, " x ", p, "Design Matrix" );
+var start = +(new Date);
+fos.Run( vectorized_X, Y, "cd" )
+var end = +(new Date);
+var difference = end - start;
 
-fos.Run( vectorized_X, Y, "cd" );
+console.log( "Approximate execution time (ms): ", difference );
 
 var coefs = fos.ReturnCoefficients();
 var intercept = fos.ReturnIntercept();

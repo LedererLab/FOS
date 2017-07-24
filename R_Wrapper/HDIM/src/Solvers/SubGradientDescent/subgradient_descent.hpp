@@ -18,6 +18,7 @@
 #include "../../Generic/generics.hpp"
 #include "../../Generic/debug.hpp"
 #include "../solver.hpp"
+#include "../screeningsolver.hpp"
 
 namespace hdim {
 
@@ -29,13 +30,13 @@ namespace hdim {
 
 namespace internal {
 
-template < typename T >
+template < typename T, typename Base = internal::Solver<T> >
 
 /*!
  * \brief Abstract base class for Sub-Gradient Descent algorithms
  * ,such as ISTA and FISTA, with backtracking line search.
  */
-class SubGradientSolver : public Solver<T> {
+class SubGradientSolver : public Base {
 
   public:
     SubGradientSolver( T L = 0.1 );
@@ -66,17 +67,17 @@ class SubGradientSolver : public Solver<T> {
 
 };
 
-template < typename T >
-SubGradientSolver<T>::SubGradientSolver( T L ) : L_0( L ) {
+template < typename T, typename Base >
+SubGradientSolver< T, Base >::SubGradientSolver( T L ) : L_0( L ) {
     static_assert(std::is_floating_point< T >::value,\
                   "Subgradient descent methods can only be used with floating point types.");
 }
 
-template < typename T >
-SubGradientSolver<T>::~SubGradientSolver() {}
+template < typename T, typename Base >
+SubGradientSolver< T, Base >::~SubGradientSolver() {}
 
-template < typename T >
-T SubGradientSolver<T>::f_beta (
+template < typename T, typename Base >
+T SubGradientSolver< T, Base >::f_beta (
     const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta ) {
@@ -85,8 +86,8 @@ T SubGradientSolver<T>::f_beta (
 
 }
 
-template < typename T >
-T SubGradientSolver<T>::f_beta_tilda (
+template < typename T, typename  Base >
+T SubGradientSolver< T, Base >::f_beta_tilda (
     const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,
@@ -106,8 +107,8 @@ T SubGradientSolver<T>::f_beta_tilda (
     return taylor_term_0 + taylor_term_1 + taylor_term_2;
 }
 
-template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, 1 > SubGradientSolver<T>::update_beta_ista (
+template < typename T, typename Base >
+Eigen::Matrix< T, Eigen::Dynamic, 1 > SubGradientSolver< T, Base >::update_beta_ista (
     const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta,

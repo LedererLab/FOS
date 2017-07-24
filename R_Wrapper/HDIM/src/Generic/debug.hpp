@@ -17,7 +17,7 @@
 #include <fstream>
 #include <typeinfo>  // typeid, typeof
 
-#ifdef __linux__
+#if defined __linux__ || defined __APPLE__
 #include <cxxabi.h>// abi::__cxa_demangle
 #endif
 
@@ -30,7 +30,6 @@
  *  \brief Functions designed to aid in debugging.
  */
 
-template <typename T>
 /*!
  * \brief Get the de-mangled name of a type ( as it would
  * appear in the source code ).
@@ -38,8 +37,10 @@ template <typename T>
  * \return
  * name of the template parameter type
  */
-#ifdef __linux__
+#if defined __linux__ || defined __APPLE__
+template <typename T>
 std::string get_type_name () {
+
     int status;
     char* type_name = abi::__cxa_demangle(typeid(T).name(), 0, 0, &status);
     std::string type_str = std::string( type_name );

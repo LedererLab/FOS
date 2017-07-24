@@ -75,16 +75,20 @@ Rcpp::List FOS( const Rcpp::NumericMatrix& X, const Rcpp::NumericVector& Y, cons
     Eigen::MatrixXf mat_X = NumMat2Eigen<float>(X);
     Eigen::VectorXf vect_Y = NumVect2Eigen<float>(Y);
 
-    hdim::experimental::X_FOS<float> fos;
+    hdim::X_FOS<float> fos;
 
     if ( solver_type == "ista" ) {
       fos(  mat_X, vect_Y, hdim::SolverType::ista );
+    } else if ( solver_type == "screen_ista" ) {
+      fos(  mat_X, vect_Y, hdim::SolverType::screen_ista );
     } else if ( solver_type == "fista" ) {
       fos(  mat_X, vect_Y, hdim::SolverType::fista );
+    } else if ( solver_type == "screen_fista" ) {
+      fos(  mat_X, vect_Y, hdim::SolverType::screen_fista );
     } else if ( solver_type == "cd" ) {
       fos(  mat_X, vect_Y, hdim::SolverType::cd );
-    } else if ( solver_type == "lazy_cd" ) {
-      fos(  mat_X, vect_Y, hdim::SolverType::lazy_cd );
+    } else if ( solver_type == "screen_cd" ) {
+      fos(  mat_X, vect_Y, hdim::SolverType::screen_cd );
     } else {
       fos(  mat_X, vect_Y, hdim::SolverType::ista );
     }
@@ -110,7 +114,7 @@ Rcpp::List FOS( const Rcpp::NumericMatrix& X, const Rcpp::NumericVector& Y, cons
 }
 
 // [[Rcpp::export]]
-Rcpp::NumericVector CoordinateDescent( Rcpp::NumericMatrix X,
+Rcpp::NumericVector CD( Rcpp::NumericMatrix X,
                         Rcpp::NumericVector Y,
                         Rcpp::NumericVector Beta_0,
                         double lambda,
@@ -120,13 +124,29 @@ Rcpp::NumericVector CoordinateDescent( Rcpp::NumericMatrix X,
     Eigen::VectorXd vect_Y = NumVect2Eigen<double>(Y);
     Eigen::VectorXd vect_Beta_0 = NumVect2Eigen<double>(Beta_0);
 
-    hdim::CoordinateDescentSolver<double> cd_solver( mat_X, vect_Y, vect_Beta_0 );
+    hdim::LazyCoordinateDescent<double,hdim::internal::Solver<double>> cd_solver( mat_X, vect_Y, vect_Beta_0 );
 
     return Eigen2NumVec<double>( cd_solver( mat_X, vect_Y, vect_Beta_0, lambda, num_iterations ) );
 }
 
 // [[Rcpp::export]]
-Rcpp::NumericVector CoordinateDescent_DG( Rcpp::NumericMatrix X,
+Rcpp::NumericVector CDSR( Rcpp::NumericMatrix X,
+                        Rcpp::NumericVector Y,
+                        Rcpp::NumericVector Beta_0,
+                        double lambda,
+                        unsigned int num_iterations ) {
+
+    Eigen::MatrixXd mat_X = NumMat2Eigen<double>(X);
+    Eigen::VectorXd vect_Y = NumVect2Eigen<double>(Y);
+    Eigen::VectorXd vect_Beta_0 = NumVect2Eigen<double>(Beta_0);
+
+    hdim::LazyCoordinateDescent<double,hdim::internal::ScreeningSolver<double>> cd_solver( mat_X, vect_Y, vect_Beta_0 );
+
+    return Eigen2NumVec<double>( cd_solver( mat_X, vect_Y, vect_Beta_0, lambda, num_iterations ) );
+}
+
+// [[Rcpp::export]]
+Rcpp::NumericVector CDDG( Rcpp::NumericMatrix X,
                         Rcpp::NumericVector Y,
                         Rcpp::NumericVector Beta_0,
                         double lambda,
@@ -136,10 +156,27 @@ Rcpp::NumericVector CoordinateDescent_DG( Rcpp::NumericMatrix X,
     Eigen::VectorXd vect_Y = NumVect2Eigen<double>(Y);
     Eigen::VectorXd vect_Beta_0 = NumVect2Eigen<double>(Beta_0);
 
-    hdim::CoordinateDescentSolver<double> cd_solver( mat_X, vect_Y, vect_Beta_0 );
+    hdim::LazyCoordinateDescent<double,hdim::internal::Solver<double>> cd_solver( mat_X, vect_Y, vect_Beta_0 );
 
-    return Eigen2NumVec<double>( cd_solver( mat_X, vect_Y, vect_Beta_0, lambda, static_cast<double>( duality_gap_target ) ) );
+    return Eigen2NumVec<double>( cd_solver( mat_X, vect_Y, vect_Beta_0, lambda, duality_gap_target ) );
 }
+
+// [[Rcpp::export]]
+Rcpp::NumericVector CDSRDG( Rcpp::NumericMatrix X,
+                        Rcpp::NumericVector Y,
+                        Rcpp::NumericVector Beta_0,
+                        double lambda,
+                        double duality_gap_target ) {
+
+    Eigen::MatrixXd mat_X = NumMat2Eigen<double>(X);
+    Eigen::VectorXd vect_Y = NumVect2Eigen<double>(Y);
+    Eigen::VectorXd vect_Beta_0 = NumVect2Eigen<double>(Beta_0);
+
+    hdim::LazyCoordinateDescent<double,hdim::internal::ScreeningSolver<double>> cd_solver( mat_X, vect_Y, vect_Beta_0 );
+
+    return Eigen2NumVec<double>( cd_solver( mat_X, vect_Y, vect_Beta_0, lambda, duality_gap_target ) );
+}
+
 
 // [[Rcpp::export]]
 Rcpp::NumericVector ISTA( Rcpp::NumericMatrix X,
@@ -153,7 +190,24 @@ Rcpp::NumericVector ISTA( Rcpp::NumericMatrix X,
     Eigen::VectorXd vect_Y = NumVect2Eigen<double>(Y);
     Eigen::VectorXd vect_Beta_0 = NumVect2Eigen<double>(Beta_0);
 
-    hdim::ISTA<double> ista_solver( static_cast<double>( L_0 ) );
+    hdim::ISTA<double,hdim::internal::Solver<double>> ista_solver( static_cast<double>( L_0 ) );
+
+    return Eigen2NumVec<double>( ista_solver( mat_X, vect_Y, vect_Beta_0, lambda, num_iterations ) );
+}
+
+// [[Rcpp::export]]
+Rcpp::NumericVector ISTASR( Rcpp::NumericMatrix X,
+                          Rcpp::NumericVector Y,
+                          Rcpp::NumericVector Beta_0,
+                          double lambda,
+                          unsigned int num_iterations,
+                          double L_0 = 0.1 ) {
+
+    Eigen::MatrixXd mat_X = NumMat2Eigen<double>(X);
+    Eigen::VectorXd vect_Y = NumVect2Eigen<double>(Y);
+    Eigen::VectorXd vect_Beta_0 = NumVect2Eigen<double>(Beta_0);
+
+    hdim::ISTA<double,hdim::internal::ScreeningSolver<double>> ista_solver( static_cast<double>( L_0 ) );
 
     return Eigen2NumVec<double>( ista_solver( mat_X, vect_Y, vect_Beta_0, lambda, num_iterations ) );
 }
@@ -170,9 +224,26 @@ Rcpp::NumericVector ISTA_DG( Rcpp::NumericMatrix X,
     Eigen::VectorXd vect_Y = NumVect2Eigen<double>(Y);
     Eigen::VectorXd vect_Beta_0 = NumVect2Eigen<double>(Beta_0);
 
-    hdim::ISTA<double> ista_solver( static_cast<double>( L_0 ) );
+    hdim::ISTA<double,hdim::internal::Solver<double>> ista_solver( static_cast<double>( L_0 ) );
 
-    return Eigen2NumVec<double>( ista_solver( mat_X, vect_Y, vect_Beta_0, lambda, static_cast<double>( duality_gap_target ) ) );
+    return Eigen2NumVec<double>( ista_solver( mat_X, vect_Y, vect_Beta_0, lambda, duality_gap_target ) );
+}
+
+// [[Rcpp::export]]
+Rcpp::NumericVector ISTASR_DG( Rcpp::NumericMatrix X,
+                          Rcpp::NumericVector Y,
+                          Rcpp::NumericVector Beta_0,
+                          double lambda,
+                          double duality_gap_target,
+                          double L_0 = 0.1 ) {
+
+    Eigen::MatrixXd mat_X = NumMat2Eigen<double>(X);
+    Eigen::VectorXd vect_Y = NumVect2Eigen<double>(Y);
+    Eigen::VectorXd vect_Beta_0 = NumVect2Eigen<double>(Beta_0);
+
+    hdim::ISTA<double,hdim::internal::ScreeningSolver<double>> ista_solver( static_cast<double>( L_0 ) );
+
+    return Eigen2NumVec<double>( ista_solver( mat_X, vect_Y, vect_Beta_0, lambda, duality_gap_target ) );
 }
 
 // [[Rcpp::export]]
@@ -187,7 +258,24 @@ Rcpp::NumericVector FISTA( Rcpp::NumericMatrix X,
     Eigen::VectorXd vect_Y = NumVect2Eigen<double>(Y);
     Eigen::VectorXd vect_Beta_0 = NumVect2Eigen<double>(Beta_0);
 
-    hdim::ISTA<double> fista_solver( static_cast<double>( L_0 ) );
+    hdim::FISTA<double,hdim::internal::Solver<double>> fista_solver( vect_Beta_0, static_cast<double>( L_0 ) );
+
+    return Eigen2NumVec<double>( fista_solver( mat_X, vect_Y, vect_Beta_0, lambda, num_iterations ) );
+}
+
+// [[Rcpp::export]]
+Rcpp::NumericVector FISTASR( Rcpp::NumericMatrix X,
+                          Rcpp::NumericVector Y,
+                          Rcpp::NumericVector Beta_0,
+                          double lambda,
+                          unsigned int num_iterations,
+                          double L_0 = 0.1 ) {
+
+    Eigen::MatrixXd mat_X = NumMat2Eigen<double>(X);
+    Eigen::VectorXd vect_Y = NumVect2Eigen<double>(Y);
+    Eigen::VectorXd vect_Beta_0 = NumVect2Eigen<double>(Beta_0);
+
+    hdim::FISTA<double,hdim::internal::ScreeningSolver<double>> fista_solver( vect_Beta_0, static_cast<double>( L_0 ) );
 
     return Eigen2NumVec<double>( fista_solver( mat_X, vect_Y, vect_Beta_0, lambda, num_iterations ) );
 }
@@ -204,9 +292,26 @@ Rcpp::NumericVector FISTA_DG( Rcpp::NumericMatrix X,
     Eigen::VectorXd vect_Y = NumVect2Eigen<double>(Y);
     Eigen::VectorXd vect_Beta_0 = NumVect2Eigen<double>(Beta_0);
 
-    hdim::FISTA<double> fista_solver( static_cast<double>( L_0 ) );
+    hdim::FISTA<double,hdim::internal::Solver<double>> fista_solver( vect_Beta_0, static_cast<double>( L_0 ) );
 
-    return Eigen2NumVec<double>( fista_solver( mat_X, vect_Y, vect_Beta_0, lambda, static_cast<double>( duality_gap_target ) ) );
+    return Eigen2NumVec<double>( fista_solver( mat_X, vect_Y, vect_Beta_0, lambda, duality_gap_target ) );
+}
+
+// [[Rcpp::export]]
+Rcpp::NumericVector FISTASR_DG( Rcpp::NumericMatrix X,
+                          Rcpp::NumericVector Y,
+                          Rcpp::NumericVector Beta_0,
+                          double lambda,
+                          double duality_gap_target,
+                          double L_0 = 0.1 ) {
+
+    Eigen::MatrixXd mat_X = NumMat2Eigen<double>(X);
+    Eigen::VectorXd vect_Y = NumVect2Eigen<double>(Y);
+    Eigen::VectorXd vect_Beta_0 = NumVect2Eigen<double>(Beta_0);
+
+    hdim::FISTA<double,hdim::internal::ScreeningSolver<double>> fista_solver( vect_Beta_0, static_cast<double>( L_0 ) );
+
+    return Eigen2NumVec<double>( fista_solver( mat_X, vect_Y, vect_Beta_0, lambda, duality_gap_target ) );
 }
 
 #endif // FOS_R_H

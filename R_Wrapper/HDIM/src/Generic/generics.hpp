@@ -13,10 +13,9 @@
 // C++ System headers
 #include <chrono>
 #include <fstream>      // std::ifstream
+#include <vector>
 // Eigen Headers
 #include <eigen3/Eigen/Dense>
-// Boost Headers
-#include <boost/lexical_cast.hpp>// lexical_cast<T>
 // OpenMP
 //
 // Project Specific Headers
@@ -27,58 +26,6 @@
  */
 
 namespace hdim {
-
-template < typename T >
-/*!
- * \brief Read a .csv file into an Eigen Matrix
- *
- * Files must -not- have header information of any kind (e.g. row/col labels etc. )
- * Rows are determined by line breakers, columns are determined by comma-delimiter.
- *
- * \param file_path
- *
- * The (hard) path to the data file.
- *
- * \return
- * An Eigen matrix with rows/cols determined by data file.
- */
-Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > CSV2Eigen( std::string file_path ) {
-
-    std::ifstream file_stream( file_path.c_str() );
-
-    if ( !file_stream.good() ) {
-        std::string err_str = __func__;
-        err_str += "\nCould not open CSV file at location :";
-        err_str += file_path;
-        file_stream.close();
-        throw std::ios_base::failure( err_str );
-    } else {
-        file_stream.close();
-    }
-
-    std::string line;
-    std::vector<T> values;
-    unsigned int rows = 0;
-
-    while (std::getline(file_stream, line)) {
-
-        std::stringstream lineStream(line);
-        std::string cell;
-
-        while (std::getline(lineStream, cell, ',')) {
-            values.push_back( boost::lexical_cast<T>(cell) );
-        }
-        rows ++;
-    }
-
-    file_stream.close();
-
-    unsigned int num_cols = values.size() / rows;
-
-//    return Eigen::Map< Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic, Eigen::ColMajor> >( values.data(), num_cols, rows );
-    return Eigen::Map< Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>>(values.data(), rows, num_cols );
-
-}
 
 template < typename T >
 T StdDev( const Eigen::Matrix< T, Eigen::Dynamic, 1 >& vect ) {
@@ -474,6 +421,36 @@ T duality_gap ( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X, \
     T d_nu = 0.25*square( r_stats_it )*nu_part.squaredNorm() - Y.squaredNorm();
 
     return f_beta + d_nu;
+}
+
+template < typename T >
+Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > slice (
+        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& org,
+        const std::vector< unsigned int >& indices ) {
+
+    Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > sliced ( org.rows(), indices.size() );
+
+    for( unsigned int j = 0 ; j < indices.size() ; j++ ) {
+        sliced.col( j ) = org.col( indices[ j ] );
+    }
+
+    return sliced;
+
+}
+
+template < typename T >
+Eigen::Matrix< T, Eigen::Dynamic, 1 > slice (
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& org,
+        const std::vector< unsigned int >& indices ) {
+
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > sliced ( indices.size() );
+
+    for( unsigned int j = 0 ; j < indices.size() ; j++ ) {
+        sliced[ j ] = org[ indices[ j ] ];
+    }
+
+    return sliced;
+
 }
 
 }

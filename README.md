@@ -121,6 +121,12 @@ be located in the same directory as the root of the HDIM package.
 - Find the file `win_build.ps1` and run it using PowerShell.
 - This will run a preprocessing step using Rcpp then build and install the R Wrapper.
 
+## Licensing
+
+The HDIM package is licensed under the MIT license with one notable exception --
+the R language wrapper on all platforms is licensed under the GPL version 3. To
+view the MIT license please consult `LICENSE.txt` and for the the GPLv3 see
+`/R_Wrapper/HDIM/LICENSE.`
 ## Authors
 
 * **Benjamin J Phillips** - *Work on native C++, R wrapper, and Python wrapper*

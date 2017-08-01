@@ -161,9 +161,6 @@ class LazyCoordinateDescent : public Base {
 
 };
 
-%template(X_FOS_d) hdim::experimental::X_FOS<double>;
-%template(X_FOS_f) hdim::experimental::X_FOS<float>;
-
 %template(AbstractSolver_f) hdim::internal::AbstractSolver<float>;
 %template(AbstractSolver_d) hdim::internal::AbstractSolver<double>;
 
@@ -184,3 +181,6 @@ class LazyCoordinateDescent : public Base {
 
 %template(CD) hdim::LazyCoordinateDescent<double,hdim::internal::Solver<double>>;
 %template(CD_SR) hdim::LazyCoordinateDescent<double,hdim::internal::ScreeningSolver<double>>;
+
+%template(X_FOS_d) hdim::X_FOS<double>;
+%template(X_FOS_f) hdim::X_FOS<float>;

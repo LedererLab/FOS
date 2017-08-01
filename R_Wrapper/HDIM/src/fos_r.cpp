@@ -163,10 +163,10 @@ Rcpp::NumericVector CDDG( Rcpp::NumericMatrix X,
 
 // [[Rcpp::export]]
 Rcpp::NumericVector CDSRDG( Rcpp::NumericMatrix X,
-                        Rcpp::NumericVector Y,
-                        Rcpp::NumericVector Beta_0,
-                        double lambda,
-                        double duality_gap_target ) {
+	                Rcpp::NumericVector Y,
+	                Rcpp::NumericVector Beta_0,
+	                double lambda,
+	                double duality_gap_target ) {
 
     Eigen::MatrixXd mat_X = NumMat2Eigen<double>(X);
     Eigen::VectorXd vect_Y = NumVect2Eigen<double>(Y);

@@ -84,7 +84,6 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 > ScreeningSolver<T>::operator()(
     Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X_A = X;
     Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta_A = Beta;
 
-
     std::vector< unsigned int > active_set, inactive_set;
 
     // Initialize vector of values [ 0, 1, ..., p - 1, p ]

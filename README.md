@@ -61,6 +61,7 @@ compared to using the native code base. Currently both wrappers require building
 * [SWIG](http://www.swig.org/download.html) The Simplified Wrapper and Interface Generator
 * Python Development Headers
 * Numpy, including Development Headers
+* [Eigen 3](http://eigen.tuxfamily.org/index.php) A C++ template library for linear algebra
 
 ##### Building
 
@@ -92,6 +93,7 @@ compared to using the native code base. Currently both wrappers require building
 * [SWIG](http://www.swig.org/download.html) The Simplified Wrapper and Interface Generator
 * Python Development Headers
 * Numpy, including Development Headers
+* [Eigen 3](http://eigen.tuxfamily.org/index.php) A C++ template library for linear algebra
 * gcc -- installation will not work with the default C++ complier, clang
 
 ##### Building
@@ -130,6 +132,7 @@ view the MIT license please consult `LICENSE.txt` and for the the GPLv3 see
 ## Authors
 
 * **Benjamin J Phillips** - *Work on native C++, R wrapper, and Python wrapper*
+* **Saba Noorassa** - *Work on adding Mac OS compatibility*
 
 ## References
 

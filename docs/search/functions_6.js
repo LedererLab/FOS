@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['pos_5fpart',['pos_part',['../generics_8hpp.html#a9873ec5b4ca42c2bd280841d4585389f',1,'hdim']]],
-  ['prox',['prox',['../generics_8hpp.html#a8c8be46b7676a3d3327625568b16bcc3',1,'hdim']]]
+  ['x_5ffos',['X_FOS',['../classhdim_1_1_x___f_o_s.html#a219c7b0b76407fac417677d314085aff',1,'hdim::X_FOS']]]
 ];

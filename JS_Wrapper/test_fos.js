@@ -28,7 +28,6 @@ var coefs = fos.ReturnCoefficients();
 var intercept = fos.ReturnIntercept();
 
 console.log( "Intercept: ", intercept );
-
 console.log( "Beta Vector:" );
 
 for ( i = 0; i < coefs.size() ; i++ ) {

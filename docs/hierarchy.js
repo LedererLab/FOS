@@ -14,8 +14,9 @@ var hierarchy =
       [ "hdim::LazyCoordinateDescent< T, Base >", "classhdim_1_1_lazy_coordinate_descent.html", null ]
     ] ],
     [ "hdim::Binarize< T >", "structhdim_1_1_binarize.html", null ],
-    [ "hdim::FOS< T >", "classhdim_1_1_f_o_s.html", null ],
     [ "hdim::SoftThres< T >", "structhdim_1_1_soft_thres.html", null ],
     [ "hdim::SupportSift< T >", "structhdim_1_1_support_sift.html", null ],
-    [ "hdim::experimental::X_FOS< T >", "classhdim_1_1experimental_1_1_x___f_o_s.html", null ]
+    [ "hdim::X_FOS< T >", "classhdim_1_1_x___f_o_s.html", [
+      [ "JS_FOS< T >", "class_j_s___f_o_s.html", null ]
+    ] ]
 ];

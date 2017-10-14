@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['build_5fmatrix',['build_matrix',['../generics_8hpp.html#a406e0732a7d43381d66ecdb1d973cdab',1,'hdim']]]
+  ['logscalevector',['LogScaleVector',['../generics_8hpp.html#ad4e74a775b3bf698a6eb15db78148f18',1,'hdim']]]
 ];

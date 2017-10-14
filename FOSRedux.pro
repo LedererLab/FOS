@@ -35,8 +35,7 @@ INCLUDEPATH += /usr/include/eigen3
 # emscripten
 INCLUDEPATH += /home/bephillips2/Packages/emsdk-portable/emscripten/1.37.16/system/include/
 
-HEADERS += FOS/fos.hpp \
-    Generic/debug.hpp \
+HEADERS += Generic/debug.hpp \
     Generic/generics.hpp \
     Solvers/SubGradientDescent/ISTA/ista.hpp \
     Solvers/SubGradientDescent/ISTA/test_ista.hpp \
@@ -57,7 +56,6 @@ HEADERS += FOS/fos.hpp \
 
 SOURCES += main.cpp \
     FOS/x_fos.cpp \
-    FOS/fos.cpp \
     Solvers/SubGradientDescent/ISTA/ista.cpp \
     Solvers/SubGradientDescent/FISTA/fista.cpp \
     Solvers/CoordinateDescent/coordinate_descent.cpp \

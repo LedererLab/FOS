@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['algorithm',['Algorithm',['../classhdim_1_1_f_o_s.html#a51b4de321e8bed46676fa6d3d938c5cb',1,'hdim::FOS']]]
+  ['build_5fmatrix',['build_matrix',['../generics_8hpp.html#a406e0732a7d43381d66ecdb1d973cdab',1,'hdim']]]
 ];

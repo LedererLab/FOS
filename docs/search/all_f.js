@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['x_5ffos',['X_FOS',['../classhdim_1_1experimental_1_1_x___f_o_s.html',1,'hdim::experimental']]],
-  ['x_5ffos',['X_FOS',['../classhdim_1_1experimental_1_1_x___f_o_s.html#a1c7804223ae195cd33864303a301d86e',1,'hdim::experimental::X_FOS']]]
+  ['x_5ffos',['X_FOS',['../classhdim_1_1_x___f_o_s.html',1,'hdim']]],
+  ['x_5ffos',['X_FOS',['../classhdim_1_1_x___f_o_s.html#a219c7b0b76407fac417677d314085aff',1,'hdim::X_FOS']]]
 ];

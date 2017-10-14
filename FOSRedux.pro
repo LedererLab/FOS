@@ -29,6 +29,14 @@ LIBS += -L/usr/local/lib \
         -lboost_system \
         -lboost_filesystem \
 
+# clBLAS
+LIBS += -L/usr/local/lib64/
+LIBS += -lclBLAS
+
+# OpenCL
+LIBS += -L/usr/local/cuda/lib64
+LIBS += -lOpenCL
+
 # Eigen
 INCLUDEPATH += /usr/include/eigen3
 

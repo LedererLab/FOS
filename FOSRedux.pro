@@ -60,7 +60,12 @@ HEADERS += Generic/debug.hpp \
     Solvers/abstractsolver.hpp \
     FOS/perf_fos.hpp \
     Solvers/SubGradientDescent/ISTA/perf_ista.hpp \
-    JS_Wrapper/fos_js.hpp
+    JS_Wrapper/fos_js.hpp \
+    OpenCL_Base/openclbase.h \
+    OpenCL_Generics/cl_algorithm.h \
+    OpenCL_Generics/cl_generics.h \
+    OpenCL_Generics/matvectprodtest.h \
+    OpenCL_Generics/perf_cl_product.h
 
 SOURCES += main.cpp \
     FOS/x_fos.cpp \
@@ -69,6 +74,9 @@ SOURCES += main.cpp \
     Solvers/CoordinateDescent/coordinate_descent.cpp \
     Solvers/CoordinateDescent/coordinatedescentwithscreen.cpp \
     JS_Wrapper/fos_js.cpp \
+    OpenCL_Base/openclbase.cpp \
+    OpenCL_Generics/matvectprodtest.cpp \
+    OpenCL_Generics/perf_cl_product.cpp
 
 DISTFILES += \
     Python_Wrapper/build.sh \

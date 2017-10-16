@@ -65,7 +65,10 @@ HEADERS += Generic/debug.hpp \
     OpenCL_Generics/cl_algorithm.h \
     OpenCL_Generics/cl_generics.h \
     OpenCL_Generics/matvectprodtest.h \
-    OpenCL_Generics/perf_cl_product.h
+    OpenCL_Generics/perf_cl_product.h \
+    Solvers/SubGradientDescent/ocl_subgradient_descent.hpp \
+    Solvers/ocl_solver.hpp \
+    Generic/ocl_debug.hpp
 
 SOURCES += main.cpp \
     FOS/x_fos.cpp \
@@ -76,7 +79,8 @@ SOURCES += main.cpp \
     JS_Wrapper/fos_js.cpp \
     OpenCL_Base/openclbase.cpp \
     OpenCL_Generics/matvectprodtest.cpp \
-    OpenCL_Generics/perf_cl_product.cpp
+    OpenCL_Generics/perf_cl_product.cpp \
+    Generic/ocl_debug.cpp
 
 DISTFILES += \
     Python_Wrapper/build.sh \

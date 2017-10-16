@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['x_5ffos',['X_FOS',['../classhdim_1_1_x___f_o_s.html',1,'hdim']]],
-  ['x_5ffos',['X_FOS',['../classhdim_1_1_x___f_o_s.html#a219c7b0b76407fac417677d314085aff',1,'hdim::X_FOS']]]
+  ['time_5fit',['TIME_IT',['../debug_8hpp.html#ae7cd57cebd2ba2707f8d54ef09abbd12',1,'debug.hpp']]]
 ];

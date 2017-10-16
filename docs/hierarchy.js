@@ -14,6 +14,13 @@ var hierarchy =
       [ "hdim::LazyCoordinateDescent< T, Base >", "classhdim_1_1_lazy_coordinate_descent.html", null ]
     ] ],
     [ "hdim::Binarize< T >", "structhdim_1_1_binarize.html", null ],
+    [ "ocl::OpenCLBase", "classocl_1_1_open_c_l_base.html", [
+      [ "MatProdTest", "class_mat_prod_test.html", null ],
+      [ "MatVectProdTest", "class_mat_vect_prod_test.html", null ],
+      [ "ocl::internal::Solver< T >", "classocl_1_1internal_1_1_solver.html", [
+        [ "hdim::ocl::internal::SubGradientSolver< T >", "classhdim_1_1ocl_1_1internal_1_1_sub_gradient_solver.html", null ]
+      ] ]
+    ] ],
     [ "hdim::SoftThres< T >", "structhdim_1_1_soft_thres.html", null ],
     [ "hdim::SupportSift< T >", "structhdim_1_1_support_sift.html", null ],
     [ "hdim::X_FOS< T >", "classhdim_1_1_x___f_o_s.html", [

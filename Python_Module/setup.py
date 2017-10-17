@@ -29,4 +29,5 @@ setup(name='hdim',
       license='MIT',
       packages=['hdim'],
       ext_modules=[extension],
+      requires=['NumPy (>= 1.3)'],
       zip_safe=False)

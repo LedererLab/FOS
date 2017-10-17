@@ -5,6 +5,10 @@ import os
 
 # os.system('swig -c++ -python ./hdim/hdim.i')
 
+header_files = glob( 'src/FOS/*.hpp' )
+header_files.append( 'src/Generic/*.hpp' )
+header_files.append( 'src/Solvers/*.hpp' )
+
 source_files = glob( 'src/FOS/x_fos.cpp' )
 source_files.append( 'src/Solvers/SubGradientDescent/ISTA/ista.cpp' )
 source_files.append( 'src/Solvers/SubGradientDescent/FISTA/fista.cpp' )
@@ -28,6 +32,7 @@ setup(name='hdim',
       author_email='bejphil@uw.edu',
       license='MIT',
       packages=['hdim'],
+      headers=[header_files],
       ext_modules=[extension],
       requires=['NumPy (>= 1.3)'],
       zip_safe=False)

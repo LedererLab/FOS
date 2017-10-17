@@ -3,7 +3,7 @@ from glob import glob
 
 import os
 
-# os.system("./hdim/nix_build.sh")
+# os.system('swig -c++ -python ./hdim/hdim.i')
 
 source_files = glob( 'src/FOS/x_fos.cpp' )
 source_files.append( 'src/Solvers/SubGradientDescent/ISTA/ista.cpp' )

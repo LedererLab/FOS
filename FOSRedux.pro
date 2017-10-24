@@ -14,10 +14,11 @@ CONFIG += c++11
 # Override Qt's default -O2 flag in release mode
 CONFIG(debug, debug|release) {
     DEFINES += "DEBUG"
+    DEFINES += "VIENNACL_WITH_OPENCL"
 } else {
     DEFINES += "NDEBUG"
+    DEFINES += "VIENNACL_WITH_OPENCL"
     CONFIG += optimize_full
-#    QMAKE_CXXFLAGS *= -Ofast
     QMAKE_CXXFLAGS_RELEASE *= -mtune=native
     QMAKE_CXXFLAGS_RELEASE *= -march=native
 }
@@ -28,6 +29,10 @@ LIBS += -L/usr/local/lib \
         -lboost_iostreams \
         -lboost_system \
         -lboost_filesystem \
+
+# ViennaCL
+
+INCLUDEPATH += /usr/include/viennacl
 
 # clBLAS
 LIBS += -L/usr/local/lib64/
@@ -68,7 +73,11 @@ HEADERS += Generic/debug.hpp \
     OpenCL_Generics/perf_cl_product.h \
     Solvers/SubGradientDescent/ocl_subgradient_descent.hpp \
     Solvers/ocl_solver.hpp \
-    Generic/ocl_debug.hpp
+    Generic/ocl_debug.hpp \
+    Solvers/SubGradientDescent/ISTA/viennacl_ista.h \
+    Solvers/SubGradientDescent/viennacl_subgradient_descent.hpp \
+    Solvers/viennacl_solver.hpp \
+    Solvers/viennacl_abstractsolver.hpp
 
 SOURCES += main.cpp \
     FOS/x_fos.cpp \
@@ -80,7 +89,8 @@ SOURCES += main.cpp \
     OpenCL_Base/openclbase.cpp \
     OpenCL_Generics/matvectprodtest.cpp \
     OpenCL_Generics/perf_cl_product.cpp \
-    Generic/ocl_debug.cpp
+    Generic/ocl_debug.cpp \
+    Solvers/SubGradientDescent/ISTA/viennacl_ista.cpp
 
 DISTFILES += \
     Python_Wrapper/build.sh \

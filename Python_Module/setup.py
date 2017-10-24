@@ -3,8 +3,6 @@ from glob import glob
 
 import os
 
-# os.system('swig -c++ -python ./hdim/hdim.i')
-
 source_files = glob( 'src/FOS/x_fos.cpp' )
 source_files.append( 'src/Solvers/SubGradientDescent/ISTA/ista.cpp' )
 source_files.append( 'src/Solvers/SubGradientDescent/FISTA/fista.cpp' )
@@ -30,5 +28,5 @@ setup(name='hdim',
       packages=['hdim'],
       ext_modules=[extension],
       requires=['NumPy (>= 1.3)'],
-      python_requires='>=3',
+      python_requires=['>=3'],
       zip_safe=False)

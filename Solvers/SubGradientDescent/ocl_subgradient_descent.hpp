@@ -58,29 +58,52 @@ class SubGradientSolver : public ocl::internal::Solver<T> {
 
     const T L_0;
 
-private:
+  private:
 
-  void OCLInit( unsigned int n, unsigned int p );
+    void OCLInit( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+                  const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+                  const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta );
 
-  cl::Buffer  Beta_, X_, Y_, Residual_; // Input argument buffers
-  cl::Buffer ScratchVector_, ScratchScalar_; // Scratch buffers
+    cl::Buffer  Beta_, X_, Y_; // Input argument buffers
+    cl::Buffer ScratchVector_, ScratchScalar_, ScratchDoubleVector_; // Scratch buffers
 
-  T ScratchScalar;
-  Eigen::Matrix< T, Eigen::Dynamic, 1 > ScratchVector; // Host copy of Beta
+    T ScratchScalar;
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > ScratchVector; // Host copy of Beta
 
-  std::vector< cl::Buffer > X_cols_; // Buffers containing columns of design matrix
+    std::vector< cl::Buffer > X_cols_; // Buffers containing columns of design matrix
 
-  Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta; // Host copy of Beta
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta; // Host copy of Beta
 
-  cl_int err;
-  cl_event event = NULL;
+    cl_int err;
+    cl_event event = NULL;
 
-  size_t off;
-  size_t offMat, offVec;
+    size_t off;
+    size_t offMat, offVec;
 
-  int incx = 1;
-  int incy = 1;
-  size_t ldMat;
+    int incx = 1;
+    int incy = 1;
+    size_t ldMat;
+
+    int n, p; // rows and columns of X respectively
+
+    std::string softthreshold_kernel = R"END(
+
+       __kernel void SoftThreshold( __global TYPE* input, __global TYPE* output, const TYPE threshold, const int n, const int p )
+       {
+
+           int i = get_global_id(0);
+
+           TYPE X_i_j = input[i];
+           TYPE signum = (TYPE)( X_i_j >= 0.0 );
+
+           TYPE fragment = fabsf( X_i_j ) - threshold;
+           TYPE pos_part = ( fragment >= 0.0 )?( fragment ):( 0.0 );
+
+           output[i] = signum*pos_part;
+
+       }
+
+  )END";
 
 };
 
@@ -94,7 +117,12 @@ template < typename T, typename Base >
 SubGradientSolver< T, Base >::~SubGradientSolver() {}
 
 template < typename T >
-SubGradientSolver< T >::OCLInit( unsigned int n, unsigned int p ) {
+SubGradientSolver< T >::OCLInit( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+                                 const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+                                 const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta ) {
+
+    n = X.rows();
+    p = Y.cols();
 
     X_ = cl::Buffer ( OpenCLBase::context,
                       CL_MEM_READ_ONLY,
@@ -104,9 +132,9 @@ SubGradientSolver< T >::OCLInit( unsigned int n, unsigned int p ) {
     OCL_DEBUG( err );
 
     Beta_ = cl::Buffer ( OpenCLBase::context,
-                      CL_MEM_READ_ONLY,
-                      n * 1 * sizeof( T ),
-                      NULL, &err );
+                         CL_MEM_READ_ONLY,
+                         p * 1 * sizeof( T ),
+                         NULL, &err );
 
     OCL_DEBUG( err );
 
@@ -131,6 +159,13 @@ SubGradientSolver< T >::OCLInit( unsigned int n, unsigned int p ) {
 
     OCL_DEBUG( err );
 
+    ScratchDoubleVector_ = cl::Buffer( OpenCLBase::context,
+                                       CL_MEM_READ_WRITE,
+                                       2 * n * 1 * sizeof( T ),
+                                       NULL, &err );
+
+    OCL_DEBUG( err );
+
     off  = 1;
     offMat = n + off;   /* M + off */
     offVec = off;       /* off */
@@ -138,6 +173,10 @@ SubGradientSolver< T >::OCLInit( unsigned int n, unsigned int p ) {
     incx = 1;
     incy = 1;
     ldMat = p;        /* i.e. lda = N */
+
+    ocl::internal::Solver<T>::command_queue.enqueueWriteBuffer( X_, CL_TRUE, 0, n * p * sizeof( T ), X.data() );
+    ocl::internal::Solver<T>::command_queue.enqueueWriteBuffer( Y_, CL_TRUE, 0, n * 1 * sizeof( T ), Y.data() );
+    ocl::internal::Solver<T>::command_queue.enqueueWriteBuffer( Beta_, CL_TRUE, 0, n * 1 * sizeof( T ), Beta.data() );
 }
 
 template < typename T >
@@ -146,7 +185,63 @@ void SubGradientSolver< T, Base >::f_beta (
     const cl::Buffer& Y,
     const cl::Buffer& Beta ) {
 
-    return (X*Beta - Y).squaredNorm();
+    // Since BLAS Matrix-Vector product would over-write Beta we copy
+    // it into out scratch buffer for vector objects
+    err = clEnqueueCopyBuffer( &ocl::internal::Solver<T>::command_queue(),
+                               Beta(),
+                               ScratchVector_(),
+                               off,
+                               off,
+                               n * 1 * sizeof( T ),
+                               0,
+                               NULL,
+                               &event );
+
+    OCL_DEBUG( err );
+
+    // Compute X*Beta - Y and load results into vector-sized scratch buffer
+    err = clblasSgemv( clblasRowMajor,
+                       clblasNoTrans,
+                       n,
+                       p,
+                       1.0,
+                       X(),
+                       offMat,
+                       ldMat,
+                       Y(),
+                       offVec,
+                       incy,
+                       -1.0,
+                       ScratchVector_(),
+                       offVec,
+                       incy,
+                       1,
+                       &ocl::internal::Solver<T>::command_queue(),
+                       0,
+                       NULL,
+                       &event );
+
+
+    OCL_DEBUG( err );
+
+
+    // Computer ( X*Beta - Y )_2^2 and load results into scalar-sized scratch buffer
+    err = clblasSnrm2( n * p,
+                       ScratchScalar_(),
+                       offVec,
+                       ScratchVector_(),
+                       offMat,
+                       incx,
+                       ScratchDoubleVector_(),
+                       1,
+                       &ocl::internal::Solver<T>::command_queue(),
+                       0,
+                       NULL,
+                       &event );
+
+    OCL_DEBUG( err );
+
+//    return (X*Beta - Y).squaredNorm();
 
 }
 

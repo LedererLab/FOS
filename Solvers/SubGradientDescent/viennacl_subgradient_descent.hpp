@@ -18,6 +18,7 @@
 #include "viennacl/linalg/norm_2.hpp"
 #include "viennacl/linalg/matrix_operations.hpp"
 #include "viennacl/linalg/inner_prod.hpp"
+#include "viennacl/ocl/backend.hpp"
 #include "viennacl/ocl/program.hpp"
 #include "viennacl/ocl/kernel.hpp"
 #include "viennacl/ocl/context.hpp"
@@ -72,7 +73,7 @@ class SubGradientSolver : public Base {
 
     const std::string softthreshold_kernel = R"END(
 
-       __kernel void SoftThreshold( __global float* input, __global float* output, __global float* threshold )
+       __kernel void SoftThreshold( __global const float* input, __global float* output, __global const float* threshold )
        {
 
            int i = get_global_id(0);
@@ -80,7 +81,7 @@ class SubGradientSolver : public Base {
            float X_i_j = input[i];
            float signum = (float)( X_i_j >= 0.0 );
 
-           float fragment = fabsf( X_i_j ) - threshold[0];
+           float fragment = fabs( X_i_j ) - threshold[0];
            float pos_part = ( fragment >= 0.0 )?( fragment ):( 0.0 );
 
            output[i] = signum*pos_part;
@@ -101,7 +102,11 @@ SubGradientSolver< T, Base >::SubGradientSolver( T L ) : L_0( L ) {
     static_assert(std::is_floating_point< T >::value,\
                   "Subgradient descent methods can only be used with floating point types.");
 
-    program_ = &viennacl::ocl::current_context().add_program(softthreshold_kernel.c_str(), "softthreshold_kernel");
+    viennacl::ocl::set_context_device_type( 1, viennacl::ocl::gpu_tag() );
+
+    std::cout << "Current Context: " << viennacl::ocl::current_context().current_device().full_info() << std::endl;
+
+    program_ = &viennacl::ocl::current_context().add_program(softthreshold_kernel, "softthreshold_kernel");
     soft_thres_kernel_ = &program_->get_kernel("SoftThreshold");
 }
 
@@ -149,7 +154,10 @@ viennacl::vector<T> SubGradientSolver< T, Base >::update_beta_ista (
     T L,
     T thres ) {
 
-    viennacl::vector<T> thres_ { thres/L };
+    // Extraordinarily silly way to pass a single value to the proximal operator kernel...
+    viennacl::vector<T> thres_( 1 );
+    std::vector<T> thres_val  { thres / L };
+    viennacl::copy( thres_val, thres_ );
 
     viennacl::vector<T> f_beta = viennacl::linalg::prod( X, Beta ) - Y;
 

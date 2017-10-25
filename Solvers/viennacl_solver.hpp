@@ -131,6 +131,10 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 > Solver<T>::operator()(
     T lambda,
     T duality_gap_target ) {
 
+    X_ = viennacl::matrix<T>( X.rows(), X.cols() );
+    Y_ = viennacl::vector<T>( X.rows() );
+    Beta_0_ = viennacl::vector<T>( X.rows() );
+
     viennacl::copy( X, X_ );
     viennacl::copy( Y, Y_ );
     viennacl::copy( Beta_0, Beta_0_ );
@@ -166,6 +170,10 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 > Solver<T>::operator()(
     T lambda,
     unsigned int num_iterations ) {
 
+    X_ = viennacl::matrix<T>( X.rows(), X.cols() );
+    Y_ = viennacl::vector<T>( X.rows() );
+    Beta_0_ = viennacl::vector<T>( X.rows() );
+
     viennacl::copy( X, X_ );
     viennacl::copy( Y, Y_ );
     viennacl::copy( Beta_0, Beta_0_ );
@@ -179,7 +187,7 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 > Solver<T>::operator()(
 
     }
 
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta;
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta ( Beta_0.rows(), 1 );
     viennacl::copy( Beta_, Beta );
 
     return Beta;

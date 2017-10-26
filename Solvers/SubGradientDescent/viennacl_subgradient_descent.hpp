@@ -18,7 +18,6 @@
 #include "viennacl/linalg/norm_2.hpp"
 #include "viennacl/linalg/matrix_operations.hpp"
 #include "viennacl/linalg/inner_prod.hpp"
-#include "viennacl/ocl/backend.hpp"
 #include "viennacl/ocl/program.hpp"
 #include "viennacl/ocl/kernel.hpp"
 #include "viennacl/ocl/context.hpp"
@@ -101,10 +100,6 @@ template < typename T, typename Base >
 SubGradientSolver< T, Base >::SubGradientSolver( T L ) : L_0( L ) {
     static_assert(std::is_floating_point< T >::value,\
                   "Subgradient descent methods can only be used with floating point types.");
-
-    viennacl::ocl::set_context_device_type( 1, viennacl::ocl::gpu_tag() );
-
-    std::cout << "Current Context: " << viennacl::ocl::current_context().current_device().full_info() << std::endl;
 
     program_ = &viennacl::ocl::current_context().add_program(softthreshold_kernel, "softthreshold_kernel");
     soft_thres_kernel_ = &program_->get_kernel("SoftThreshold");

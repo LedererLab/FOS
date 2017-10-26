@@ -39,8 +39,8 @@ LIBS += -L/usr/local/lib64/
 LIBS += -lclBLAS
 
 # OpenCL
-LIBS += -L/usr/local/cuda/lib64
-LIBS += -lOpenCL
+INCLUDEPATH +=-I "/usr/local/cuda/include"
+LIBS +=-L "/usr/local/cuda/lib64" -lOpenCL
 
 # Eigen
 INCLUDEPATH += /usr/include/eigen3

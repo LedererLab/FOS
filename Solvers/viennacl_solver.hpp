@@ -22,6 +22,7 @@
 #include "viennacl/linalg/norm_inf.hpp"
 #include "viennacl/linalg/matrix_operations.hpp"
 #include "viennacl/linalg/inner_prod.hpp"
+#include "viennacl/ocl/backend.hpp"
 // OpenMP Headers
 //
 // Project Specific Headers
@@ -86,6 +87,10 @@ class Solver : public vcl::internal::AbstractSolver < T > {
 template < typename T >
 Solver<T>::Solver() {
     DEBUG_PRINT( "Using Plain Solver.");
+
+    viennacl::ocl::set_context_device_type( 1, viennacl::ocl::gpu_tag() );
+    DEBUG_PRINT( "Current Context: " << viennacl::ocl::current_context().current_device().full_info() );
+
 }
 
 template < typename T >

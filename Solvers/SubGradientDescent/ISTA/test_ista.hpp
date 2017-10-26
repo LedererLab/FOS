@@ -4,7 +4,7 @@
 // C System-Headers
 //
 // C++ System headers
-#include <cmath>
+#include <chrono>
 // Eigen Headers
 #include <eigen3/Eigen/Core>
 #include <eigen3/Eigen/Dense>
@@ -43,7 +43,7 @@ void RunIstaTests() {
     std::vector<T> cpu_results;
     std::vector<T> gpu_results;
 
-    for ( unsigned int k = 200; k <= 2000; k+= 200 ) {
+    for ( unsigned int k = 200; k <= 1000; k+= 200 ) {
 
         unsigned int N = k, P = k;
 
@@ -59,7 +59,7 @@ void RunIstaTests() {
                   << std::endl;
 
         std::cout << "Testing CPU ISTA" << std::endl;
-        T cpu_result = TestISTA< T, hdim::vcl::ISTA<T> >( X, Y, W_0, 10 );
+        T cpu_result = TestISTA< T, hdim::ISTA<T> >( X, Y, W_0, 10 );
         cpu_results.push_back( cpu_result );
 
         std::cout << "Testing GPU ISTA" << std::endl;

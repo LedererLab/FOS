@@ -88,7 +88,7 @@ template < typename T >
 Solver<T>::Solver() {
     DEBUG_PRINT( "Using Plain Solver.");
 
-    viennacl::ocl::set_context_device_type( 1, viennacl::ocl::gpu_tag() );
+    viennacl::ocl::set_context_device_type( 0, viennacl::ocl::gpu_tag() );
     DEBUG_PRINT( "Current Context: " << viennacl::ocl::current_context().current_device().full_info() );
 
 }

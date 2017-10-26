@@ -49,7 +49,7 @@ void RunIstaPerfs() {
     std::vector<int> cpu_results;
     std::vector<int> gpu_results;
 
-    for ( unsigned int k = 200; k <= 1000; k+= 200 ) {
+    for ( unsigned int k = 1000; k <= 10000; k+= 1000 ) {
 
         unsigned int N = k, P = k;
 

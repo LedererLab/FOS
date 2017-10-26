@@ -78,7 +78,7 @@ class SubGradientSolver : public Base {
            int i = get_global_id(0);
 
            float X_i_j = input[i];
-           float signum = (float)( X_i_j >= 0.0 );
+           float signum = (float)(( X_i_j > 0) ? 1 : (( X_i_j < 0) ? -1 : 0));
 
            float fragment = fabs( X_i_j ) - threshold[0];
            float pos_part = ( fragment >= 0.0 )?( fragment ):( 0.0 );

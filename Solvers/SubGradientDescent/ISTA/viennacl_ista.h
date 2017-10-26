@@ -52,6 +52,7 @@ class ISTA : public vcl::internal::SubGradientSolver<T,Base> {
 template < typename T, typename Base >
 ISTA<T,Base>::ISTA( T L_0 ) : internal::SubGradientSolver<T,Base>( L_0 ) {}
 
+#ifdef DEBUG
 template < typename T, typename Base >
 viennacl::vector<T> ISTA<T,Base>::update_rule(
     const viennacl::matrix<T>& X,
@@ -81,6 +82,69 @@ viennacl::vector<T> ISTA<T,Base>::update_rule(
 
     return internal::SubGradientSolver<T,Base>::update_beta_ista( X, Y, Beta, L, lambda );
 }
+
+#else
+template < typename T, typename Base >
+viennacl::vector<T> ISTA<T,Base>::update_rule(
+    const viennacl::matrix<T>& X,
+    const viennacl::vector<T>& Y,
+    const viennacl::vector<T>& Beta,
+    T lambda ) {
+
+    L = internal::SubGradientSolver<T,Base>::L_0;
+
+    // Extraordinarily silly way to pass a single value to the proximal operator kernel...
+    viennacl::vector<T> thres_( 1 );
+    std::vector<T> thres_val  { lambda / L };
+    viennacl::copy( thres_val, thres_ );
+
+    viennacl::vector<T> f_grad = 2.0*viennacl::linalg::prod( viennacl::trans( X ), viennacl::linalg::prod( X, Beta ) - Y );
+    viennacl::vector<T> beta_to_modify = Beta - (1.0/L)*f_grad;
+    viennacl::vector<T> beta_temp = beta_to_modify;
+
+    viennacl::ocl::enqueue( hdim::vcl::internal::SubGradientSolver<T,Base>::soft_thres_kernel_->operator()( beta_to_modify, beta_temp, thres_ ) );
+
+    T f_beta = norm_sqr( static_cast<viennacl::vector<T>>( viennacl::linalg::prod( X, beta_temp ) - Y ) );
+
+    viennacl::vector<T> f_part = viennacl::linalg::prod( X, Beta ) - Y;
+    T taylor_term_0 = norm_sqr( f_part );
+
+    viennacl::vector<T> beta_diff = beta_temp - Beta;
+
+    T taylor_term_1 = viennacl::linalg::inner_prod( f_grad , beta_diff );
+    T taylor_term_2 = ( L / 2.0 )*norm_sqr( beta_diff );
+
+    T f_beta_tilde = taylor_term_0 + taylor_term_1 + taylor_term_2;
+
+    while( f_beta > f_beta_tilde ) {
+
+        L*= eta;
+
+        beta_to_modify = Beta - (1.0/L)*f_grad;
+
+        viennacl::copy( std::vector<T> { lambda / L }, thres_ );
+        viennacl::ocl::enqueue( hdim::vcl::internal::SubGradientSolver<T,Base>::soft_thres_kernel_->operator()( beta_to_modify, beta_temp, thres_ ) );
+
+        f_beta = norm_sqr( static_cast<viennacl::vector<T>>( viennacl::linalg::prod( X, beta_temp ) - Y ) );
+
+        beta_diff = beta_temp - Beta;
+
+        taylor_term_1 = viennacl::linalg::inner_prod( f_grad , beta_diff );
+        taylor_term_2 = ( L / 2.0 )*norm_sqr( beta_diff );
+
+        f_beta_tilde = taylor_term_0 + taylor_term_1 + taylor_term_2;
+
+    }
+
+    beta_to_modify = Beta - (1.0/L)*f_grad;
+    viennacl::copy( std::vector<T> { lambda / L }, thres_ );
+
+    viennacl::ocl::enqueue( hdim::vcl::internal::SubGradientSolver<T,Base>::soft_thres_kernel_->operator()( beta_to_modify, beta_temp, thres_ ) );
+
+    return beta_temp;
+
+}
+#endif
 
 }
 

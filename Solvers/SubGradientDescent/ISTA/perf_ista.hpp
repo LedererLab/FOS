@@ -30,7 +30,7 @@ int PerfISTA( Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > design_matrix,
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > ista_retval = ista_test( design_matrix,
+    ista_test( design_matrix,
             predictors,
             beta_zero,
             1.0,
@@ -49,7 +49,7 @@ void RunIstaPerfs() {
     std::vector<int> cpu_results;
     std::vector<int> gpu_results;
 
-    for ( unsigned int k = 1000; k <= 10000; k+= 1000 ) {
+    for ( unsigned int k = 1000; k <= 5000; k+= 1000 ) {
 
         unsigned int N = k, P = k;
 

@@ -31,12 +31,7 @@ LIBS += -L/usr/local/lib \
         -lboost_filesystem \
 
 # ViennaCL
-
 INCLUDEPATH += /usr/include/viennacl
-
-# clBLAS
-LIBS += -L/usr/local/lib64/
-LIBS += -lclBLAS
 
 # OpenCL
 INCLUDEPATH +=-I "/usr/local/cuda/include"
@@ -69,10 +64,6 @@ HEADERS += Generic/debug.hpp \
     OpenCL_Base/openclbase.h \
     OpenCL_Generics/cl_algorithm.h \
     OpenCL_Generics/cl_generics.h \
-    OpenCL_Generics/matvectprodtest.h \
-    OpenCL_Generics/perf_cl_product.h \
-    Solvers/SubGradientDescent/ocl_subgradient_descent.hpp \
-    Solvers/ocl_solver.hpp \
     Generic/ocl_debug.hpp \
     Solvers/SubGradientDescent/ISTA/viennacl_ista.h \
     Solvers/SubGradientDescent/viennacl_subgradient_descent.hpp \
@@ -87,8 +78,6 @@ SOURCES += main.cpp \
     Solvers/CoordinateDescent/coordinatedescentwithscreen.cpp \
     JS_Wrapper/fos_js.cpp \
     OpenCL_Base/openclbase.cpp \
-    OpenCL_Generics/matvectprodtest.cpp \
-    OpenCL_Generics/perf_cl_product.cpp \
     Generic/ocl_debug.cpp \
     Solvers/SubGradientDescent/ISTA/viennacl_ista.cpp
 

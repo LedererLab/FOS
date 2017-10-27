@@ -24,6 +24,7 @@
 // Project Specific Headers
 #include "../Generic/generics.hpp"
 #include "../Generic/debug.hpp"
+#include "base_solver.hpp"
 
 namespace hdim {
 
@@ -38,7 +39,7 @@ template < typename T >
  *
  * This class supports two types of convergence criteria -- iterative and duality gap.
  */
-class AbstractSolver {
+class AbstractSolver : public hdim::internal::BaseSolver < T > {
 
   public:
 

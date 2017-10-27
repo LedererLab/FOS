@@ -1,23 +1,5 @@
-#ifndef ABSTRACTSOLVER_HPP
-#define ABSTRACTSOLVER_HPP
-
-// C System-Headers
-//
-// C++ System headers
-#include <functional> // std::function
-// Eigen Headers
-#include <eigen3/Eigen/Dense>
-#include <eigen3/Eigen/Core>
-// Boost Headers
-//
-// SPAMS Headers
-//
-// OpenMP Headers
-//
-// Project Specific Headers
-#include "../Generic/generics.hpp"
-#include "../Generic/debug.hpp"
-#include "base_solver.hpp"
+#ifndef BASE_SOLVER_HPP
+#define BASE_SOLVER_HPP
 
 namespace hdim {
 
@@ -30,14 +12,14 @@ template < typename T >
  *
  * This class supports two types of convergence criteria -- iterative and duality gap.
  */
-class AbstractSolver : public BaseSolver < T > {
+class BaseSolver {
 
   public:
 
-    virtual ~AbstractSolver() = 0;
+    virtual ~BaseSolver() = 0;
 
     /*!
-     * \brief Run the AbstractSolver for a fixed number of steps,
+     * \brief Run the BaseSolver for a fixed number of steps,
      * specified by num_iterations.
      *
      * \param X
@@ -95,22 +77,14 @@ class AbstractSolver : public BaseSolver < T > {
         T lambda,
         T duality_gap_target ) = 0;
 
-  protected:
-
-    virtual Eigen::Matrix< T, Eigen::Dynamic, 1 > update_rule(
-        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
-        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
-        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
-        T lambda ) = 0;
-
 };
 
 template < typename T >
-AbstractSolver<T>::~AbstractSolver() {}
+BaseSolver<T>::~BaseSolver() {}
 
 
 }
 
 }
 
-#endif // ABSTRACTSOLVER_HPP
+#endif // BASE_SOLVER_HPP

@@ -18,7 +18,7 @@
 #include "../../../Generic/debug.hpp"
 #include "../../../Generic/generics.hpp"
 #include "ista.hpp"
-#include "viennacl_ista.h"
+#include "viennacl_ista.hpp"
 
 template < typename T, typename Solver >
 T TestISTA( Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > design_matrix,

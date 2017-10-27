@@ -120,7 +120,7 @@ $(document).ready(function(){initNavTree('classhdim_1_1internal_1_1_screening_so
 <p>Abstract base class for Solvers that use GAP SAFE screening rules.  
  <a href="classhdim_1_1internal_1_1_screening_solver.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="screeningsolver_8hpp_source.html">screeningsolver.hpp</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="_python___module_2src_2_solvers_2screeningsolver_8hpp_source.html">screeningsolver.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for hdim::internal::ScreeningSolver&lt; T &gt;:</div>
 <div class="dyncontent">
@@ -146,9 +146,18 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af2d1f2a55b8356e521a80cce97993983"><td class="memItemLeft" align="right" valign="top">virtual Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhdim_1_1internal_1_1_screening_solver.html#af2d1f2a55b8356e521a80cce97993983">operator()</a> (const Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;X, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Y, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Beta_0, T lambda, T duality_gap_target)</td></tr>
 <tr class="memdesc:af2d1f2a55b8356e521a80cce97993983"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the Sub-Gradient Descent algorithm until the duality gap is below the threshold specified by duality_gap_target.  <a href="#af2d1f2a55b8356e521a80cce97993983">More...</a><br /></td></tr>
 <tr class="separator:af2d1f2a55b8356e521a80cce97993983"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8758cec199bf47280044c87f6f956efd"><td class="memItemLeft" align="right" valign="top">virtual Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhdim_1_1internal_1_1_screening_solver.html#a8758cec199bf47280044c87f6f956efd">operator()</a> (const Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;X, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Y, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Beta_0, T lambda, unsigned int num_iterations)</td></tr>
+<tr class="memdesc:a8758cec199bf47280044c87f6f956efd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the <a class="el" href="classhdim_1_1internal_1_1_abstract_solver.html" title="Abstract base class for all iterative solvers. ">AbstractSolver</a> for a fixed number of steps, specified by num_iterations.  <a href="#a8758cec199bf47280044c87f6f956efd">More...</a><br /></td></tr>
+<tr class="separator:a8758cec199bf47280044c87f6f956efd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad01b54ee98d96299ccf281a35adcb432"><td class="memItemLeft" align="right" valign="top">virtual Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhdim_1_1internal_1_1_screening_solver.html#ad01b54ee98d96299ccf281a35adcb432">operator()</a> (const Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;X, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Y, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Beta_0, T lambda, T duality_gap_target)</td></tr>
+<tr class="memdesc:ad01b54ee98d96299ccf281a35adcb432"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the Sub-Gradient Descent algorithm until the duality gap is below the threshold specified by duality_gap_target.  <a href="#ad01b54ee98d96299ccf281a35adcb432">More...</a><br /></td></tr>
+<tr class="separator:ad01b54ee98d96299ccf281a35adcb432"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
+<tr class="memitem:a5eacdcc361ad5fa07f1a71e87f68e6c1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5eacdcc361ad5fa07f1a71e87f68e6c1"></a>
+virtual Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>update_rule</b> (const Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;X, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Y, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Beta_0, T lambda)=0</td></tr>
+<tr class="separator:a5eacdcc361ad5fa07f1a71e87f68e6c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5eacdcc361ad5fa07f1a71e87f68e6c1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5eacdcc361ad5fa07f1a71e87f68e6c1"></a>
 virtual Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>update_rule</b> (const Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;X, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Y, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Beta_0, T lambda)=0</td></tr>
 <tr class="separator:a5eacdcc361ad5fa07f1a71e87f68e6c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -159,7 +168,7 @@ class hdim::internal::ScreeningSolver&lt; T &gt;</h3>
 
 <p>Abstract base class for Solvers that use GAP SAFE screening rules. </p>
 
-<p>Definition at line <a class="el" href="screeningsolver_8hpp_source.html#l00032">32</a> of file <a class="el" href="screeningsolver_8hpp_source.html">screeningsolver.hpp</a>.</p>
+<p>Definition at line <a class="el" href="_python___module_2src_2_solvers_2screeningsolver_8hpp_source.html#l00032">32</a> of file <a class="el" href="_python___module_2src_2_solvers_2screeningsolver_8hpp_source.html">screeningsolver.hpp</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="a524b715dae86e7302b04a0898a0e9e35"></a>
 <div class="memitem">
@@ -228,7 +237,145 @@ template&lt;typename T &gt; </div>
 
 <p>Implements <a class="el" href="classhdim_1_1internal_1_1_abstract_solver.html#ac845a2103ffeb5d3bfb29678c5f6932e">hdim::internal::AbstractSolver&lt; T &gt;</a>.</p>
 
-<p>Definition at line <a class="el" href="screeningsolver_8hpp_source.html#l00146">146</a> of file <a class="el" href="screeningsolver_8hpp_source.html">screeningsolver.hpp</a>.</p>
+<p>Definition at line <a class="el" href="_python___module_2src_2_solvers_2screeningsolver_8hpp_source.html#l00146">146</a> of file <a class="el" href="_python___module_2src_2_solvers_2screeningsolver_8hpp_source.html">screeningsolver.hpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8758cec199bf47280044c87f6f956efd"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; <a class="el" href="classhdim_1_1internal_1_1_screening_solver.html">hdim::internal::ScreeningSolver</a>&lt; T &gt;::operator() </td>
+          <td>(</td>
+          <td class="paramtype">const Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;&#160;</td>
+          <td class="paramname"><em>X</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>Y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>Beta_0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T&#160;</td>
+          <td class="paramname"><em>lambda</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>num_iterations</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Run the <a class="el" href="classhdim_1_1internal_1_1_abstract_solver.html" title="Abstract base class for all iterative solvers. ">AbstractSolver</a> for a fixed number of steps, specified by num_iterations. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">X</td><td>An n x p design matrix.</td></tr>
+    <tr><td class="paramname">Y</td><td>A 1 x n vector of predictors.</td></tr>
+    <tr><td class="paramname">Beta_0</td><td>A 1 x n vector of starting parameters.</td></tr>
+    <tr><td class="paramname">lambda</td><td>Current grid element.</td></tr>
+    <tr><td class="paramname">num_iterations</td><td>The number of times the algorithm should iterate.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A 1 x n vector of results from the algorithm. </dd></dl>
+
+<p>Implements <a class="el" href="classhdim_1_1internal_1_1_abstract_solver.html#ac845a2103ffeb5d3bfb29678c5f6932e">hdim::internal::AbstractSolver&lt; T &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad01b54ee98d96299ccf281a35adcb432"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; <a class="el" href="classhdim_1_1internal_1_1_screening_solver.html">hdim::internal::ScreeningSolver</a>&lt; T &gt;::operator() </td>
+          <td>(</td>
+          <td class="paramtype">const Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;&#160;</td>
+          <td class="paramname"><em>X</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>Y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>Beta_0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T&#160;</td>
+          <td class="paramname"><em>lambda</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T&#160;</td>
+          <td class="paramname"><em>duality_gap_target</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Run the Sub-Gradient Descent algorithm until the duality gap is below the threshold specified by duality_gap_target. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">X</td><td>An n x p design matrix.</td></tr>
+    <tr><td class="paramname">Y</td><td>A 1 x n vector of predictors.</td></tr>
+    <tr><td class="paramname">Beta_0</td><td>A 1 x n vector of starting parameters.</td></tr>
+    <tr><td class="paramname">lambda</td><td>Current grid element.</td></tr>
+    <tr><td class="paramname">duality_gap_target</td><td>The algorithm will iterate until the compute duality gap is below duality_gap_target. Note care should be exercised, as the algorithm can iterate ad infinitum.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A 1 x n vector of results from the algorithm. </dd></dl>
+
+<p>Implements <a class="el" href="classhdim_1_1internal_1_1_abstract_solver.html#a7840e92d37451d1412412f80623194f7">hdim::internal::AbstractSolver&lt; T &gt;</a>.</p>
 
 </div>
 </div>
@@ -299,7 +446,7 @@ template&lt;typename T &gt; </div>
 
 <p>Implements <a class="el" href="classhdim_1_1internal_1_1_abstract_solver.html#a7840e92d37451d1412412f80623194f7">hdim::internal::AbstractSolver&lt; T &gt;</a>.</p>
 
-<p>Definition at line <a class="el" href="screeningsolver_8hpp_source.html#l00073">73</a> of file <a class="el" href="screeningsolver_8hpp_source.html">screeningsolver.hpp</a>.</p>
+<p>Definition at line <a class="el" href="_python___module_2src_2_solvers_2screeningsolver_8hpp_source.html#l00073">73</a> of file <a class="el" href="_python___module_2src_2_solvers_2screeningsolver_8hpp_source.html">screeningsolver.hpp</a>.</p>
 
 </div>
 </div>

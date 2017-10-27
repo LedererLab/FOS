@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['debug_2ehpp',['debug.hpp',['../debug_8hpp.html',1,'']]],
-  ['debug_5fprint',['DEBUG_PRINT',['../debug_8hpp.html#a9e21a2a88f554186e2b2380b00eab944',1,'debug.hpp']]]
+  ['cd',['CD',['../classhdim_1_1hdim_1_1_c_d.html',1,'hdim::hdim']]],
+  ['cd_5fsr',['CD_SR',['../classhdim_1_1hdim_1_1_c_d___s_r.html',1,'hdim::hdim']]],
+  ['coordinatedescentwithscreen',['CoordinateDescentWithScreen',['../classhdim_1_1_coordinate_descent_with_screen.html',1,'hdim']]]
 ];

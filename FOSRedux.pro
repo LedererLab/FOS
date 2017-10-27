@@ -15,9 +15,11 @@ CONFIG += c++11
 CONFIG(debug, debug|release) {
     DEFINES += "DEBUG"
     DEFINES += "VIENNACL_WITH_OPENCL"
+    DEFINES += "VIENNACL_WITH_EIGEN"
 } else {
     DEFINES += "NDEBUG"
     DEFINES += "VIENNACL_WITH_OPENCL"
+    DEFINES += "VIENNACL_WITH_EIGEN"
     CONFIG += optimize_full
     QMAKE_CXXFLAGS_RELEASE *= -mtune=native
     QMAKE_CXXFLAGS_RELEASE *= -march=native
@@ -65,10 +67,11 @@ HEADERS += Generic/debug.hpp \
     OpenCL_Generics/cl_algorithm.h \
     OpenCL_Generics/cl_generics.h \
     Generic/ocl_debug.hpp \
-    Solvers/SubGradientDescent/ISTA/viennacl_ista.h \
     Solvers/SubGradientDescent/viennacl_subgradient_descent.hpp \
     Solvers/viennacl_solver.hpp \
-    Solvers/viennacl_abstractsolver.hpp
+    Solvers/viennacl_abstractsolver.hpp \
+    Solvers/SubGradientDescent/ISTA/viennacl_ista.hpp \
+    Solvers/base_solver.hpp
 
 SOURCES += main.cpp \
     FOS/x_fos.cpp \

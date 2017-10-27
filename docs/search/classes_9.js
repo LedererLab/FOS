@@ -1,10 +1,4 @@
 var searchData=
 [
-  ['screeningsolver',['ScreeningSolver',['../classhdim_1_1internal_1_1_screening_solver.html',1,'hdim::internal']]],
-  ['softthres',['SoftThres',['../structhdim_1_1_soft_thres.html',1,'hdim']]],
-  ['solver',['Solver',['../classhdim_1_1internal_1_1_solver.html',1,'hdim::internal']]],
-  ['solver',['Solver',['../classocl_1_1internal_1_1_solver.html',1,'ocl::internal']]],
-  ['subgradientsolver',['SubGradientSolver',['../classhdim_1_1internal_1_1_sub_gradient_solver.html',1,'hdim::internal']]],
-  ['subgradientsolver',['SubGradientSolver',['../classhdim_1_1ocl_1_1internal_1_1_sub_gradient_solver.html',1,'hdim::ocl::internal']]],
-  ['supportsift',['SupportSift',['../structhdim_1_1_support_sift.html',1,'hdim']]]
+  ['pyheaptypeobject',['PyHeapTypeObject',['../struct_py_heap_type_object.html',1,'']]]
 ];

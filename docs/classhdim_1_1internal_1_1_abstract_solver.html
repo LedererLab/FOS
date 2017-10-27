@@ -120,7 +120,7 @@ $(document).ready(function(){initNavTree('classhdim_1_1internal_1_1_abstract_sol
 <p>Abstract base class for all iterative solvers.  
  <a href="classhdim_1_1internal_1_1_abstract_solver.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="abstractsolver_8hpp_source.html">abstractsolver.hpp</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="_python___module_2src_2_solvers_2abstractsolver_8hpp_source.html">abstractsolver.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for hdim::internal::AbstractSolver&lt; T &gt;:</div>
 <div class="dyncontent">
@@ -140,9 +140,18 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7840e92d37451d1412412f80623194f7"><td class="memItemLeft" align="right" valign="top">virtual Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhdim_1_1internal_1_1_abstract_solver.html#a7840e92d37451d1412412f80623194f7">operator()</a> (const Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;X, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Y, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Beta_0, T lambda, T duality_gap_target)=0</td></tr>
 <tr class="memdesc:a7840e92d37451d1412412f80623194f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the Sub-Gradient Descent algorithm until the duality gap is below the threshold specified by duality_gap_target.  <a href="#a7840e92d37451d1412412f80623194f7">More...</a><br /></td></tr>
 <tr class="separator:a7840e92d37451d1412412f80623194f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac845a2103ffeb5d3bfb29678c5f6932e"><td class="memItemLeft" align="right" valign="top">virtual Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhdim_1_1internal_1_1_abstract_solver.html#ac845a2103ffeb5d3bfb29678c5f6932e">operator()</a> (const Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;X, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Y, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Beta_0, T lambda, unsigned int num_iterations)=0</td></tr>
+<tr class="memdesc:ac845a2103ffeb5d3bfb29678c5f6932e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the <a class="el" href="classhdim_1_1internal_1_1_abstract_solver.html" title="Abstract base class for all iterative solvers. ">AbstractSolver</a> for a fixed number of steps, specified by num_iterations.  <a href="#ac845a2103ffeb5d3bfb29678c5f6932e">More...</a><br /></td></tr>
+<tr class="separator:ac845a2103ffeb5d3bfb29678c5f6932e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7840e92d37451d1412412f80623194f7"><td class="memItemLeft" align="right" valign="top">virtual Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhdim_1_1internal_1_1_abstract_solver.html#a7840e92d37451d1412412f80623194f7">operator()</a> (const Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;X, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Y, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Beta_0, T lambda, T duality_gap_target)=0</td></tr>
+<tr class="memdesc:a7840e92d37451d1412412f80623194f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the Sub-Gradient Descent algorithm until the duality gap is below the threshold specified by duality_gap_target.  <a href="#a7840e92d37451d1412412f80623194f7">More...</a><br /></td></tr>
+<tr class="separator:a7840e92d37451d1412412f80623194f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
+<tr class="memitem:a4bcf7f9b6f46485242f1a3e9d66b065b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4bcf7f9b6f46485242f1a3e9d66b065b"></a>
+virtual Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>update_rule</b> (const Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;X, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Y, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Beta_0, T lambda)=0</td></tr>
+<tr class="separator:a4bcf7f9b6f46485242f1a3e9d66b065b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4bcf7f9b6f46485242f1a3e9d66b065b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4bcf7f9b6f46485242f1a3e9d66b065b"></a>
 virtual Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>update_rule</b> (const Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;X, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Y, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Beta_0, T lambda)=0</td></tr>
 <tr class="separator:a4bcf7f9b6f46485242f1a3e9d66b065b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -154,13 +163,13 @@ class hdim::internal::AbstractSolver&lt; T &gt;</h3>
 <p>Abstract base class for all iterative solvers. </p>
 <p>This class supports two types of convergence criteria &ndash; iterative and duality gap. </p>
 
-<p>Definition at line <a class="el" href="abstractsolver_8hpp_source.html#l00032">32</a> of file <a class="el" href="abstractsolver_8hpp_source.html">abstractsolver.hpp</a>.</p>
+<p>Definition at line <a class="el" href="_python___module_2src_2_solvers_2abstractsolver_8hpp_source.html#l00032">32</a> of file <a class="el" href="_python___module_2src_2_solvers_2abstractsolver_8hpp_source.html">abstractsolver.hpp</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="ac845a2103ffeb5d3bfb29678c5f6932e"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T &gt; </div>
+template&lt;typename T&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -221,7 +230,76 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A 1 x n vector of results from the algorithm. </dd></dl>
 
-<p>Implemented in <a class="el" href="classhdim_1_1_coordinate_descent_with_screen.html#a21c2a99cb01aaefc127e9dd41e1120a7">hdim::CoordinateDescentWithScreen&lt; T &gt;</a>, <a class="el" href="classhdim_1_1internal_1_1_screening_solver.html#a524b715dae86e7302b04a0898a0e9e35">hdim::internal::ScreeningSolver&lt; T &gt;</a>, and <a class="el" href="classhdim_1_1internal_1_1_solver.html#a882960d16aa8f8ca6f72089ae397c4ce">hdim::internal::Solver&lt; T &gt;</a>.</p>
+<p>Implemented in <a class="el" href="classhdim_1_1_coordinate_descent_with_screen.html#a21c2a99cb01aaefc127e9dd41e1120a7">hdim::CoordinateDescentWithScreen&lt; T &gt;</a>, <a class="el" href="classhdim_1_1_coordinate_descent_with_screen.html#a21c2a99cb01aaefc127e9dd41e1120a7">hdim::CoordinateDescentWithScreen&lt; T &gt;</a>, <a class="el" href="classhdim_1_1internal_1_1_screening_solver.html#a524b715dae86e7302b04a0898a0e9e35">hdim::internal::ScreeningSolver&lt; T &gt;</a>, <a class="el" href="classhdim_1_1internal_1_1_screening_solver.html#a8758cec199bf47280044c87f6f956efd">hdim::internal::ScreeningSolver&lt; T &gt;</a>, <a class="el" href="classhdim_1_1internal_1_1_solver.html#a882960d16aa8f8ca6f72089ae397c4ce">hdim::internal::Solver&lt; T &gt;</a>, and <a class="el" href="classhdim_1_1internal_1_1_solver.html#a90eebce6676cb4ddf1baf7433349b13e">hdim::internal::Solver&lt; T &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac845a2103ffeb5d3bfb29678c5f6932e"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; <a class="el" href="classhdim_1_1internal_1_1_abstract_solver.html">hdim::internal::AbstractSolver</a>&lt; T &gt;::operator() </td>
+          <td>(</td>
+          <td class="paramtype">const Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;&#160;</td>
+          <td class="paramname"><em>X</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>Y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>Beta_0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T&#160;</td>
+          <td class="paramname"><em>lambda</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>num_iterations</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Run the <a class="el" href="classhdim_1_1internal_1_1_abstract_solver.html" title="Abstract base class for all iterative solvers. ">AbstractSolver</a> for a fixed number of steps, specified by num_iterations. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">X</td><td>An n x p design matrix.</td></tr>
+    <tr><td class="paramname">Y</td><td>A 1 x n vector of predictors.</td></tr>
+    <tr><td class="paramname">Beta_0</td><td>A 1 x n vector of starting parameters.</td></tr>
+    <tr><td class="paramname">lambda</td><td>Current grid element.</td></tr>
+    <tr><td class="paramname">num_iterations</td><td>The number of times the algorithm should iterate.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A 1 x n vector of results from the algorithm. </dd></dl>
+
+<p>Implemented in <a class="el" href="classhdim_1_1_coordinate_descent_with_screen.html#a21c2a99cb01aaefc127e9dd41e1120a7">hdim::CoordinateDescentWithScreen&lt; T &gt;</a>, <a class="el" href="classhdim_1_1_coordinate_descent_with_screen.html#a21c2a99cb01aaefc127e9dd41e1120a7">hdim::CoordinateDescentWithScreen&lt; T &gt;</a>, <a class="el" href="classhdim_1_1internal_1_1_screening_solver.html#a524b715dae86e7302b04a0898a0e9e35">hdim::internal::ScreeningSolver&lt; T &gt;</a>, <a class="el" href="classhdim_1_1internal_1_1_screening_solver.html#a8758cec199bf47280044c87f6f956efd">hdim::internal::ScreeningSolver&lt; T &gt;</a>, <a class="el" href="classhdim_1_1internal_1_1_solver.html#a882960d16aa8f8ca6f72089ae397c4ce">hdim::internal::Solver&lt; T &gt;</a>, and <a class="el" href="classhdim_1_1internal_1_1_solver.html#a90eebce6676cb4ddf1baf7433349b13e">hdim::internal::Solver&lt; T &gt;</a>.</p>
 
 </div>
 </div>
@@ -229,7 +307,7 @@ template&lt;typename T &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T &gt; </div>
+template&lt;typename T&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -290,7 +368,76 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A 1 x n vector of results from the algorithm. </dd></dl>
 
-<p>Implemented in <a class="el" href="classhdim_1_1internal_1_1_screening_solver.html#af2d1f2a55b8356e521a80cce97993983">hdim::internal::ScreeningSolver&lt; T &gt;</a>, <a class="el" href="classhdim_1_1internal_1_1_solver.html#a90e3b14f85da3c4e9e2c9f9eea298677">hdim::internal::Solver&lt; T &gt;</a>, and <a class="el" href="classhdim_1_1_coordinate_descent_with_screen.html#ab81b945f129a22992fbdd4703182d49c">hdim::CoordinateDescentWithScreen&lt; T &gt;</a>.</p>
+<p>Implemented in <a class="el" href="classhdim_1_1internal_1_1_screening_solver.html#af2d1f2a55b8356e521a80cce97993983">hdim::internal::ScreeningSolver&lt; T &gt;</a>, <a class="el" href="classhdim_1_1internal_1_1_screening_solver.html#ad01b54ee98d96299ccf281a35adcb432">hdim::internal::ScreeningSolver&lt; T &gt;</a>, <a class="el" href="classhdim_1_1internal_1_1_solver.html#a90e3b14f85da3c4e9e2c9f9eea298677">hdim::internal::Solver&lt; T &gt;</a>, <a class="el" href="classhdim_1_1internal_1_1_solver.html#ab946c8bf5fb986219077f856ade5ac4a">hdim::internal::Solver&lt; T &gt;</a>, <a class="el" href="classhdim_1_1_coordinate_descent_with_screen.html#ab81b945f129a22992fbdd4703182d49c">hdim::CoordinateDescentWithScreen&lt; T &gt;</a>, and <a class="el" href="classhdim_1_1_coordinate_descent_with_screen.html#ab81b945f129a22992fbdd4703182d49c">hdim::CoordinateDescentWithScreen&lt; T &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7840e92d37451d1412412f80623194f7"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; <a class="el" href="classhdim_1_1internal_1_1_abstract_solver.html">hdim::internal::AbstractSolver</a>&lt; T &gt;::operator() </td>
+          <td>(</td>
+          <td class="paramtype">const Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;&#160;</td>
+          <td class="paramname"><em>X</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>Y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>Beta_0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T&#160;</td>
+          <td class="paramname"><em>lambda</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T&#160;</td>
+          <td class="paramname"><em>duality_gap_target</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Run the Sub-Gradient Descent algorithm until the duality gap is below the threshold specified by duality_gap_target. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">X</td><td>An n x p design matrix.</td></tr>
+    <tr><td class="paramname">Y</td><td>A 1 x n vector of predictors.</td></tr>
+    <tr><td class="paramname">Beta_0</td><td>A 1 x n vector of starting parameters.</td></tr>
+    <tr><td class="paramname">lambda</td><td>Current grid element.</td></tr>
+    <tr><td class="paramname">duality_gap_target</td><td>The algorithm will iterate until the compute duality gap is below duality_gap_target. Note care should be exercised, as the algorithm can iterate ad infinitum.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A 1 x n vector of results from the algorithm. </dd></dl>
+
+<p>Implemented in <a class="el" href="classhdim_1_1internal_1_1_screening_solver.html#af2d1f2a55b8356e521a80cce97993983">hdim::internal::ScreeningSolver&lt; T &gt;</a>, <a class="el" href="classhdim_1_1internal_1_1_screening_solver.html#ad01b54ee98d96299ccf281a35adcb432">hdim::internal::ScreeningSolver&lt; T &gt;</a>, <a class="el" href="classhdim_1_1internal_1_1_solver.html#a90e3b14f85da3c4e9e2c9f9eea298677">hdim::internal::Solver&lt; T &gt;</a>, <a class="el" href="classhdim_1_1internal_1_1_solver.html#ab946c8bf5fb986219077f856ade5ac4a">hdim::internal::Solver&lt; T &gt;</a>, <a class="el" href="classhdim_1_1_coordinate_descent_with_screen.html#ab81b945f129a22992fbdd4703182d49c">hdim::CoordinateDescentWithScreen&lt; T &gt;</a>, and <a class="el" href="classhdim_1_1_coordinate_descent_with_screen.html#ab81b945f129a22992fbdd4703182d49c">hdim::CoordinateDescentWithScreen&lt; T &gt;</a>.</p>
 
 </div>
 </div>

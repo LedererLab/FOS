@@ -18,7 +18,7 @@
 #include "../../../Generic/debug.hpp"
 #include "../../../Generic/generics.hpp"
 #include "ista.hpp"
-#include "viennacl_ista.h"
+#include "viennacl_ista.hpp"
 
 template < typename T, typename Solver >
 int PerfISTA( Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > design_matrix,
@@ -65,7 +65,7 @@ void RunIstaPerfs() {
                   << std::endl;
 
         std::cout << "Testing CPU ISTA" << std::endl;
-        T cpu_result = PerfISTA< T, hdim::ISTA<T> >( X, Y, W_0, 10 );
+        T cpu_result = PerfISTA< T, hdim::ISTA<T, hdim::internal::ScreeningSolver<T> > >( X, Y, W_0, 10 );
         cpu_results.push_back( cpu_result );
 
         std::cout << "Testing GPU ISTA" << std::endl;

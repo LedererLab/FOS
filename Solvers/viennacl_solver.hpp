@@ -8,8 +8,6 @@
 // Eigen Headers
 #include <eigen3/Eigen/Dense>
 #include <eigen3/Eigen/Core>
-// IMPORTANT: Must be set prior to any ViennaCL includes if you want to use ViennaCL algorithms on Eigen objects
-#define VIENNACL_WITH_EIGEN 1
 // Boost Headers
 //
 // ViennCL Headers
@@ -138,7 +136,7 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 > Solver<T>::operator()(
 
     X_ = viennacl::matrix<T>( X.rows(), X.cols() );
     Y_ = viennacl::vector<T>( X.rows() );
-    Beta_0_ = viennacl::vector<T>( X.rows() );
+    Beta_0_ = viennacl::vector<T>( X.cols() );
 
     viennacl::copy( X, X_ );
     viennacl::copy( Y, Y_ );
@@ -159,7 +157,7 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 > Solver<T>::operator()(
         Beta_ = update_rule( X_, Y_, Beta_, lambda );
     }
 
-    Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta;
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta( Beta_0.rows(), 1 );
     viennacl::copy( Beta_, Beta );
 
     return Beta;
@@ -177,7 +175,7 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 > Solver<T>::operator()(
 
     X_ = viennacl::matrix<T>( X.rows(), X.cols() );
     Y_ = viennacl::vector<T>( X.rows() );
-    Beta_0_ = viennacl::vector<T>( X.rows() );
+    Beta_0_ = viennacl::vector<T>( X.cols() );
 
     viennacl::copy( X, X_ );
     viennacl::copy( Y, Y_ );

@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['none',['None',['../class_f_i_s_t_a_1_1_none.html',1,'FISTA']]],
-  ['norml2',['normL2',['../class_f_i_s_t_a_1_1norm_l2.html',1,'FISTA']]],
-  ['normlinf',['normLINF',['../class_f_i_s_t_a_1_1norm_l_i_n_f.html',1,'FISTA']]]
+  ['x_5ffos',['X_FOS',['../classhdim_1_1_x___f_o_s.html',1,'hdim']]],
+  ['x_5ffos_5fd',['X_FOS_d',['../classhdim_1_1hdim_1_1_x___f_o_s__d.html',1,'hdim::hdim']]],
+  ['x_5ffos_5ff',['X_FOS_f',['../classhdim_1_1hdim_1_1_x___f_o_s__f.html',1,'hdim::hdim']]]
 ];

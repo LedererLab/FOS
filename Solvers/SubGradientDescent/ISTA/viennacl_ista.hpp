@@ -95,8 +95,7 @@ viennacl::vector<T> ISTA<T,Base>::update_rule(
 
     // Extraordinarily silly way to pass a single value to the proximal operator kernel...
     viennacl::vector<T> thres_( 1 );
-    std::vector<T> thres_val  { lambda / L };
-    viennacl::copy( thres_val, thres_ );
+    viennacl::copy( std::vector<T> { lambda / L }, thres_ );
 
     viennacl::vector<T> f_grad = 2.0*viennacl::linalg::prod( viennacl::trans( X ), viennacl::linalg::prod( X, Beta ) - Y );
     viennacl::vector<T> beta_to_modify = Beta - (1.0/L)*f_grad;

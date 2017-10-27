@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['matprodtest',['MatProdTest',['../class_mat_prod_test.html',1,'']]],
-  ['matvectprodtest',['MatVectProdTest',['../class_mat_vect_prod_test.html',1,'']]]
+  ['lazycoordinatedescent',['LazyCoordinateDescent',['../classhdim_1_1_lazy_coordinate_descent.html',1,'hdim']]],
+  ['logscalevector',['LogScaleVector',['../_generic_2generics_8hpp.html#ad4e74a775b3bf698a6eb15db78148f18',1,'hdim']]]
 ];

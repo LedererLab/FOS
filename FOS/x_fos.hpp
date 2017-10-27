@@ -12,22 +12,25 @@
 #include <memory>
 // Eigen Headers
 #include <eigen3/Eigen/Dense>
-// Boost Headers
-//
-// FISTA Headers
-//
 // Project Specific Headers
+// Generic
 #include "../Generic/generics.hpp"
+// Solvers
+#include "../Solvers/base_solver.hpp"
 #include "../Solvers/abstractsolver.hpp"
 #include "../Solvers/solver.hpp"
 #include "../Solvers/screeningsolver.hpp"
 #include "../Solvers/SubGradientDescent/ISTA/ista.hpp"
 #include "../Solvers/SubGradientDescent/FISTA/fista.hpp"
 #include "../Solvers/CoordinateDescent/coordinate_descent.hpp"
+// OpenCL Solvers
+#include "../Solvers/viennacl_abstractsolver.hpp"
+#include "../Solvers/viennacl_solver.hpp"
+#include "../Solvers/SubGradientDescent/ISTA/viennacl_ista.hpp"
 
 namespace hdim {
 
-enum class SolverType { ista, screen_ista, fista, screen_fista, cd, screen_cd };
+enum class SolverType { ista, screen_ista, cl_ista, fista, screen_fista, cd, screen_cd };
 
 template < typename T >
 /*!
@@ -112,7 +115,7 @@ class X_FOS {
                         const Eigen::Matrix< T, Eigen::Dynamic, 1 >& beta,
                         SolverType s_type );
 
-    std::unique_ptr< internal::AbstractSolver<T> > solver;
+    std::unique_ptr< internal::BaseSolver<T> > solver;
 
     Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > Betas;
     Eigen::Matrix< T, Eigen::Dynamic, 1 > x_std_devs;
@@ -378,6 +381,9 @@ void X_FOS< T >::choose_solver( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::D
         break;
     case SolverType::screen_ista:
         solver = std::unique_ptr< ISTA<T,internal::ScreeningSolver<T>> >( new ISTA<T,internal::ScreeningSolver<T>>() );
+        break;
+    case SolverType::cl_ista:
+        solver = std::unique_ptr< vcl::ISTA<T> >( new vcl::ISTA<T>() );
         break;
     case SolverType::fista:
         solver = std::unique_ptr< FISTA<T,internal::Solver<T>> >( new FISTA<T,internal::Solver<T>>(beta) );

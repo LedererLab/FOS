@@ -129,20 +129,6 @@ SubGradientSolver< T, Base >::SubGradientSolver( T L ) : L_0( L ) {
     soft_thres_kernel_ = &program_->get_kernel("SoftThreshold");
 }
 
-//template < typename Base >
-//SubGradientSolver< float, Base >::SubGradientSolver( float L ) : L_0( L ) {
-
-//    program_ = &viennacl::ocl::current_context().add_program( f_softthreshold_kernel, "softthreshold_kernel" );
-//    soft_thres_kernel_ = &program_->get_kernel("SoftThreshold");
-//}
-
-//template < typename Base >
-//SubGradientSolver< double, Base >::SubGradientSolver( double L ) : L_0( L ) {
-
-//    program_ = &viennacl::ocl::current_context().add_program( softthreshold_kernel, "softthreshold_kernel" );
-//    soft_thres_kernel_ = &program_->get_kernel("SoftThreshold");
-//}
-
 template < typename T, typename Base >
 SubGradientSolver< T, Base >::~SubGradientSolver() {}
 

@@ -1,4 +1,29 @@
 var searchData=
 [
-  ['x_5ffos',['X_FOS',['../classhdim_1_1_x___f_o_s.html',1,'hdim']]]
+  ['screeningsolver',['ScreeningSolver',['../classhdim_1_1internal_1_1_screening_solver.html',1,'hdim::internal']]],
+  ['sgd',['SGD',['../classhdim_1_1hdim_1_1_s_g_d.html',1,'hdim::hdim']]],
+  ['sgd_5fsr',['SGD_SR',['../classhdim_1_1hdim_1_1_s_g_d___s_r.html',1,'hdim::hdim']]],
+  ['softthres',['SoftThres',['../structhdim_1_1_soft_thres.html',1,'hdim']]],
+  ['solver',['Solver',['../classhdim_1_1internal_1_1_solver.html',1,'hdim::internal']]],
+  ['solver',['Solver',['../classocl_1_1internal_1_1_solver.html',1,'ocl::internal']]],
+  ['solver',['Solver',['../classhdim_1_1vcl_1_1internal_1_1_solver.html',1,'hdim::vcl::internal']]],
+  ['solver_5fd',['Solver_d',['../classhdim_1_1hdim_1_1_solver__d.html',1,'hdim::hdim']]],
+  ['solver_5ff',['Solver_f',['../classhdim_1_1hdim_1_1_solver__f.html',1,'hdim::hdim']]],
+  ['srsolver_5fd',['SRSolver_d',['../classhdim_1_1hdim_1_1_s_r_solver__d.html',1,'hdim::hdim']]],
+  ['srsolver_5ff',['SRSolver_f',['../classhdim_1_1hdim_1_1_s_r_solver__f.html',1,'hdim::hdim']]],
+  ['subgradientsolver',['SubGradientSolver',['../classhdim_1_1ocl_1_1internal_1_1_sub_gradient_solver.html',1,'hdim::ocl::internal']]],
+  ['subgradientsolver',['SubGradientSolver',['../classhdim_1_1vcl_1_1internal_1_1_sub_gradient_solver.html',1,'hdim::vcl::internal']]],
+  ['subgradientsolver',['SubGradientSolver',['../classhdim_1_1internal_1_1_sub_gradient_solver.html',1,'hdim::internal']]],
+  ['supportsift',['SupportSift',['../structhdim_1_1_support_sift.html',1,'hdim']]],
+  ['swig_5fcast_5finfo',['swig_cast_info',['../structswig__cast__info.html',1,'']]],
+  ['swig_5fconst_5finfo',['swig_const_info',['../structswig__const__info.html',1,'']]],
+  ['swig_5fglobalvar',['swig_globalvar',['../structswig__globalvar.html',1,'']]],
+  ['swig_5fmodule_5finfo',['swig_module_info',['../structswig__module__info.html',1,'']]],
+  ['swig_5ftype_5finfo',['swig_type_info',['../structswig__type__info.html',1,'']]],
+  ['swig_5fvarlinkobject',['swig_varlinkobject',['../structswig__varlinkobject.html',1,'']]],
+  ['swigptr_5fpyobject',['SwigPtr_PyObject',['../classswig_1_1_swig_ptr___py_object.html',1,'swig']]],
+  ['swigpyclientdata',['SwigPyClientData',['../struct_swig_py_client_data.html',1,'']]],
+  ['swigpyobject',['SwigPyObject',['../struct_swig_py_object.html',1,'']]],
+  ['swigpypacked',['SwigPyPacked',['../struct_swig_py_packed.html',1,'']]],
+  ['swigvar_5fpyobject',['SwigVar_PyObject',['../structswig_1_1_swig_var___py_object.html',1,'swig']]]
 ];

@@ -20,8 +20,12 @@ int main(int argc, char *argv[]) {
     (void)argc;
     (void)argv;
 
-//    RunIstaPerfs<float>();
-    RunIstaTests< float >();
+    RunIstaPerfs<float>();
+    RunIstaPerfs<double>();
+
+
+//    RunIstaTests< float >();
+//    RunIstaTests< double >();
 //    hdim::TestXFOS<double>( 200, 500, hdim::SolverType::cd );
 
 }

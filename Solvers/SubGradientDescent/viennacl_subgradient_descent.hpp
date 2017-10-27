@@ -4,7 +4,7 @@
 // C System-Headers
 //
 // C++ System headers
-//
+#include <type_traits>
 // Eigen Headers
 #include <eigen3/Eigen/Dense>
 #include <eigen3/Eigen/Core>
@@ -70,7 +70,7 @@ class SubGradientSolver : public Base {
         T L,
         T thres );
 
-    const std::string softthreshold_kernel = R"END(
+    const std::string f_softthreshold_kernel = R"END(
 
        __kernel void SoftThreshold( __global const float* input, __global float* output, __global const float* threshold )
        {
@@ -82,6 +82,25 @@ class SubGradientSolver : public Base {
 
            float fragment = fabs( X_i_j ) - threshold[0];
            float pos_part = ( fragment >= 0.0 )?( fragment ):( 0.0 );
+
+           output[i] = signum*pos_part;
+
+       }
+
+  )END";
+
+    const std::string softthreshold_kernel = R"END(
+
+       __kernel void SoftThreshold( __global const double* input, __global double* output, __global const double* threshold )
+       {
+
+           int i = get_global_id(0);
+
+           double X_i_j = input[i];
+           double signum = (double)(( X_i_j > 0) ? 1 : (( X_i_j < 0) ? -1 : 0));
+
+           double fragment = fabs( X_i_j ) - threshold[0];
+           double pos_part = ( fragment >= 0.0 )?( fragment ):( 0.0 );
 
            output[i] = signum*pos_part;
 
@@ -101,9 +120,28 @@ SubGradientSolver< T, Base >::SubGradientSolver( T L ) : L_0( L ) {
     static_assert(std::is_floating_point< T >::value,\
                   "Subgradient descent methods can only be used with floating point types.");
 
-    program_ = &viennacl::ocl::current_context().add_program(softthreshold_kernel, "softthreshold_kernel");
+    if ( std::is_same< T , float >::value ) {
+        program_ = &viennacl::ocl::current_context().add_program(f_softthreshold_kernel, "f_softthreshold_kernel");
+    } else if ( std::is_same< T , double >::value ) {
+        program_ = &viennacl::ocl::current_context().add_program(softthreshold_kernel, "softthreshold_kernel");
+    }
+
     soft_thres_kernel_ = &program_->get_kernel("SoftThreshold");
 }
+
+//template < typename Base >
+//SubGradientSolver< float, Base >::SubGradientSolver( float L ) : L_0( L ) {
+
+//    program_ = &viennacl::ocl::current_context().add_program( f_softthreshold_kernel, "softthreshold_kernel" );
+//    soft_thres_kernel_ = &program_->get_kernel("SoftThreshold");
+//}
+
+//template < typename Base >
+//SubGradientSolver< double, Base >::SubGradientSolver( double L ) : L_0( L ) {
+
+//    program_ = &viennacl::ocl::current_context().add_program( softthreshold_kernel, "softthreshold_kernel" );
+//    soft_thres_kernel_ = &program_->get_kernel("SoftThreshold");
+//}
 
 template < typename T, typename Base >
 SubGradientSolver< T, Base >::~SubGradientSolver() {}

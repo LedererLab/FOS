@@ -157,7 +157,6 @@ T SubGradientSolver< T, Base >::f_beta_tilda (
     viennacl::vector<T> f_grad = 2.0*viennacl::linalg::prod( viennacl::trans( X ),  f_beta );
     viennacl::vector<T> beta_diff = ( Beta - Beta_prime );
 
-//    T taylor_term_1 = viennacl::linalg::prod( viennacl::trans( f_grad ), beta_diff );
     T taylor_term_1 = viennacl::linalg::inner_prod( f_grad, beta_diff );
 
     T taylor_term_2 = L/2.0*norm_sqr( beta_diff );

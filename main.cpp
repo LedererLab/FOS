@@ -14,6 +14,8 @@
 #include "FOS/test_x_fos.hpp"
 #include "Solvers/SubGradientDescent/ISTA/test_ista.hpp"
 #include "Solvers/SubGradientDescent/ISTA/perf_ista.hpp"
+#include "Solvers/SubGradientDescent/FISTA/test_fista.hpp"
+#include "Solvers/SubGradientDescent/FISTA/perf_fista.hpp"
 
 int main(int argc, char *argv[]) {
 
@@ -23,10 +25,17 @@ int main(int argc, char *argv[]) {
 //    RunIstaPerfs<float>();
 //    RunIstaPerfs<double>();
 
+//    RunISTATests< float >();
+//    RunISTATests< double >();
 
-//    RunIstaTests< float >();
-//    RunIstaTests< double >();
+//    RunFISTATests< float >();
+//    RunFISTATests< double >();
 
-    hdim::TestXFOS< float >( 300, 2000, hdim::SolverType::cl_ista );
+//    RunFISTAPerfs<float>();
+//    RunFISTAPerfs<double>();
+
+    hdim::TestXFOS< float >( 200, 500, hdim::SolverType::cd );
+    hdim::TestXFOS< float >( 200, 500, hdim::SolverType::fista );
+    hdim::TestXFOS< float >( 200, 500, hdim::SolverType::cl_fista );
 
 }

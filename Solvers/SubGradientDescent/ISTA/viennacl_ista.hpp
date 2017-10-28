@@ -6,7 +6,7 @@
 // C++ System headers
 #include <functional>
 // Eigen Headers
-#define VIENNACL_WITH_EIGEN 1
+//
 // Boost Headers
 //
 // ViennCL Headers

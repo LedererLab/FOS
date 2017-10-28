@@ -71,7 +71,10 @@ HEADERS += Generic/debug.hpp \
     Solvers/viennacl_solver.hpp \
     Solvers/viennacl_abstractsolver.hpp \
     Solvers/SubGradientDescent/ISTA/viennacl_ista.hpp \
-    Solvers/base_solver.hpp
+    Solvers/base_solver.hpp \
+    Solvers/SubGradientDescent/FISTA/viennacl_fista.hpp \
+    Solvers/SubGradientDescent/FISTA/test_fista.hpp \
+    Solvers/SubGradientDescent/FISTA/perf_fista.hpp
 
 SOURCES += main.cpp \
     FOS/x_fos.cpp \
@@ -82,7 +85,8 @@ SOURCES += main.cpp \
     JS_Wrapper/fos_js.cpp \
     OpenCL_Base/openclbase.cpp \
     Generic/ocl_debug.cpp \
-    Solvers/SubGradientDescent/ISTA/viennacl_ista.cpp
+    Solvers/SubGradientDescent/ISTA/viennacl_ista.cpp \
+    Solvers/SubGradientDescent/FISTA/viennacl_fista.cpp
 
 DISTFILES += \
     Python_Wrapper/build.sh \

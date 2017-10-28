@@ -27,10 +27,11 @@
 #include "../Solvers/viennacl_abstractsolver.hpp"
 #include "../Solvers/viennacl_solver.hpp"
 #include "../Solvers/SubGradientDescent/ISTA/viennacl_ista.hpp"
+#include "../Solvers/SubGradientDescent/FISTA/viennacl_fista.hpp"
 
 namespace hdim {
 
-enum class SolverType { ista, screen_ista, cl_ista, fista, screen_fista, cd, screen_cd };
+enum class SolverType { ista, screen_ista, cl_ista, fista, screen_fista, cl_fista, cd, screen_cd };
 
 template < typename T >
 /*!
@@ -390,6 +391,9 @@ void X_FOS< T >::choose_solver( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::D
         break;
     case SolverType::screen_fista:
         solver = std::unique_ptr< FISTA<T,internal::ScreeningSolver<T>> >( new FISTA<T,internal::ScreeningSolver<T>>(beta) );
+        break;
+    case SolverType::cl_fista:
+        solver = std::unique_ptr< vcl::FISTA<T> >( new vcl::FISTA<T>(beta) );
         break;
     case SolverType::cd:
         solver = std::unique_ptr< LazyCoordinateDescent<T,internal::Solver<T>> >( new LazyCoordinateDescent<T,internal::Solver<T>>( x, y, Betas.col( 0 ) ) );

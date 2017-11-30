@@ -82,7 +82,6 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 > LazyCoordinateDescent<T,Base>::update_rule
     for( int i = 0; i < Beta.size() ; i++ ) {
 
         Eigen::Matrix< T, Eigen::Dynamic, 1 > X_i = X.col( i );
-//            T inverse_norm = static_cast<T>(1)/X_i.squaredNorm();
         T inverse_norm = inverse_norms[i];
 
         if( Beta( i ) != static_cast<T>(0) ) {

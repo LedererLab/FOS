@@ -28,8 +28,6 @@
 
 namespace hdim {
 
-namespace vcl {
-
 namespace internal {
 
 template < typename T >
@@ -39,11 +37,11 @@ template < typename T >
  *
  * This class supports two types of convergence criteria -- iterative and duality gap.
  */
-class AbstractSolver : public hdim::internal::BaseSolver < T > {
+class CL_AbstractSolver : public hdim::internal::BaseSolver < T > {
 
   public:
 
-    virtual ~AbstractSolver() = 0;
+    virtual ~CL_AbstractSolver() = 0;
 
     /*!
      * \brief Run the AbstractSolver for a fixed number of steps,
@@ -115,9 +113,7 @@ class AbstractSolver : public hdim::internal::BaseSolver < T > {
 };
 
 template < typename T >
-AbstractSolver<T>::~AbstractSolver() {}
-
-}
+CL_AbstractSolver<T>::~CL_AbstractSolver() {}
 
 }
 

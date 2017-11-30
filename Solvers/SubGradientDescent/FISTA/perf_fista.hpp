@@ -65,11 +65,11 @@ void RunFISTAPerfs() {
                   << std::endl;
 
         std::cout << "Testing CPU ISTA" << std::endl;
-        T cpu_result = PerfFISTA< T, hdim::FISTA<T, hdim::internal::ScreeningSolver<T> > >( X, Y, W_0, 10 );
+        T cpu_result = PerfFISTA< T, hdim::FISTA<T, hdim::internal::ScreeningSolver<T> > >( X, Y, W_0, 100 );
         cpu_results.push_back( cpu_result );
 
         std::cout << "Testing GPU ISTA" << std::endl;
-        T gpu_result = PerfFISTA< T, hdim::vcl::FISTA<T> >( X, Y, W_0, 10 );
+        T gpu_result = PerfFISTA< T, hdim::CL_FISTA<T> >( X, Y, W_0, 100 );
         gpu_results.push_back( gpu_result );
     }
 

@@ -69,7 +69,7 @@ void RunIstaPerfs() {
         cpu_results.push_back( cpu_result );
 
         std::cout << "Testing GPU ISTA" << std::endl;
-        T gpu_result = PerfISTA< T, hdim::vcl::ISTA<T> >( X, Y, W_0, 10 );
+        T gpu_result = PerfISTA< T, hdim::CL_ISTA<T> >( X, Y, W_0, 10 );
         gpu_results.push_back( gpu_result );
     }
 

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['_5fobject',['_object',['../classhdim_1_1hdim_1_1__object.html',1,'hdim::hdim']]]
+  ['abstractsolver',['AbstractSolver',['../classhdim_1_1internal_1_1_abstract_solver.html',1,'hdim::internal']]],
+  ['abstractsolver',['AbstractSolver',['../classhdim_1_1vcl_1_1internal_1_1_abstract_solver.html',1,'hdim::vcl::internal']]]
 ];

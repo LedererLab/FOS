@@ -121,7 +121,7 @@ $(document).ready(function(){initNavTree('classhdim_1_1internal_1_1_sub_gradient
 <p>Abstract base class for Sub-Gradient Descent algorithms ,such as <a class="el" href="classhdim_1_1_i_s_t_a.html" title="Run the Iterative Shrinking and Thresholding Algorthim. ">ISTA</a> and <a class="el" href="classhdim_1_1_f_i_s_t_a.html" title="Run the Fast Iterative Shrinking and Thresholding Algorthim. ">FISTA</a>, with backtracking line search.  
  <a href="classhdim_1_1internal_1_1_sub_gradient_solver.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="_python___module_2src_2_solvers_2_sub_gradient_descent_2subgradient__descent_8hpp_source.html">subgradient_descent.hpp</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="subgradient__descent_8hpp_source.html">subgradient_descent.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for hdim::internal::SubGradientSolver&lt; T, Base &gt;:</div>
 <div class="dyncontent">
@@ -142,21 +142,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a1ddbede53568489e6af1d04339b97bd4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1ddbede53568489e6af1d04339b97bd4"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>SubGradientSolver</b> (T L=0.1)</td></tr>
 <tr class="separator:a1ddbede53568489e6af1d04339b97bd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1ddbede53568489e6af1d04339b97bd4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1ddbede53568489e6af1d04339b97bd4"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>SubGradientSolver</b> (T L=0.1)</td></tr>
-<tr class="separator:a1ddbede53568489e6af1d04339b97bd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:aabaa9d92c5e78d26d0bb158920aab2be"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aabaa9d92c5e78d26d0bb158920aab2be"></a>
-T&#160;</td><td class="memItemRight" valign="bottom"><b>f_beta</b> (const Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;X, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Y, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Beta)</td></tr>
-<tr class="separator:aabaa9d92c5e78d26d0bb158920aab2be"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac8a19f53deadb143444e36fadc8acca4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac8a19f53deadb143444e36fadc8acca4"></a>
-T&#160;</td><td class="memItemRight" valign="bottom"><b>f_beta_tilda</b> (const Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;X, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Y, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Beta, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Beta_prime, T L)</td></tr>
-<tr class="separator:ac8a19f53deadb143444e36fadc8acca4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a70714d8501a74d36351c749f84b86b80"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a70714d8501a74d36351c749f84b86b80"></a>
-Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>update_beta_ista</b> (const Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;X, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Y, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Beta, T L, T thres)</td></tr>
-<tr class="separator:a70714d8501a74d36351c749f84b86b80"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aabaa9d92c5e78d26d0bb158920aab2be"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aabaa9d92c5e78d26d0bb158920aab2be"></a>
 T&#160;</td><td class="memItemRight" valign="bottom"><b>f_beta</b> (const Eigen::Matrix&lt; T, Eigen::Dynamic, Eigen::Dynamic &gt; &amp;X, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Y, const Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;Beta)</td></tr>
 <tr class="separator:aabaa9d92c5e78d26d0bb158920aab2be"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -179,7 +167,7 @@ class hdim::internal::SubGradientSolver&lt; T, Base &gt;</h3>
 
 <p>Abstract base class for Sub-Gradient Descent algorithms ,such as <a class="el" href="classhdim_1_1_i_s_t_a.html" title="Run the Iterative Shrinking and Thresholding Algorthim. ">ISTA</a> and <a class="el" href="classhdim_1_1_f_i_s_t_a.html" title="Run the Fast Iterative Shrinking and Thresholding Algorthim. ">FISTA</a>, with backtracking line search. </p>
 
-<p>Definition at line <a class="el" href="_python___module_2src_2_solvers_2_sub_gradient_descent_2subgradient__descent_8hpp_source.html#l00039">39</a> of file <a class="el" href="_python___module_2src_2_solvers_2_sub_gradient_descent_2subgradient__descent_8hpp_source.html">subgradient_descent.hpp</a>.</p>
+<p>Definition at line <a class="el" href="subgradient__descent_8hpp_source.html#l00033">33</a> of file <a class="el" href="subgradient__descent_8hpp_source.html">subgradient_descent.hpp</a>.</p>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

@@ -12,6 +12,17 @@
 #include <memory>
 // Eigen Headers
 #include <eigen3/Eigen/Dense>
+// ViennCL Headers
+#include "viennacl/vector.hpp"
+#include "viennacl/matrix.hpp"
+#include "viennacl/compressed_matrix.hpp"
+#include "viennacl/linalg/prod.hpp"
+#include "viennacl/linalg/norm_1.hpp"
+#include "viennacl/linalg/norm_2.hpp"
+#include "viennacl/linalg/norm_inf.hpp"
+#include "viennacl/linalg/matrix_operations.hpp"
+#include "viennacl/linalg/inner_prod.hpp"
+#include "viennacl/ocl/backend.hpp"
 // Project Specific Headers
 // Generic
 #include "../Generic/generics.hpp"
@@ -384,7 +395,7 @@ void X_FOS< T >::choose_solver( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::D
         solver = std::unique_ptr< ISTA<T,internal::ScreeningSolver<T>> >( new ISTA<T,internal::ScreeningSolver<T>>() );
         break;
     case SolverType::cl_ista:
-        solver = std::unique_ptr< vcl::ISTA<T> >( new vcl::ISTA<T>() );
+        solver = std::unique_ptr< CL_ISTA<T> >( new CL_ISTA<T>() );
         break;
     case SolverType::fista:
         solver = std::unique_ptr< FISTA<T,internal::Solver<T>> >( new FISTA<T,internal::Solver<T>>(beta) );
@@ -393,7 +404,7 @@ void X_FOS< T >::choose_solver( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::D
         solver = std::unique_ptr< FISTA<T,internal::ScreeningSolver<T>> >( new FISTA<T,internal::ScreeningSolver<T>>(beta) );
         break;
     case SolverType::cl_fista:
-        solver = std::unique_ptr< vcl::FISTA<T> >( new vcl::FISTA<T>(beta) );
+        solver = std::unique_ptr< CL_FISTA<T> >( new CL_FISTA<T>(beta) );
         break;
     case SolverType::cd:
         solver = std::unique_ptr< LazyCoordinateDescent<T,internal::Solver<T>> >( new LazyCoordinateDescent<T,internal::Solver<T>>( x, y, Betas.col( 0 ) ) );

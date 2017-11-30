@@ -131,6 +131,7 @@ var dir_49e56c817e5e54854c35e136979f97ca =
     [ "classhdim_1_1hdim_1_1_x___f_o_s__d.js", "classhdim__1__1hdim__1__1__x______f__o__s____d_8js_source.html", null ],
     [ "classhdim_1_1hdim_1_1_x___f_o_s__f.js", "classhdim__1__1hdim__1__1__x______f__o__s____f_8js_source.html", null ],
     [ "classhdim_1_1internal_1_1_abstract_solver.js", "classhdim__1__1internal__1__1__abstract__solver_8js_source.html", null ],
+    [ "classhdim_1_1internal_1_1_base_solver.js", "classhdim__1__1internal__1__1__base__solver_8js_source.html", null ],
     [ "classhdim_1_1internal_1_1_f_i_s_t_a.js", "classhdim__1__1internal__1__1__f__i__s__t__a_8js_source.html", null ],
     [ "classhdim_1_1internal_1_1_screening_solver.js", "classhdim__1__1internal__1__1__screening__solver_8js_source.html", null ],
     [ "classhdim_1_1internal_1_1_solver.js", "classhdim__1__1internal__1__1__solver_8js_source.html", null ],

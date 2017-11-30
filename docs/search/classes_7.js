@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['lazycoordinatedescent',['LazyCoordinateDescent',['../classhdim_1_1_lazy_coordinate_descent.html',1,'hdim']]]
+  ['openclbase',['OpenCLBase',['../classocl_1_1_open_c_l_base.html',1,'ocl']]]
 ];

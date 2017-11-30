@@ -1,7 +1,7 @@
 %module hdim
 
 %{
-#include "../FOS/x_fos.hpp"
+#include "../Solvers/base_solver.hpp"
 #include "../Solvers/abstractsolver.hpp"
 #include "../Solvers/solver.hpp"
 #include "../Solvers/screeningsolver.hpp"
@@ -9,6 +9,13 @@
 #include "../Solvers/SubGradientDescent/ISTA/ista.hpp"
 #include "../Solvers/SubGradientDescent/FISTA/fista.hpp"
 #include "../Solvers/CoordinateDescent/coordinate_descent.hpp"
+#include "../Solvers/CoordinateDescent/coordinatedescentwithscreen.hpp"
+#include "../Solvers/viennacl_abstractsolver.hpp"
+#include "../Solvers/viennacl_solver.hpp"
+#include "../Solvers/SubGradientDescent/viennacl_subgradient_descent.hpp"
+#include "../Solvers/SubGradientDescent/ISTA/viennacl_ista.hpp"
+#include "../Solvers/SubGradientDescent/FISTA/viennacl_fista.hpp"
+#include "../FOS/x_fos.hpp"
 %}
 
 %include <typemaps.i>
@@ -24,22 +31,33 @@
 
 %eigen_typemaps(Eigen::Matrix<int,Eigen::Dynamic,1>)
 
-%include "../FOS/x_fos.hpp"
+%include "../Solvers/base_solver.hpp"
 %include "../Solvers/abstractsolver.hpp"
 %include "../Solvers/solver.hpp"
 %include "../Solvers/screeningsolver.hpp"
+
 %include "../Solvers/SubGradientDescent/subgradient_descent.hpp"
 %include "../Solvers/SubGradientDescent/ISTA/ista.hpp"
 %include "../Solvers/SubGradientDescent/FISTA/fista.hpp"
+
 %include "../Solvers/CoordinateDescent/coordinate_descent.hpp"
 %include "../Solvers/CoordinateDescent/coordinatedescentwithscreen.hpp"
 
+%include "../Solvers/viennacl_abstractsolver.hpp"
+%include "../Solvers/viennacl_solver.hpp"
+
+%include "../Solvers/SubGradientDescent/viennacl_subgradient_descent.hpp"
+%include "../Solvers/SubGradientDescent/ISTA/viennacl_ista.hpp"
+%include "../Solvers/SubGradientDescent/FISTA/viennacl_fista.hpp"
+
+%include "../FOS/x_fos.hpp"
+
 template < typename T >
-class AbstractSolver {
+class BaseSolver {
 
   public:
 
-    virtual ~AbstractSolver() = 0;
+    virtual ~BaseSolver() = 0;
 
     virtual Eigen::Matrix< T, Eigen::Dynamic, 1 > operator()(
         const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
@@ -55,6 +73,10 @@ class AbstractSolver {
         T lambda,
         T duality_gap_target ) = 0;
 
+};
+
+template < typename T >
+class AbstractSolver : public BaseSolver < T > {
 };
 
 template < typename T >
@@ -161,26 +183,82 @@ class LazyCoordinateDescent : public Base {
 
 };
 
-%template(AbstractSolver_f) hdim::internal::AbstractSolver<float>;
-%template(AbstractSolver_d) hdim::internal::AbstractSolver<double>;
+template < typename T >
+class CL_AbstractSolver : public hdim::internal::BaseSolver < T > {
 
-%template(Solver_f) hdim::internal::Solver<float>;
-%template(Solver_d) hdim::internal::Solver<double>;
+};
 
-%template(SRSolver_f) hdim::internal::ScreeningSolver<float>;
-%template(SRSolver_d) hdim::internal::ScreeningSolver<double>;
+template < typename T >
+class CL_Solver : public CL_AbstractSolver < T > {
+
+  public:
+
+    Solver();
+    virtual ~Solver() = 0;
+
+    virtual Eigen::Matrix< T, Eigen::Dynamic, 1 > operator()(
+        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
+        T lambda,
+        unsigned int num_iterations );
+
+    virtual Eigen::Matrix< T, Eigen::Dynamic, 1 > operator()(
+        const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
+        const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
+        T lambda,
+        T duality_gap_target );
+};
+
+template < typename T, typename Base = internal::CL_Solver<T> >
+class CL_SubGradientSolver : public Base {
+
+  public:
+    SubGradientSolver( T L = 0.1 );
+    ~SubGradientSolver();
+
+};
+
+template < typename T, typename Base = internal::CL_Solver< T > >
+class CL_ISTA : public internal::CL_SubGradientSolver<T,Base> {
+
+  public:
+    ISTA( T L_0 = 0.1 );
+
+};
+
+template < typename T, typename Base = internal::CL_Solver< T > >
+class CL_FISTA : public internal::CL_SubGradientSolver<T,Base> {
+
+  public:
+    FISTA( const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta, T L_0 = 0.1 );
+
+};
+
+%template(baseSolver) hdim::internal::BaseSolver<double>;
+
+%template(abstractSolver) hdim::internal::AbstractSolver<double>;
+%template(CL_abstractSolver) hdim::internal::CL_AbstractSolver<double>;
+
+%template(solver) hdim::internal::Solver<double>;
+%template(CL_solver) hdim::internal::CL_Solver<double>;
+
+%template(SR_solver) hdim::internal::ScreeningSolver<double>;
 
 %template(SGD) hdim::internal::SubGradientSolver<double,hdim::internal::Solver<double>>;
 %template(SGD_SR) hdim::internal::SubGradientSolver<double,hdim::internal::ScreeningSolver<double>>;
+%template(CL_SGD) hdim::internal::SubGradientSolver<double,hdim::internal::CL_Solver<double>>;
 
-%template(ISTA) hdim::ISTA<double,hdim::internal::Solver<double>>;
-%template(ISTA_SR) hdim::ISTA<double,hdim::internal::ScreeningSolver<double>>;
+%template(ista) hdim::ISTA<double,hdim::internal::Solver<double>>;
+%template(screened_ista) hdim::ISTA<double,hdim::internal::ScreeningSolver<double>>;
+%template(CL_ista) hdim::ISTA<double,hdim::internal::CL_Solver<double>>;
 
-%template(FISTA) hdim::FISTA<double,hdim::internal::Solver<double>>;
-%template(FISTA_SR) hdim::FISTA<double,hdim::internal::ScreeningSolver<double>>;
+%template(fista) hdim::FISTA<double,hdim::internal::Solver<double>>;
+%template(screened_fista) hdim::FISTA<double,hdim::internal::ScreeningSolver<double>>;
+%template(CL_fista) hdim::FISTA<double,hdim::internal::CL_Solver<double>>;
 
 %template(CD) hdim::LazyCoordinateDescent<double,hdim::internal::Solver<double>>;
 %template(CD_SR) hdim::LazyCoordinateDescent<double,hdim::internal::ScreeningSolver<double>>;
 
-%template(X_FOS_d) hdim::X_FOS<double>;
-%template(X_FOS_f) hdim::X_FOS<float>;
+%template(fos) hdim::X_FOS<double>;

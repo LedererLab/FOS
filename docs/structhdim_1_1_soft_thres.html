@@ -120,25 +120,16 @@ $(document).ready(function(){initNavTree('structhdim_1_1_soft_thres.html','');})
 <p>Soft Threshold functor used to apply hdim::soft_threshold to each element in a matrix or vector.  
  <a href="structhdim_1_1_soft_thres.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="_generic_2generics_8hpp_source.html">generics.hpp</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="generics_8hpp_source.html">generics.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:acb9a8b214b6bb17d29c846e1a338e6fa"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acb9a8b214b6bb17d29c846e1a338e6fa"></a>
 typedef T&#160;</td><td class="memItemRight" valign="bottom"><b>result_type</b></td></tr>
 <tr class="separator:acb9a8b214b6bb17d29c846e1a338e6fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb9a8b214b6bb17d29c846e1a338e6fa"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acb9a8b214b6bb17d29c846e1a338e6fa"></a>
-typedef T&#160;</td><td class="memItemRight" valign="bottom"><b>result_type</b></td></tr>
-<tr class="separator:acb9a8b214b6bb17d29c846e1a338e6fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a1188bc74146e561b76923de5ec3c4bc7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhdim_1_1_soft_thres.html#a1188bc74146e561b76923de5ec3c4bc7">SoftThres</a> (T lambda_in)</td></tr>
-<tr class="memdesc:a1188bc74146e561b76923de5ec3c4bc7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize proximal operator, note that the term lambda_in takes the place of 'y' in the definition of the proximal operator.  <a href="#a1188bc74146e561b76923de5ec3c4bc7">More...</a><br /></td></tr>
-<tr class="separator:a1188bc74146e561b76923de5ec3c4bc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a720715947c56f1fb5a6c7a8ad7a29ac3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a720715947c56f1fb5a6c7a8ad7a29ac3"></a>
-T&#160;</td><td class="memItemRight" valign="bottom"><b>operator()</b> (T x) const </td></tr>
-<tr class="separator:a720715947c56f1fb5a6c7a8ad7a29ac3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1188bc74146e561b76923de5ec3c4bc7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhdim_1_1_soft_thres.html#a1188bc74146e561b76923de5ec3c4bc7">SoftThres</a> (T lambda_in)</td></tr>
 <tr class="memdesc:a1188bc74146e561b76923de5ec3c4bc7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize proximal operator, note that the term lambda_in takes the place of 'y' in the definition of the proximal operator.  <a href="#a1188bc74146e561b76923de5ec3c4bc7">More...</a><br /></td></tr>
 <tr class="separator:a1188bc74146e561b76923de5ec3c4bc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -153,7 +144,7 @@ struct hdim::SoftThres&lt; T &gt;</h3>
 <p>Soft Threshold functor used to apply hdim::soft_threshold to each element in a matrix or vector. </p>
 <p>Designed to be applied with Eigen::Matrix::unaryExpr or the like. </p>
 
-<p>Definition at line <a class="el" href="_generic_2generics_8hpp_source.html#l00288">288</a> of file <a class="el" href="_generic_2generics_8hpp_source.html">generics.hpp</a>.</p>
+<p>Definition at line <a class="el" href="generics_8hpp_source.html#l00288">288</a> of file <a class="el" href="generics_8hpp_source.html">generics.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a1188bc74146e561b76923de5ec3c4bc7"></a>
 <div class="memitem">
@@ -187,43 +178,7 @@ template&lt;typename T &gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_generic_2generics_8hpp_source.html#l00300">300</a> of file <a class="el" href="_generic_2generics_8hpp_source.html">generics.hpp</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a1188bc74146e561b76923de5ec3c4bc7"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structhdim_1_1_soft_thres.html">hdim::SoftThres</a>&lt; T &gt;::<a class="el" href="structhdim_1_1_soft_thres.html">SoftThres</a> </td>
-          <td>(</td>
-          <td class="paramtype">T&#160;</td>
-          <td class="paramname"><em>lambda_in</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Initialize proximal operator, note that the term lambda_in takes the place of 'y' in the definition of the proximal operator. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">lambda_in</td><td>The equivalent of 'y' in the definition of the proximal operator the value for 'x' will be provided by the matrix element. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>Definition at line <a class="el" href="_python___module_2src_2_generic_2generics_8hpp_source.html#l00300">300</a> of file <a class="el" href="_python___module_2src_2_generic_2generics_8hpp_source.html">generics.hpp</a>.</p>
+<p>Definition at line <a class="el" href="generics_8hpp_source.html#l00300">300</a> of file <a class="el" href="generics_8hpp_source.html">generics.hpp</a>.</p>
 
 </div>
 </div>

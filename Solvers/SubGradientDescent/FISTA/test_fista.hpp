@@ -57,7 +57,7 @@ void PrintDifferences( const Eigen::Matrix< T, Eigen::Dynamic, 1 >& a, const Eig
 template < typename T >
 void RunFISTATests() {
 
-    for ( unsigned int k = 200; k <= 1000; k+= 200 ) {
+    for ( unsigned int k = 1000; k <= 5000; k+= 1000 ) {
 
         unsigned int N = k, P = k;
 
@@ -65,7 +65,7 @@ void RunFISTATests() {
         Eigen::Matrix< T, Eigen::Dynamic, 1 > Y = Eigen::Matrix< T, Eigen::Dynamic, 1 >::Random( N, 1 );
         Eigen::Matrix< T, Eigen::Dynamic, 1 > W_0 = Eigen::Matrix< T, Eigen::Dynamic, 1 >::Zero( N, 1 );
 
-        std::cout << "Testing ISTA for a "
+        std::cout << "Testing FISTA for a "
                   << k
                   << "x"
                   << k
@@ -73,7 +73,7 @@ void RunFISTATests() {
                   << std::endl;
 
         Eigen::Matrix< T, Eigen::Dynamic, 1 > cpu_results = TestFISTA< T, hdim::FISTA<T> >( X, Y, W_0, 10 );
-        Eigen::Matrix< T, Eigen::Dynamic, 1 > gpu_results = TestFISTA< T, hdim::vcl::FISTA<T> >( X, Y, W_0, 10 );
+        Eigen::Matrix< T, Eigen::Dynamic, 1 > gpu_results = TestFISTA< T, hdim::CL_FISTA<T> >( X, Y, W_0, 10 );
 
         if( cpu_results ==  gpu_results ) {
             std::cout << "CPU and GPU results agree!" << std::endl;

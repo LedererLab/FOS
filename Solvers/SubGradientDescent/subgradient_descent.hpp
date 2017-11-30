@@ -22,12 +22,6 @@
 
 namespace hdim {
 
-//template< typename T >
-//using MatrixT = Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >;
-
-//template< typename T >
-//using VectorT = Eigen::Matrix< T, Eigen::Dynamic, 1 >;
-
 namespace internal {
 
 template < typename T, typename Base = internal::Solver<T> >

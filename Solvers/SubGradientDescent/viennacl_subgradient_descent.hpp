@@ -33,21 +33,19 @@
 
 namespace hdim {
 
-namespace vcl {
-
 namespace internal {
 
-template < typename T, typename Base = vcl::internal::Solver<T> >
+template < typename T, typename Base = internal::CL_Solver<T> >
 
 /*!
  * \brief Abstract base class for Sub-Gradient Descent algorithms
  * ,such as ISTA and FISTA, with backtracking line search.
  */
-class SubGradientSolver : public Base {
+class CL_SubGradientSolver : public Base {
 
   public:
-    SubGradientSolver( T L = 0.1 );
-    ~SubGradientSolver();
+    CL_SubGradientSolver( T L = 0.1 );
+    ~CL_SubGradientSolver();
 
   protected:
 
@@ -116,7 +114,7 @@ class SubGradientSolver : public Base {
 };
 
 template < typename T, typename Base >
-SubGradientSolver< T, Base >::SubGradientSolver( T L ) : L_0( L ) {
+CL_SubGradientSolver< T, Base >::CL_SubGradientSolver( T L ) : L_0( L ) {
     static_assert(std::is_floating_point< T >::value,\
                   "Subgradient descent methods can only be used with floating point types.");
 
@@ -130,10 +128,10 @@ SubGradientSolver< T, Base >::SubGradientSolver( T L ) : L_0( L ) {
 }
 
 template < typename T, typename Base >
-SubGradientSolver< T, Base >::~SubGradientSolver() {}
+CL_SubGradientSolver< T, Base >::~CL_SubGradientSolver() {}
 
 template < typename T, typename Base >
-T SubGradientSolver< T, Base >::f_beta (
+T CL_SubGradientSolver< T, Base >::f_beta (
     const viennacl::matrix<T>& X,
     const viennacl::vector<T>& Y,
     const viennacl::vector<T>& Beta ) {
@@ -144,7 +142,7 @@ T SubGradientSolver< T, Base >::f_beta (
 }
 
 template < typename T, typename  Base >
-T SubGradientSolver< T, Base >::f_beta_tilda (
+T CL_SubGradientSolver< T, Base >::f_beta_tilda (
     const viennacl::matrix<T>& X,
     const viennacl::vector<T>& Y,
     const viennacl::vector<T>& Beta,
@@ -165,7 +163,7 @@ T SubGradientSolver< T, Base >::f_beta_tilda (
 }
 
 template < typename T, typename Base >
-viennacl::vector<T> SubGradientSolver< T, Base >::update_beta_ista (
+viennacl::vector<T> CL_SubGradientSolver< T, Base >::update_beta_ista (
     const viennacl::matrix<T>& X,
     const viennacl::vector<T>& Y,
     const viennacl::vector<T>& Beta,
@@ -188,8 +186,6 @@ viennacl::vector<T> SubGradientSolver< T, Base >::update_beta_ista (
     return beta_output;
 
 //    return beta_to_modify.unaryExpr( SoftThres<T>( thres/L ) );
-
-}
 
 }
 

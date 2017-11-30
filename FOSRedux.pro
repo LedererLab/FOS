@@ -26,17 +26,17 @@ CONFIG(debug, debug|release) {
 }
 
 # Boost
-LIBS += -L/usr/local/lib \
-        -L/usr/lib \
-        -lboost_iostreams \
-        -lboost_system \
-        -lboost_filesystem \
+#LIBS += -L/usr/local/lib \
+#        -L/usr/lib \
+#        -lboost_iostreams \
+#        -lboost_system \
+#        -lboost_filesystem \
 
 # ViennaCL
 INCLUDEPATH += /usr/include/viennacl
 
 # OpenCL
-INCLUDEPATH +=-I "/usr/local/cuda/include"
+INCLUDEPATH += /usr/local/cuda/include
 LIBS +=-L "/usr/local/cuda/lib64" -lOpenCL
 
 # Eigen
@@ -74,7 +74,8 @@ HEADERS += Generic/debug.hpp \
     Solvers/base_solver.hpp \
     Solvers/SubGradientDescent/FISTA/viennacl_fista.hpp \
     Solvers/SubGradientDescent/FISTA/test_fista.hpp \
-    Solvers/SubGradientDescent/FISTA/perf_fista.hpp
+    Solvers/SubGradientDescent/FISTA/perf_fista.hpp \
+    Solvers/CoordinateDescent/perf_coordinate_descent.hpp
 
 SOURCES += main.cpp \
     FOS/x_fos.cpp \

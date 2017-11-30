@@ -1,6 +1,9 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classhdim_1_1internal_1_1_abstract_solver.html" title="Abstract base class for all iterative solvers. " alt="" coords="5,35,163,76"/>
-<area shape="rect" id="node2" href="$classhdim_1_1internal_1_1_screening_solver.html" title="Abstract base class for Solvers that use GAP SAFE screening rules. " alt="" coords="216,5,383,47"/>
-<area shape="rect" id="node3" href="$classhdim_1_1internal_1_1_solver.html" title="Abstract base class for solvers that do not make use of GAP SAFE screening rules. ..." alt="" coords="211,71,388,98"/>
-<area shape="rect" id="node4" href="$classhdim_1_1_coordinate_descent_with_screen.html" title="hdim::CoordinateDescentWith\lScreen\&lt; T \&gt;" alt="" coords="436,64,633,105"/>
+<area shape="rect" id="node2" href="$classhdim_1_1internal_1_1_sub_gradient_solver.html" title="Abstract base class for Sub&#45;Gradient Descent algorithms ,such as ISTA and FISTA, with backtracking li..." alt="" coords="115,33,295,74"/>
+<area shape="rect" id="node5" href="$classhdim_1_1_lazy_coordinate_descent.html" title="hdim::LazyCoordinateDescent\l\&lt; T, Base \&gt;" alt="" coords="105,98,304,139"/>
+<area shape="rect" id="node6" href="$classhdim_1_1vcl_1_1internal_1_1_sub_gradient_solver.html" title="Abstract base class for Sub&#45;Gradient Descent algorithms ,such as ISTA and FISTA, with backtracking li..." alt="" coords="135,163,274,219"/>
+<area shape="rect" id="node3" href="$classhdim_1_1_f_i_s_t_a.html" title="Run the Fast Iterative Shrinking and Thresholding Algorthim. " alt="" coords="352,5,519,32"/>
+<area shape="rect" id="node4" href="$classhdim_1_1_i_s_t_a.html" title="Run the Iterative Shrinking and Thresholding Algorthim. " alt="" coords="356,56,515,83"/>
+<area shape="rect" id="node7" href="$classhdim_1_1vcl_1_1_f_i_s_t_a.html" title="Run the Fast Iterative Shrinking and Thresholding Algorthim. " alt="" coords="363,123,508,165"/>
+<area shape="rect" id="node8" href="$classhdim_1_1vcl_1_1_i_s_t_a.html" title="Run the Iterative Shrinking and Thresholding Algorthim. " alt="" coords="367,189,504,230"/>
 </map>

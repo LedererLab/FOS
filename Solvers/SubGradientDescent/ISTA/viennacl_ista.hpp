@@ -1,5 +1,5 @@
-#ifndef VIENNACL_ISTA_H
-#define VIENNACL_ISTA_H
+#ifndef VIENNACL_CL_ISTA_HPP
+#define VIENNACL_CL_ISTA_HPP
 
 // C System-Headers
 //
@@ -25,16 +25,14 @@
 
 namespace hdim {
 
-namespace vcl {
-
-template < typename T, typename Base = vcl::internal::Solver< T > >
+template < typename T, typename Base = internal::CL_Solver< T > >
 /*!
  * \brief Run the Iterative Shrinking and Thresholding Algorthim.
  */
-class ISTA : public vcl::internal::SubGradientSolver<T,Base> {
+class CL_ISTA : public internal::CL_SubGradientSolver<T,Base> {
 
   public:
-    ISTA( T L_0 = 0.1 );
+    CL_ISTA( T L_0 = 0.1 );
 
   protected:
     viennacl::vector<T> update_rule(
@@ -50,11 +48,11 @@ class ISTA : public vcl::internal::SubGradientSolver<T,Base> {
 };
 
 template < typename T, typename Base >
-ISTA<T,Base>::ISTA( T L_0 ) : internal::SubGradientSolver<T,Base>( L_0 ) {}
+CL_ISTA<T,Base>::CL_ISTA( T L_0 ) : internal::CL_SubGradientSolver<T,Base>( L_0 ) {}
 
 #ifdef DEBUG
 template < typename T, typename Base >
-viennacl::vector<T> ISTA<T,Base>::update_rule(
+viennacl::vector<T> CL_ISTA<T,Base>::update_rule(
     const viennacl::matrix<T>& X,
     const viennacl::vector<T>& Y,
     const viennacl::vector<T>& Beta_0,
@@ -63,35 +61,35 @@ viennacl::vector<T> ISTA<T,Base>::update_rule(
     viennacl::vector<T> Beta = Beta_0;
 
     unsigned int counter = 0;
-    L = internal::SubGradientSolver<T,Base>::L_0;
+    L = internal::CL_SubGradientSolver<T,Base>::L_0;
 
-    viennacl::vector<T> Beta_temp = internal::SubGradientSolver<T,Base>::update_beta_ista( X, Y, Beta, L, lambda );
+    viennacl::vector<T> Beta_temp = internal::CL_SubGradientSolver<T,Base>::update_beta_ista( X, Y, Beta, L, lambda );
 
     counter++;
     DEBUG_PRINT( "Backtrace iteration: " << counter );
 
-    while( ( internal::SubGradientSolver<T,Base>::f_beta( X, Y, Beta_temp ) > internal::SubGradientSolver<T,Base>::f_beta_tilda( X, Y, Beta_temp, Beta, L ) ) ) {
+    while( ( internal::CL_SubGradientSolver<T,Base>::f_beta( X, Y, Beta_temp ) > internal::CL_SubGradientSolver<T,Base>::f_beta_tilda( X, Y, Beta_temp, Beta, L ) ) ) {
 
         counter++;
         DEBUG_PRINT( "Backtrace iteration: " << counter );
 
         L*= eta;
-        Beta_temp = internal::SubGradientSolver<T,Base>::update_beta_ista( X, Y, Beta, L, lambda );
+        Beta_temp = internal::CL_SubGradientSolver<T,Base>::update_beta_ista( X, Y, Beta, L, lambda );
 
     }
 
-    return internal::SubGradientSolver<T,Base>::update_beta_ista( X, Y, Beta, L, lambda );
+    return internal::CL_SubGradientSolver<T,Base>::update_beta_ista( X, Y, Beta, L, lambda );
 }
 
 #else
 template < typename T, typename Base >
-viennacl::vector<T> ISTA<T,Base>::update_rule(
+viennacl::vector<T> CL_ISTA<T,Base>::update_rule(
     const viennacl::matrix<T>& X,
     const viennacl::vector<T>& Y,
     const viennacl::vector<T>& Beta,
     T lambda ) {
 
-    L = internal::SubGradientSolver<T,Base>::L_0;
+    L = internal::CL_SubGradientSolver<T,Base>::L_0;
 
     // Extraordinarily silly way to pass a single value to the proximal operator kernel...
     viennacl::vector<T> thres_( 1 );
@@ -101,7 +99,7 @@ viennacl::vector<T> ISTA<T,Base>::update_rule(
     viennacl::vector<T> beta_to_modify = Beta - (1.0/L)*f_grad;
     viennacl::vector<T> beta_temp = beta_to_modify;
 
-    viennacl::ocl::enqueue( hdim::vcl::internal::SubGradientSolver<T,Base>::soft_thres_kernel_->operator()( beta_to_modify, beta_temp, thres_ ) );
+    viennacl::ocl::enqueue( hdim::internal::CL_SubGradientSolver<T,Base>::soft_thres_kernel_->operator()( beta_to_modify, beta_temp, thres_ ) );
 
     T f_beta = norm_sqr( static_cast<viennacl::vector<T>>( viennacl::linalg::prod( X, beta_temp ) - Y ) );
 
@@ -122,7 +120,7 @@ viennacl::vector<T> ISTA<T,Base>::update_rule(
         beta_to_modify = Beta - (1.0/L)*f_grad;
 
         viennacl::copy( std::vector<T> { lambda / L }, thres_ );
-        viennacl::ocl::enqueue( hdim::vcl::internal::SubGradientSolver<T,Base>::soft_thres_kernel_->operator()( beta_to_modify, beta_temp, thres_ ) );
+        viennacl::ocl::enqueue( hdim::internal::CL_SubGradientSolver<T,Base>::soft_thres_kernel_->operator()( beta_to_modify, beta_temp, thres_ ) );
 
         f_beta = norm_sqr( static_cast<viennacl::vector<T>>( viennacl::linalg::prod( X, beta_temp ) - Y ) );
 
@@ -138,7 +136,7 @@ viennacl::vector<T> ISTA<T,Base>::update_rule(
     beta_to_modify = Beta - (1.0/L)*f_grad;
     viennacl::copy( std::vector<T> { lambda / L }, thres_ );
 
-    viennacl::ocl::enqueue( hdim::vcl::internal::SubGradientSolver<T,Base>::soft_thres_kernel_->operator()( beta_to_modify, beta_temp, thres_ ) );
+    viennacl::ocl::enqueue( hdim::internal::CL_SubGradientSolver<T,Base>::soft_thres_kernel_->operator()( beta_to_modify, beta_temp, thres_ ) );
 
     return beta_temp;
 
@@ -147,6 +145,4 @@ viennacl::vector<T> ISTA<T,Base>::update_rule(
 
 }
 
-}
-
-#endif // VIENNACL_ISTA_H
+#endif // VIENNACL_CL_ISTA_HPP

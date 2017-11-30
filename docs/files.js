@@ -6,7 +6,6 @@ var files =
     [ "JS_Wrapper", "dir_b709e4362456be500ab3839d0a509832.html", "dir_b709e4362456be500ab3839d0a509832" ],
     [ "OpenCL_Base", "dir_b34738e4897d4fab4ca811e2d3b116f4.html", "dir_b34738e4897d4fab4ca811e2d3b116f4" ],
     [ "OpenCL_Generics", "dir_2c6f6aa72448d67687ebd00140699186.html", "dir_2c6f6aa72448d67687ebd00140699186" ],
-    [ "Python_Module", "dir_b8097fd48b34c7d332264be0b5e13f6e.html", "dir_b8097fd48b34c7d332264be0b5e13f6e" ],
     [ "Screening", "dir_c990edf1b97713c0ff9704904b8844c9.html", "dir_c990edf1b97713c0ff9704904b8844c9" ],
     [ "Solvers", "dir_bdfa83abd3770e9236d0774c4efb3ff7.html", "dir_bdfa83abd3770e9236d0774c4efb3ff7" ],
     [ "test", "dir_13e138d54eb8818da29c3992edef070a.html", "dir_13e138d54eb8818da29c3992edef070a" ],

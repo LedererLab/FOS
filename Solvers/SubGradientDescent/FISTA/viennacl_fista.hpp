@@ -1,5 +1,5 @@
-#ifndef VIENNACL_FISTA_HPP
-#define VIENNACL_FISTA_HPP
+#ifndef VIENNACL_CL_FISTA_HPP
+#define VIENNACL_CL_FISTA_HPP
 
 // C System-Headers
 //
@@ -18,16 +18,14 @@
 
 namespace hdim {
 
-namespace vcl {
-
-template < typename T, typename Base = internal::Solver< T > >
+template < typename T, typename Base = internal::CL_Solver< T > >
 /*!
  * \brief Run the Fast Iterative Shrinking and Thresholding Algorthim.
  */
-class FISTA : public vcl::internal::SubGradientSolver<T,Base> {
+class CL_FISTA : public internal::CL_SubGradientSolver<T,Base> {
 
   public:
-    FISTA( const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0, T L_0 = 0.1 );
+    CL_FISTA( const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0, T L_0 = 0.1 );
 
   protected:
     viennacl::vector<T> update_rule(
@@ -56,7 +54,7 @@ class FISTA : public vcl::internal::SubGradientSolver<T,Base> {
 };
 
 template < typename T, typename Base >
-FISTA<T,Base>::FISTA( const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0, T L_0 ) : vcl::internal::SubGradientSolver<T,Base>( L_0 ) {
+CL_FISTA<T,Base>::CL_FISTA( const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0, T L_0 ) : internal::CL_SubGradientSolver<T,Base>( L_0 ) {
 
     y_k = viennacl::vector<T>( Beta_0.rows() );
     y_k_old = viennacl::vector<T>( Beta_0.rows() );
@@ -66,7 +64,7 @@ FISTA<T,Base>::FISTA( const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0, T L_0
 }
 
 template < typename T, typename Base >
-viennacl::vector<T> FISTA<T,Base>::update_beta_fista (
+viennacl::vector<T> CL_FISTA<T,Base>::update_beta_fista (
     const viennacl::matrix<T> &X,
     const viennacl::vector<T> &Y,
     const viennacl::vector<T> &Beta,
@@ -76,7 +74,7 @@ viennacl::vector<T> FISTA<T,Base>::update_beta_fista (
     viennacl::vector<T> x_k = Beta;
 
     x_k_less_1 = x_k;
-    x_k = internal::SubGradientSolver<T,Base>::update_beta_ista( X, Y, y_k, L, thres );
+    x_k = internal::CL_SubGradientSolver<T,Base>::update_beta_ista( X, Y, y_k, L, thres );
 
     T t_k_plus_1 = ( 1.0 + std::sqrt( 1.0 + 4.0 * square( t_k ) ) ) / 2.0;
     t_k = t_k_plus_1;
@@ -88,13 +86,13 @@ viennacl::vector<T> FISTA<T,Base>::update_beta_fista (
 
 #ifdef DEBUG
 template < typename T, typename Base >
-viennacl::vector<T> FISTA<T, Base>::update_rule(
+viennacl::vector<T> CL_FISTA<T, Base>::update_rule(
     const viennacl::matrix<T> &X,
     const viennacl::vector<T> &Y,
     const viennacl::vector<T> &Beta,
     T lambda ) {
 
-    L = vcl::internal::SubGradientSolver<T,Base>::L_0;
+    L = internal::CL_SubGradientSolver<T,Base>::L_0;
 
     viennacl::copy( Beta, y_k );
 
@@ -102,11 +100,11 @@ viennacl::vector<T> FISTA<T, Base>::update_rule(
 
     y_k_old = y_k;
 
-    viennacl::vector<T> y_k_temp = internal::SubGradientSolver<T,Base>::update_beta_ista( X, Y, y_k, L, lambda );
+    viennacl::vector<T> y_k_temp = internal::CL_SubGradientSolver<T,Base>::update_beta_ista( X, Y, y_k, L, lambda );
 
     unsigned int counter = 0;
 
-    while( ( internal::SubGradientSolver<T,Base>::f_beta( X, Y, y_k_temp ) > internal::SubGradientSolver<T,Base>::f_beta_tilda( X, Y, y_k_temp, y_k_old, L ) ) ) {
+    while( ( internal::CL_SubGradientSolver<T,Base>::f_beta( X, Y, y_k_temp ) > internal::CL_SubGradientSolver<T,Base>::f_beta_tilda( X, Y, y_k_temp, y_k_old, L ) ) ) {
 
         counter++;
         DEBUG_PRINT( "Backtrace iteration: " << counter );
@@ -114,7 +112,7 @@ viennacl::vector<T> FISTA<T, Base>::update_rule(
         L*= eta;
 
         DEBUG_PRINT( "L: " << L );
-        y_k_temp = internal::SubGradientSolver<T,Base>::update_beta_ista( X, Y, Beta, L, lambda );
+        y_k_temp = internal::CL_SubGradientSolver<T,Base>::update_beta_ista( X, Y, Beta, L, lambda );
 
     }
 
@@ -122,13 +120,13 @@ viennacl::vector<T> FISTA<T, Base>::update_rule(
 }
 #else
 template < typename T, typename Base >
-viennacl::vector<T> FISTA<T,Base>::update_rule(
+viennacl::vector<T> CL_FISTA<T,Base>::update_rule(
     const viennacl::matrix<T> &X,
     const viennacl::vector<T> &Y,
     const viennacl::vector<T> &Beta,
     T lambda ) {
 
-//    L = internal::SubGradientSolver<T,Base>::L_0;
+//    L = internal::CL_SubGradientSolver<T,Base>::L_0;
 
 //    y_k = Beta;
 
@@ -154,7 +152,7 @@ viennacl::vector<T> FISTA<T,Base>::update_rule(
 
 //    T f_beta_tilde = taylor_term_0 + taylor_term_1 + taylor_term_2;
 
-    L = internal::SubGradientSolver<T,Base>::L_0;
+    L = internal::CL_SubGradientSolver<T,Base>::L_0;
 
     viennacl::copy( Beta, y_k );
 
@@ -167,7 +165,7 @@ viennacl::vector<T> FISTA<T,Base>::update_rule(
     viennacl::copy( std::vector<T> { lambda / L }, thres_ );
 
     viennacl::vector<T> y_k_temp ( y_k.size() );
-    viennacl::ocl::enqueue( hdim::vcl::internal::SubGradientSolver<T,Base>::soft_thres_kernel_->operator()( to_modify, y_k_temp, thres_ ) );
+    viennacl::ocl::enqueue( hdim::internal::CL_SubGradientSolver<T,Base>::soft_thres_kernel_->operator()( to_modify, y_k_temp, thres_ ) );
 
     T f_beta = norm_sqr( static_cast<viennacl::vector<T>>(viennacl::linalg::prod( X, y_k_temp ) - Y ) );
     viennacl::vector<T> f_part = viennacl::linalg::prod( X, y_k_old ) - Y;
@@ -205,7 +203,7 @@ viennacl::vector<T> FISTA<T,Base>::update_rule(
         to_modify = y_k_old - (1.0/L)*f_grad;
 
         viennacl::copy( std::vector<T> { lambda / L }, thres_ );
-        viennacl::ocl::enqueue( hdim::vcl::internal::SubGradientSolver<T,Base>::soft_thres_kernel_->operator()( to_modify, y_k_temp, thres_ ) );
+        viennacl::ocl::enqueue( hdim::internal::CL_SubGradientSolver<T,Base>::soft_thres_kernel_->operator()( to_modify, y_k_temp, thres_ ) );
 
         f_beta = norm_sqr( static_cast<viennacl::vector<T>>(viennacl::linalg::prod( X, y_k_temp ) - Y ) );
 
@@ -240,7 +238,7 @@ viennacl::vector<T> FISTA<T,Base>::update_rule(
     to_modify = y_k_old - (1.0/L)*f_grad;
 
     viennacl::copy( std::vector<T> { lambda / L }, thres_ );
-    viennacl::ocl::enqueue( hdim::vcl::internal::SubGradientSolver<T,Base>::soft_thres_kernel_->operator()( to_modify, x_k, thres_ ) );
+    viennacl::ocl::enqueue( hdim::internal::CL_SubGradientSolver<T,Base>::soft_thres_kernel_->operator()( to_modify, x_k, thres_ ) );
 
     T t_k_plus_1 = ( 1.0 + std::sqrt( 1.0 + 4.0 * square( t_k ) ) ) / 2.0;
     t_k = t_k_plus_1;
@@ -253,7 +251,5 @@ viennacl::vector<T> FISTA<T,Base>::update_rule(
 
 }
 
-}
 
-
-#endif // VIENNACL_FISTA_HPP
+#endif // VIENNACL_CL_FISTA_HPP

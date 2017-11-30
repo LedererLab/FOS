@@ -31,8 +31,6 @@
 
 namespace hdim {
 
-namespace vcl {
-
 namespace internal {
 
 template < typename T >
@@ -40,12 +38,12 @@ template < typename T >
 /*!
  * \brief Abstract base class for solvers that do not make use of GAP SAFE screening rules.
  */
-class Solver : public vcl::internal::AbstractSolver < T > {
+class CL_Solver : public internal::CL_AbstractSolver < T > {
 
   public:
 
-    Solver();
-    virtual ~Solver() = 0;
+    CL_Solver();
+    virtual ~CL_Solver() = 0;
 
     virtual Eigen::Matrix< T, Eigen::Dynamic, 1 > operator()(
         const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
@@ -80,25 +78,32 @@ class Solver : public vcl::internal::AbstractSolver < T > {
     viennacl::vector<T> Y_;
     viennacl::vector<T> Beta_0_;
 
+    Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic > X_compare;
+    Eigen::Matrix<T, Eigen::Dynamic, 1 > Y_compare;
+    Eigen::Matrix<T, Eigen::Dynamic, 1 > Beta_0_compare;
+
+    bool has_run = false;
+
 };
 
 template < typename T >
-Solver<T>::Solver() {
-    DEBUG_PRINT( "Using Plain Solver.");
+CL_Solver<T>::CL_Solver() {
+    DEBUG_PRINT( "Using Plain CL_Solver.");
 
+    // Use first available GPU as compute device
     viennacl::ocl::set_context_device_type( 0, viennacl::ocl::gpu_tag() );
     DEBUG_PRINT( "Current Context: " << viennacl::ocl::current_context().current_device().full_info() );
 
 }
 
 template < typename T >
-Solver<T>::~Solver() {}
+CL_Solver<T>::~CL_Solver() {}
 
 template < typename T >
-T Solver< T >::vcl_duality_gap ( const viennacl::matrix<T>& X,
-                    const viennacl::vector<T>& Y,
-                    const viennacl::vector<T>& Beta,
-                    T r_stats_it ) {
+T CL_Solver< T >::vcl_duality_gap ( const viennacl::matrix<T>& X,
+                                 const viennacl::vector<T>& Y,
+                                 const viennacl::vector<T>& Beta,
+                                 T r_stats_it ) {
 
     //Computation of Primal Objective
 
@@ -127,20 +132,41 @@ T Solver< T >::vcl_duality_gap ( const viennacl::matrix<T>& X,
 
 // Iterative
 template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, 1 > Solver<T>::operator()(
+Eigen::Matrix< T, Eigen::Dynamic, 1 > CL_Solver<T>::operator()(
     const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
     T lambda,
     T duality_gap_target ) {
 
-    X_ = viennacl::matrix<T>( X.rows(), X.cols() );
-    Y_ = viennacl::vector<T>( X.rows() );
-    Beta_0_ = viennacl::vector<T>( X.cols() );
+    if( !has_run ) {
 
-    viennacl::copy( X, X_ );
-    viennacl::copy( Y, Y_ );
-    viennacl::copy( Beta_0, Beta_0_ );
+        X_ = viennacl::matrix<T>( X.rows(), X.cols() );
+        Y_ = viennacl::vector<T>( X.rows() );
+        Beta_0_ = viennacl::vector<T>( X.cols() );
+
+        X_compare = X;
+        Y_compare = Y;
+        Beta_0_compare = Beta_0;
+
+        viennacl::copy( X, X_ );
+        viennacl::copy( Y, Y_ );
+        viennacl::copy( Beta_0, Beta_0_ );
+
+    }
+
+    if( X_compare != X ) {
+        viennacl::copy( X, X_ );
+        DEBUG_PRINT( "Value for X has changed!" );
+    }
+    if( Y_compare != Y ) {
+        viennacl::copy( Y, Y_ );
+        DEBUG_PRINT( "Value for Y has changed!" );
+    }
+    if( Beta_0_compare != Beta_0 ) {
+        viennacl::copy( Beta_0, Beta_0_ );
+        DEBUG_PRINT( "Value for Beta has changed!" );
+    }
 
     viennacl::vector<T> Beta_ = Beta_0_;
 
@@ -160,13 +186,15 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 > Solver<T>::operator()(
     Eigen::Matrix< T, Eigen::Dynamic, 1 > Beta( Beta_0.rows(), 1 );
     viennacl::copy( Beta_, Beta );
 
+    has_run |= true; //We've run at least once
+
     return Beta;
 
 }
 
 // Duality Gap Convergence Criteria
 template < typename T >
-Eigen::Matrix< T, Eigen::Dynamic, 1 > Solver<T>::operator()(
+Eigen::Matrix< T, Eigen::Dynamic, 1 > CL_Solver<T>::operator()(
     const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Y,
     const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta_0,
@@ -194,8 +222,6 @@ Eigen::Matrix< T, Eigen::Dynamic, 1 > Solver<T>::operator()(
     viennacl::copy( Beta_, Beta );
 
     return Beta;
-
-}
 
 }
 

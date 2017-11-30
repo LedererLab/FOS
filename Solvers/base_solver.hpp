@@ -1,6 +1,14 @@
 #ifndef BASE_SOLVER_HPP
 #define BASE_SOLVER_HPP
 
+// C System-Headers
+//
+// C++ System headers
+//
+// Eigen Headers
+#include <eigen3/Eigen/Dense>
+#include <eigen3/Eigen/Core>
+
 namespace hdim {
 
 namespace internal {

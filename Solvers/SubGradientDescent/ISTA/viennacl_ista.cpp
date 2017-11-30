@@ -1,4 +1,4 @@
 #include "viennacl_ista.hpp"
 
-template class hdim::vcl::ISTA<float,hdim::vcl::internal::Solver<float>>;
-template class hdim::vcl::ISTA<double,hdim::vcl::internal::Solver<double>>;
+template class hdim::CL_ISTA<float,hdim::internal::CL_Solver<float>>;
+template class hdim::CL_ISTA<double,hdim::internal::CL_Solver<double>>;

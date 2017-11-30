@@ -39,6 +39,6 @@ int main(int argc, char *argv[]) {
 
 //    hdim::TestXFOS< float >( 200, 500, hdim::SolverType::cd );
 //    hdim::TestXFOS< float >( 200, 500, hdim::SolverType::fista );
-    hdim::TestXFOS< float >( 3000, 3000, hdim::SolverType::cl_fista );
+//    hdim::TestXFOS< float >( 3000, 3000, hdim::SolverType::cl_fista );
 
 }

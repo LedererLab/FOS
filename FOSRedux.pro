@@ -20,17 +20,11 @@ CONFIG(debug, debug|release) {
     DEFINES += "NDEBUG"
     DEFINES += "VIENNACL_WITH_OPENCL"
     DEFINES += "VIENNACL_WITH_EIGEN"
+    DEFINES += "W_OPENCL"
     CONFIG += optimize_full
     QMAKE_CXXFLAGS_RELEASE *= -mtune=native
     QMAKE_CXXFLAGS_RELEASE *= -march=native
 }
-
-# Boost
-#LIBS += -L/usr/local/lib \
-#        -L/usr/lib \
-#        -lboost_iostreams \
-#        -lboost_system \
-#        -lboost_filesystem \
 
 # ViennaCL
 INCLUDEPATH += /usr/include/viennacl

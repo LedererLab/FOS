@@ -193,8 +193,8 @@ class CL_Solver : public CL_AbstractSolver < T > {
 
   public:
 
-    Solver();
-    virtual ~Solver() = 0;
+    CL_Solver();
+    virtual ~CL_Solver() = 0;
 
     virtual Eigen::Matrix< T, Eigen::Dynamic, 1 > operator()(
         const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,
@@ -232,7 +232,7 @@ template < typename T, typename Base = internal::CL_Solver< T > >
 class CL_FISTA : public internal::CL_SubGradientSolver<T,Base> {
 
   public:
-    FISTA( const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta, T L_0 = 0.1 );
+    CL_FISTA( const Eigen::Matrix< T, Eigen::Dynamic, 1 >& Beta, T L_0 = 0.1 );
 
 };
 

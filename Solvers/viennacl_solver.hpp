@@ -38,7 +38,7 @@ template < typename T >
 /*!
  * \brief Abstract base class for solvers that do not make use of GAP SAFE screening rules.
  */
-class CL_Solver : public internal::CL_AbstractSolver < T > {
+class CL_Solver : public CL_AbstractSolver < T > {
 
   public:
 

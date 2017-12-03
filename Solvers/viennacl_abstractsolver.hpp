@@ -37,7 +37,7 @@ template < typename T >
  *
  * This class supports two types of convergence criteria -- iterative and duality gap.
  */
-class CL_AbstractSolver : public hdim::internal::BaseSolver < T > {
+class CL_AbstractSolver : public BaseSolver < T > {
 
   protected:
 

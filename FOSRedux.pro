@@ -14,24 +14,12 @@ CONFIG += c++11
 # Override Qt's default -O2 flag in release mode
 CONFIG(debug, debug|release) {
     DEFINES += "DEBUG"
-    DEFINES += "VIENNACL_WITH_OPENCL"
-    DEFINES += "VIENNACL_WITH_EIGEN"
 } else {
     DEFINES += "NDEBUG"
-    DEFINES += "VIENNACL_WITH_OPENCL"
-    DEFINES += "VIENNACL_WITH_EIGEN"
-    DEFINES += "W_OPENCL"
     CONFIG += optimize_full
     QMAKE_CXXFLAGS_RELEASE *= -mtune=native
     QMAKE_CXXFLAGS_RELEASE *= -march=native
 }
-
-# ViennaCL
-INCLUDEPATH += /usr/include/viennacl
-
-# OpenCL
-INCLUDEPATH += /usr/local/cuda/include
-LIBS +=-L "/usr/local/cuda/lib64" -lOpenCL
 
 # Eigen
 INCLUDEPATH += /usr/include/eigen3
@@ -54,22 +42,8 @@ HEADERS += Generic/debug.hpp \
     FOS/test_x_fos.hpp \
     Solvers/screeningsolver.hpp \
     Solvers/abstractsolver.hpp \
-    FOS/perf_fos.hpp \
-    Solvers/SubGradientDescent/ISTA/perf_ista.hpp \
     JS_Wrapper/fos_js.hpp \
-    OpenCL_Base/openclbase.h \
-    OpenCL_Generics/cl_algorithm.h \
-    OpenCL_Generics/cl_generics.h \
-    Generic/ocl_debug.hpp \
-    Solvers/SubGradientDescent/viennacl_subgradient_descent.hpp \
-    Solvers/viennacl_solver.hpp \
-    Solvers/viennacl_abstractsolver.hpp \
-    Solvers/SubGradientDescent/ISTA/viennacl_ista.hpp \
     Solvers/base_solver.hpp \
-    Solvers/SubGradientDescent/FISTA/viennacl_fista.hpp \
-    Solvers/SubGradientDescent/FISTA/test_fista.hpp \
-    Solvers/SubGradientDescent/FISTA/perf_fista.hpp \
-    Solvers/CoordinateDescent/perf_coordinate_descent.hpp
 
 SOURCES += main.cpp \
     FOS/x_fos.cpp \
@@ -78,10 +52,6 @@ SOURCES += main.cpp \
     Solvers/CoordinateDescent/coordinate_descent.cpp \
     Solvers/CoordinateDescent/coordinatedescentwithscreen.cpp \
     JS_Wrapper/fos_js.cpp \
-    OpenCL_Base/openclbase.cpp \
-    Generic/ocl_debug.cpp \
-    Solvers/SubGradientDescent/ISTA/viennacl_ista.cpp \
-    Solvers/SubGradientDescent/FISTA/viennacl_fista.cpp
 
 DISTFILES += \
     Python_Wrapper/build.sh \

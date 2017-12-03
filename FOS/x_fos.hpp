@@ -12,17 +12,6 @@
 #include <memory>
 // Eigen Headers
 #include <eigen3/Eigen/Dense>
-// ViennCL Headers
-#include "viennacl/vector.hpp"
-#include "viennacl/matrix.hpp"
-#include "viennacl/compressed_matrix.hpp"
-#include "viennacl/linalg/prod.hpp"
-#include "viennacl/linalg/norm_1.hpp"
-#include "viennacl/linalg/norm_2.hpp"
-#include "viennacl/linalg/norm_inf.hpp"
-#include "viennacl/linalg/matrix_operations.hpp"
-#include "viennacl/linalg/inner_prod.hpp"
-#include "viennacl/ocl/backend.hpp"
 // Project Specific Headers
 // Generic
 #include "../Generic/generics.hpp"
@@ -35,19 +24,8 @@
 #include "../Solvers/SubGradientDescent/FISTA/fista.hpp"
 #include "../Solvers/CoordinateDescent/coordinate_descent.hpp"
 
-#ifdef W_OPENCL
-// OpenCL Solvers
-#include "../Solvers/viennacl_abstractsolver.hpp"
-#include "../Solvers/viennacl_solver.hpp"
-#include "../Solvers/SubGradientDescent/ISTA/viennacl_ista.hpp"
-#include "../Solvers/SubGradientDescent/FISTA/viennacl_fista.hpp"
-#endif
-
 namespace hdim {
 
-#ifdef W_OPENCL
-enum class SolverType { ista, screen_ista, cl_ista, fista, screen_fista, cl_fista, cd, screen_cd };
-#else
 enum class SolverType { ista, screen_ista, fista, screen_fista, cd, screen_cd };
 #endif
 
@@ -413,14 +391,6 @@ void X_FOS< T >::choose_solver( const Eigen::Matrix< T, Eigen::Dynamic, Eigen::D
     case SolverType::screen_cd:
         solver = std::unique_ptr< LazyCoordinateDescent<T,internal::ScreeningSolver<T>> >( new LazyCoordinateDescent<T,internal::ScreeningSolver<T>>( x, y, Betas.col( 0 ) ) );
         break;
-#ifdef W_OPENCL
-    case SolverType::cl_ista:
-        solver = std::unique_ptr< CL_ISTA<T> >( new CL_ISTA<T>() );
-        break;
-    case SolverType::cl_fista:
-        solver = std::unique_ptr< CL_FISTA<T> >( new CL_FISTA<T>(beta) );
-        break;
-#endif
     }
 
 }

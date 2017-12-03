@@ -27,7 +27,6 @@
 namespace hdim {
 
 enum class SolverType { ista, screen_ista, fista, screen_fista, cd, screen_cd };
-#endif
 
 template < typename T >
 /*!

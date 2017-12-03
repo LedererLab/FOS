@@ -51,7 +51,7 @@ class ISTA : public internal::SubGradientSolver<T,Base> {
 template < typename T, typename Base >
 ISTA<T,Base>::ISTA( T L_0 ) : internal::SubGradientSolver<T,Base>( L_0 ) {}
 
-#ifdef DEBUG
+#if defined DEBUG
 template < typename T, typename Base >
 Eigen::Matrix< T, Eigen::Dynamic, 1 > ISTA<T,Base>::update_rule(
     const Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >& X,

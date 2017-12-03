@@ -1,4 +1,5 @@
 <map id="hdim::CoordinateDescentWithScreen&lt; T &gt;" name="hdim::CoordinateDescentWithScreen&lt; T &gt;">
-<area shape="rect" id="node2" href="$classhdim_1_1internal_1_1_solver.html" title="Abstract base class for solvers that do not make use of GAP SAFE screening rules. ..." alt="" coords="15,95,193,121"/>
-<area shape="rect" id="node3" href="$classhdim_1_1internal_1_1_abstract_solver.html" title="Abstract base class for all iterative solvers. " alt="" coords="25,5,183,47"/>
+<area shape="rect" id="node2" href="$classhdim_1_1internal_1_1_solver.html" title="Abstract base class for solvers that do not make use of GAP SAFE screening rules. ..." alt="" coords="20,169,197,196"/>
+<area shape="rect" id="node3" href="$classhdim_1_1internal_1_1_abstract_solver.html" title="Abstract base class for all iterative solvers. " alt="" coords="30,80,187,121"/>
+<area shape="rect" id="node4" href="$classhdim_1_1internal_1_1_base_solver.html" title="Abstract base class for all iterative solvers. " alt="" coords="5,5,212,32"/>
 </map>

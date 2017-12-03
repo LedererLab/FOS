@@ -1,4 +1,4 @@
 <map id="ocl::OpenCLBase" name="ocl::OpenCLBase">
-<area shape="rect" id="node2" href="$class_mat_prod_test.html" title="MatProdTest" alt="" coords="5,80,103,107"/>
-<area shape="rect" id="node3" href="$class_mat_vect_prod_test.html" title="MatVectProdTest" alt="" coords="127,80,251,107"/>
+<area shape="rect" id="node2" href="$classocl_1_1internal_1_1_solver.html" title="Abstract base class for Solvers. " alt="" coords="7,80,174,107"/>
+<area shape="rect" id="node3" href="$classhdim_1_1ocl_1_1internal_1_1_sub_gradient_solver.html" title="Abstract base class for Sub&#45;Gradient Descent algorithms ,such as ISTA and FISTA, with backtracking li..." alt="" coords="5,155,176,196"/>
 </map>

@@ -6,6 +6,7 @@
 // C++ System headers
 #include <cmath>
 // Eigen Headers
+#include <eigen3/Eigen/Core>
 #include <eigen3/Eigen/Dense>
 // Boost Headers
 //
@@ -14,35 +15,66 @@
 // Armadillo Headers
 //
 // Project Specific Headers
-#include "../Generic/debug.h"
-#include "../Generic/generics.h"
-#include "ista.h"
+#include "../../../Generic/debug.hpp"
+#include "../../../Generic/generics.hpp"
+#include "ista.hpp"
+#include "viennacl_ista.hpp"
 
-void PerfIsta( uint num_rows, uint num_cols ) {
+template < typename T, typename Solver >
+int PerfISTA( Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > design_matrix,
+            Eigen::Matrix< T, Eigen::Dynamic, 1 > predictors,
+            Eigen::Matrix< T, Eigen::Dynamic, 1 > beta_zero,
+            unsigned int number_of_iterations ) {
 
-    Eigen::Matrix< float, Eigen::Dynamic, Eigen::Dynamic > X = build_matrix<float>( num_rows, num_cols, &eucl_distance );
-    Eigen::Matrix< float, Eigen::Dynamic, 1 > Y = X.col(0);
-    Eigen::Matrix< float, Eigen::Dynamic, 1 > W_0 = Eigen::Matrix< float, Eigen::Dynamic, 1 > ( num_rows, 1 );
-    W_0.setZero();
+    Solver ista_test( 0.1 );
 
-    float lambda = 1.0;
+    auto start = std::chrono::high_resolution_clock::now();
 
-    TIME_IT( ISTA< float >( X, Y, W_0, 1, 0.1f, 0.5*lambda ); );
+    ista_test( design_matrix,
+            predictors,
+            beta_zero,
+            1.0,
+            number_of_iterations );
 
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double, std::milli> ms = end - start;
+    int time_taken = ms.count();\
+
+    return time_taken;
 }
 
-void RunIstaPerfTests() {
+template < typename T >
+void RunIstaPerfs() {
 
-    for ( uint k = 200; k <= 2000; k += 200 ) {
+    std::vector<int> cpu_results;
+    std::vector<int> gpu_results;
 
-        std::cout << "Testing ISTA for a " \
-                  << k \
-                  << "x" \
-                  << k \
-                  << "Matrix:" \
+    for ( unsigned int k = 1000; k <= 5000; k+= 1000 ) {
+
+        unsigned int N = k, P = k;
+
+        Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > X = Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic >::Random( N , P );
+        Eigen::Matrix< T, Eigen::Dynamic, 1 > Y = Eigen::Matrix< T, Eigen::Dynamic, 1 >::Random( N, 1 );
+        Eigen::Matrix< T, Eigen::Dynamic, 1 > W_0 = Eigen::Matrix< T, Eigen::Dynamic, 1 >::Zero( N, 1 );
+
+        std::cout << "Testing ISTA for a "
+                  << k
+                  << "x"
+                  << k
+                  << "Matrix: \n"
                   << std::endl;
 
-        PerfIsta( k, k );
+        std::cout << "Testing CPU ISTA" << std::endl;
+        T cpu_result = PerfISTA< T, hdim::ISTA<T, hdim::internal::ScreeningSolver<T> > >( X, Y, W_0, 10 );
+        cpu_results.push_back( cpu_result );
+
+        std::cout << "Testing GPU ISTA" << std::endl;
+        T gpu_result = PerfISTA< T, hdim::CL_ISTA<T> >( X, Y, W_0, 10 );
+        gpu_results.push_back( gpu_result );
+    }
+
+    for( unsigned int i = 0; i < cpu_results.size() ; i++ ) {
+        std::cout << "CPU Timing Results (ms): " << cpu_results[i] << " , GPU Timing Results (ms): " << gpu_results[i] << std::endl;
     }
 }
 

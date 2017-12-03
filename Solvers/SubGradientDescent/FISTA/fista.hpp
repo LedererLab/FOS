@@ -47,7 +47,7 @@ class FISTA : public internal::SubGradientSolver<T,Base> {
     Eigen::Matrix< T, Eigen::Dynamic, 1 > y_k;
     Eigen::Matrix< T, Eigen::Dynamic, 1 > y_k_old;
 
-    Eigen::Matrix< T, Eigen::Dynamic, Eigen::Dynamic > x_k_less_1;
+    Eigen::Matrix< T, Eigen::Dynamic, 1 > x_k_less_1;
 
     const T eta = 1.5;
     T t_k = static_cast<T>( 1 );

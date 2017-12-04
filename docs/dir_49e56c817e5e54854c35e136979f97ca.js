@@ -137,6 +137,7 @@ var dir_49e56c817e5e54854c35e136979f97ca =
     [ "classhdim_1_1internal_1_1_solver.js", "classhdim__1__1internal__1__1__solver_8js_source.html", null ],
     [ "classhdim_1_1internal_1_1_sub_gradient_solver.js", "classhdim__1__1internal__1__1__sub__gradient__solver_8js_source.html", null ],
     [ "classhdim_1_1ocl_1_1internal_1_1_sub_gradient_solver.js", "classhdim__1__1ocl__1__1internal__1__1__sub__gradient__solver_8js_source.html", null ],
+    [ "classhdim_1_1vcl_1_1_f_i_s_t_a.js", "classhdim__1__1vcl__1__1__f__i__s__t__a_8js_source.html", null ],
     [ "classhdim_1_1vcl_1_1_i_s_t_a.js", "classhdim__1__1vcl__1__1__i__s__t__a_8js_source.html", null ],
     [ "classhdim_1_1vcl_1_1internal_1_1_abstract_solver.js", "classhdim__1__1vcl__1__1internal__1__1__abstract__solver_8js_source.html", null ],
     [ "classhdim_1_1vcl_1_1internal_1_1_solver.js", "classhdim__1__1vcl__1__1internal__1__1__solver_8js_source.html", null ],

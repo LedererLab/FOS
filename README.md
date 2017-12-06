@@ -4,19 +4,18 @@ HDIM is a toolkit for working with high-dimensional data that emphasizes
 speed and statistical guarantees. Specifically, it provides tools for working
 with the LASSO objective function.
 
-HDIM provides traditional iterative solvers for the LASSO objective function
+HDIM provides iterative solvers for the LASSO objective function
  including ISTA, FISTA and Coordinate Descent. HDIM also provides FOS,
   the Fast and Optimal Selection algorithm, a novel new method
-for performing high-dimensional linear regression.
+for variable selection.
 
 HDIM is a product of the research conducted by
-[Lederer and Hauser HDIM Group]( https://lederer.stat.washington.edu/ )
-in affiliation with the University of Washington.
+[Lederer and Hauser HDIM Group]( https://lederer.stat.washington.edu/ ).
 
 ## Supported Languages
 
 The HDIM package is written in C++, and can be used in native form or via
-the supplied Python or R language wrappers.
+ Python or R language wrappers.
 
 ## Supported Platforms
 
@@ -30,7 +29,7 @@ HDIM currently supports the following operating systems and languages.
 
 # Installation
 
-## Native C++
+## C++ ( All Platforms )
 
 HDIM's native code base is cross-platform and header-only.
  There is no installation step -- just clone the git repository and `#include`
@@ -52,83 +51,21 @@ Using the Python or R wrapper requires additional dependencies and build steps
 compared to using the native code base. Currently both wrappers require building from source --
  in the future we hope to provide users with more convenient installation options.
 
-### Linux
+#### R ( Linux & Windows )
 
-#### Python
+Visit the [HDIM-R](https://github.com/LedererLab/HDIM-R) repository for
+installation instructions for the `HDIM` R wrapper.
 
-##### Dependencies
+##### Python ( Linux & OS X)
 
-* [SWIG](http://www.swig.org/download.html) The Simplified Wrapper and Interface Generator
-* Python Development Headers
-* Numpy, including Development Headers
-* [Eigen 3](http://eigen.tuxfamily.org/index.php) A C++ template library for linear algebra
-
-##### Building
-
-- Clone the HDIM package into a convenient location.
-- Navigate to $PKG_DIR/Python_Wrapper, where PKG_DIR is the root directory of the cloned repository.
-- Find the file `nix_build.sh` and mark it as executable ( `chmod +x ./nix_build.sh` ).
-- This will run SWIG and build the Python wrapper.
-- The Python package path will *not* be updated.
-
-#### R
-
-##### Dependencies
-
-* [Rcpp](https://cran.r-project.org/web/packages/Rcpp/index.html)
-
-##### Building
-
-- Clone the HDIM package into a convenient location.
-- Navigate to $PKG_DIR/R_Wrapper, where PKG_DIR is the root directory of the cloned repository.
-- Find the file `nix_build.sh` and mark it as executable ( `chmod +x ./nix_build.sh` ).
-- This will run a preprocessing step using Rcpp then build and install the R Wrapper.
-
-### OS X
-
-#### Python
-
-##### Dependencies
-
-* [SWIG](http://www.swig.org/download.html) The Simplified Wrapper and Interface Generator
-* Python Development Headers
-* Numpy, including Development Headers
-* [Eigen 3](http://eigen.tuxfamily.org/index.php) A C++ template library for linear algebra
-* gcc -- installation will not work with the default C++ complier, clang
-
-##### Building
-
-- Clone the HDIM package into a convenient location.
-- Navigate to $PKG_DIR/Python_Wrapper, where PKG_DIR is the root directory of the cloned repository.
-- Find the file `os_x_build.sh` and mark it as executable ( `chmod +x ./os_x_build.sh` ).
-- This will run SWIG and build the Python wrapper.
-- The Python package path will *not* be updated.
-
-### Windows
-
-Installation under Windows *requires* that the root directory of the Eigen3 library
-be located in the same directory as the root of the HDIM package.
-
-#### R
-
-##### Dependencies
-
-* [Rtools](https://cran.r-project.org/bin/windows/Rtools/)
-* [Rcpp](https://cran.r-project.org/web/packages/Rcpp/index.html)
-
-##### Building
-
-- Clone the HDIM package into the directory where the Eigen3 library is located.
-- Navigate to $PKG_DIR/R_Wrapper, where PKG_DIR is the root directory of the cloned repository.
-- Find the file `win_build.ps1` and run it using PowerShell.
-- This will run a preprocessing step using Rcpp then build and install the R Wrapper.
+Visit the [HDIM-Py](https://github.com/LedererLab/HDIM-Py) repository for
+installation instructions for the `HDIM` Python wrapper.
 
 ## Licensing
 
-The HDIM package is licensed under the MIT license with one notable exception --
-the R language wrapper on all platforms is licensed under the GPL version 3. To
-view the MIT license please consult `LICENSE.txt` and for the the GPLv3 see
-`/R_Wrapper/HDIM/LICENSE.`
+The HDIM package is licensed under the MIT license. To
+view the MIT license please consult `LICENSE.txt`.
+
 ## Authors
 
 * **Benjamin J Phillips** - *Work on native C++, R wrapper, and Python wrapper*

@@ -56,7 +56,7 @@ compared to using the native code base. Currently both wrappers require building
 Visit the [HDIM-R](https://github.com/LedererLab/HDIM-R) repository for
 installation instructions for the `HDIM` R wrapper.
 
-##### Python ( Linux & OS X)
+#### Python ( Linux & OS X )
 
 Visit the [HDIM-Py](https://github.com/LedererLab/HDIM-Py) repository for
 installation instructions for the `HDIM` Python wrapper.
